@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,8 +24,10 @@ public class Map extends BaseEntity {
     @Column(nullable = false)
     private boolean access;
 
-    @Column(nullable = false)
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private User user;
 
     @Column(nullable = false)
     private String emoji;
@@ -39,11 +41,11 @@ public class Map extends BaseEntity {
     }
 
     @Builder
-    public Map(long campusId, String title, boolean access, long userId, String emoji){
+    public Map(long campusId, String title, boolean access, User user, String emoji){
         this.campusId=campusId;
         this.title=title;
         this.access=access;
-        this.userId=userId;
+        this.user=user;
         this.emoji=emoji;
     }
 }

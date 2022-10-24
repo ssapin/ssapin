@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,8 +21,10 @@ public class TogethermapPlace extends BaseEntity {
     @Column(nullable = false)
     private long togethermapId;
 
-    @Column(nullable = false)
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private User user;
 
     public TogethermapPlace update(long placeId, long togethermapId){
         this.placeId=placeId;
@@ -31,9 +33,9 @@ public class TogethermapPlace extends BaseEntity {
     }
 
     @Builder
-    public TogethermapPlace(long placeId, long togethermapId, long userId){
+    public TogethermapPlace(long placeId, long togethermapId, User user){
         this.placeId=placeId;
         this.togethermapId=togethermapId;
-        this.userId=userId;
+        this.user=user;
     }
 }

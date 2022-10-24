@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,8 +24,10 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private User user;
 
     public Review update(long placeId, int emojiType, String content){
         this.placeId = placeId;
@@ -35,10 +37,10 @@ public class Review extends BaseEntity {
     }
 
     @Builder
-    public Review(long placeId, int emojiType, String content, long userId){
+    public Review(long placeId, int emojiType, String content, User user){
         this.placeId = placeId;
         this.emojiType = emojiType;
         this.content = content;
-        this.userId = userId;
+        this.user = user;
     }
 }
