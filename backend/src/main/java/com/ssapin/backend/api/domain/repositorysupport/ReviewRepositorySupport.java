@@ -1,6 +1,6 @@
 package com.ssapin.backend.api.domain.repositorysupport;
 
-import com.ssapin.backend.api.domain.entity.Place;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssapin.backend.api.domain.entity.Review;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
