@@ -3,7 +3,9 @@ package com.ssapin.backend.api.domain.repositorysupport;
 import com.ssapin.backend.api.domain.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UserRepositorySupport extends QuerydslRepositorySupport {
     private final JPAQueryFactory queryFactory;
 

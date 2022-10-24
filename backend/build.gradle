@@ -61,6 +61,9 @@ dependencies {
 	//querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	//assertj
+	testImplementation "org.assertj:assertj-core:3.6.2"
 }
 
 tasks.named('test') {

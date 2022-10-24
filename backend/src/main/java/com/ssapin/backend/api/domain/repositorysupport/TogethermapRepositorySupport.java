@@ -6,9 +6,11 @@ import com.ssapin.backend.api.domain.entity.QTogethermap;
 import com.ssapin.backend.api.domain.entity.Togethermap;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class TogethermapRepositorySupport extends QuerydslRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
