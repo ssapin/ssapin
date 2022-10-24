@@ -1,3 +1,9 @@
+buildscript {
+	ext {
+		queryDslVersion = "4.4.0"
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.7.4'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
@@ -34,7 +40,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-
 	//swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
@@ -50,6 +55,21 @@ dependencies {
 	//Junit
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+	//querydsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor(
+			"javax.persistence:javax.persistence-api",
+			"javax.annotation:javax.annotation-api",
+			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+		}
+	}
 }
 
 tasks.named('test') {

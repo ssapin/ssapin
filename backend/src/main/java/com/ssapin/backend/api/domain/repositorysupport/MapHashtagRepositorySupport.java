@@ -1,0 +1,14 @@
+package com.ssapin.backend.api.domain.repositorysupport;
+
+import com.ssapin.backend.api.domain.entity.MapBookmark;
+import com.ssapin.backend.api.domain.entity.MapHashtag;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+public class MapHashtagRepositorySupport extends QuerydslRepositorySupport {
+    private final JPAQueryFactory queryFactory;
+
+    public MapHashtagRepositorySupport(JPAQueryFactory queryFactory) {
+        super(MapHashtag.class);
+        this.queryFactory = queryFactory;
+    }
+}
