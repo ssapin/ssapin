@@ -17,7 +17,7 @@ public class TogethermapRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<Togethermap> findByCampus(Campus campus) {
+    public List<Togethermap> findAllByCampus(Campus campus) {
         return queryFactory.selectFrom(QTogethermap.togethermap)
                 .where(QTogethermap.togethermap.campus.eq(campus))
                 .fetch();

@@ -28,7 +28,7 @@ public class TogethermapServiceImpl implements TogethermapService {
     public List<TogethermapResponse> findAll(long campusId) {
         List<TogethermapResponse> result = new ArrayList<>();
         Campus campus = campusRepository.getById(campusId);
-        List<Togethermap> togethermaps = togethermapRepositorySupport.findByCampus(campus);
+        List<Togethermap> togethermaps = togethermapRepositorySupport.findAllByCampus(campus);
         for(Togethermap map : togethermaps) {
             List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(map);
             if (togethermapPlaceList.isEmpty()) {
