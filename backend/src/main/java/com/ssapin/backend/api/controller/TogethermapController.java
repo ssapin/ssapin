@@ -22,9 +22,16 @@ import java.util.List;
 public class TogethermapController {
 
     private final TogethermapServiceImpl togethermapService;
+
     @GetMapping("/{campusId}")
     @ApiOperation(value = "모여지도 리스트 조회 ", notes = "모여지도의 전체 리스트를 반환한다.")
     public ResponseEntity<?> getTogethermapList(@PathVariable long campusId) {
         return new ResponseEntity<List<TogethermapResponse>>(togethermapService.findAll(campusId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{togethermapId}/detail")
+    @ApiOperation(value = "모여지도 리스트 조회 ", notes = "모여지도의 전체 리스트를 반환한다.")
+    public ResponseEntity<?> getTogethermap(@PathVariable long togethermapId) {
+        return new ResponseEntity<TogethermapResponse>(togethermapService.findOne(togethermapId), HttpStatus.OK);
     }
 }

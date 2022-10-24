@@ -7,8 +7,11 @@ import com.ssapin.backend.api.domain.entity.Place;
 import com.ssapin.backend.api.domain.entity.Togethermap;
 import com.ssapin.backend.api.domain.entity.TogethermapPlace;
 import com.ssapin.backend.api.domain.repository.CampusRepository;
+import com.ssapin.backend.api.domain.repository.TogethermapRepository;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapPlaceRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapRepositorySupport;
+import com.ssapin.backend.exception.CustomException;
+import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,11 +26,12 @@ public class TogethermapServiceImpl implements TogethermapService {
     private final TogethermapRepositorySupport togethermapRepositorySupport;
     private final TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
     private final CampusRepository campusRepository;
+    private final TogethermapRepository togethermapRepository;
 
     @Override
     public List<TogethermapResponse> findAll(long campusId) {
         List<TogethermapResponse> result = new ArrayList<>();
-        Campus campus = campusRepository.getById(campusId);
+        Campus campus = campusRepository.findById(campusId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
         List<Togethermap> togethermaps = togethermapRepositorySupport.findAllByCampus(campus);
         for(Togethermap map : togethermaps) {
             List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(map);
@@ -43,5 +47,16 @@ public class TogethermapServiceImpl implements TogethermapService {
             }
         }
         return result;
+    }
+
+    @Override
+    public TogethermapResponse findOne(long togethermapId) {
+        Togethermap togethermap = togethermapRepository.findById(togethermapId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
+        List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(togethermap);
+        List<PlaceResponse> placeList = new ArrayList<>();
+        for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
+            placeList.add(new PlaceResponse(togethermapPlace.getPlace()));
+        }
+        return new TogethermapResponse(togethermap, placeList);
     }
 }
