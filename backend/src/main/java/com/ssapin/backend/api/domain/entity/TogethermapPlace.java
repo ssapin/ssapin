@@ -20,24 +20,26 @@ public class TogethermapPlace extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Place place;
 
-    @Column(nullable = false)
-    private long togethermapId;
+    @ManyToOne
+    @JoinColumn(name="togethermap_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Togethermap togethermap;
 
     @ManyToOne
     @JoinColumn(name="user_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public TogethermapPlace update(Place place, long togethermapId){
+    public TogethermapPlace update(Place place, Togethermap togethermap){
         this.place=place;
-        this.togethermapId=togethermapId;
+        this.togethermap=togethermap;
         return this;
     }
 
     @Builder
-    public TogethermapPlace(Place place, long togethermapId, User user){
+    public TogethermapPlace(Place place, Togethermap togethermap, User user){
         this.place=place;
-        this.togethermapId=togethermapId;
+        this.togethermap=togethermap;
         this.user=user;
     }
 }
