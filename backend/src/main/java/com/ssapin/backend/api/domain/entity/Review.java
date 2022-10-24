@@ -15,8 +15,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="review")
 public class Review extends BaseEntity {
-    @Column(nullable = false)
-    private long placeId;
+    @ManyToOne
+    @JoinColumn(name="place_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Place place;
 
     @Column(nullable = false)
     private int emojiType;
@@ -29,16 +31,16 @@ public class Review extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public Review update(long placeId, int emojiType, String content){
-        this.placeId = placeId;
+    public Review update(Place place, int emojiType, String content){
+        this.place = place;
         this.emojiType = emojiType;
         this.content = content;
         return this;
     }
 
     @Builder
-    public Review(long placeId, int emojiType, String content, User user){
-        this.placeId = placeId;
+    public Review(Place place, int emojiType, String content, User user){
+        this.place = place;
         this.emojiType = emojiType;
         this.content = content;
         this.user = user;

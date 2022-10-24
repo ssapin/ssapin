@@ -20,17 +20,19 @@ public class PlaceBookmark extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(nullable = false)
-    private long placeId;
+    @ManyToOne
+    @JoinColumn(name="place_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Place place;
 
-    public PlaceBookmark update(long placeId){
-        this.placeId = placeId;
+    public PlaceBookmark update(Place place){
+        this.place = place;
         return this;
     }
 
     @Builder
-    public PlaceBookmark(User user, long placeId){
+    public PlaceBookmark(User user, Place place){
         this.user = user;
-        this.placeId = placeId;
+        this.place = place;
     }
 }

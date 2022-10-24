@@ -20,24 +20,26 @@ public class MapPlace extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Map map;
 
-    @Column(nullable = false)
-    private long placeId;
+    @ManyToOne
+    @JoinColumn(name="place_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Place place;
 
     @ManyToOne
     @JoinColumn(name="user_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public MapPlace update(Map map, long placeId){
+    public MapPlace update(Map map, Place place){
         this.map = map;
-        this.placeId = placeId;
+        this.place = place;
         return this;
     }
 
     @Builder
-    public MapPlace(Map map, long placeId, User user){
+    public MapPlace(Map map, Place place, User user){
         this.map = map;
-        this.placeId = placeId;
+        this.place = place;
         this.user = user;
     }
 }

@@ -15,8 +15,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="togethermap_place")
 public class TogethermapPlace extends BaseEntity {
-    @Column(nullable = false)
-    private long placeId;
+    @ManyToOne
+    @JoinColumn(name="place_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Place place;
 
     @Column(nullable = false)
     private long togethermapId;
@@ -26,15 +28,15 @@ public class TogethermapPlace extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public TogethermapPlace update(long placeId, long togethermapId){
-        this.placeId=placeId;
+    public TogethermapPlace update(Place place, long togethermapId){
+        this.place=place;
         this.togethermapId=togethermapId;
         return this;
     }
 
     @Builder
-    public TogethermapPlace(long placeId, long togethermapId, User user){
-        this.placeId=placeId;
+    public TogethermapPlace(Place place, long togethermapId, User user){
+        this.place=place;
         this.togethermapId=togethermapId;
         this.user=user;
     }

@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -22,24 +22,26 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String token;
 
-    @Column(nullable = false)
-    private long campusId;
+    @ManyToOne
+    @JoinColumn(name="campus_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Campus campus;
 
     @Column(nullable = false)
     private String emoji;
 
-    public User update(String nickname, long compusId, String emoji){
+    public User update(String nickname, Campus campus, String emoji){
         this.nickname = nickname;
-        this.campusId = compusId;
+        this.campus = campus;
         this.emoji = emoji;
         return this;
     }
 
     @Builder
-    public User(String nickname, String token, long compusId, String emoji){
+    public User(String nickname, String token, Campus campus, String emoji){
         this.nickname = nickname;
         this.token = token;
-        this.campusId = compusId;
+        this.campus = campus;
         this.emoji = emoji;
     }
 }
