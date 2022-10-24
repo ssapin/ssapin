@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -18,18 +18,20 @@ public class Togethermap extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private long campusId;
+    @ManyToOne
+    @JoinColumn(name="campus_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Campus campus;
 
-    public Togethermap update(String title, long campusId){
+    public Togethermap update(String title, Campus campus){
         this.title=title;
-        this.campusId=campusId;
+        this.campus=campus;
         return this;
     }
 
     @Builder
-    public Togethermap(String title, long campusId){
+    public Togethermap(String title, Campus campus){
         this.title=title;
-        this.campusId=campusId;
+        this.campus=campus;
     }
 }

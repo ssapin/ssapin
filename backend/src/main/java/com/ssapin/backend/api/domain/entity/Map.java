@@ -15,8 +15,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="map")
 public class Map extends BaseEntity {
-    @Column(nullable = false)
-    private long campusId;
+    @ManyToOne
+    @JoinColumn(name="campus_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Campus campus;
 
     @Column(nullable = false)
     private String title;
@@ -32,8 +34,8 @@ public class Map extends BaseEntity {
     @Column(nullable = false)
     private String emoji;
 
-    public Map update(long campusId, String title, boolean access, String emoji){
-        this.campusId=campusId;
+    public Map update(Campus campus, String title, boolean access, String emoji){
+        this.campus=campus;
         this.title=title;
         this.access=access;
         this.emoji=emoji;
@@ -41,8 +43,8 @@ public class Map extends BaseEntity {
     }
 
     @Builder
-    public Map(long campusId, String title, boolean access, User user, String emoji){
-        this.campusId=campusId;
+    public Map(Campus campus, String title, boolean access, User user, String emoji){
+        this.campus=campus;
         this.title=title;
         this.access=access;
         this.user=user;
