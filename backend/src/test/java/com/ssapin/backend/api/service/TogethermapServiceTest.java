@@ -41,10 +41,10 @@ class TogethermapServiceTest {
     void findAll() {
         //given
         final TogethermapServiceImpl togethermapService = null;
-        Campus campusBuilder = Campus.builder()
+        Campus campus = Campus.builder()
                 .region("서울")
                 .build();
-        Campus campus = campusRepository.save(campusBuilder);
+        campusRepository.save(campus);
 
         User user = User.builder()
                 .campus(campus)
