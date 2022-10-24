@@ -15,22 +15,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="map_hashtag")
 public class MapHashtag extends BaseEntity {
-    @Column(nullable = false)
-    private long hashtagId;
+    @ManyToOne
+    @JoinColumn(name="hashtag_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Hashtag hashtag;
 
     @ManyToOne
     @JoinColumn(name="map_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Map map;
 
-    public MapHashtag update(long hashtagId){
-        this.hashtagId = hashtagId;
+    public MapHashtag update(Hashtag hashtag){
+        this.hashtag = hashtag;
         return this;
     }
 
     @Builder
-    public MapHashtag(long hashtagId, Map map){
-        this.hashtagId = hashtagId;
+    public MapHashtag(Hashtag hashtag, Map map){
+        this.hashtag = hashtag;
         this.map = map;
     }
 }
