@@ -5,9 +5,6 @@ import com.ssapin.backend.api.service.TogethermapServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +27,7 @@ public class TogethermapController {
     }
 
     @GetMapping("/{togethermapId}/detail")
-    @ApiOperation(value = "모여지도 리스트 조회 ", notes = "모여지도의 전체 리스트를 반환한다.")
+    @ApiOperation(value = "모여지도 상세 조회 ", notes = "모여지도의 상세 정보를 반환한다.")
     public ResponseEntity<?> getTogethermap(@PathVariable long togethermapId) {
         return new ResponseEntity<TogethermapResponse>(togethermapService.findOne(togethermapId), HttpStatus.OK);
     }

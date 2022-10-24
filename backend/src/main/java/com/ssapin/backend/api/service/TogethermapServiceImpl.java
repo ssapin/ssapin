@@ -3,7 +3,6 @@ package com.ssapin.backend.api.service;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.Campus;
-import com.ssapin.backend.api.domain.entity.Place;
 import com.ssapin.backend.api.domain.entity.Togethermap;
 import com.ssapin.backend.api.domain.entity.TogethermapPlace;
 import com.ssapin.backend.api.domain.repository.CampusRepository;
@@ -13,7 +12,6 @@ import com.ssapin.backend.api.domain.repositorysupport.TogethermapRepositorySupp
 import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
