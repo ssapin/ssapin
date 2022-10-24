@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -15,16 +15,18 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name="map_ranking")
 public class MapRanking extends BaseEntity {
-    @Column(nullable = false)
-    private long mapId;
+    @ManyToOne
+    @JoinColumn(name="map_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Map map;
 
-    public MapRanking update(long mapId){
-        this.mapId = mapId;
+    public MapRanking update(Map map){
+        this.map=map;
         return this;
     }
 
     @Builder
-    public MapRanking(long mapId){
-        this.mapId = mapId;
+    public MapRanking(Map map){
+        this.map = map;
     }
 }

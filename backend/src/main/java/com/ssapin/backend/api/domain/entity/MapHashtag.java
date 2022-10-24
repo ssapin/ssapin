@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -18,8 +18,10 @@ public class MapHashtag extends BaseEntity {
     @Column(nullable = false)
     private long hashtagId;
 
-    @Column(nullable = false)
-    private long mapId;
+    @ManyToOne
+    @JoinColumn(name="map_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Map map;
 
     public MapHashtag update(long hashtagId){
         this.hashtagId = hashtagId;
@@ -27,8 +29,8 @@ public class MapHashtag extends BaseEntity {
     }
 
     @Builder
-    public MapHashtag(long hashtagId, long mapId){
+    public MapHashtag(long hashtagId, Map map){
         this.hashtagId = hashtagId;
-        this.mapId = mapId;
+        this.map = map;
     }
 }

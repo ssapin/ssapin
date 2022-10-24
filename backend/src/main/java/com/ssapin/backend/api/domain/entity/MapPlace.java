@@ -15,8 +15,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="map_place")
 public class MapPlace extends BaseEntity {
-    @Column(nullable = false)
-    private long mapId;
+    @ManyToOne
+    @JoinColumn(name="map_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Map map;
 
     @Column(nullable = false)
     private long placeId;
@@ -26,15 +28,15 @@ public class MapPlace extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public MapPlace update(long mapId, long placeId){
-        this.mapId = mapId;
+    public MapPlace update(Map map, long placeId){
+        this.map = map;
         this.placeId = placeId;
         return this;
     }
 
     @Builder
-    public MapPlace(long mapId, long placeId, User user){
-        this.mapId = mapId;
+    public MapPlace(Map map, long placeId, User user){
+        this.map = map;
         this.placeId = placeId;
         this.user = user;
     }

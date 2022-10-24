@@ -20,17 +20,19 @@ public class MapBookmark extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(nullable = false)
-    private long mapId;
+    @ManyToOne
+    @JoinColumn(name="map_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Map map;
 
-    public MapBookmark update(long mapId){
-        this.mapId = mapId;
+    public MapBookmark update(Map map){
+        this.map = map;
         return this;
     }
 
     @Builder
-    public MapBookmark(User user, long mapId){
+    public MapBookmark(User user, Map map){
         this.user = user;
-        this.mapId = mapId;
+        this.map = map;
     }
 }
