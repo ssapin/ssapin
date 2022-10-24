@@ -46,6 +46,10 @@ dependencies {
 
 	//Jasypt
 	implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.3'
+
+	//Junit
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
 }
 
 tasks.named('test') {
