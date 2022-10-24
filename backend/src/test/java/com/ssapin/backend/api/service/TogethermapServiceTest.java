@@ -37,7 +37,6 @@ class TogethermapServiceTest {
 
     @DisplayName("모여지도 전체 조회 테스트")
     @Test
-    @Transactional
     void findAll() {
         //given
         final TogethermapServiceImpl togethermapService = null;
