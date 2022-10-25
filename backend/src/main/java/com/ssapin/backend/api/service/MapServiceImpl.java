@@ -40,7 +40,7 @@ public class MapServiceImpl implements MapService {
 
         //HashTag 저장
         for(HashtagRequest hashtag : mapRegister.getHashtagList()) {
-            Hashtag hashTag = hashtagRepository.findById(mapRegister.getCampusId()).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND));
+            Hashtag hashTag = hashtagRepository.findById(hashtag.getHashtagId()).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND));
             MapHashtag mapHashtag = MapHashtag.builder()
                     .hashtag(hashTag)
                     .map(result)
