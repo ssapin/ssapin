@@ -1,7 +1,7 @@
 package com.ssapin.backend.api.service;
 
 
-import com.ssapin.backend.api.domain.dto.request.ReviewRequestDto;
+import com.ssapin.backend.api.domain.dto.request.ReviewRequest;
 import com.ssapin.backend.api.domain.entity.Place;
 import com.ssapin.backend.api.domain.entity.Review;
 import com.ssapin.backend.api.domain.repository.PlaceRepository;
@@ -22,12 +22,22 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void addReview(ReviewRequestDto.ReviewAdd request) {
+    public long addReview(ReviewRequest.ReviewAdd request) {
         Place place = placeRepository.findById(request.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Review review = Review.builder()
+                .place(place)
                 .emojiType(request.getEmojiType())
                 .content(request.getContent())
                 .build();
-        reviewRepository.save(review);
+        return reviewRepository.save(review).getId();
     }
+
+    @Override
+    @Transactional
+    public long updateReview(ReviewRequest.ReviewEdit request) {
+        Review review = reviewRepository.findById(request.getReviewId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        return review.update(request.getEmojiType(), request.getContent()).getId();
+    }
+
+
 }

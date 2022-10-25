@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @ApiModel("DiaryRequest")
-public class ReviewRequestDto {
+public class ReviewRequest {
 
     @Getter
     @Setter
@@ -23,6 +23,12 @@ public class ReviewRequestDto {
 
         @ApiModelProperty(name = "리뷰내용", example = "여기 존맛탱구리구리뱅뱅")
         private String content;
+
+        public ReviewAdd(long placeId, int emojiType, String content) {
+            this.placeId = placeId;
+            this.emojiType = emojiType;
+            this.content = content;
+        }
     }
 
     @Getter
@@ -39,6 +45,12 @@ public class ReviewRequestDto {
         @ApiModelProperty(name = "리뷰내용", example = "여기 존맛탱구리구리뱅뱅")
         private String content;
 
+
+        public ReviewEdit(long reviewId, int emojiType, String content) {
+            this.reviewId = reviewId;
+            this.emojiType = emojiType;
+            this.content = content;
+        }
     }
 
 
