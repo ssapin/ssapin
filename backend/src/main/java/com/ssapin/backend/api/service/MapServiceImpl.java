@@ -111,7 +111,7 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public MapResponse detailMap(User user, long mapId) {
+    public MapResponse detailMap(long mapId) {
         Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
         List<HashtagRequest> hashtagList = new ArrayList<>();
@@ -121,14 +121,14 @@ public class MapServiceImpl implements MapService {
 
         List<MapPlace> mapPlaceList = mapPlaceRepositorySupport.findByMap(map);
         if (mapPlaceList.isEmpty()) {
-            return new MapResponse(map, user,null, hashtagList);
+            return new MapResponse(map, null, hashtagList);
         }
         else {
             List<PlaceResponse> placeList = new ArrayList<>();
             for(MapPlace mapPlace : mapPlaceList) {
                 placeList.add(new PlaceResponse(mapPlace.getPlace()));
             }
-            return new MapResponse(map, user, placeList, hashtagList);
+            return new MapResponse(map, placeList, hashtagList);
         }
     }
 }

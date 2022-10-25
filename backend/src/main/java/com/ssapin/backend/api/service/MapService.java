@@ -14,5 +14,5 @@ public interface MapService {
 
     void deleteMap(long mapId);
 
-    MapResponse detailMap(User user, long mapId);
+    MapResponse detailMap(long mapId);
 }

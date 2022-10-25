@@ -2,6 +2,8 @@ package com.ssapin.backend.api.service;
 
 import com.ssapin.backend.api.domain.dto.request.HashtagRequest;
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
+import com.ssapin.backend.api.domain.dto.response.MapResponse;
+import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.CampusRepository;
 import com.ssapin.backend.api.domain.repository.HashtagRepository;
@@ -228,9 +230,19 @@ class MapServiceImplTest {
         given(mapRepository.findById(originMap.getId())).willReturn(Optional.ofNullable(originMap));
         given(mapPlaceRepositorySupport.findByMap(any())).willReturn(testmapplaceList);
         given(mapHashtagRepositorySupport.findAllByMap(originMap)).willReturn(originList);
-        
+
         //when
+        MapResponse result = mapService.detailMap(originMap.getId());
 
         //then
+        assertEquals(originMap.getEmoji(), result.getMapEmoji());
+        assertEquals(originMap.getUser().getEmoji(), result.getUserEmoji());
+        assertEquals(originMap.getTitle(), result.getTitle());
+        assertEquals(originMap.getUser().getId(), result.getUserId());
+        assertEquals(originMap.getCampus().getId(), result.getCampusId());
+        assertEquals(result.getPlaceList().size(), 1);
+        assertEquals(originMap.isAccess(), result.isAccess());
+        assertEquals(result.getHashtagList().size(), 2);
+
     }
 }

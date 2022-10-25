@@ -20,14 +20,14 @@ public class MapResponse {
     private List<PlaceResponse> placeList;
     private List<HashtagRequest> hashtagList;
 
-    public MapResponse(Map map, User user, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList) {
+    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList) {
         this.mapId = map.getId();
         this.title = map.getTitle();
-        this.userId = user.getId();
-        this.nickname = user.getNickname();
+        this.userId = map.getUser().getId();
+        this.nickname = map.getUser().getNickname();
         this.campusId = map.getCampus().getId();
         this.access = map.isAccess();
-        this.userEmoji = user.getEmoji();
+        this.userEmoji = map.getUser().getEmoji();
         this.mapEmoji = map.getEmoji();
         this.placeList = placeList;
         this.hashtagList = hashtagList;
