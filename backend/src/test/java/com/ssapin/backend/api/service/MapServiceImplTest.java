@@ -39,6 +39,9 @@ class MapServiceImplTest {
     private HashtagRepository hashtagRepository;
 
     @Mock
+    private MapHashtagRepository mapHashtagRepository;
+
+    @Mock
     private MapRepository mapRepository;
 
     @Mock
@@ -80,6 +83,7 @@ class MapServiceImplTest {
         MapRequest.MapRegister registerRequest = new MapRequest.MapRegister(
                 testmap.getCampus().getId(), testmap.getTitle(), testmap.getEmoji(), testmap.isAccess(), hashtagList
         );
+        MapHashtag mapHashtag = new MapHashtag(testhashtag, testmap);
 
         Long fakeMapId = 1l;
         ReflectionTestUtils.setField(testmap, "id", fakeMapId);
@@ -186,19 +190,19 @@ class MapServiceImplTest {
         verify(mapRepository, times(1)).delete(originMap);
     }
 
-    @DisplayName("추천지도 삭제 테스트")
+    @DisplayName("추천지도 조회 테스트")
     @Test
     void detailMap() throws Exception {
         //given
-        createMap();
-        Map originMap = mapRepository.findById(1L).get();
-
         List<HashtagRequest> hashtagList = new ArrayList<>();
         HashtagRequest hashtag = new HashtagRequest(1);
         Hashtag originHashtag = Hashtag.builder()
                 .content("test hashtag")
                 .build();
         hashtagList.add(hashtag);
+
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
         List<MapHashtag> originList = new ArrayList<>();
         MapHashtag originmapHashtag = MapHashtag.builder()
                 .map(originMap)
@@ -242,7 +246,7 @@ class MapServiceImplTest {
         assertEquals(originMap.getCampus().getId(), result.getCampusId());
         assertEquals(result.getPlaceList().size(), 1);
         assertEquals(originMap.isAccess(), result.isAccess());
-        assertEquals(result.getHashtagList().size(), 2);
+        assertEquals(result.getHashtagList().size(), 1);
 
     }
 }
