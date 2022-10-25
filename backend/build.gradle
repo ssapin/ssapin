@@ -72,13 +72,16 @@ querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
+
 sourceSets {
 	main.java.srcDir querydslDir
 }
+
 compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
 }
 
 test {
 	useJUnitPlatform()
+	systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
 }

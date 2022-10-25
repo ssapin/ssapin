@@ -28,6 +28,7 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 
+
 spring:
   jpa:
     hibernate:
@@ -44,8 +45,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      password: ENC(8iPNy9JbK5/cU16wZAY6bZOnGcpDPKwo)
-      username: ssapin
+      password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
+      username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
     url: jdbc:mysql://localhost:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
   devtools:
     livereload:
