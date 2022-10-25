@@ -62,7 +62,7 @@ public class MapServiceImpl implements MapService {
     public Long updateMap(MapRequest.MapEdit mapEdit) {
         Map map = mapRepository.findById(mapEdit.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Campus campus = campusRepository.findById(mapEdit.getCampusId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        map.update(campus, mapEdit.getTitle(), mapEdit.getAccess(), mapEdit.getEmoji());
+        Map updatedMap = map.update(campus, mapEdit.getTitle(), mapEdit.getAccess(), mapEdit.getEmoji());
 
         //원래 sticker
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
@@ -99,6 +99,7 @@ public class MapServiceImpl implements MapService {
                 }
             }
         }
-        return null;
+
+        return updatedMap.getId();
     }
 }
