@@ -66,14 +66,6 @@ dependencies {
 	testImplementation "org.assertj:assertj-core:3.6.2"
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
-
-test {
-	useJUnitPlatform()
-}
-
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -85,4 +77,8 @@ sourceSets {
 }
 compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
+}
+
+test {
+	useJUnitPlatform()
 }

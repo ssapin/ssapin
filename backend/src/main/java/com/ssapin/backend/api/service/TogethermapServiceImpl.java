@@ -26,6 +26,7 @@ public class TogethermapServiceImpl implements TogethermapService {
     private final CampusRepository campusRepository;
     private final TogethermapRepository togethermapRepository;
 
+    @Override
     public List<TogethermapResponse> findAll(long campusId) {
         List<TogethermapResponse> result = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
@@ -46,6 +47,7 @@ public class TogethermapServiceImpl implements TogethermapService {
         return result;
     }
 
+    @Override
     public TogethermapResponse findOne(long togethermapId) {
         Togethermap togethermap = togethermapRepository.findById(togethermapId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
         List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(togethermap);

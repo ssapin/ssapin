@@ -8,180 +8,126 @@ import com.ssapin.backend.api.domain.repository.PlaceRepository;
 import com.ssapin.backend.api.domain.repository.TogethermapRepository;
 import com.ssapin.backend.api.domain.repository.UserRepository;
 import com.ssapin.backend.api.domain.repository.TogethermapPlaceRepository;
+import com.ssapin.backend.api.domain.repositorysupport.TogethermapPlaceRepositorySupport;
+import com.ssapin.backend.api.domain.repositorysupport.TogethermapRepositorySupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 class TogethermapServiceTest {
-    @Autowired
+    @Mock
     private TogethermapRepository togethermapRepository;
 
-    @Autowired
-    private TogethermapPlaceRepository togethermapPlaceRepository;
+    @Mock
+    private TogethermapRepositorySupport togethermapRepositorySupport;
 
-    @Autowired
-    private PlaceRepository placeRepository;
+    @Mock
+    private TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
 
-    @Autowired
+    @Mock
     private CampusRepository campusRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    @InjectMocks
+    private TogethermapServiceImpl togethermapService;
 
     @DisplayName("모여지도 전체 조회 테스트")
     @Test
     void findAll() {
         //given
-        final TogethermapServiceImpl togethermapService = null;
-        Campus campus = Campus.builder()
-                .region("서울")
+        Campus testcampus = Campus.builder()
+                .region("test campus")
                 .build();
-        campusRepository.save(campus);
+        given(campusRepository.findById(any())).willReturn(Optional.ofNullable(testcampus));
 
-        User user = User.builder()
-                .campus(campus)
-                .emoji("test")
-                .nickname("test")
-                .token("test")
+        List<Togethermap> testmapList = new ArrayList<>();
+        Togethermap testmap = Togethermap.builder()
+                .title("test togethermap")
+                .campus(testcampus)
                 .build();
-        userRepository.save(user);
+        testmapList.add(testmap);
+        given(togethermapRepositorySupport.findAllByCampus(any())).willReturn(testmapList);
 
-        Place place1 = Place.builder()
-                .address("test1")
-                .itemId(123)
-                .lat((float) 1.1)
-                .lng((float) 1.2)
-                .title("test1")
+        List<TogethermapPlace> testmapplaceList = new ArrayList<>();
+        Place testplace = Place.builder()
+                .title("test place title")
+                .lng(1)
+                .lat(1)
+                .itemId(1)
                 .build();
-        placeRepository.save(place1);
-
-        Place place2 = Place.builder()
-                .address("test2")
-                .itemId(123)
-                .lat((float) 1.1)
-                .lng((float) 1.2)
-                .title("test2")
+        User testuser = User.builder()
+                .token("test token")
+                .nickname("test nickname")
+                .emoji("test emoji")
+                .campus(testcampus)
                 .build();
-        placeRepository.save(place2);
-
-        Togethermap togethermap1 = Togethermap.builder()
-                .campus(campus)
-                .title("test1")
+        TogethermapPlace testmapplace = TogethermapPlace.builder()
+                .togethermap(testmap)
+                .user(testuser)
+                .place(testplace)
                 .build();
-        togethermapRepository.save(togethermap1);
-
-        Togethermap togethermap2 = Togethermap.builder()
-                .campus(campus)
-                .title("test2")
-                .build();
-        togethermapRepository.save(togethermap2);
-
-        TogethermapPlace togethermapPlace1 = TogethermapPlace.builder()
-                .place(place1)
-                .user(user)
-                .togethermap(togethermap1)
-                .build();
-        togethermapPlaceRepository.save(togethermapPlace1);
-
-        TogethermapPlace togethermapPlace2 = TogethermapPlace.builder()
-                .place(place2)
-                .user(user)
-                .togethermap(togethermap2)
-                .build();
-        togethermapPlaceRepository.save(togethermapPlace2);
-
-        List<PlaceResponse> placeList1 = new ArrayList<>();
-        placeList1.add(new PlaceResponse(place1));
-
-        List<PlaceResponse> placeList2 = new ArrayList<>();
-        placeList2.add(new PlaceResponse(place2));
+        testmapplaceList.add(testmapplace);
+        given(togethermapPlaceRepositorySupport.findByTogethermap(any())).willReturn(testmapplaceList);
 
         //when
-        List<TogethermapResponse> result = togethermapService.findAll(1);
+        List<TogethermapResponse> result = togethermapService.findAll(testcampus.getId());
+        System.out.println("result = " + result.get(0).getTitle());
 
         //then
-        assertThat(result.size()).isEqualTo(2);
-
-        assertThat(result.get(0).getPlaceList()).isEqualTo(placeList1);
-        assertThat(result.get(1).getPlaceList()).isEqualTo(placeList2);
-
-        assertThat(result.get(0).getTogethermapId()).isEqualTo(togethermap1.getId());
-        assertThat(result.get(1).getTogethermapId()).isEqualTo(togethermap2.getId());
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getPlaceList().get(0).getPlaceId()).isEqualTo(testplace.getId());
+        assertThat(result.get(0).getTogethermapId()).isEqualTo(testmap.getId());
     }
 
     @DisplayName("모여지도 상세 조회 테스트")
     @Test
     void findOne() {
         //given
-        final TogethermapServiceImpl togethermapService = null;
-        Campus campus = Campus.builder()
-                .region("서울")
+        Campus testcampus = Campus.builder()
+                .region("test campus")
                 .build();
-        campusRepository.save(campus);
-
-        User user = User.builder()
-                .campus(campus)
-                .emoji("test")
-                .nickname("test")
-                .token("test")
+        Togethermap testmap = Togethermap.builder()
+                .title("test togethermap")
+                .campus(testcampus)
                 .build();
-        userRepository.save(user);
+        given(togethermapRepository.findById(any())).willReturn(Optional.ofNullable(testmap));
 
-        Place place1 = Place.builder()
-                .address("test1")
-                .itemId(123)
-                .lat((float) 1.1)
-                .lng((float) 1.2)
-                .title("test1")
+        List<TogethermapPlace> testmapplaceList = new ArrayList<>();
+        Place testplace = Place.builder()
+                .title("test place title")
+                .lng(1)
+                .lat(1)
+                .itemId(1)
                 .build();
-        placeRepository.save(place1);
-
-        Place place2 = Place.builder()
-                .address("test2")
-                .itemId(123)
-                .lat((float) 1.1)
-                .lng((float) 1.2)
-                .title("test2")
+        User testuser = User.builder()
+                .token("test token")
+                .nickname("test nickname")
+                .emoji("test emoji")
+                .campus(testcampus)
                 .build();
-        placeRepository.save(place2);
-
-        Togethermap togethermap = Togethermap.builder()
-                .campus(campus)
-                .title("test")
+        TogethermapPlace testmapplace = TogethermapPlace.builder()
+                .togethermap(testmap)
+                .user(testuser)
+                .place(testplace)
                 .build();
-        togethermapRepository.save(togethermap);
-
-        TogethermapPlace togethermapPlace1 = TogethermapPlace.builder()
-                .place(place1)
-                .user(user)
-                .togethermap(togethermap)
-                .build();
-        togethermapPlaceRepository.save(togethermapPlace1);
-
-        TogethermapPlace togethermapPlace2 = TogethermapPlace.builder()
-                .place(place2)
-                .user(user)
-                .togethermap(togethermap)
-                .build();
-        togethermapPlaceRepository.save(togethermapPlace2);
-
-        List<PlaceResponse> placeList = new ArrayList<>();
-        placeList.add(new PlaceResponse(place1));
-        placeList.add(new PlaceResponse(place2));
+        testmapplaceList.add(testmapplace);
+        given(togethermapPlaceRepositorySupport.findByTogethermap(any())).willReturn(testmapplaceList);
 
         //when
-        TogethermapResponse result = togethermapService.findOne(1);
+        TogethermapResponse result = togethermapService.findOne(testmap.getId());
+        System.out.println("result = " + result.getTitle());
 
         //then
-        assertThat(result.getPlaceList().size()).isEqualTo(2);
-        assertThat(result.getPlaceList()).isEqualTo(placeList);
-        assertThat(result.getTogethermapId()).isEqualTo(togethermap.getId());
+        assertThat(result.getTogethermapId()).isEqualTo(testmap.getId());
+        assertThat(result.getPlaceList().get(0).getPlaceId()).isEqualTo(testplace.getId());
     }
 }
