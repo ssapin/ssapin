@@ -18,10 +18,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-class ReviewServiceTest {
+class ReviewServiceImplTest {
 
     @InjectMocks
     private ReviewServiceImpl reviewService;
@@ -82,13 +85,27 @@ class ReviewServiceTest {
         Review testreview = reviewRepository.findById(1L).get();
 
         ReviewRequest.ReviewEdit reviewEdit = new ReviewRequest.ReviewEdit(
-                testreview.getId(),2,"어쩔"
+                testreview.getId(), 2, "어쩔"
         );
 
         //when
         long updatedreviewId = reviewService.updateReview(reviewEdit);
         //then
-        assertEquals( reviewRepository.findById(updatedreviewId).get().getEmojiType(),2);
-        assertEquals( reviewRepository.findById(updatedreviewId).get().getContent(),"어쩔");
+        assertEquals(reviewRepository.findById(updatedreviewId).get().getEmojiType(), 2);
+        assertEquals(reviewRepository.findById(updatedreviewId).get().getContent(), "어쩔");
     }
+
+    @DisplayName("리뷰 삭제 테스트")
+    @Test
+    void deleteReview() {
+        //given
+        addReview();
+        Review testreview = reviewRepository.findById(1L).get();
+        willDoNothing().given(reviewRepository).delete(testreview);
+        //when
+        reviewService.deleteReview(1L);
+        //then
+        verify(reviewRepository, times(1)).delete(testreview);
+    }
+
 }
