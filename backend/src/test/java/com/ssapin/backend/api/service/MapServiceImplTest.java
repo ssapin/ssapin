@@ -158,6 +158,7 @@ class MapServiceImplTest {
 
         //then
         Map findMap = mapRepository.findById(newMapId).get();
+        assertEquals(originMap.getId(), findMap.getId());
         assertEquals(testmap.getCampus().getId(), findMap.getCampus().getId());
         assertEquals(testmap.getTitle(), findMap.getTitle());
         assertEquals(testmap.getEmoji(), findMap.getEmoji());
