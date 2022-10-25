@@ -102,4 +102,10 @@ public class MapServiceImpl implements MapService {
 
         return updatedMap.getId();
     }
+
+    @Override
+    public void deleteMap(long mapId) {
+        Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        mapRepository.delete(map);
+    }
 }

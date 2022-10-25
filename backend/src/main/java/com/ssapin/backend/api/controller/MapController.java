@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "추천지도 관련 API", tags={"Map"})
 @RestController
@@ -55,6 +56,25 @@ public class MapController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "추천지도 삭제", notes = "사용자가 추천지도를 삭제한다.")
+    public ResponseEntity<?> deleteMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> requestMap) {
+        try {
+            long mapId = requestMap.get("mapId");
+//            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+//            User user = userService.findOneUser(userId);
+            User user = new User("test", "test", new Campus("test"), "test");
+            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+            else {
+                mapService.deleteMap(mapId);
+                return new ResponseEntity<String>("추천지도 삭제 성공", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

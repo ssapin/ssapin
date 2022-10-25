@@ -23,6 +23,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MapServiceImplTest {
@@ -93,7 +95,7 @@ class MapServiceImplTest {
         assertEquals(testmap, findMap);
     }
 
-    @DisplayName("추천지도 생성 테스트")
+    @DisplayName("추천지도 수정 테스트")
     @Test
     void updateMap() throws Exception {
         //given
@@ -162,5 +164,22 @@ class MapServiceImplTest {
         assertEquals(testmap.getCampus().getId(), findMap.getCampus().getId());
         assertEquals(testmap.getTitle(), findMap.getTitle());
         assertEquals(testmap.getEmoji(), findMap.getEmoji());
+    }
+
+    @DisplayName("추천지도 삭제 테스트")
+    @Test
+    void deleteMap() throws Exception {
+        //given
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+
+        //mocking
+        given(mapRepository.findById(originMap.getId())).willReturn(Optional.ofNullable(originMap));
+
+        //when
+        mapService.deleteMap(originMap.getId());
+
+        //then
+        verify(mapRepository, times(1)).delete(originMap);
     }
 }
