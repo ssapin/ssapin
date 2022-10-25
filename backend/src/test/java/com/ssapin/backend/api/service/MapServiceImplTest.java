@@ -81,15 +81,20 @@ class MapServiceImplTest {
                 testmap.getCampus().getId(), testmap.getTitle(), testmap.getEmoji(), testmap.isAccess(), hashtagList
         );
 
+        Long fakeMapId = 1l;
+        ReflectionTestUtils.setField(testmap, "id", fakeMapId);
+
         //mocking
         given(campusRepository.findById(any())).willReturn(Optional.ofNullable(testcampus));
         given(mapRepository.save(any())).willReturn(testmap);
+        given(mapRepository.findById(fakeMapId)).willReturn(Optional.ofNullable(testmap));
         given(hashtagRepository.findById(hashtag.getHashtagId())).willReturn(Optional.ofNullable(testhashtag));
 
         //when
         Long newMapId = mapService.createMap(testuser, registerRequest);
 
         //then
-        assertThat(newMapId).isEqualTo(testmap.getId());
+        Map findMap = mapRepository.findById(newMapId).get();
+        assertEquals(testmap, findMap);
     }
 }
