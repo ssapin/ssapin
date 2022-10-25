@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MapService {
     Long createMap(User user, MapRequest.MapRegister mapRegister);
+
+    Long updateMap(MapRequest.MapEdit mapEdit);
 }

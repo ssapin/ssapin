@@ -26,7 +26,7 @@ public class MapController {
 
     @PostMapping
     @ApiOperation(value = "추천지도 생성 ", notes = "사용자가 추천지도를 생성한다.")
-    public ResponseEntity<?> addMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister, float price) {
+    public ResponseEntity<?> addMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister) {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
@@ -42,19 +42,19 @@ public class MapController {
     }
 
     @PatchMapping
-    @ApiOperation(value = "추천지도 생성 ", notes = "사용자가 추천지도를 생성한다.")
-    public ResponseEntity<?> editMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister, float price) {
+    @ApiOperation(value = "추천지도 수정", notes = "사용자가 추천지도를 수정한다.")
+    public ResponseEntity<?> editMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapEdit mapEdit) {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
             User user = new User("test", "test", new Campus("test"), "test");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
-                return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
+                return new ResponseEntity<Long>(mapService.updateMap(mapEdit), HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("추천지도 생성 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("추천지도 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
