@@ -33,9 +33,6 @@ class MapServiceImplTest {
     private MapServiceImpl mapService;
 
     @Mock
-    private MapHashtagRepository mapHashtagRepository;
-
-    @Mock
     private HashtagRepository hashtagRepository;
 
     @Mock
