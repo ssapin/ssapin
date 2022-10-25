@@ -1,6 +1,7 @@
 package com.ssapin.backend.api.service;
 
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
+import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.User;
 
@@ -12,4 +13,6 @@ public interface MapService {
     Long updateMap(MapRequest.MapEdit mapEdit);
 
     void deleteMap(long mapId);
+
+    MapResponse detailMap(User user, long mapId);
 }

@@ -8,6 +8,7 @@ import com.ssapin.backend.api.domain.repository.HashtagRepository;
 import com.ssapin.backend.api.domain.repository.MapHashtagRepository;
 import com.ssapin.backend.api.domain.repository.MapRepository;
 import com.ssapin.backend.api.domain.repositorysupport.MapHashtagRepositorySupport;
+import com.ssapin.backend.api.domain.repositorysupport.MapPlaceRepositorySupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,9 @@ class MapServiceImplTest {
 
     @Mock
     private MapHashtagRepositorySupport mapHashtagRepositorySupport;
+
+    @Mock
+    private MapPlaceRepositorySupport mapPlaceRepositorySupport;
 
     @DisplayName("추천지도 생성 테스트")
     @Test
@@ -178,5 +182,55 @@ class MapServiceImplTest {
 
         //then
         verify(mapRepository, times(1)).delete(originMap);
+    }
+
+    @DisplayName("추천지도 삭제 테스트")
+    @Test
+    void detailMap() throws Exception {
+        //given
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+
+        List<HashtagRequest> hashtagList = new ArrayList<>();
+        HashtagRequest hashtag = new HashtagRequest(1);
+        Hashtag originHashtag = Hashtag.builder()
+                .content("test hashtag")
+                .build();
+        hashtagList.add(hashtag);
+        List<MapHashtag> originList = new ArrayList<>();
+        MapHashtag originmapHashtag = MapHashtag.builder()
+                .map(originMap)
+                .hashtag(originHashtag)
+                .build();
+        originList.add(originmapHashtag);
+
+        List<MapPlace> testmapplaceList = new ArrayList<>();
+        Place testplace = Place.builder()
+                .title("test place title")
+                .lng(1)
+                .lat(1)
+                .itemId(1)
+                .build();
+        User testuser = User.builder()
+                .token("test token2")
+                .nickname("test nickname2")
+                .emoji("test emoji2")
+                .campus(originMap.getCampus())
+                .build();
+        MapPlace testmapplace = MapPlace.builder()
+                .map(originMap)
+                .user(testuser)
+                .place(testplace)
+                .build();
+        testmapplaceList.add(testmapplace);
+
+        //mocking
+        given(mapRepository.findById(originMap.getId())).willReturn(Optional.ofNullable(originMap));
+        given(mapPlaceRepositorySupport.findByMap(any())).willReturn(testmapplaceList);
+        given(mapHashtagRepositorySupport.findAllByMap(originMap)).willReturn(originList);
+        
+        //when
+
+        //then
     }
 }

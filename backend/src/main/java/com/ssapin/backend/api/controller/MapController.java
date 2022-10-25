@@ -1,6 +1,7 @@
 package com.ssapin.backend.api.controller;
 
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
+import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.Campus;
 import com.ssapin.backend.api.domain.entity.User;
@@ -77,4 +78,40 @@ public class MapController {
             return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/{mapId}/detail")
+    @ApiOperation(value = "추천지도 상세 조회", notes = "사용자가 추천지도를 상세 조회한다.")
+    public ResponseEntity<?> detailMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @PathVariable long mapId) {
+        try {
+//            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+//            User user = userService.findOneUser(userId);
+            User user = new User("test", "test", new Campus("test"), "test");
+            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+            else {
+                return new ResponseEntity<MapResponse>(mapService.detailMap(user, mapId), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    @GetMapping("/{campusId}/main")
+//    @ApiOperation(value = "추천지도 삭제", notes = "사용자가 추천지도를 삭제한다.")
+//    public ResponseEntity<?> deleteMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> requestMap) {
+//        try {
+//            long mapId = requestMap.get("mapId");
+////            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+////            User user = userService.findOneUser(userId);
+//            User user = new User("test", "test", new Campus("test"), "test");
+//            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+//            else {
+//                mapService.deleteMap(mapId);
+//                return new ResponseEntity<String>("추천지도 삭제 성공", HttpStatus.OK);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }
