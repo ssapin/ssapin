@@ -1,5 +1,6 @@
 package com.ssapin.backend.api.controller;
 
+import com.ssapin.backend.api.domain.dto.request.HashtagRequest;
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
@@ -10,10 +11,14 @@ import com.ssapin.backend.api.service.TogethermapServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,22 +95,14 @@ public class MapController {
         }
     }
 
-//    @GetMapping("/{campusId}/main")
-//    @ApiOperation(value = "추천지도 삭제", notes = "사용자가 추천지도를 삭제한다.")
-//    public ResponseEntity<?> deleteMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> requestMap) {
-//        try {
-//            long mapId = requestMap.get("mapId");
-////            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-////            User user = userService.findOneUser(userId);
-//            User user = new User("test", "test", new Campus("test"), "test");
-//            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-//            else {
-//                mapService.deleteMap(mapId);
-//                return new ResponseEntity<String>("추천지도 삭제 성공", HttpStatus.OK);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @GetMapping
+    @ApiOperation(value = "추천지도 리스트", notes = "필터링을 포함한 추천지도 리스트를 조회한다.")
+    public ResponseEntity<?> getMapList(@RequestParam List<HashtagRequest> hashtagList, @RequestParam String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
+        try {
+            return new ResponseEntity<Page<MapResponse>>(mapService.getMapList(campusId, hashtagList, keyword, pageable), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

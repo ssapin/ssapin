@@ -11,6 +11,9 @@ import com.ssapin.backend.api.domain.repositorysupport.*;
 import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class MapServiceImpl implements MapService {
 
     private final MapRepository mapRepository;
     private final MapPlaceRepositorySupport mapPlaceRepositorySupport;
+    private final MapRepositorySupport mapRepositorySupport;
     private final CampusRepository campusRepository;
     private final HashtagRepository hashtagRepository;
     private final MapHashtagRepositorySupport mapHashtagRepositorySupport;
@@ -130,5 +134,20 @@ public class MapServiceImpl implements MapService {
             }
             return new MapResponse(map, placeList, hashtagList);
         }
+    }
+
+    @Override
+    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, Pageable pageable) {
+        List<MapResponse> mapResponseList = new ArrayList<>();
+        Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);
+        for(Map map : mapList) {
+            mapResponseList.add(detailMap(map.getId()));
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), mapResponseList.size());
+        Page<MapResponse> result = new PageImpl<>(mapResponseList.subList(start, end), pageable, mapResponseList.size());
+        return result;
     }
 }
