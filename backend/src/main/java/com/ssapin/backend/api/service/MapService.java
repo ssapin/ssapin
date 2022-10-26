@@ -16,9 +16,13 @@ public interface MapService {
 
     void deleteMap(long mapId);
 
-    MapResponse detailMap(long mapId);
+    MapResponse detailMap(long mapId, User user);
 
-    Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, Pageable pageable);
+    Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable);
 
-    List<MapResponse> getRankingList(long campusId);
+    List<MapResponse> getRankingList(long campusId, User user);
+
+    void addBookmark(User user, long mapId);
+
+    void deleteBookmark(User user, long mapId);
 }

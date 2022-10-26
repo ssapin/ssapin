@@ -39,9 +39,6 @@ class MapServiceImplTest {
     private HashtagRepository hashtagRepository;
 
     @Mock
-    private MapHashtagRepository mapHashtagRepository;
-
-    @Mock
     private MapRepository mapRepository;
 
     @Mock
@@ -236,7 +233,7 @@ class MapServiceImplTest {
         given(mapHashtagRepositorySupport.findAllByMap(originMap)).willReturn(originList);
 
         //when
-        MapResponse result = mapService.detailMap(originMap.getId());
+        MapResponse result = mapService.detailMap(originMap.getId(), testuser);
 
         //then
         assertEquals(originMap.getEmoji(), result.getMapEmoji());

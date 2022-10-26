@@ -34,6 +34,8 @@ public class MapServiceImpl implements MapService {
     private final MapHashtagRepositorySupport mapHashtagRepositorySupport;
     private final MapHashtagRepository mapHashtagRepository;
     private final MapRankingRepositorySupport mapRankingRepositorySupport;
+    private final MapBookmarkRepository mapBookmarkRepository;
+    private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
 
     @Override
     @Transactional
@@ -116,8 +118,10 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public MapResponse detailMap(long mapId) {
+    public MapResponse detailMap(long mapId, User user) {
         Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        boolean bookMark = false;
+        if(user!=null) bookMark = mapBookmarkRepository.existsMapBookmarkByMapAndUser(map, user);
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
         List<HashtagRequest> hashtagList = new ArrayList<>();
         for(MapHashtag mapHashtag : list) {
@@ -126,24 +130,24 @@ public class MapServiceImpl implements MapService {
 
         List<MapPlace> mapPlaceList = mapPlaceRepositorySupport.findByMap(map);
         if (mapPlaceList.isEmpty()) {
-            return new MapResponse(map, null, hashtagList);
+            return new MapResponse(map, null, hashtagList, bookMark);
         }
         else {
             List<PlaceResponse> placeList = new ArrayList<>();
             for(MapPlace mapPlace : mapPlaceList) {
                 placeList.add(new PlaceResponse(mapPlace.getPlace()));
             }
-            return new MapResponse(map, placeList, hashtagList);
+            return new MapResponse(map, placeList, hashtagList, bookMark);
         }
     }
 
     @Override
-    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, Pageable pageable) {
+    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable) {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);
         for(Map map : mapList) {
-            mapResponseList.add(detailMap(map.getId()));
+            mapResponseList.add(detailMap(map.getId(), user));
         }
 
         int start = (int) pageable.getOffset();
@@ -153,13 +157,31 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public List<MapResponse> getRankingList(long campusId) {
+    public List<MapResponse> getRankingList(long campusId, User user) {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRankingRepositorySupport.findAllByCampus(campus);
         for(Map map : mapList) {
-            mapResponseList.add(detailMap(map.getId()));
+            mapResponseList.add(detailMap(map.getId(), user));
         }
         return mapResponseList;
+    }
+
+    @Override
+    public void addBookmark(User user, long mapId) {
+        Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        MapBookmark bookmark = MapBookmark.builder()
+                .map(map)
+                .user(user)
+                .build();
+        mapBookmarkRepository.save(bookmark);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBookmark(User user, long mapId) {
+        Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        MapBookmark mapBookmark = mapBookmarkRepositorySupport.findByMapBookmark(map, user);
+        mapBookmarkRepository.delete(mapBookmark);
     }
 }

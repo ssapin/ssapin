@@ -19,8 +19,9 @@ public class MapResponse {
     private String mapEmoji;
     private List<PlaceResponse> placeList;
     private List<HashtagRequest> hashtagList;
+    private boolean bookMark;
 
-    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList) {
+    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList, boolean bookMark) {
         this.mapId = map.getId();
         this.title = map.getTitle();
         this.userId = map.getUser().getId();
@@ -31,5 +32,6 @@ public class MapResponse {
         this.mapEmoji = map.getEmoji();
         this.placeList = placeList;
         this.hashtagList = hashtagList;
+        this.bookMark = bookMark;
     }
 }
