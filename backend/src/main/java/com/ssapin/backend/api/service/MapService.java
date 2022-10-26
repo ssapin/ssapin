@@ -19,4 +19,6 @@ public interface MapService {
     MapResponse detailMap(long mapId);
 
     Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, Pageable pageable);
+
+    List<MapResponse> getRankingList(long campusId);
 }

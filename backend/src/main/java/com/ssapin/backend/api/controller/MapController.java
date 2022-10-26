@@ -105,4 +105,15 @@ public class MapController {
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/{campusId}/ranking")
+    @ApiOperation(value = "추천지도 랭킹 리스트", notes = "추천지도 랭킹 리스트를 조회한다.")
+    public ResponseEntity<?> getRankingList(@PathVariable long campusId) {
+        try {
+            return new ResponseEntity<List<MapResponse>>(mapService.getRankingList(campusId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

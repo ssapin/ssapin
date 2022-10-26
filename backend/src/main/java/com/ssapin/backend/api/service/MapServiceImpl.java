@@ -33,6 +33,7 @@ public class MapServiceImpl implements MapService {
     private final HashtagRepository hashtagRepository;
     private final MapHashtagRepositorySupport mapHashtagRepositorySupport;
     private final MapHashtagRepository mapHashtagRepository;
+    private final MapRankingRepositorySupport mapRankingRepositorySupport;
 
     @Override
     @Transactional
@@ -149,5 +150,16 @@ public class MapServiceImpl implements MapService {
         int end = Math.min((start + pageable.getPageSize()), mapResponseList.size());
         Page<MapResponse> result = new PageImpl<>(mapResponseList.subList(start, end), pageable, mapResponseList.size());
         return result;
+    }
+
+    @Override
+    public List<MapResponse> getRankingList(long campusId) {
+        List<MapResponse> mapResponseList = new ArrayList<>();
+        Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        List<Map> mapList = mapRankingRepositorySupport.findAllByCampus(campus);
+        for(Map map : mapList) {
+            mapResponseList.add(detailMap(map.getId()));
+        }
+        return mapResponseList;
     }
 }
