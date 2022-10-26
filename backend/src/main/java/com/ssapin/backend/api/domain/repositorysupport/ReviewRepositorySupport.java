@@ -18,14 +18,10 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<ReviewResponse> findAllByPlace(Place place) {
-        List<Review> list = queryFactory.selectFrom(QReview.review)
+    public List<Review> findAllByPlace(Place place) {
+        return queryFactory.selectFrom(QReview.review)
                 .where(QReview.review.place.eq(place))
                 .fetch();
-        List <ReviewResponse> result = new ArrayList<>();
-        for(Review r : list) {
-            result.add(new ReviewResponse(r));
-        }
-         return result;
+
     }
 }

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +56,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewResponse> findReview(long placeId) {
         Place place = placeRepository.findById(placeId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        return reviewRepositorySupport.findAllByPlace(place);
+        List<ReviewResponse> result = new ArrayList<>();
+        List<Review> list = reviewRepositorySupport.findAllByPlace(place);
+        for (Review r : list) {
+            result.add(new ReviewResponse(r));
+        }
+        return result;
     }
 
 }

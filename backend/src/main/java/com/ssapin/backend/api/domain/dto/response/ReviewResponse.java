@@ -1,7 +1,9 @@
 package com.ssapin.backend.api.domain.dto.response;
 
 import com.ssapin.backend.api.domain.entity.Review;
+import lombok.Getter;
 
+@Getter
 public class ReviewResponse {
 
     private int emojiType;
