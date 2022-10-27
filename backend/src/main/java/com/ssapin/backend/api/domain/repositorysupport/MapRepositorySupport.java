@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,8 +22,8 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(QMap.map.campus.eq(campus));
 
-        if(!hashtagRequestList.isEmpty()) {
-            for(HashtagRequest request : hashtagRequestList) {
+        if (!hashtagRequestList.isEmpty()) {
+            for (HashtagRequest request : hashtagRequestList) {
                 Hashtag hashtag = (Hashtag) queryFactory.selectOne().from(QHashtag.hashtag)
                         .where(QHashtag.hashtag.id.eq(request.getHashtagId()))
                         .fetch();
@@ -32,7 +31,7 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
             }
         }
 
-        if(!(keyword.equals("") || keyword.isEmpty() || keyword.equals(null))) {
+        if (!(keyword.equals("") || keyword.isEmpty() || keyword.equals(null))) {
             builder.and(QMap.map.title.containsIgnoreCase(keyword));
         }
 
@@ -44,4 +43,6 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
 
         return result;
     }
+
+
 }
