@@ -3,12 +3,9 @@ package com.ssapin.backend.api.service;
 import com.ssapin.backend.api.domain.dto.request.HashtagRequest;
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
-import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.*;
-import com.ssapin.backend.api.domain.repositorysupport.MapBookmarkRepositorySupport;
-import com.ssapin.backend.api.domain.repositorysupport.MapHashtagRepositorySupport;
-import com.ssapin.backend.api.domain.repositorysupport.MapPlaceRepositorySupport;
+import com.ssapin.backend.api.domain.repositorysupport.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +50,12 @@ class MapServiceImplTest {
 
     @Mock
     private MapHashtagRepository mapHashtagRepository;
+
+    @Mock
+    private MapRankingRepositorySupport mapRankingRepositorySupport;
+
+    @Mock
+    private MapRepositorySupport mapRepositorySupport;
 
     @Mock
     private MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
@@ -258,11 +261,50 @@ class MapServiceImplTest {
     @DisplayName("추천지도 조회 테스트")
     @Test
     void getMapList() throws Exception {
+        //given
+        List<HashtagRequest> hashtagList = new ArrayList<>();
+        HashtagRequest hashtag = new HashtagRequest(1);
+        hashtagList.add(hashtag);
+
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+        List<Map> list = new ArrayList<>();
+        list.add(originMap);
+
+        //mocking
+        given(mapRepositorySupport.findAllByFiltering(any(), any(), any())).willReturn(list);
+
+        //when
+        List<Map> mapList = mapRepositorySupport.findAllByFiltering(originMap.getCampus(), hashtagList, originMap.getTitle().substring(1));
+
+        //then
+        assertEquals(list.get(0).getId(), mapList.get(0).getId());
     }
 
     @DisplayName("추천지도 리스트 테스트")
     @Test
     void getRankingList() throws Exception {
+        //given
+        List<HashtagRequest> hashtagList = new ArrayList<>();
+        HashtagRequest hashtag = new HashtagRequest(1);
+        hashtagList.add(hashtag);
+
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+        List<Map> list = new ArrayList<>();
+        list.add(originMap);
+
+        Campus testcampus = Campus.builder()
+                .region("test campus2")
+                .build();
+
+        //mocking
+        given(mapRankingRepositorySupport.findAllByCampus(testcampus)).willReturn(list);
+
+        List<Map> mapList = mapRankingRepositorySupport.findAllByCampus(testcampus);
+
+        //then
+        assertEquals(list.get(0).getId(), mapList.get(0).getId());
     }
 
     @DisplayName("추천지도 북마크 추가 테스트")
@@ -298,16 +340,28 @@ class MapServiceImplTest {
     @Test
     void deleteBookmark() throws Exception {
         //given
-        addBookmark();
-        MapBookmark originBookmark = mapBookmarkRepository.findById(1L).get();
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+        User testuser = User.builder()
+                .token("test token2")
+                .nickname("test nickname2")
+                .emoji("test emoji2")
+                .campus(originMap.getCampus())
+                .build();
+
+        MapBookmark testBookmark = MapBookmark.builder()
+                .map(originMap)
+                .user(testuser)
+                .build();
 
         //mocking
-        given(mapBookmarkRepository.findById(originBookmark.getId())).willReturn(Optional.ofNullable(originBookmark));
+        given(mapRepository.findById(any())).willReturn(Optional.ofNullable(originMap));
+        given(mapBookmarkRepositorySupport.findByMapBookmark(originMap, testuser)).willReturn(testBookmark);
 
         //when
-        mapService.deleteBookmark(originBookmark.getUser(), originBookmark.getMap().getId());
+        mapService.deleteBookmark(testBookmark.getUser(), testBookmark.getMap().getId());
 
         //then
-        verify(mapBookmarkRepository, times(1)).delete(originBookmark);
+        verify(mapBookmarkRepository, times(1)).delete(testBookmark);
     }
 }
