@@ -82,7 +82,7 @@ function Footer() {
           </Icon>
           <Icon>
             <a
-              href="https://www.kakaocorp.com/page/service/service/KakaoTalk"
+              href="http://pf.kakao.com/_mLgKxj"
               target="_blank"
               rel="noreferrer"
             >
