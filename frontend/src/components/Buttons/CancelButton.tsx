@@ -3,13 +3,13 @@ import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
-const StyledConfirm = styled.button`
+const StyledCancel = styled.button`
   width: 10vh;
   height: 5vh;
   flex-grow: 0;
   padding: ${pixelToRem(8)} ${pixelToRem(30)};
   border-radius: ${pixelToRem(10)};
-  background-color: ${(props) => props.theme.colors.DeepBlue};
+  background-color: ${(props) => props.theme.colors.gray300};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
@@ -17,18 +17,18 @@ const StyledConfirm = styled.button`
   line-height: 1.13;
   letter-spacing: ${pixelToRem(-0.8)};
   text-align: center;
-  color: ${(props) => props.theme.colors.gray50};
+  color: ${(props) => props.theme.colors.gray600};
 `;
 
-export default function ConfirmButton({
+export default function CancelButton({
   text,
   type,
   func,
   disabled,
 }: IButtonProps) {
   return (
-    <StyledConfirm type={type} onClick={func} disabled={disabled}>
+    <StyledCancel type={type} onClick={func} disabled={disabled}>
       {text}
-    </StyledConfirm>
+    </StyledCancel>
   );
 }

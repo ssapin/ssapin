@@ -1,41 +1,36 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-
-// 타입 지정해주기
-interface IBackButton {
-  type: "button" | undefined;
-  onClick: (e: React.MouseEvent) => void;
-}
+import { pixelToRem } from "../../utils/functions/util";
 
 const BackBtnBg = styled.button`
   position: relative;
-  width: 71px;
-  height: 67px;
-  margin: 2px 5px 29px 0;
-  border-radius: 10px;
+  width: ${pixelToRem(71)};
+  height: ${pixelToRem(67)};
+  margin: ${pixelToRem(2)} ${pixelToRem(5)} ${pixelToRem(29)} 0;
+  border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.lightBlue};
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
   }
   .arrow-head {
-    width: 30px;
-    height: 30px;
+    width: ${pixelToRem(30)};
+    height: ${pixelToRem(30)};
     flex-grow: 0;
     transform: rotate(225deg);
-    border-top: 3px solid #ffffff;
-    border-right: 3px solid #ffffff;
+    border-top: ${pixelToRem(3)} solid #ffffff;
+    border-right: ${pixelToRem(3)} solid #ffffff;
     position: absolute;
-    left: 20.3px;
-    top: 18px;
+    left: ${pixelToRem(20.3)};
+    top: ${pixelToRem(18)};
   }
   .arrow-body {
     position: absolute;
-    width: 36px;
-    height: 3px;
+    width: ${pixelToRem(36)};
+    height: ${pixelToRem(3)};
     flex-grow: 0;
-    bottom: 32.7px;
-    right: 18px;
+    bottom: ${pixelToRem(32.7)};
+    right: ${pixelToRem(18)};
     background-color: ${(props) => props.theme.colors.gray50};
   }
 `;
