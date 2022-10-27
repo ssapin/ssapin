@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.querydsl.jpa.JPAExpressions.select;
+
 @Repository
 public class MapRepositorySupport extends QuerydslRepositorySupport {
     private final JPAQueryFactory queryFactory;
@@ -23,8 +25,8 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(QMap.map.campus.eq(campus));
 
-        if(!hashtagRequestList.isEmpty()) {
-            for(HashtagRequest request : hashtagRequestList) {
+        if (!hashtagRequestList.isEmpty()) {
+            for (HashtagRequest request : hashtagRequestList) {
                 Hashtag hashtag = (Hashtag) queryFactory.selectOne().from(QHashtag.hashtag)
                         .where(QHashtag.hashtag.id.eq(request.getHashtagId()))
                         .fetch();
@@ -32,7 +34,7 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
             }
         }
 
-        if(!(keyword.equals("") || keyword.isEmpty() || keyword.equals(null))) {
+        if (!(keyword.equals("") || keyword.isEmpty() || keyword.equals(null))) {
             builder.and(QMap.map.title.containsIgnoreCase(keyword));
         }
 
@@ -43,5 +45,15 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
 
         return result;
+    }
+
+    public List<Map> findAllByCampus(Campus campus) {
+        return queryFactory.
+                selectFrom(QMap.map)
+                .join(QMap.map.user, QUser.user)
+                .where(QUser.user.campus.eq(campus))
+                .orderBy(QMap.map.count().desc())
+                .limit(5)
+                .fetch();
     }
 }

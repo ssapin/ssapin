@@ -41,7 +41,7 @@ public class MapServiceImpl implements MapService {
     @Transactional
     public Long createMap(User user, MapRequest.MapRegister mapRegister) {
         //Map 저장
-        Campus campus = campusRepository.findById(mapRegister.getCampusId()).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Campus campus = campusRepository.findById(mapRegister.getCampusId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Map map = Map.builder()
                 .user(user)
                 .access(mapRegister.getAccess())
@@ -52,8 +52,8 @@ public class MapServiceImpl implements MapService {
         Map result = mapRepository.save(map);
 
         //HashTag 저장
-        for(HashtagRequest hashtag : mapRegister.getHashtagList()) {
-            Hashtag hashTag = hashtagRepository.findById(hashtag.getHashtagId()).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND));
+        for (HashtagRequest hashtag : mapRegister.getHashtagList()) {
+            Hashtag hashTag = hashtagRepository.findById(hashtag.getHashtagId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
             MapHashtag mapHashtag = MapHashtag.builder()
                     .hashtag(hashTag)
                     .map(result)
@@ -75,7 +75,7 @@ public class MapServiceImpl implements MapService {
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
         List<Hashtag> originHashtagList = new ArrayList<>();
         List<Hashtag> deleteHashtagList = new ArrayList<>();
-        for(MapHashtag maphashTag : list) {
+        for (MapHashtag maphashTag : list) {
             originHashtagList.add(maphashTag.getHashtag());
             deleteHashtagList.add(maphashTag.getHashtag());
         }
@@ -83,25 +83,25 @@ public class MapServiceImpl implements MapService {
         //변경된 sticker
         List<HashtagRequest> newHashtagList = mapEdit.getHashtagList();
         List<Hashtag> updateHashTagList = new ArrayList<>();
-        for(HashtagRequest hashtagId : newHashtagList) {
+        for (HashtagRequest hashtagId : newHashtagList) {
             Hashtag hashtag = hashtagRepository.findById(hashtagId.getHashtagId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
             updateHashTagList.add(hashtag);
         }
 
         Collections.sort(newHashtagList);
-        if(!newHashtagList.equals(originHashtagList)) {
+        if (!newHashtagList.equals(originHashtagList)) {
             updateHashTagList.removeAll(originHashtagList);
             deleteHashtagList.removeAll(newHashtagList);
 
-            if(deleteHashtagList.size()!=0) {
-                for(Hashtag hashtag : deleteHashtagList) {
+            if (deleteHashtagList.size() != 0) {
+                for (Hashtag hashtag : deleteHashtagList) {
                     MapHashtag mapHashtag = mapHashtagRepositorySupport.findByMapAndHashtag(map, hashtag);
                     mapHashtagRepository.delete(mapHashtag);
                 }
             }
 
-            if(updateHashTagList.size()!=0) {
-                for(Hashtag hashtag : updateHashTagList) {
+            if (updateHashTagList.size() != 0) {
+                for (Hashtag hashtag : updateHashTagList) {
                     mapHashtagRepository.save(new MapHashtag(hashtag, map));
                 }
             }
@@ -121,20 +121,19 @@ public class MapServiceImpl implements MapService {
     public MapResponse detailMap(long mapId, User user) {
         Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         boolean bookMark = false;
-        if(user!=null) bookMark = mapBookmarkRepository.existsMapBookmarkByMapAndUser(map, user);
+        if (user != null) bookMark = mapBookmarkRepository.existsMapBookmarkByMapAndUser(map, user);
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
         List<HashtagRequest> hashtagList = new ArrayList<>();
-        for(MapHashtag mapHashtag : list) {
+        for (MapHashtag mapHashtag : list) {
             hashtagList.add(new HashtagRequest(mapHashtag.getHashtag().getId()));
         }
 
         List<MapPlace> mapPlaceList = mapPlaceRepositorySupport.findByMap(map);
         if (mapPlaceList.isEmpty()) {
             return new MapResponse(map, null, hashtagList, bookMark);
-        }
-        else {
+        } else {
             List<PlaceResponse> placeList = new ArrayList<>();
-            for(MapPlace mapPlace : mapPlaceList) {
+            for (MapPlace mapPlace : mapPlaceList) {
                 placeList.add(new PlaceResponse(mapPlace.getPlace()));
             }
             return new MapResponse(map, placeList, hashtagList, bookMark);
@@ -146,7 +145,7 @@ public class MapServiceImpl implements MapService {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);
-        for(Map map : mapList) {
+        for (Map map : mapList) {
             mapResponseList.add(detailMap(map.getId(), user));
         }
 
@@ -161,7 +160,7 @@ public class MapServiceImpl implements MapService {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRankingRepositorySupport.findAllByCampus(campus);
-        for(Map map : mapList) {
+        for (Map map : mapList) {
             mapResponseList.add(detailMap(map.getId(), user));
         }
         return mapResponseList;
@@ -183,5 +182,12 @@ public class MapServiceImpl implements MapService {
         Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         MapBookmark mapBookmark = mapBookmarkRepositorySupport.findByMapBookmark(map, user);
         mapBookmarkRepository.delete(mapBookmark);
+    }
+
+    @Override
+    @Transactional
+    public List<Map> get5UserByCampus(long campusId) {
+        Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        return mapRepositorySupport.findAllByCampus(campus);
     }
 }
