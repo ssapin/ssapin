@@ -5,10 +5,8 @@ import com.ssapin.backend.api.domain.dto.request.MapRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.*;
-import com.ssapin.backend.api.domain.repository.CampusRepository;
-import com.ssapin.backend.api.domain.repository.HashtagRepository;
-import com.ssapin.backend.api.domain.repository.MapHashtagRepository;
-import com.ssapin.backend.api.domain.repository.MapRepository;
+import com.ssapin.backend.api.domain.repository.*;
+import com.ssapin.backend.api.domain.repositorysupport.MapBookmarkRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.MapHashtagRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.MapPlaceRepositorySupport;
 import org.junit.jupiter.api.DisplayName;
@@ -50,6 +48,15 @@ class MapServiceImplTest {
     @Mock
     private MapPlaceRepositorySupport mapPlaceRepositorySupport;
 
+    @Mock
+    private MapBookmarkRepository mapBookmarkRepository;
+
+    @Mock
+    private MapHashtagRepository mapHashtagRepository;
+
+    @Mock
+    private MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
+
     @DisplayName("추천지도 생성 테스트")
     @Test
     void createMap() throws Exception {
@@ -90,6 +97,7 @@ class MapServiceImplTest {
         given(mapRepository.save(any())).willReturn(testmap);
         given(mapRepository.findById(fakeMapId)).willReturn(Optional.ofNullable(testmap));
         given(hashtagRepository.findById(hashtag.getHashtagId())).willReturn(Optional.ofNullable(testhashtag));
+        given(mapHashtagRepository.save(any())).willReturn(mapHashtag);
 
         //when
         Long newMapId = mapService.createMap(testuser, registerRequest);
@@ -245,5 +253,61 @@ class MapServiceImplTest {
         assertEquals(originMap.isAccess(), result.isAccess());
         assertEquals(result.getHashtagList().size(), 1);
 
+    }
+
+    @DisplayName("추천지도 조회 테스트")
+    @Test
+    void getMapList() throws Exception {
+    }
+
+    @DisplayName("추천지도 리스트 테스트")
+    @Test
+    void getRankingList() throws Exception {
+    }
+
+    @DisplayName("추천지도 북마크 추가 테스트")
+    @Test
+    void addBookmark() throws Exception {
+        //given
+        createMap();
+        Map originMap = mapRepository.findById(1L).get();
+        User testuser = User.builder()
+                .token("test token2")
+                .nickname("test nickname2")
+                .emoji("test emoji2")
+                .campus(originMap.getCampus())
+                .build();
+
+        MapBookmark testBookmark = MapBookmark.builder()
+                .map(originMap)
+                .user(testuser)
+                .build();
+
+        //mocking
+        given(mapRepository.findById(originMap.getId())).willReturn(Optional.ofNullable(originMap));
+        given(mapBookmarkRepository.save(any())).willReturn(testBookmark);
+
+        //when
+        mapService.addBookmark(testuser, originMap.getId());
+
+        //then
+        verify(mapBookmarkRepository, times(1)).save(any());
+    }
+
+    @DisplayName("추천지도 북마크 해제 테스트")
+    @Test
+    void deleteBookmark() throws Exception {
+        //given
+        addBookmark();
+        MapBookmark originBookmark = mapBookmarkRepository.findById(1L).get();
+
+        //mocking
+        given(mapBookmarkRepository.findById(originBookmark.getId())).willReturn(Optional.ofNullable(originBookmark));
+
+        //when
+        mapService.deleteBookmark(originBookmark.getUser(), originBookmark.getMap().getId());
+
+        //then
+        verify(mapBookmarkRepository, times(1)).delete(originBookmark);
     }
 }
