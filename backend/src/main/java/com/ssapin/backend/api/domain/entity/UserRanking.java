@@ -20,13 +20,18 @@ public class UserRanking extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public UserRanking update(User user){
+    @Column(nullable = false)
+    private long mapCount;
+
+    public UserRanking update(User user,long mapCount){
         this.user = user;
+        this.mapCount = mapCount;
         return this;
     }
 
     @Builder
-    public UserRanking(User user){
+    public UserRanking(User user,long mapCount){
         this.user = user;
+        this.mapCount =mapCount;
     }
 }

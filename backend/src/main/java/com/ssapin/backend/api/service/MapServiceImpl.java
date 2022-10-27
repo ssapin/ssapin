@@ -4,7 +4,7 @@ import com.ssapin.backend.api.domain.dto.request.HashtagRequest;
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
-import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
+import com.ssapin.backend.api.domain.dto.response.UserRankingResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.*;
 import com.ssapin.backend.api.domain.repositorysupport.*;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +35,8 @@ public class MapServiceImpl implements MapService {
     private final MapRankingRepositorySupport mapRankingRepositorySupport;
     private final MapBookmarkRepository mapBookmarkRepository;
     private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
+
+    private final UserRankingRepositorySupport userRankingRepositorySupport;
 
     @Override
     @Transactional
@@ -186,8 +187,8 @@ public class MapServiceImpl implements MapService {
 
     @Override
     @Transactional
-    public List<Map> get5UserByCampus(long campusId) {
+    public List<UserRankingResponse> get5UserByCampus(long campusId) {
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        return mapRepositorySupport.findAllByCampus(campus);
+        return userRankingRepositorySupport.findUsersByCampus(campus);
     }
 }
