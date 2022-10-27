@@ -5,8 +5,10 @@ import com.ssapin.backend.api.domain.dto.request.ReviewRequest;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
 import com.ssapin.backend.api.domain.entity.Place;
 import com.ssapin.backend.api.domain.entity.Review;
+import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.domain.repository.PlaceRepository;
 import com.ssapin.backend.api.domain.repository.ReviewRepository;
+import com.ssapin.backend.api.domain.repository.UserRepository;
 import com.ssapin.backend.api.domain.repositorysupport.ReviewRepositorySupport;
 import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssapin.backend.api.domain.entity.QUser.user;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -25,13 +29,17 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewRepositorySupport reviewRepositorySupport;
 
+    private final UserRepository userRepository;
+
 
     @Override
     @Transactional
-    public long addReview(ReviewRequest.ReviewAdd request) {
+    public long addReview(ReviewRequest.ReviewAdd request,User user) {
         Place place = placeRepository.findById(request.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+
         Review review = Review.builder()
                 .place(place)
+                .user(user)
                 .emojiType(request.getEmojiType())
                 .content(request.getContent())
                 .build();

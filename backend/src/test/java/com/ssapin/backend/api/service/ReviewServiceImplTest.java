@@ -39,6 +39,7 @@ class ReviewServiceImplTest {
     @Mock
     private ReviewRepository reviewRepository;
 
+
     @Mock
     private PlaceRepository placeRepository;
 
@@ -50,17 +51,30 @@ class ReviewServiceImplTest {
     @Test
     void addReview() {
         //given
+
+        Campus testcampus = Campus.builder()
+                .region("test campus")
+                .build();
         Place testplace = Place.builder()
                 .title("test place title")
                 .lng(1)
                 .lat(1)
                 .itemId(1)
                 .build();
-        System.out.println(testplace.getId());
+
+
+        User testuser = User.builder()
+                .token("test token")
+                .nickname("test nickname")
+                .emoji("test emoji")
+                .campus(testcampus)
+                .build();
+
         Review testreview = Review.builder()
                 .place(testplace)
                 .emojiType(1)
                 .content("존맛탱구리구리뱅뱅")
+                .user(testuser)
                 .build();
 
         Long fakeReviewId = 1l;
@@ -77,14 +91,14 @@ class ReviewServiceImplTest {
         given(reviewRepository.findById(fakeReviewId)).willReturn(Optional.ofNullable(testreview));
 
         //when
+        long newReviewId = reviewService.addReview(reviewRequest, testuser);
 
-        long newReviewId = reviewService.addReview(reviewRequest);
-        System.out.println(newReviewId);
         //then
         Review review = reviewRepository.findById(newReviewId).get();
         assertEquals(testreview.getId(), review.getId());
         assertEquals(testreview.getEmojiType(), review.getEmojiType());
         assertEquals(testreview.getContent(), review.getContent());
+        assertEquals(testreview.getUser().getId(), testuser.getId());
     }
 
     @DisplayName("리뷰 수정 테스트")
@@ -121,51 +135,29 @@ class ReviewServiceImplTest {
     @DisplayName("리뷰 조회 테스트")
     @Test
     void findReview() {
+        //given
         addReview();
 
-//        //given
-//        Campus testcampus = Campus.builder()
-//                .region("test campus")
-//                .build();
-//        List<Review> reviewList = new ArrayList<>();
         Place testplace = Place.builder()
                 .title("test place title")
                 .lng(1)
                 .lat(1)
                 .itemId(1)
                 .build();
-//
-//        User testuser = User.builder()
-//                .token("test token")
-//                .nickname("test nickname")
-//                .emoji("test emoji")
-//                .campus(testcampus)
-//                .build();
-//
-//        System.out.println(testplace.getId());
-//
-//        Review testreview = Review.builder()
-//                .place(testplace)
-//                .user(testuser)
-//                .emojiType(1)
-//                .content("존맛탱구리구리뱅뱅")
-//                .build();
-//
-//        reviewList.add(testreview);
+        Review testreview = reviewRepository.findById(1L).get();
+        List<Review> list = new ArrayList<>();
+        list.add(testreview);
+        given(placeRepository.findById(any())).willReturn(Optional.ofNullable(testplace));
+        given(reviewRepositorySupport.findAllByPlace(any())).willReturn(list);
 
-    List<Review> reviews = reviewRepositorySupport.findAllByPlace(testplace);
+        //when
+        List<ReviewResponse> result = reviewService.findReview(testplace.getId());
 
-    assertThat(reviews.size()).isGreaterThan(0);
 
-//        //when
-//        List<ReviewResponse> result = reviewService.findReview(testplace.getId());
-//        System.out.println("result = "+result.get(0).getContent());
-//
-//        //then
-//        assertThat(result.size()).isEqualTo(1);
-////        assertThat(result.get(0).getUserId()).isEqualTo(testreview.getUser().getId());
-////        assertThat(result.get(0).getContent()).isEqualTo(testreview.getContent());
-
+        //then
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getUserId()).isEqualTo(testreview.getUser().getId());
+        assertThat(result.get(0).getContent()).isEqualTo(testreview.getContent());
     }
 
 }

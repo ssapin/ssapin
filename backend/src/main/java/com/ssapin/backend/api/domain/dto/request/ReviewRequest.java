@@ -39,6 +39,7 @@ public class ReviewRequest {
         @ApiModelProperty(name = "리뷰아이디", example = "1")
         private long reviewId;
 
+
         @ApiModelProperty(name = "이모지타입", example = "1")
         private int emojiType;
 
