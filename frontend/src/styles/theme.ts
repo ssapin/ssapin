@@ -7,11 +7,13 @@ const colors = {
   lightBlue: "#3396F4",
   mediumBlue: "#A3BED8",
   lightLightBlue: "#E8F4FF",
+  mainNavy: "#11416F",
 
   /** Sub */
   mainYellow: "#FFE651",
   subYellow: "#FFE792",
   mainRed: "#FC0000",
+
   /** GrayScale */
   gray900: "#171717",
   gray800: "#262626",
