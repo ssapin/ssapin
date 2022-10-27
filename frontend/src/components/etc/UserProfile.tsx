@@ -11,7 +11,7 @@ const Container = styled.div`
   font-size: ${(props) => props.theme.fontSizes.h3};
   color: ${(props) => props.theme.colors.mainNavy};
   font-family: ${(props) => props.theme.fontFamily.h3bold};
-  padding: 0.5rem;
+  margin: 0.5rem;
 `;
 
 function UserProfile({ emoji, nickname }: ProfileProps) {
