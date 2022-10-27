@@ -35,5 +35,27 @@ declare module "@emotion/react" {
       s3: string;
       s4: string;
     };
+    fontFamily: {
+      h1: string;
+      h2: string;
+      h3: string;
+      h4: string;
+      h5: string;
+      paragraph: string;
+      s1: string;
+      s2: string;
+      s3: string;
+      s4: string;
+      h1bold: string;
+      h2bold: string;
+      h3bold: string;
+      h4bold: string;
+      h5bold: string;
+      paragraphbold: string;
+      s1bold: string;
+      s2bold: string;
+      s3bold: string;
+      s4bold: string;
+    };
   }
 }
