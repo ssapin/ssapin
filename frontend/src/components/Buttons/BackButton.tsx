@@ -5,33 +5,34 @@ import { pixelToRem } from "../../utils/functions/util";
 
 const BackBtnBg = styled.button`
   position: relative;
-  width: ${pixelToRem(71)};
-  height: ${pixelToRem(67)};
-  margin: ${pixelToRem(2)} ${pixelToRem(5)} ${pixelToRem(29)} 0;
+  width: 9.833795013850416vh;
+  height: 9.279778393351801vh;
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.lightBlue};
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
   }
   .arrow-head {
-    width: ${pixelToRem(30)};
-    height: ${pixelToRem(30)};
+    width: 4.1551246537396125vh;
+    height: 4.1551246537396125vh;
     flex-grow: 0;
     transform: rotate(225deg);
-    border-top: ${pixelToRem(3)} solid #ffffff;
-    border-right: ${pixelToRem(3)} solid #ffffff;
+    border-top: 0.4155124653739612vh solid
+      ${(props) => props.theme.colors.gray0};
+    border-right: 0.4155124653739612vh solid
+      ${(props) => props.theme.colors.gray0};
     position: absolute;
-    left: ${pixelToRem(20.3)};
-    top: ${pixelToRem(18)};
+    left: 2.811634349030471vh;
+    top: 2.4930747922437675vh;
   }
   .arrow-body {
     position: absolute;
-    width: ${pixelToRem(36)};
-    height: ${pixelToRem(3)};
+    width: 4.986149584487535vh;
+    height: 0.4155124653739612vh;
     flex-grow: 0;
-    bottom: ${pixelToRem(32.7)};
-    right: ${pixelToRem(18)};
-    background-color: ${(props) => props.theme.colors.gray50};
+    bottom: 4.529085872576178vh;
+    right: 2.4930747922437675vh;
+    background-color: ${(props) => props.theme.colors.gray0};
   }
 `;
 

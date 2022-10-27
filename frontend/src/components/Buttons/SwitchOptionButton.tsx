@@ -29,31 +29,54 @@ const ToggleGroup = styled.div`
   }
 `;
 
-export default function SwitchOptionButton({
-  text1,
-  text2,
-  toggle,
-}: MoreTextProps) {
-  const [toggle, setToggle] = useState(0);
+export default function ToggleButton(props: {
+  onClickLeft: () => void;
+  onClickRight: () => void;
+  textLeft:
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | React.ReactFragment
+    | React.ReactPortal
+    | null
+    | undefined;
+  textRight:
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | React.ReactFragment
+    | React.ReactPortal
+    | null
+    | undefined;
+}) {
+  const [toggle, setToggle] = React.useState("off");
 
-  const changeType = (toggle: number) => {
-    setToggle(toggle);
-  };
+  function onClickLeft() {
+    if (props && props.onClickLeft) props.onClickLeft();
+    setToggle("off");
+  }
+  function onClickRight() {
+    if (props && props.onClickRight) props.onClickRight();
+    setToggle("on");
+  }
+
   return (
     <ToggleGroup>
       <button
         type="button"
-        className={toggle === 0 ? "active" : "inactive"}
-        onClick={() => changeType(0)}
+        className={toggle === "off" ? "active" : "inactive"}
+        onClick={onClickLeft}
       >
-        {text1}
+        {props.textLeft}
       </button>
       <button
         type="button"
-        className={toggle === 1 ? "active" : "inactive"}
-        onClick={() => changeType(1)}
+        className={toggle === "on" ? "active" : "inactive"}
+        onClick={onClickRight}
       >
-        {text2}
+        {props.textRight}
       </button>
     </ToggleGroup>
   );

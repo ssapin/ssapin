@@ -7,7 +7,7 @@ const StyledCreate = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 67px;
+  height: 7vh;
   padding: 15px;
   flex-grow: 0;
   border-radius: ${pixelToRem(25)};
@@ -22,8 +22,8 @@ const StyledCreate = styled.button`
     letter-spacing: ${pixelToRem(-1.2)};
   }
   .plus {
-    width: 45px;
-    height: 45px;
+    width: 5vh;
+    height: 5vh;
     .horizontal-line {
       position: relative;
       background-color: ${(props) => props.theme.colors.gray0};

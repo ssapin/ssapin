@@ -12,6 +12,7 @@ import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import SwitchOptionButton from "../../components/Buttons/SwitchOptionButton";
+import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 
 const PageTopBg = styled.div`
   width: auto;
@@ -33,11 +34,12 @@ function MyPage() {
   return (
     <div>
       <PageTopBg>로고위치</PageTopBg>
+      <ShowMoreButton />
       <BackButton />
       <ExampleBox>
         <ConfirmButton type="button" text="검색" />
         <CancelButton type="button" text="취소" />
-        <SwitchOptionButton />
+        {/* <SwitchOptionButton textLeft="장소" textRight="지도" /> */}
         {/* <YellowButton type="button" text="필터링" /> */}
         <BigYellowButton
           type="button"
