@@ -35,7 +35,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         System.out.println("유저랭킹시작 두구두구");
         userRankingRepository.deleteAll();
 
-        for (int i = 1; i <= 5; i++) {
+        for (long i = 1; i <= 5; i++) {
             List<UserRankingResponse> UsersList = mapService.get5UserByCampus(i);
             for (UserRankingResponse uu : UsersList) {
                 UserRanking userRanking = UserRanking.builder()
@@ -48,6 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         System.out.println("지도랭킹시작 두구두구");
+        mapRankingRepository.deleteAll();
         for (int i = 1; i <= 5; i++) {
             List<Map> MapList = mapService.get6MapsByCampus(i);
             for (Map mm : MapList) {
