@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 import UserProfileImge from "../etc/UserProfileImage";
 
 type UserInfoProps = {
@@ -31,7 +30,7 @@ const EmojiContainer = styled.div`
   align-items: center;
 `;
 
-const InfoContainer = styled.div`
+const InfoContainer = styled.div<{ type: string }>`
   width: 60%;
   height: 100%;
   display: flex;
@@ -46,20 +45,33 @@ const InfoContainer = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s1};
+    background-color: transparent;
   }
 
   .nickname {
-    height: 32%;
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    height: 35%;
+    font-size: ${(props) =>
+      props.type === "pc"
+        ? props.theme.fontSizes.h3
+        : props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.mainNavy};
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-family: ${(props) =>
+      props.type === "pc"
+        ? props.theme.fontFamily.h3bold
+        : props.theme.fontFamily.h5bold};
   }
 
   .campus {
-    height: 32%;
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    height: 35%;
+    font-size: ${(props) =>
+      props.type === "pc"
+        ? props.theme.fontSizes.h3
+        : props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.mainNavy};
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-family: ${(props) =>
+      props.type === "pc"
+        ? props.theme.fontFamily.h3bold
+        : props.theme.fontFamily.h5bold};
   }
 `;
 
@@ -73,8 +85,10 @@ function UserInfoCard({ type, emoji, nickname, campus, func }: UserInfoProps) {
           <UserProfileImge size={95} emoji={emoji} />
         )}
       </EmojiContainer>
-      <InfoContainer>
-        <p className="edit">수정</p>
+      <InfoContainer type={type}>
+        <button type="button" className="edit" onClick={func}>
+          수정
+        </button>
         <p className="nickname">닉네임 : {nickname}</p>
         <p className="campus">캠퍼스 : {campus}</p>
       </InfoContainer>
