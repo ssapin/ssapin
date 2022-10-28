@@ -7,10 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.querydsl.jpa.JPAExpressions.select;
 
 @Repository
 public class MapRepositorySupport extends QuerydslRepositorySupport {
@@ -47,13 +44,5 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
         return result;
     }
 
-    public List<Map> findAllByCampus(Campus campus) {
-        return queryFactory.
-                selectFrom(QMap.map)
-                .join(QMap.map.user, QUser.user)
-                .where(QUser.user.campus.eq(campus))
-                .orderBy(QMap.map.count().desc())
-                .limit(5)
-                .fetch();
-    }
+
 }
