@@ -7,11 +7,13 @@ const colors = {
   lightBlue: "#3396F4",
   mediumBlue: "#A3BED8",
   lightLightBlue: "#E8F4FF",
+  mainNavy: "#11416F",
 
   /** Sub */
   mainYellow: "#FFE651",
   subYellow: "#FFE792",
   mainRed: "#FC0000",
+
   /** GrayScale */
   gray900: "#171717",
   gray800: "#262626",
@@ -39,9 +41,33 @@ const fontSizes = {
   s4: pixelToRem(6),
 };
 
+const fontFamily = {
+  h1: "S-CoreDream-5Medium",
+  h2: "S-CoreDream-5Medium",
+  h3: "S-CoreDream-5Medium",
+  h4: "S-CoreDream-5Medium",
+  h5: "S-CoreDream-5Medium",
+  h1bold: "S-CoreDream-7ExtraBold",
+  h2bold: "S-CoreDream-7ExtraBold",
+  h3bold: "S-CoreDream-7ExtraBold",
+  h4bold: "S-CoreDream-7ExtraBold",
+  h5bold: "S-CoreDream-7ExtraBold",
+  paragraph: "S-CoreDream-4Regular",
+  s1: "S-CoreDream-4Regular",
+  s2: "S-CoreDream-4Regular",
+  s3: "S-CoreDream-4Regular",
+  s4: "S-CoreDream-4Regular",
+  paragraphbold: "S-CoreDream-6Bold",
+  s1bold: "S-CoreDream-6Bold",
+  s2bold: "S-CoreDream-6Bold",
+  s3bold: "S-CoreDream-6Bold",
+  s4bold: "S-CoreDream-6Bold",
+};
+
 export const themes = {
   colors,
   fontSizes,
+  fontFamily,
 };
 
 export default themes;
