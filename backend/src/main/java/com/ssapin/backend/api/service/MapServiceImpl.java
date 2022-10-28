@@ -35,8 +35,8 @@ public class MapServiceImpl implements MapService {
     private final MapRankingRepositorySupport mapRankingRepositorySupport;
     private final MapBookmarkRepository mapBookmarkRepository;
     private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
-
     private final UserRankingRepositorySupport userRankingRepositorySupport;
+    private final ReviewRepositorySupport reviewRepositorySupport;
 
     @Override
     @Transactional
@@ -135,7 +135,9 @@ public class MapServiceImpl implements MapService {
         } else {
             List<PlaceResponse> placeList = new ArrayList<>();
             for (MapPlace mapPlace : mapPlaceList) {
-                placeList.add(new PlaceResponse(mapPlace.getPlace()));
+                List<Review> review = reviewRepositorySupport.findAllByPlace(mapPlace.getPlace());
+                if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null));
+                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(review.size()-1).getContent()));
             }
             return new MapResponse(map, placeList, hashtagList, bookMark);
         }
