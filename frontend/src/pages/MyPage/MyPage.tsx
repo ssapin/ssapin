@@ -4,15 +4,17 @@ import { pixelToRem } from "../../utils/functions/util";
 import BackButton from "../../components/Buttons/BackButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import CancelButton from "../../components/Buttons/CancelButton";
-import {
-  YellowButton,
-  BigYellowButton,
-} from "../../components/Buttons/YellowButton";
+import { BigYellowButton } from "../../components/Buttons/YellowButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import SwitchOptionButton from "../../components/Buttons/SwitchOptionButton";
 import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
+import MapCircleButton from "../../components/Buttons/MapCircleButton";
+import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
+import PlaceDetailButton from "../../components/Buttons/PlaceDetailButton";
+import CampusButton from "../../components/Buttons/CampusButton";
+import MenuButton from "../../components/Buttons/MenuButton";
 
 const PageTopBg = styled.div`
   width: auto;
@@ -34,6 +36,11 @@ function MyPage() {
   return (
     <div>
       <PageTopBg>로고위치</PageTopBg>
+      <MenuButton />
+      <CampusButton />
+      {/* <PlaceDetailButton type="button" /> */}
+      <PlaceRatingButton />
+      <MapCircleButton type="button" shape="1" />
       <ShowMoreButton />
       <BackButton />
       <ExampleBox>
