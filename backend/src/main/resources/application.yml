@@ -24,9 +24,9 @@ logging:
       samsung:
         security: DEBUG
     root: INFO
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
+#jasypt:
+  #encryptor:
+  #  bean: jasyptStringEncryptor
 
 
 spring:
@@ -45,9 +45,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
-      username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
-    url: jdbc:mysql://localhost:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+      password: rldya2tony!
+      username: root
+    url: jdbc:mysql://localhost:3306/ssafy?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
   devtools:
     livereload:
       enabled: 'true'
