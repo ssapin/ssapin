@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 
 interface UserOpinionProps {
-  emoji: string;
+  emoji: number;
   content: string;
   isAdmin: boolean;
   // eslint-disable-next-line react/require-default-props
@@ -65,7 +65,9 @@ function TogetherMapTitleCard({
 }: UserOpinionProps) {
   return (
     <Container>
-      <p className="icon">{emoji}</p>
+      {emoji === 1 && <p className="icon">웃음이모지</p>}
+      {emoji === 2 && <p className="icon">무표정이모지</p>}
+      {emoji === 3 && <p className="icon">화남이모지</p>}
       {isAdmin && (
         <div className="delete">
           <TrashIcon onClick={func} />
