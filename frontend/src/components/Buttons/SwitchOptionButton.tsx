@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 
@@ -51,14 +51,14 @@ export default function ToggleButton(props: {
     | null
     | undefined;
 }) {
-  const [toggle, setToggle] = React.useState("off");
+  const [toggle, setToggle] = useState("off");
 
   function onClickLeft() {
-    if (props && props.onClickLeft) props.onClickLeft();
+    if (props && onClickLeft) onClickLeft();
     setToggle("off");
   }
   function onClickRight() {
-    if (props && props.onClickRight) props.onClickRight();
+    if (props && onClickRight) onClickRight();
     setToggle("on");
   }
 
@@ -69,14 +69,14 @@ export default function ToggleButton(props: {
         className={toggle === "off" ? "active" : "inactive"}
         onClick={onClickLeft}
       >
-        {props.textLeft}
+        {textLeft}
       </button>
       <button
         type="button"
         className={toggle === "on" ? "active" : "inactive"}
         onClick={onClickRight}
       >
-        {props.textRight}
+        {textRight}
       </button>
     </ToggleGroup>
   );
