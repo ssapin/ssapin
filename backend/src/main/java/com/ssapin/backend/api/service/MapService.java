@@ -4,6 +4,7 @@ import com.ssapin.backend.api.domain.dto.request.HashtagRequest;
 import com.ssapin.backend.api.domain.dto.request.MapRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.UserRankingResponse;
+import com.ssapin.backend.api.domain.entity.Map;
 import com.ssapin.backend.api.domain.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,4 +29,6 @@ public interface MapService {
     void deleteBookmark(User user, long mapId);
 
     List<UserRankingResponse> get5UserByCampus(long campusId);
+
+    List<Map> get6MapsByCampus(long campusId);
 }
