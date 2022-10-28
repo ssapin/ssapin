@@ -11,7 +11,7 @@ const Container = styled.div`
   border-radius: 10px;
   margin: 1rem;
   width: 22rem;
-  height: 7rem;
+  height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
