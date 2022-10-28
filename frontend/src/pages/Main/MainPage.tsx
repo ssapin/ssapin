@@ -1,12 +1,12 @@
 import React from "react";
-import BackButton from "../../components/Buttons/BackButton";
+import Footer from "../../components/etc/Footer";
 
 function MainPage() {
   return (
-    <div>
-      <div>시범 페이지 </div>
-      <BackButton />
-    </div>
+    <>
+      <div>MainPage</div>
+      <Footer />
+    </>
   );
 }
 
