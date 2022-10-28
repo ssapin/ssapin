@@ -4,6 +4,8 @@ type HotPlaceProps = {
   place: string;
   address: string;
   message: string;
+  // eslint-disable-next-line react/require-default-props
+  func?: () => void;
 };
 
 const Container = styled.div`
@@ -43,9 +45,9 @@ const Container = styled.div`
   }
 `;
 
-function HotPlaceCard({ place, address, message }: HotPlaceProps) {
+function HotPlaceCard({ place, address, message, func }: HotPlaceProps) {
   return (
-    <Container>
+    <Container onClick={func}>
       <p className="place">{place}</p>
       <p className="address">{address}</p>
       <p className="message">{message}</p>
