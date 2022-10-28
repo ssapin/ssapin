@@ -3,10 +3,12 @@ package com.ssapin.backend.api.service;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.Campus;
+import com.ssapin.backend.api.domain.entity.Review;
 import com.ssapin.backend.api.domain.entity.Togethermap;
 import com.ssapin.backend.api.domain.entity.TogethermapPlace;
 import com.ssapin.backend.api.domain.repository.CampusRepository;
 import com.ssapin.backend.api.domain.repository.TogethermapRepository;
+import com.ssapin.backend.api.domain.repositorysupport.ReviewRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapPlaceRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapRepositorySupport;
 import com.ssapin.backend.exception.CustomException;
@@ -25,6 +27,20 @@ public class TogethermapServiceImpl implements TogethermapService {
     private final TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
     private final CampusRepository campusRepository;
     private final TogethermapRepository togethermapRepository;
+    private final ReviewRepositorySupport reviewRepositorySupport;
+
+    @Override
+    public TogethermapResponse findOne(long togethermapId) {
+        Togethermap togethermap = togethermapRepository.findById(togethermapId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
+        List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(togethermap);
+        List<PlaceResponse> placeList = new ArrayList<>();
+        for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
+            List<Review> review = reviewRepositorySupport.findAllByPlace(togethermapPlace.getPlace());
+            if(review.isEmpty()) placeList.add(new PlaceResponse(togethermapPlace.getPlace(), null));
+            else placeList.add(new PlaceResponse(togethermapPlace.getPlace(), review.get(review.size()-1).getContent()));
+        }
+        return new TogethermapResponse(togethermap, placeList);
+    }
 
     @Override
     public List<TogethermapResponse> findAll(long campusId) {
@@ -37,24 +53,12 @@ public class TogethermapServiceImpl implements TogethermapService {
                 result.add(new TogethermapResponse(map, null));
             }
             else {
-                List<PlaceResponse> placeList = new ArrayList<>();
                 for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
-                    placeList.add(new PlaceResponse(togethermapPlace.getPlace()));
+                    result.add(findOne(togethermapPlace.getId()));
                 }
-                result.add(new TogethermapResponse(map, placeList));
+
             }
         }
         return result;
-    }
-
-    @Override
-    public TogethermapResponse findOne(long togethermapId) {
-        Togethermap togethermap = togethermapRepository.findById(togethermapId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
-        List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(togethermap);
-        List<PlaceResponse> placeList = new ArrayList<>();
-        for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
-            placeList.add(new PlaceResponse(togethermapPlace.getPlace()));
-        }
-        return new TogethermapResponse(togethermap, placeList);
     }
 }
