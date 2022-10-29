@@ -16,12 +16,14 @@ const StyledShowMore = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   color: ${(props) => props.theme.colors.gray0};
   text-align: center;
-
+  &:hover {
+    background-color: ${(props) => props.theme.colors.mainBlue};
+  }
   .text {
     font-size: ${(props) => props.theme.fontSizes.h3};
     line-height: 1.21;
     letter-spacing: ${pixelToRem(-1.2)};
-    font-weight: 800;
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
   }
 `;
 

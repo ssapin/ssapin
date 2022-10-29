@@ -1,28 +1,16 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
+import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 
 const StyledCreate = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   width: 7vh;
   height: 7vh;
   background-color: ${(props) => props.theme.colors.lightBlue};
-  .horizontal-line {
-    position: relative;
-    background-color: ${(props) => props.theme.colors.gray0};
-    width: 60%;
-    height: 5%;
-    left: 20%;
-    top: 25%;
-  }
-  .vertical-line {
-    position: relative;
-    background-color: ${(props) => props.theme.colors.gray0};
-    width: 5%;
-    height: 50%;
-    left: 47%;
-    top: 0%;
-  }
 `;
 
 export default function CreateButtonMobile({
@@ -32,8 +20,7 @@ export default function CreateButtonMobile({
 }: IButtonProps) {
   return (
     <StyledCreate type={type} onClick={func} disabled={disabled}>
-      <div className="horizontal-line" />
-      <div className="vertical-line" />
+      <PlusIcon />
     </StyledCreate>
   );
 }

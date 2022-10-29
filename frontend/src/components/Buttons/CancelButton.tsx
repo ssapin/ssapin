@@ -4,17 +4,14 @@ import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
 const StyledCancel = styled.button`
-  width: 10vh;
-  height: 5vh;
+  height: 4.761904761904762vh;
   flex-grow: 0;
-  padding: ${pixelToRem(8)} ${pixelToRem(30)};
+  padding: 0 ${pixelToRem(30)};
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.gray300};
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
   font-size: ${(props) => props.theme.fontSizes.paragraph};
-  line-height: 1.13;
+  line-height: 0.5;
   letter-spacing: ${pixelToRem(-0.8)};
   text-align: center;
   color: ${(props) => props.theme.colors.gray600};

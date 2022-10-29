@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
+import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 
 const StyledCreate = styled.button`
   display: flex;
@@ -14,32 +15,20 @@ const StyledCreate = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   color: ${(props) => props.theme.colors.gray0};
   text-align: center;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.mainBlue};
+  }
   .text {
     bottom: 25%;
-    width: 155px;
+    width: 120%;
     font-size: ${(props) => props.theme.fontSizes.h3};
+    font-family: ${(props) => props.theme.fontFamily.h3};
     line-height: 1.21;
     letter-spacing: ${pixelToRem(-1.2)};
   }
   .plus {
     width: 5vh;
     height: 5vh;
-    .horizontal-line {
-      position: relative;
-      background-color: ${(props) => props.theme.colors.gray0};
-      width: 55%;
-      height: 5%;
-      left: 20.5%;
-      top: 45%;
-    }
-    .vertical-line {
-      position: relative;
-      background-color: ${(props) => props.theme.colors.gray0};
-      width: 5%;
-      height: 55%;
-      left: 45%;
-      top: 15%;
-    }
   }
 `;
 
@@ -52,10 +41,7 @@ export default function CreateButton({
   return (
     <StyledCreate type={type} onClick={func} disabled={disabled}>
       <div className="text">{text}</div>
-      <div className="plus">
-        <div className="horizontal-line" />
-        <div className="vertical-line" />
-      </div>
+      <PlusIcon className="plus" />
     </StyledCreate>
   );
 }

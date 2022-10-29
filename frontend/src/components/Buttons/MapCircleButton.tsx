@@ -41,7 +41,7 @@ export default function MapCircleButton({
   return (
     <WhiteCircle type={type} onClick={func} disabled={disabled} shape={shape}>
       {shape === "0" && <KakaotalkIcon className="not-location" />}
-      {shape === "1" && <LinkShareIcon width={35} height={35} fill="none" />}
+      {shape === "1" && <LinkShareIcon width={25} fill="none" />}
       {shape === "2" && <EHeartIcon className="not-location" />}
       {shape === "3" && <FHeartIcon className="not-location" />}
       {shape === "4" && <LocationIcon className="my-location" />}

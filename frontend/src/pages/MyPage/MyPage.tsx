@@ -26,11 +26,11 @@ const PageTopBg = styled.div`
   color: ${(props) => props.theme.colors.gray0};
 `;
 
-const ExampleBox = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: space-around;
-`;
+// const ExampleBox = styled.div`
+//   width: 50%;
+//   display: flex;
+//   justify-content: space-around;
+// `;
 
 function MyPage() {
   return (
@@ -38,25 +38,23 @@ function MyPage() {
       <PageTopBg>로고위치</PageTopBg>
       <MenuButton />
       <CampusButton />
-      {/* <PlaceDetailButton type="button" /> */}
+      <PlaceDetailButton type="button" />
       <PlaceRatingButton />
       <MapCircleButton type="button" shape="1" />
       <ShowMoreButton />
       <BackButton />
-      <ExampleBox>
-        <ConfirmButton type="button" text="검색" />
-        <CancelButton type="button" text="취소" />
-        {/* <SwitchOptionButton textLeft="장소" textRight="지도" /> */}
-        {/* <YellowButton type="button" text="필터링" /> */}
-        <BigYellowButton
-          type="button"
-          text1="129개의 핀잇!"
-          text2="지금 참여하러 가기"
-        />
-      </ExampleBox>
+      <ConfirmButton type="button" text="카카오 지도로 자세히 보기" />
+      <CancelButton type="button" text="취소" />
+      {/* <SwitchOptionButton textLeft="장소" textRight="지도" /> */}
+      {/* <YellowButton type="button" text="필터링" /> */}
+      <BigYellowButton
+        type="button"
+        text1="129개의 핀잇!"
+        text2="지금 참여하러 가기"
+      />
+      <CreateButtonMobile type="button" />
       <MoveToTopButton />
       <CreateButton type="button" text="장소 추가하기" />
-      <CreateButtonMobile type="button" />
     </div>
   );
 }

@@ -13,9 +13,7 @@ const StyledYellow = styled.button`
   padding: ${pixelToRem(18)} ${pixelToRem(40)};
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.mainYellow};
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
+  font-family: ${(props) => props.theme.fontFamily.h3};
   font-size: ${(props) => props.theme.fontSizes.h3};
   line-height: 1.21;
   letter-spacing: ${pixelToRem(-1.2)};
@@ -31,22 +29,21 @@ const StyledBigYellow = styled.button`
   box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} 0 rgba(0, 0, 0, 0.25);
   display: block;
   justify-content: center;
+  text-align: center;
+  &:hover {
+    background-color: #ffdf1d;
+  }
   .red-textbox {
     color: ${(props) => props.theme.colors.mainRed};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
+    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
     line-height: 1.13;
     letter-spacing: ${pixelToRem(-0.8)};
-    text-align: center;
   }
   .main-textbox {
-    width: ${pixelToRem(232)};
     font-size: ${(props) => props.theme.fontSizes.h3};
-    font-weight: 800;
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
     color: ${(props) => props.theme.colors.gray900};
-    text-align: center;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.21;

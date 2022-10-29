@@ -3,10 +3,6 @@ import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as MenuIcon } from "../../assets/svgs/hamburgerbar.svg";
 
-interface IMenuProps {
-  func?: void;
-}
-
 const StyledMenu = styled.button`
   width: ${pixelToRem(66)};
   height: ${pixelToRem(66)};
@@ -15,9 +11,9 @@ const StyledMenu = styled.button`
   background-color: ${(props) => props.theme.colors.mainBlue};
 `;
 
-export default function MenuButton({ func }: IMenuProps) {
+export default function MenuButton() {
   return (
-    <StyledMenu type="button" onClick={func}>
+    <StyledMenu type="button">
       <MenuIcon />
     </StyledMenu>
   );
