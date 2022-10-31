@@ -36,8 +36,8 @@ public class TogethermapServiceImpl implements TogethermapService {
         List<PlaceResponse> placeList = new ArrayList<>();
         for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
             List<Review> review = reviewRepositorySupport.findAllByPlace(togethermapPlace.getPlace());
-            if(review.isEmpty()) placeList.add(new PlaceResponse(togethermapPlace.getPlace(), null));
-            else placeList.add(new PlaceResponse(togethermapPlace.getPlace(), review.get(review.size()-1).getContent()));
+            if(review.isEmpty()) placeList.add(new PlaceResponse(togethermapPlace.getPlace(), null, togethermapPlace.getUser()));
+            else placeList.add(new PlaceResponse(togethermapPlace.getPlace(), review.get(review.size()-1).getContent(), togethermapPlace.getUser()));
         }
         return new TogethermapResponse(togethermap, placeList);
     }

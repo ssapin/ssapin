@@ -262,9 +262,8 @@ class MapServiceImplTest {
     @Test
     void getMapList() throws Exception {
         //given
-        List<HashtagRequest> hashtagList = new ArrayList<>();
-        HashtagRequest hashtag = new HashtagRequest(1);
-        hashtagList.add(hashtag);
+        List<Long> hashtagList = new ArrayList<>();
+        hashtagList.add(1l);
 
         createMap();
         Map originMap = mapRepository.findById(1L).get();

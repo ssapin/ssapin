@@ -83,16 +83,18 @@ public class MapServiceImpl implements MapService {
 
         //변경된 sticker
         List<HashtagRequest> newHashtagList = mapEdit.getHashtagList();
+        Collections.sort(newHashtagList);
         List<Hashtag> updateHashTagList = new ArrayList<>();
+        List<Hashtag> newHashTagList = new ArrayList<>();
         for (HashtagRequest hashtagId : newHashtagList) {
             Hashtag hashtag = hashtagRepository.findById(hashtagId.getHashtagId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
             updateHashTagList.add(hashtag);
+            newHashTagList.add(hashtag);
         }
 
-        Collections.sort(newHashtagList);
-        if (!newHashtagList.equals(originHashtagList)) {
+        if (!updateHashTagList.equals(originHashtagList)) {
             updateHashTagList.removeAll(originHashtagList);
-            deleteHashtagList.removeAll(newHashtagList);
+            deleteHashtagList.removeAll(newHashTagList);
 
             if (deleteHashtagList.size() != 0) {
                 for (Hashtag hashtag : deleteHashtagList) {
@@ -136,15 +138,15 @@ public class MapServiceImpl implements MapService {
             List<PlaceResponse> placeList = new ArrayList<>();
             for (MapPlace mapPlace : mapPlaceList) {
                 List<Review> review = reviewRepositorySupport.findAllByPlace(mapPlace.getPlace());
-                if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null));
-                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(review.size()-1).getContent()));
+                if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null, mapPlace.getUser()));
+                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(review.size()-1).getContent(), mapPlace.getUser()));
             }
             return new MapResponse(map, placeList, hashtagList, bookMark);
         }
     }
 
     @Override
-    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable) {
+    public Page<MapResponse> getMapList(long campusId, List<Long> hashtagList, String keyword, User user, Pageable pageable) {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);

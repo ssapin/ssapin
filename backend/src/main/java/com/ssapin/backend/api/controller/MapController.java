@@ -37,7 +37,7 @@ public class MapController {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-              User user = new User("test", "test", new Campus("test"), "test");
+              User user = new User("dd", "dd", new Campus("서울"), "dd");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
@@ -101,7 +101,7 @@ public class MapController {
     @GetMapping
     @ApiOperation(value = "추천지도 리스트", notes = "필터링을 포함한 추천지도 리스트를 조회한다.")
     public ResponseEntity<?> getMapList(@RequestHeader("ACCESS_TOKEN") final String accessToken,
-                                        @RequestParam List<HashtagRequest> hashtagList, @RequestParam String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
+                                        @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
         try {
             //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
@@ -129,7 +129,7 @@ public class MapController {
 
     @PostMapping("/bookmark")
     @ApiOperation(value = "추천지도 북마크", notes = "사용자가 추천지도를 북마크한다.")
-    public ResponseEntity<?> addBookmark(@RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> addBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -148,7 +148,7 @@ public class MapController {
 
     @DeleteMapping("/bookmark")
     @ApiOperation(value = "추천지도 북마크 해제", notes = "사용자가 추천지도 북마크를 해제한다.")
-    public ResponseEntity<?> deleteBookmark(@RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> deleteBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
