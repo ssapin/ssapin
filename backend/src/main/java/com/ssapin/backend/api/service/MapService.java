@@ -20,7 +20,7 @@ public interface MapService {
 
     MapResponse detailMap(long mapId, User user);
 
-    Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable);
+    Page<MapResponse> getMapList(long campusId, List<Long> hashtagList, String keyword, User user, Pageable pageable);
 
     List<MapResponse> getRankingList(long campusId, User user);
 

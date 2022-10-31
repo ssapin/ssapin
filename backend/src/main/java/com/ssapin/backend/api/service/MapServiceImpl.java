@@ -144,7 +144,7 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable) {
+    public Page<MapResponse> getMapList(long campusId, List<Long> hashtagList, String keyword, User user, Pageable pageable) {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);

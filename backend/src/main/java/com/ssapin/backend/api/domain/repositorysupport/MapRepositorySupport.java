@@ -18,14 +18,14 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<Map> findAllByFiltering(Campus campus, List<HashtagRequest> hashtagRequestList, String keyword) {
+    public List<Map> findAllByFiltering(Campus campus, List<Long> hashtagRequestList, String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(QMap.map.campus.eq(campus));
 
         if (!hashtagRequestList.isEmpty()) {
-            for (HashtagRequest request : hashtagRequestList) {
+            for (Long request : hashtagRequestList) {
                 Hashtag hashtag = (Hashtag) queryFactory.selectOne().from(QHashtag.hashtag)
-                        .where(QHashtag.hashtag.id.eq(request.getHashtagId()))
+                        .where(QHashtag.hashtag.id.eq(request))
                         .fetch();
                 builder.and(QMapHashtag.mapHashtag.hashtag.eq(hashtag));
             }
