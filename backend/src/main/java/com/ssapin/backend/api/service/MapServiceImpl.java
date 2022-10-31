@@ -83,16 +83,18 @@ public class MapServiceImpl implements MapService {
 
         //변경된 sticker
         List<HashtagRequest> newHashtagList = mapEdit.getHashtagList();
+        Collections.sort(newHashtagList);
         List<Hashtag> updateHashTagList = new ArrayList<>();
+        List<Hashtag> newHashTagList = new ArrayList<>();
         for (HashtagRequest hashtagId : newHashtagList) {
             Hashtag hashtag = hashtagRepository.findById(hashtagId.getHashtagId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
             updateHashTagList.add(hashtag);
+            newHashTagList.add(hashtag);
         }
 
-        Collections.sort(newHashtagList);
-        if (!newHashtagList.equals(originHashtagList)) {
+        if (!updateHashTagList.equals(originHashtagList)) {
             updateHashTagList.removeAll(originHashtagList);
-            deleteHashtagList.removeAll(newHashtagList);
+            deleteHashtagList.removeAll(newHashTagList);
 
             if (deleteHashtagList.size() != 0) {
                 for (Hashtag hashtag : deleteHashtagList) {

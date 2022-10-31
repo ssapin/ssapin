@@ -34,7 +34,7 @@ spring:
     hibernate:
       naming:
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
-      ddl-auto: create
+      ddl-auto: update
       use-new-id-generator-mappings: 'true'
     properties:
       hibernate:

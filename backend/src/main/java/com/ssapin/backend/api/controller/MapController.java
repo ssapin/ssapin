@@ -37,7 +37,7 @@ public class MapController {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-              User user = new User("test", "test", new Campus("test"), "test");
+              User user = new User("dd", "dd", new Campus("서울"), "dd");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
@@ -101,7 +101,7 @@ public class MapController {
     @GetMapping
     @ApiOperation(value = "추천지도 리스트", notes = "필터링을 포함한 추천지도 리스트를 조회한다.")
     public ResponseEntity<?> getMapList(@RequestHeader("ACCESS_TOKEN") final String accessToken,
-                                        @RequestParam List<Long> hashtagList, @RequestParam String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
+                                        @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
         try {
             //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
