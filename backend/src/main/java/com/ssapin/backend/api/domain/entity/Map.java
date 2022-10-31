@@ -35,10 +35,10 @@ public class Map extends BaseEntity {
     private String emoji;
 
     public Map update(Campus campus, String title, boolean access, String emoji){
-        this.campus=campus;
-        this.title=title;
-        this.access=access;
-        this.emoji=emoji;
+        if(!this.campus.equals(campus)) this.campus=campus;
+        if(!this.title.equals(title)) this.title=title;
+        if(this.access!=access) this.access=access;
+        if(!this.emoji.equals(emoji)) this.emoji=emoji;
         return this;
     }
 
