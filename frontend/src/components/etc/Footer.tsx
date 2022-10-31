@@ -54,7 +54,6 @@ const CopyRight = styled.div`
 
 const Icon = styled.div`
   padding: 10px;
-  color: ${(props) => props.theme.colors.gray400};
 `;
 
 function Footer() {
@@ -86,7 +85,7 @@ function Footer() {
               target="_blank"
               rel="noreferrer"
             >
-              <KakaotalkIcon />
+              <KakaotalkIcon fill="#999999" />
             </a>
           </Icon>
         </IconContainer>

@@ -1,0 +1,20 @@
+import React from "react";
+import styled from "@emotion/styled";
+import { pixelToRem } from "../../utils/functions/util";
+import { ReactComponent as MenuIcon } from "../../assets/svgs/hamburgerbar.svg";
+
+const StyledMenu = styled.button`
+  width: ${pixelToRem(66)};
+  height: ${pixelToRem(66)};
+  padding: 5px;
+  border-radius: ${pixelToRem(20)};
+  background-color: ${(props) => props.theme.colors.mainBlue};
+`;
+
+export default function MenuButton() {
+  return (
+    <StyledMenu type="button">
+      <MenuIcon />
+    </StyledMenu>
+  );
+}
