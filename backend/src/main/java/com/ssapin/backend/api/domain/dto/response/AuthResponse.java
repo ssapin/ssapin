@@ -10,12 +10,14 @@ public class AuthResponse {
         private String accessToken;
         private String refreshToken;
         private long accessTokenExpiresIn;
+        private boolean firstLogin;
 
         @Builder
-        Detail(String accessToken, String refreshToken, long accessTokenExpiresIn){
+        Detail(String accessToken, String refreshToken, long accessTokenExpiresIn, boolean firstLogin){
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
             this.accessTokenExpiresIn = accessTokenExpiresIn;
+            this.firstLogin = firstLogin;
         }
 
     }

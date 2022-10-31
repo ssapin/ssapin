@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class KakaoOAuth2 {
 
-    private final WebClient webClient;
     // properties 파일에 숨길 예정
     private static final String CLIENT_ID = "e3a714fa6facdc0a7b2fdc80c4cc85ef";
     // 테스트용
@@ -19,46 +18,36 @@ public class KakaoOAuth2 {
 
     public String getKakaoToken(String authorizeCode) {
 
-        return webClient.post()
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://kauth.kakao.com")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        JSONObject response = webClient.post()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/kauth.kakao.com/oauth/token")
+                        .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", CLIENT_ID)
                         .queryParam("redirect_uri", REDIRECT_URI)
                         .queryParam("code", authorizeCode)
                         .build())
-                .retrieve()
-                .bodyToMono(JSONObject.class)
-                .block()
-                .get("access_token")
-                .toString();
+                .retrieve().bodyToMono(JSONObject.class).block();
+
+        return response.get("access_token").toString();
     }
 
     public long getKakaoId(String accessToken) {
 
-//        WebClient webClient = WebClient.builder()
-//                .baseUrl("https://kapi.kakao.com")
-//                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .build();
-//
-//        JSONObject response = webClient.get()
-//                .uri(uriBuilder -> uriBuilder.path("/v2/user/me").build())
-//                .header("Authorization", "Bearer " + accessToken)
-//                .retrieve().bodyToMono(JSONObject.class).block();
-//
-//        return Long.parseLong(response.get("id").toString());
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://kapi.kakao.com")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
 
-        return Long.parseLong(
-                webClient.get()
-                        .uri(uriBuilder -> uriBuilder
-                                .path("/kapi.kakao.com/v2/user/me")
-                                .build())
-                        .header("Authorization", "Bearer " + accessToken)
-                        .retrieve()
-                        .bodyToMono(JSONObject.class)
-                        .block()
-                        .get("id")
-                        .toString());
+        JSONObject response = webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/v2/user/me").build())
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve().bodyToMono(JSONObject.class).block();
 
+        return Long.parseLong(response.get("id").toString());
     }
 }
