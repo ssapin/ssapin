@@ -129,7 +129,7 @@ public class MapController {
 
     @PostMapping("/bookmark")
     @ApiOperation(value = "추천지도 북마크", notes = "사용자가 추천지도를 북마크한다.")
-    public ResponseEntity<?> addBookmark(@RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> addBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -148,7 +148,7 @@ public class MapController {
 
     @DeleteMapping("/bookmark")
     @ApiOperation(value = "추천지도 북마크 해제", notes = "사용자가 추천지도 북마크를 해제한다.")
-    public ResponseEntity<?> deleteBookmark(@RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> deleteBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
