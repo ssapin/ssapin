@@ -51,6 +51,11 @@ const Container = styled.div`
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
   }
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
+  }
 `;
 
 function TogetherMapCard({ title, usercnt, func }: TogetherMapProps) {

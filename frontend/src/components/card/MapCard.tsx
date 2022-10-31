@@ -32,7 +32,7 @@ const Container = styled.div`
   }
 
   .title {
-    margin-top: 0.4rem;
+    margin-top: 0.7rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
@@ -40,7 +40,7 @@ const Container = styled.div`
   }
 
   .user {
-    margin-top: 0.4rem;
+    margin-top: 0.7rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
@@ -49,21 +49,19 @@ const Container = styled.div`
 
   .summary {
     text-align: right;
-    margin-top: 1rem;
+    margin-top: 0.7rem;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
   }
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
+  }
 `;
 
-function RecommandationMapCard({
-  icon,
-  title,
-  user,
-  placecnt,
-  usercnt,
-  func,
-}: MapCardProps) {
+function MapCard({ icon, title, user, placecnt, usercnt, func }: MapCardProps) {
   return (
     <Container onClick={func}>
       <p className="icon">{icon}</p>
@@ -76,4 +74,4 @@ function RecommandationMapCard({
   );
 }
 
-export default RecommandationMapCard;
+export default MapCard;

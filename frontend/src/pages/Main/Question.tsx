@@ -23,7 +23,7 @@ const QuestionContainer = styled.div<{ size: number }>`
 
   p {
     font-size: ${(props) =>
-      props.size >= 740 ? props.theme.fontSizes.h1 : props.theme.fontSizes.h3};
+      props.size >= 550 ? props.theme.fontSizes.h1 : props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray50};
     font-family: ${(props) => props.theme.fontFamily.h1bold};
   }

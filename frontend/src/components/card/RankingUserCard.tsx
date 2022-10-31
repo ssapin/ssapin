@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 
 type UserRankingProps = {
-  emoji: string;
-  nickname: string;
-  mapcnt: number;
+  user: {
+    emoji: string;
+    nickname: string;
+    mapcnt: number;
+  };
 };
 
 const Container = styled.div`
@@ -20,15 +22,15 @@ const Container = styled.div`
   padding: 1rem;
 
   .emoji {
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4};
+    font-family: ${(props) => props.theme.fontFamily.h3};
   }
 
   .nickname {
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
   }
 
   .mapcnt {
@@ -38,12 +40,12 @@ const Container = styled.div`
   }
 `;
 
-function RankingUserCard({ emoji, nickname, mapcnt }: UserRankingProps) {
+function RankingUserCard({ user }: UserRankingProps) {
   return (
     <Container>
-      <p className="emoji">{emoji}</p>
-      <p className="nickname">{nickname}</p>
-      <p className="mapcnt">{mapcnt}개의 지도</p>
+      <p className="emoji">{user.emoji}</p>
+      <p className="nickname">{user.nickname}</p>
+      <p className="mapcnt">{user.mapcnt}개의 지도</p>
     </Container>
   );
 }
