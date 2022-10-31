@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
 import Footer from "../../components/etc/Footer";
 import MapSearch from "../../components/etc/MapSearch";
-import Item from "./Item";
+import Question from "./Question";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -83,7 +83,7 @@ function MainPage() {
           <Carousel>
             {items.map((item, i) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Item key={i} item={item} />
+              <Question key={i} item={item} />
             ))}
           </Carousel>
         </QuestionContainer>

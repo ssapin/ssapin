@@ -3,7 +3,7 @@ import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BigYellowButton } from "../../components/Buttons/YellowButton";
 
-type ItemProps = {
+type QuestionProps = {
   item: {
     emoji: string;
     place: number;
@@ -12,7 +12,7 @@ type ItemProps = {
   };
 };
 
-const ItemContainer = styled.div<{ size: number }>`
+const QuestionContainer = styled.div<{ size: number }>`
   width: 100%;
   height: 35vh;
   display: flex;
@@ -29,7 +29,7 @@ const ItemContainer = styled.div<{ size: number }>`
   }
 `;
 
-function Item({ item }: ItemProps) {
+function Question({ item }: QuestionProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -40,9 +40,10 @@ function Item({ item }: ItemProps) {
   });
 
   const placeText = `${item.place}개의 장소들!`;
+
   return (
     <Paper style={{ backgroundColor: "transparent", boxShadow: "0 0 0 0" }}>
-      <ItemContainer size={innerWidth}>
+      <QuestionContainer size={innerWidth}>
         <p>{item.emoji}</p>
         <p>{item.description}</p>
         <BigYellowButton
@@ -50,9 +51,9 @@ function Item({ item }: ItemProps) {
           text1={placeText}
           text2="참여하러 가기"
         />
-      </ItemContainer>
+      </QuestionContainer>
     </Paper>
   );
 }
 
-export default Item;
+export default Question;
