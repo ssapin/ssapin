@@ -21,19 +21,17 @@ import java.util.List;
 public class AuthController {
 
     private final AuthService authService;
-    private final KakaoOAuth2 kakaoOAuth2;
     @PostMapping("/login")
     @ApiOperation(value = "카카오 로그인/회원가입 ", notes = "JWT refresh token, access token 및 expiresIn을 반환")
     public ResponseEntity<?> login(@RequestBody AuthRequest.Login loginRequest) {
 
-        return null;
+        return new ResponseEntity<>(authService.login(loginRequest.getAuthorizeCode()), HttpStatus.OK);
     }
 
-    @GetMapping("/test/{accessToken}")
-    public ResponseEntity<?> testApi(@PathVariable String accessToken){
-        long id = kakaoOAuth2.getKakaoId(accessToken);
-
-        return new ResponseEntity<>("sibal" + id, HttpStatus.OK);
+    @GetMapping("/reissue")
+    @ApiOperation(value = "엑세스 토큰 재발급", notes = "refresh Token, acces Token 필요, 새로운 access Token 발급")
+    public ResponseEntity<?> reissue(@RequestHeader("REFRESH_TOKEN") final String refreshToken) {
+        
+        return new ResponseEntity<>(authService.reissueAccessToken(refreshToken), HttpStatus.OK);
     }
-
 }

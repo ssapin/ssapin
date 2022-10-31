@@ -21,4 +21,17 @@ public class AuthResponse {
         }
 
     }
+
+    @Getter
+    public static class Reissue{
+        private String accessToken;
+        private long accessTokenExpiresIn;
+
+        @Builder
+        Reissue(String accessToken, long accessTokenExpiresIn){
+            this.accessToken = accessToken;
+            this.accessTokenExpiresIn = accessTokenExpiresIn;
+        }
+
+    }
 }

@@ -7,4 +7,5 @@ public interface AuthService {
     AuthResponse.Detail login(String authorizeCode);
     void addAuth(User user, String refreshToken);
     boolean hasAuthByRefreshToken(String refreshToken);
+    AuthResponse.Reissue reissueAccessToken(String refreshToken);
 }

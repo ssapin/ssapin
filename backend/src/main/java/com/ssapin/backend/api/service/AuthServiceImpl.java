@@ -5,6 +5,8 @@ import com.ssapin.backend.api.domain.entity.Auth;
 import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.domain.repository.AuthRepository;
 import com.ssapin.backend.api.domain.repositorysupport.AuthRepositorySupport;
+import com.ssapin.backend.exception.CustomException;
+import com.ssapin.backend.exception.ErrorCode;
 import com.ssapin.backend.util.JwtTokenUtil;
 import com.ssapin.backend.util.KakaoOAuth2;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,23 @@ public class AuthServiceImpl implements AuthService{
                 .accessTokenExpiresIn(accessTokenExpiresIn)
                 .refreshToken(refreshToken)
                 .firstLogin(firstLogin)
+                .build();
+    }
+
+    @Override
+    public AuthResponse.Reissue reissueAccessToken(String refreshToken) {
+
+        if (!jwtTokenUtil.isValidRefreshToken(refreshToken) || !authRepositorySupport.existByRefreshToken(refreshToken))
+            throw new CustomException(ErrorCode.AUTHENTICATION_FAILED);
+
+        long userId = jwtTokenUtil.getUserIdFromRefreshToken(refreshToken);
+        User user = userService.getUserById(userId);
+        String accessToken = jwtTokenUtil.generateJwtToken(user);
+        long accessTokenExpiresIn = jwtTokenUtil.getExpFromToken(accessToken);
+
+        return AuthResponse.Reissue.builder()
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
                 .build();
     }
 

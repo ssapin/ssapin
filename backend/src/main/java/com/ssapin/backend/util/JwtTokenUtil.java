@@ -48,20 +48,21 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public boolean isValidToken(String token) {
+    public int isValidToken(String token) {
+        int ret = 2;
 
         try {
             Claims accessClaims = getClaimsFormToken(token, SECRET_KEY);
-            return true;
+            return 2;
         } catch (ExpiredJwtException exception) {
             exception.printStackTrace();
-            return false;
+            return 1;
         } catch (JwtException exception) {
             exception.printStackTrace();
-            return false;
+            return 0;
         } catch (NullPointerException exception) {
             exception.printStackTrace();
-            return false;
+            return 0;
         }
     }
 
@@ -130,6 +131,15 @@ public class JwtTokenUtil {
     public long getUserIdFromToken(String token) {
 
         Claims claims = getClaimsFormToken(token, SECRET_KEY);
+        long userId = claims.get(DATA_KEY, Long.class);
+        User user = userService.getUserById(userId);
+
+        return user.getId();
+    }
+
+    public long getUserIdFromRefreshToken(String token) {
+
+        Claims claims = getClaimsFormToken(token, REFRESH_KEY);
         long userId = claims.get(DATA_KEY, Long.class);
         User user = userService.getUserById(userId);
 
