@@ -20,13 +20,13 @@ const Navbar = styled.div`
 
 const QuestionContainer = styled.div`
   width: 100%;
-  height: 60%;
+  height: 55%;
   text-align: center;
 `;
 
 const Searchbar = styled.div`
   width: 100%;
-  height: 25%;
+  height: 30%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -37,40 +37,41 @@ const Searchbar = styled.div`
 function MainPage() {
   const items = [
     {
-      emoji: "",
+      emoji: "⏰✏📚🤓💻",
       place: 129,
       mapId: 1,
-      description: "일과 끝나고 어디서 공부하시나요?",
+      description: "싸피 교육이 끝나고 어디서 공부하시나요?",
     },
     {
-      emoji: "",
+      emoji: "🍜🥂🍴🍲🥘",
       place: 129,
       mapId: 1,
-      description: "내가 뽑은 캠퍼스 근처 최고 맛집은?",
+      description: "이 곳은 찐이다.. 내가 뽑은 캠퍼스 근처 최고 맛집은?",
     },
     {
-      emoji: "",
+      emoji: "💸😞🌯🍙🥙",
       place: 129,
       mapId: 1,
       description: "히잉.. 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
     },
     {
-      emoji: "",
+      emoji: "🍦🧁🍷☕🍸",
       place: 129,
       mapId: 1,
       description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페?",
     },
     {
-      emoji: "",
+      emoji: "🎬🍻🎳🎮🎤",
       place: 129,
       mapId: 1,
-      description: "캠퍼스 근처에서 가장 놀기 좋은 장소는 어디인가요?",
+      description:
+        "싸피 끝나고 치맥 한잔! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
     },
     {
-      emoji: "",
+      emoji: "🤐🍱🍽🙋‍♂️🥟",
       place: 129,
       mapId: 1,
-      description: "아주머니 단무지는 빼주세요.. 혼밥 최고 장소는?",
+      description: "아주머니 단무지는 빼주세요.. 혼밥 최고 장소를 찍어주세요",
     },
   ];
 
@@ -87,7 +88,7 @@ function MainPage() {
           </Carousel>
         </QuestionContainer>
         <Searchbar>
-          <MapSearch width="50%" height="40%" />
+          <MapSearch width="50%" height="30%" />
         </Searchbar>
       </HeadContainer>
       <Footer />
