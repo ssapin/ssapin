@@ -106,14 +106,6 @@ export default function FilterChoiceButton() {
     }
   };
 
-  const toggleActive = (checked: any, item: any) => {
-    if (checked) {
-      setHashTag([...hashTag, item]);
-    } else if (!checked) {
-      setHashTag(hashTag.filter((el: any) => el !== item));
-    }
-  };
-
   return (
     <TiedBoxes>
       <TagName># 인원</TagName>
@@ -125,7 +117,7 @@ export default function FilterChoiceButton() {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                toggleActive(e.target.checked, e.target.value);
+                onChangeTag(e.target.checked, e.target.value);
               }}
               checked={hashTag.includes(el.value)}
             />

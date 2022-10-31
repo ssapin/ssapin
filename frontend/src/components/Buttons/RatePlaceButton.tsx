@@ -24,36 +24,45 @@ const WhiteSquareBox = styled.button`
   box-shadow: 4px 4px 13px 0 rgba(177, 177, 177, 0.6);
     background-color: ${(props) => props.theme.colors.gray0};
   .emoji {
+    font-size: ${(props) => props.theme.fontSizes.h1};
     width: ${pixelToRem(45)};
     height: ${pixelToRem(45)};
   }
 `;
 
 export default function PlaceRatingButton() {
-  const rated = ["Good", "Normal", "Bad"];
+  const [ratingPlace, setRatingPlace] = useState("");
 
-  const [btnActive, setBtnActive] = useState("");
+  const ratePlace = [
+    { key: "1", value: "😄", checked: false },
+    { key: "2", value: "🙄", checked: false },
+    { key: "3", value: "😡", checked: false },
+  ];
 
-  const toggleActive = (rate: string) => {
-    setBtnActive(rate);
-    console.log(rate);
+  const onChangeMenu = (checked: any, item: any) => {
+    if (checked) {
+      setRatingPlace([item]);
+      console.log(ratingPlace);
+    } else if (!checked) {
+      setRatingPlace(ratingPlace.filter((el: any) => el !== item));
+      console.log(ratingPlace);
+    }
   };
+
   return (
     <TiedBoxes>
-      {rated.map((rate, idx) => {
-        return (
-          <WhiteSquareBox
-            type="button"
-            value={idx}
-            className={`${btnActive === rate ? "active" : ""}`}
-            onClick={() => toggleActive(rate)}
-          >
-            {rate === "Good" && <GoodEmojiIcon className="emoji" />}
-            {rate === "Normal" && <NormalEmojiIcon className="emoji" />}
-            {rate === "Bad" && <BadEmojiIcon className="emoji" />}
-          </WhiteSquareBox>
-        );
-      })}
+      {ratePlace.map((el) => (
+        <WhiteSquareBox
+          key={el.key}
+          value={el.value}
+          onChange={(e) => {
+            onChangeMenu(e.target.checked, e.target.value);
+          }}
+          checked={ratingPlace.includes(el.value)}
+        >
+          <span className="emoji">{el.value}</span>
+        </WhiteSquareBox>
+      ))}
     </TiedBoxes>
   );
 }
