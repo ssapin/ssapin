@@ -9,39 +9,11 @@ import Input from "../etc/Input";
 const Container = styled.div`
   width: fit-content;
   height: fit-content;
-  background-color: pink;
+  background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
 
   margin: 0.5rem;
-`;
-
-const ToggleGroup = styled.div`
-  width: 350px;
-  height: 41px;
-  background-color: ${(props) => props.theme.colors.lightLightBlue};
-  text-align: center;
-  border-radius: 10px;
-  margin: 8px;
-  .inactive {
-    width: 50%;
-    height: 100%;
-    border-radius: 10px;
-    background-color: transparent;
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraph};
-    color: ${(props) => props.theme.colors.gray500};
-  }
-
-  .active {
-    width: 50%;
-    height: 100%;
-    border-radius: 10px;
-    background-color: ${(props) => props.theme.colors.lightBlue};
-    color: ${(props) => props.theme.colors.gray0};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
-  }
 `;
 
 const Form = styled.div`
@@ -68,11 +40,6 @@ const Content = styled.div`
   }
 `;
 
-// const HashForm = styled.div`
-//   display: flex;
-//   flex-direction: column;
-// `;
-
 const SubTitle = styled.h5`
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
@@ -87,11 +54,6 @@ const Flex = styled.div`
 `;
 
 function CreateMapModalPc() {
-  const [type, setType] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const changeType = (type: number) => {
-    setType(type);
-  };
   return (
     <Container>
       <Form>
@@ -113,7 +75,7 @@ function CreateMapModalPc() {
         <DivBox>
           <Content>
             <SubTitle>장소추가</SubTitle>
-            <SwitchButton />
+            <SwitchButton textLeft="혼자 찍을래!" textRight="같이 찍을래!" />
           </Content>
           <Content>
             <SubTitle>아이콘(3개까지)</SubTitle>

@@ -29,7 +29,12 @@ const ToggleGroup = styled.div`
   }
 `;
 
-export default function SwitchButton() {
+type SwitchProps = {
+  textLeft: string;
+  textRight: string;
+};
+
+export default function SwitchButton({ textLeft, textRight }: SwitchProps) {
   const [type, setType] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const changeType = (type: number) => {
@@ -42,14 +47,14 @@ export default function SwitchButton() {
         className={type === 0 ? "active" : "inactive"}
         onClick={() => changeType(0)}
       >
-        {textleft}
+        {textLeft}
       </button>
       <button
         type="button"
         className={type === 1 ? "active" : "inactive"}
         onClick={() => changeType(1)}
       >
-        {textright}
+        {textRight}
       </button>
     </ToggleGroup>
   );
