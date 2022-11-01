@@ -126,11 +126,7 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-<<<<<<< HEAD
-                toggleActive(e.target.checked, el.key);
-=======
-                onChangeTag(e.target.checked, e.target.value);
->>>>>>> upstream/FE-develop
+                onChangeTag(e.target.checked, el.key);
               }}
               checked={hashTag.includes(el.key)}
             />
