@@ -116,7 +116,7 @@ function MainPage() {
       <HeadContainer>
         <Navbar>navbar</Navbar>
         <QuestionContainer>
-          <Carousel>
+          <Carousel interval={4500} animation="fade" duration={1000}>
             {questions.map((item, i) => (
               // eslint-disable-next-line react/no-array-index-key
               <Question key={i} item={item} />
