@@ -42,6 +42,17 @@ const Description = styled.div<{ innerWidth: number }>`
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  display: flex;
+  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
+  justify-content: space-between;
+
+  .textRight {
+    padding-top: 0.5rem;
+    padding-right: ${(props) => (props.innerWidth < 950 ? `0` : `1rem`)};
+    color: ${(props) => props.theme.colors.gray400};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
+  }
 `;
 
 function MapRanking() {
@@ -105,7 +116,8 @@ function MapRanking() {
         🎉 <span>인기있는 추천지도</span>
       </Title>
       <Description innerWidth={innerWidth}>
-        장소가 제일 많이 등록된 추천지도들을 소개합니다 👍
+        <p>장소가 제일 많이 등록된 추천지도들을 소개합니다 👍</p>
+        <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       <RankingContainer innerWidth={innerWidth}>
         {maps.map(

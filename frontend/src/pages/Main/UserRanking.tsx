@@ -42,6 +42,17 @@ const Description = styled.div<{ innerWidth: number }>`
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  display: flex;
+  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
+  justify-content: space-between;
+
+  .textRight {
+    padding-top: 0.5rem;
+    padding-right: ${(props) => (props.innerWidth < 950 ? `0` : `1rem`)};
+    color: ${(props) => props.theme.colors.gray400};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
+  }
 `;
 
 function UserRanking() {
@@ -88,7 +99,8 @@ function UserRanking() {
         🔥 <span>열정적인 싸핀러 Top 5</span>
       </Title>
       <Description innerWidth={innerWidth}>
-        싸핀을 열심히 이용하는 열.정.적.인 싸핀러들을 소개합니다 😎
+        <p>싸핀을 열심히 이용하는 열.정.적.인 싸핀러들을 소개합니다 😎</p>
+        <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       {innerWidth >= 950 ? (
         <RankingContainer innerWidth={innerWidth}>
