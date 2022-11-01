@@ -8,7 +8,6 @@ import { BigYellowButton } from "../../components/Buttons/YellowButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import SwitchOptionButton from "../../components/Buttons/SwitchOptionButton";
 import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
