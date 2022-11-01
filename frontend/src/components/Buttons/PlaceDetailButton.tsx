@@ -1,10 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-<<<<<<< HEAD
-=======
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as PinIcon } from "../../assets/svgs/mappin.svg";
->>>>>>> upstream/FE-develop
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 
 const StyledPlaceDetail = styled.div`
