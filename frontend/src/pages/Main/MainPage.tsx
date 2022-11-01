@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
 import CreateButton from "../../components/Buttons/CreateButton";
@@ -299,6 +300,8 @@ function MainPage() {
               (map, id) =>
                 id <= 2 && (
                   <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
                     icon={map.icon}
                     title={map.title}
                     user={map.user}
@@ -313,6 +316,8 @@ function MainPage() {
               (map, id) =>
                 id >= 3 && (
                   <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
                     icon={map.icon}
                     title={map.title}
                     user={map.user}
@@ -336,6 +341,8 @@ function MainPage() {
               (map, id) =>
                 id <= 2 && (
                   <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
                     icon={map.icon}
                     title={map.title}
                     user={map.user}
@@ -350,6 +357,8 @@ function MainPage() {
               (map, id) =>
                 id >= 3 && (
                   <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
                     icon={map.icon}
                     title={map.title}
                     user={map.user}
@@ -372,7 +381,12 @@ function MainPage() {
             {maps.map(
               (map, id) =>
                 id <= 2 && (
-                  <TogetherMapCard title={map.title} usercnt={map.usercnt} />
+                  <TogetherMapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    title={map.title}
+                    usercnt={map.usercnt}
+                  />
                 ),
             )}
           </RankingContainer>
@@ -380,7 +394,12 @@ function MainPage() {
             {maps.map(
               (map, id) =>
                 id >= 3 && (
-                  <TogetherMapCard title={map.title} usercnt={map.usercnt} />
+                  <TogetherMapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    title={map.title}
+                    usercnt={map.usercnt}
+                  />
                 ),
             )}
           </RankingContainer>

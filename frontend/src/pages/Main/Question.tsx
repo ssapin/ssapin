@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BigYellowButton } from "../../components/Buttons/YellowButton";
 
@@ -42,17 +41,11 @@ function Question({ item }: QuestionProps) {
   const placeText = `${item.place}개의 장소들!`;
 
   return (
-    <Paper style={{ backgroundColor: "transparent", boxShadow: "0 0 0 0" }}>
-      <QuestionContainer size={innerWidth}>
-        <p>{item.emoji}</p>
-        <p>{item.description}</p>
-        <BigYellowButton
-          type="button"
-          text1={placeText}
-          text2="참여하러 가기"
-        />
-      </QuestionContainer>
-    </Paper>
+    <QuestionContainer size={innerWidth}>
+      <p>{item.emoji}</p>
+      <p>{item.description}</p>
+      <BigYellowButton type="button" text1={placeText} text2="참여하러 가기" />
+    </QuestionContainer>
   );
 }
 

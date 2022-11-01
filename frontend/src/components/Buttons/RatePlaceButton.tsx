@@ -18,11 +18,11 @@ const WhiteSquareBox = styled.button`
   width: ${pixelToRem(70)};
   height: ${pixelToRem(68)};
   flex-grow: 0;
-  margin: 0 ${pixelToRem(20)}; 0 0;
+  margin: 0 ${pixelToRem(20)} 0 0;
   padding: ${pixelToRem(12)};
   border-radius: ${pixelToRem(15)};
   box-shadow: 4px 4px 13px 0 rgba(177, 177, 177, 0.6);
-    background-color: ${(props) => props.theme.colors.gray0};
+  background-color: ${(props) => props.theme.colors.gray0};
   .emoji {
     width: ${pixelToRem(45)};
     height: ${pixelToRem(45)};

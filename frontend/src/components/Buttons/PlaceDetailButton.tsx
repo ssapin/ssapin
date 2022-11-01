@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { pixelToRem } from "../../utils/functions/util";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 
 const StyledPlaceDetail = styled.button`
