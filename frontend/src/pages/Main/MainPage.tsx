@@ -69,7 +69,7 @@ function MainPage() {
 
   const questions = [
     {
-      emoji: "⏰✏📚🤓💻",
+      emoji: "⏰📝📚🤓💻",
       place: 129,
       mapId: 1,
       description: "싸피 교육이 끝나고 어디서 공부하시나요?",
