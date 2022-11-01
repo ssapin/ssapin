@@ -9,8 +9,8 @@ const Container = styled.div<{ innerWidth: number }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: ${(props) => (props.innerWidth < 550 ? `7vw` : `20vw`)};
-  padding-right: ${(props) => (props.innerWidth < 550 ? `7vw` : `20vw`)};
+  padding-left: ${(props) => (props.innerWidth < 550 ? `7vw` : `15vw`)};
+  padding-right: ${(props) => (props.innerWidth < 550 ? `7vw` : `15vw`)};
   margin-top: 3rem;
 `;
 

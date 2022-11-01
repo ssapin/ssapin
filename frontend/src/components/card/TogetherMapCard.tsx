@@ -24,7 +24,7 @@ const Container = styled.div<{ innerWidth: number }>`
 
   .icon {
     position: absolute;
-    width: ${(props) => (props.innerWidth >= 950 ? `14vw` : `17rem`)};
+    width: ${(props) => (props.innerWidth >= 950 ? `15vw` : `17rem`)};
     margin-bottom: 4rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
