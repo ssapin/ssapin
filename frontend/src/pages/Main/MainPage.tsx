@@ -13,6 +13,7 @@ import PlaceRanking from "./PlaceRanking";
 import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
+import Navbar from "../Navbar/Navbar";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -21,11 +22,6 @@ const HeadContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
-
-const Navbar = styled.div`
-  width: 100%;
-  height: 15%;
 `;
 
 const QuestionContainer = styled.div`
@@ -114,7 +110,7 @@ function MainPage() {
   return (
     <>
       <HeadContainer>
-        <Navbar>navbar</Navbar>
+        <Navbar />
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
             {questions.map((item, i) => (

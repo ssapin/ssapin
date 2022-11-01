@@ -36,20 +36,16 @@ type CampusProps = {
   // eslint-disable-next-line react/require-default-props
   campusId?: number;
   // eslint-disable-next-line react/require-default-props
-  setIsOpen?: () => void;
+  open?: () => void;
   // eslint-disable-next-line react/require-default-props
-  setBtnActive?: (key: number) => void;
+  select?: (key: number) => void;
 };
-export default function CampusButton({
-  campusId,
-  setIsOpen,
-  setBtnActive,
-}: CampusProps) {
+export default function CampusButton({ campusId, open, select }: CampusProps) {
   const campus = ["0", "서울", "대전", "광주", "구미", "부울경"];
 
   const toggleActive = (key: number) => {
-    setBtnActive(key);
-    setIsOpen();
+    select(key);
+    open();
   };
 
   return (
