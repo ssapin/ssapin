@@ -16,9 +16,6 @@ const PageTopBg = styled.div`
     ${pixelToRem(34)};
   background-color: ${(props) => props.theme.colors.mainBlue};
   color: ${(props) => props.theme.colors.gray0};
-  .logo-group {
-    // 여기에 로고 부분 어떻게 묶을 수 있는지 작성하기
-  }
 `;
 
 const ChoiceText = styled.span`
@@ -37,8 +34,8 @@ const ChoiceText = styled.span`
 const UserInfos = styled.div`
   display: flex;
   justify-content: center;
-  width: auto;
-  height: 283px;
+  width: 100%;
+  height: auto;
 `;
 
 function MyPage() {
