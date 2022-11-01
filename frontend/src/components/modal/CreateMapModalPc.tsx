@@ -3,6 +3,7 @@ import { useState } from "react";
 import CancelButton from "../Buttons/CancelButton";
 import ConfirmButton from "../Buttons/ConfirmButton";
 import FilterChoiceButton from "../Buttons/FilterChoiceButton";
+import SwitchButton from "../Buttons/SwitchButton";
 import Input from "../etc/Input";
 
 const Container = styled.div`
@@ -112,22 +113,7 @@ function CreateMapModalPc() {
         <DivBox>
           <Content>
             <SubTitle>장소추가</SubTitle>
-            <ToggleGroup>
-              <button
-                type="button"
-                className={type === 0 ? "active" : "inactive"}
-                onClick={() => changeType(0)}
-              >
-                나만찍을래
-              </button>
-              <button
-                type="button"
-                className={type === 1 ? "active" : "inactive"}
-                onClick={() => changeType(1)}
-              >
-                다른놈도 찍어라!
-              </button>
-            </ToggleGroup>
+            <SwitchButton />
           </Content>
           <Content>
             <SubTitle>아이콘(3개까지)</SubTitle>
