@@ -1,80 +1,65 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
+
+// 이 부분은 아이폰 반응 이모지이긴한데 어떻게 넣는지를 몰라서 ㅠ-ㅠ
 import { ReactComponent as GoodEmojiIcon } from "../../assets/svgs/good.svg";
 import { ReactComponent as NormalEmojiIcon } from "../../assets/svgs/normal.svg";
 import { ReactComponent as BadEmojiIcon } from "../../assets/svgs/bad.svg";
 
-const OpenTag = styled.div`
+const TiedBoxes = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  margin: 10px;
-  font-family: ${(props) => props.theme.fontFamily.paragraph};
-  font-size: ${(props) => props.theme.fontSizes.paragraph};
-  .checkbox input {
-    display: none;
-  }
-  .checkbox {
-    display: flex;
-    margin: 0px 5px 5px 0px;
-  }
-  .checkbox_text {
-    display: flex;
-    background-color: ${(props) => props.theme.colors.lightLightBlue};
-    margin-left: 10px;
-    font-family: ${(props) => props.theme.fontFamily.paragraph};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    color: ${(props) => props.theme.colors.gray500};
-    padding: 7px 20px;
-    border-radius: ${pixelToRem(15)};
-    cursor: pointer;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lightBlue};
-      color: ${(props) => props.theme.colors.gray0};
-    }
-  }
-  .checkbox input:checked + .checkbox_text {
-    color: ${(props) => props.theme.colors.gray0};
+  justify-content: center;
+  .active {
     background-color: ${(props) => props.theme.colors.lightBlue};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  }
+`;
+
+const StyledEmotion = styled.button`
+  width: 7.695290858725762vh;
+  padding: 10px 0;
+  margin: 6px;
+  flex-grow: 0;
+  box-shadow: ${pixelToRem(4)} ${pixelToRem(4)} ${pixelToRem(13)} 0
+    rgba(177, 177, 177, 0.6);
+  border-radius: ${pixelToRem(15)};
+  flex-grow: 0;
+  font-size: 4vh;
+  line-height: 1.21;
+  text-align: center;
+  background-color: ${(props) => props.theme.colors.gray0};
+  cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lightBlue};
   }
 `;
 
 export default function PlaceRatingButton() {
-  const [hashTag, setHashTag] = useState([]);
+  const [ratePlace, setRatePlace] = useState("");
 
   const countPerson = [
-    { key: "1", value: "😄", checked: false },
-    { key: "2", value: "🙄", checked: false },
-    { key: "3", value: "😡", checked: false },
+    { key: "1", value: "😄" },
+    { key: "2", value: "🙄" },
+    { key: "3", value: "😡" },
   ];
 
-  const onChangeTag = (checked: any, item: any) => {
-    if (checked) {
-      setHashTag([...hashTag, item]);
-      console.log(hashTag);
-    } else if (!checked) {
-      setHashTag(hashTag.filter((el: any) => el !== item));
-      console.log(hashTag);
-    }
+  const toggleActive = (key: string) => {
+    setRatePlace(key);
+    console.log(key);
   };
-
   return (
-    <OpenTag>
-      {countPerson.map((el) => (
-        // eslint-disable-next-line jsx-a11y/label-has-associated-control
-        <label className="checkbox" key={el.key}>
-          <input
-            type="checkbox"
+    <TiedBoxes>
+      {countPerson.map((el) => {
+        return (
+          <StyledEmotion
             value={el.value}
-            onChange={(e) => {
-              onChangeTag(e.target.checked, e.target.value);
-            }}
-            checked={hashTag.includes(el.value)}
-          />
-          <span className="checkbox_text">{el.value}</span>
-        </label>
-      ))}
-    </OpenTag>
+            className={`${ratePlace === el.key ? "active" : ""}`}
+            onClick={() => toggleActive(el.key)}
+          >
+            {el.value}
+          </StyledEmotion>
+        );
+      })}
+    </TiedBoxes>
   );
 }
