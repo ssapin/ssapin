@@ -4,6 +4,7 @@ function MainPage() {
   return (
     <>
       <div>MainPage</div>
+
       <Footer />
     </>
   );
