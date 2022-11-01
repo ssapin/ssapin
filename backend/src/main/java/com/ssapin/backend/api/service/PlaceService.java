@@ -1,5 +1,11 @@
 package com.ssapin.backend.api.service;
 
+import com.ssapin.backend.api.domain.dto.response.MapResponse;
+import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
+import com.ssapin.backend.api.domain.dto.response.RankingResponse;
+
+import java.util.List;
+
 /**
  * (1) 추천지도에 장소추가
  * (2) 모여지도에 장소추가/업데이트
@@ -17,18 +23,18 @@ public interface PlaceService {
 
     Long addPlaceInTogetherMap();
 
-    void getListPlaceRanking() ;
+    List<RankingResponse> getListPlaceRanking() ;
 
-    void removePlaceInMap();
+    Long removePlaceInMap();
 
-    void removePlaceInTogetherMap();
+    Long removePlaceInTogetherMap();
 
-    void getPlaceInfo();
+    PlaceResponse getPlaceInfo();
 
-    void getMapListInPlace ();
+    List<MapResponse> getMapListInPlace ();
 
-    void registerBookmark();
+    Long registerBookmark();
 
-    void removeBookmark();
+    Long removeBookmark();
 
 }
