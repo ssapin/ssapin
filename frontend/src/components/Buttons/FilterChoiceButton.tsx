@@ -7,7 +7,7 @@ const TiedBoxes = styled.div`
   height: 523.2px;
   padding-left: 10px;
 `;
-const TagName = styled.span`
+const TagName = styled.span<{ type?: string }>`
   width: 62px;
   height: 29px;
   margin: 10px;
@@ -16,8 +16,14 @@ const TagName = styled.span`
   letter-spacing: ${pixelToRem(-1.2)};
   text-align: left;
   color: ${(props) => props.theme.colors.gray900};
-  font-family: ${(props) => props.theme.fontFamily.h3};
-  font-size: ${(props) => props.theme.fontSizes.h3};
+  font-family: ${(props) =>
+    props.type === "create"
+      ? props.theme.fontFamily.h5
+      : props.theme.fontFamily.h3};
+  font-size: ${(props) =>
+    props.type === "create"
+      ? props.theme.fontSizes.h5
+      : props.theme.fontSizes.h3};
 `;
 const OpenTag = styled.div`
   display: flex;
@@ -54,7 +60,12 @@ const OpenTag = styled.div`
   }
 `;
 
-export default function FilterChoiceButton() {
+type Filterprops = {
+  // eslint-disable-next-line react/require-default-props
+  type?: string;
+};
+
+export default function FilterChoiceButton({ type }: Filterprops) {
   const [hashTag, setHashTag] = useState([]);
 
   const countPerson = [
@@ -108,7 +119,7 @@ export default function FilterChoiceButton() {
 
   return (
     <TiedBoxes>
-      <TagName># 인원</TagName>
+      <TagName type={type}># 인원</TagName>
       <OpenTag>
         {countPerson.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
@@ -125,7 +136,7 @@ export default function FilterChoiceButton() {
           </label>
         ))}
       </OpenTag>
-      <TagName># 특징</TagName>
+      <TagName type={type}># 특징</TagName>
       <OpenTag>
         {featureData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
@@ -142,7 +153,7 @@ export default function FilterChoiceButton() {
           </label>
         ))}
       </OpenTag>
-      <TagName># 목적</TagName>
+      <TagName type={type}># 목적</TagName>
       <OpenTag>
         {goalData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
@@ -159,7 +170,7 @@ export default function FilterChoiceButton() {
           </label>
         ))}
       </OpenTag>
-      <TagName># 시간</TagName>
+      <TagName type={type}># 시간</TagName>
       <OpenTag>
         {timeData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
