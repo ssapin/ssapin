@@ -44,7 +44,6 @@ export default function CampusButton() {
 
   const toggleActive = (key: string) => {
     setBtnActive(key);
-    console.log(key);
   };
   return (
     <TiedBoxes>
