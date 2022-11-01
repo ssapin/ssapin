@@ -1,15 +1,15 @@
 import { atom, selector } from "recoil";
 import { v1 } from "uuid";
 
-export const userInformationState = atom({
+export const authState = atom({
   key: "userInfo",
-  default: { campus: null, nickName: "", emoji: "" },
+  default: { campus: null, nickName: "", emoji: "", accessToken: "" },
 });
 
 export const loggedInState = selector({
   key: `loggedIn/${v1()}`,
   get: ({ get }) => {
-    const userInfo = get(userInformationState);
+    const userInfo = get(authState);
     return !!userInfo.nickName;
   },
 });
