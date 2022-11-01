@@ -4,7 +4,6 @@ type ProfileProps = {
   emoji: string;
   nickname: string;
 };
-
 const Container = styled.div`
   width: fit-content;
   height: fit-content;
