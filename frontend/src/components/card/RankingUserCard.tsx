@@ -14,7 +14,7 @@ const Container = styled.div<{ type: string }>`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem 0.5rem 1rem 0.5rem;
-  width: ${(props) => (props.type === "large" ? `22rem` : `10.6rem`)};
+  width: ${(props) => (props.type === "large" ? `23rem` : `11rem`)};
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
