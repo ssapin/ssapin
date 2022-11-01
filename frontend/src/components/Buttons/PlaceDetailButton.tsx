@@ -1,39 +1,48 @@
 import React from "react";
 import styled from "@emotion/styled";
+<<<<<<< HEAD
+=======
+import { pixelToRem } from "../../utils/functions/util";
+import { ReactComponent as PinIcon } from "../../assets/svgs/mappin.svg";
+>>>>>>> upstream/FE-develop
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 
-const StyledPlaceDetail = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: red;
-  .main-box {
-    width: 45vh;
-    height: 10vh;
-    padding: 15px 9px 14px;
-    border-radius: 15px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-color: ${(props) => props.theme.colors.gray50};
+const StyledPlaceDetail = styled.div`
+  width: 186px;
+  height: 100px;
+  flex-grow: 0;
+  padding: 0 0 8px;
+  box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} 0 rgba(0, 0, 0, 0.25);
+`;
+
+const BubbleButton = styled.button`
+  .speech-bubble {
+    width: 100px;
+    position: relative;
+    background: #fafafa;
+    border-radius: 0.4em;
   }
-  .small-triangle {
-    width: 30px;
-    height: 23px;
-    transform: rotate(-180deg);
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-color: ${(props) => props.theme.colors.gray50};
+  .speech-bubble:after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 24px solid transparent;
+    border-top-color: #fafafa;
+    border-bottom: 0;
+    margin-left: -24px;
+    margin-bottom: -24px;
   }
 `;
 
-export default function PlaceDetailButton({
-  type,
-  func,
-  disabled,
-}: IButtonProps) {
+export default function PlaceDetailButton({ type, text, func }: IButtonProps) {
   return (
-    <StyledPlaceDetail type={type} onClick={func} disabled={disabled}>
-      <div className="main-box">
-        <div className="small-triangle" />
-      </div>
+    <StyledPlaceDetail>
+      <BubbleButton type={type} onClick={func}>
+        {text}
+      </BubbleButton>
+      <PinIcon />
     </StyledPlaceDetail>
   );
 }

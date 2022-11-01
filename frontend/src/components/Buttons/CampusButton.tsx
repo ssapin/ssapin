@@ -26,27 +26,36 @@ const StyledCampus = styled.button`
   letter-spacing: ${pixelToRem(-0.7)};
   text-align: center;
   background-color: ${(props) => props.theme.colors.gray0};
+  &:hover {
+    background-color: ${(props) => props.theme.colors.subYellow};
+  }
 `;
 
 export default function CampusButton() {
-  const campus = ["서울", "대전", "광주", "구미", "부울경"];
+  const campus = [
+    { key: "1", value: "서울" },
+    { key: "2", value: "대전" },
+    { key: "3", value: "광주" },
+    { key: "4", value: "구미" },
+    { key: "5", value: "부울경" },
+  ];
 
-  const [btnActive, setBtnActive] = useState("서울");
+  const [btnActive, setBtnActive] = useState("1");
 
-  const toggleActive = (name: string) => {
-    setBtnActive(name);
-    console.log(name);
+  const toggleActive = (key: string) => {
+    setBtnActive(key);
+    console.log(key);
   };
   return (
     <TiedBoxes>
-      {campus.map((name, idx) => {
+      {campus.map((el) => {
         return (
           <StyledCampus
-            value={idx}
-            className={`${btnActive === name ? "active" : ""}`}
-            onClick={() => toggleActive(name)}
+            value={el.value}
+            className={`${btnActive === el.key ? "active" : ""}`}
+            onClick={() => toggleActive(el.key)}
           >
-            {name}
+            {el.value}
           </StyledCampus>
         );
       })}
