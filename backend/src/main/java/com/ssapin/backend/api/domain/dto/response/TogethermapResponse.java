@@ -14,6 +14,8 @@ public class TogethermapResponse {
     private long campusId;
     private List<PlaceResponse> placeList;
     private long userCnt;
+    private String emoji;
+    private String question;
 
     public TogethermapResponse (Togethermap togethermap, List<PlaceResponse> placeList) {
         this.togethermapId = togethermap.getId();
@@ -29,5 +31,7 @@ public class TogethermapResponse {
             }
             this.userCnt = userSet.size();
         }
+        this.emoji = togethermap.getEmoji();
+        this.question = togethermap.getQuestion();
     }
 }

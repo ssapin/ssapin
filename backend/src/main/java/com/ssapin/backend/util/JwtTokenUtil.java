@@ -19,10 +19,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtTokenUtil {
 
-    @Value("${external.jwt.secret-key")
+    @Value("${external.jwt.secret-key}")
     private String SECRET_KEY;
 
-    @Value("${external.jwt.refresh-key")
+    @Value("${external.jwt.refresh-key}")
     private String REFRESH_KEY;
     private final static String DATA_KEY = "userId";
 
