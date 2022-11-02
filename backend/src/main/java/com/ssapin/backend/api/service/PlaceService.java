@@ -1,40 +1,33 @@
 package com.ssapin.backend.api.service;
 
+import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.dto.response.RankingResponse;
+import com.ssapin.backend.api.domain.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
-/**
- * (1) 추천지도에 장소추가
- * (2) 모여지도에 장소추가/업데이트
- * (3) 장소랭킹 리스트
- * (4) 추천지도에 장소 삭제
- * (5) 모여지도에 장소 삭제
- * (6) 장소 정보조회
- * (7) 해당장소가 추가된 추천지도 리스트 조회
- * (8) 장소 북마크
- * (9) 장소 북마크 해제
- **/
 public interface PlaceService {
 
-    Long addPlaceInMap() ;
 
-    Long addPlaceInTogetherMap();
+    Long addPlaceInMap(User user, long mapId, PlaceRequest placeRequest) ;
 
-    List<RankingResponse> getListPlaceRanking() ;
+    Long addPlaceInTogetherMap(User user,long mapId,PlaceRequest placeRequest);
 
-    Long removePlaceInMap();
+    List<RankingResponse> getListPlaceRanking(User user) ;
 
-    Long removePlaceInTogetherMap();
+    Long removePlaceInMap(User user,long mapId, long placeId);
 
-    PlaceResponse getPlaceInfo();
+    Long removePlaceInTogetherMap(User user,long mapId, long placeId);
 
-    List<MapResponse> getMapListInPlace ();
+    Optional<PlaceResponse> getPlaceInfo(User user, long itemId);
 
-    Long registerBookmark();
+    List<MapResponse> getMapListInPlace (User user, long itemId);
 
-    Long removeBookmark();
+    Long registerBookmark(User user, long itemId);
+
+    Long removeBookmark(User user, long itemId);
 
 }

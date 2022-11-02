@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MapPlaceRepository extends JpaRepository<MapPlace, Long> {
+
+
+
+
+
 }

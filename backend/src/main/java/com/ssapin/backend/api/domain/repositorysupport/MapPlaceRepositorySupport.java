@@ -21,4 +21,13 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
                 .where(QMapPlace.mapPlace.map.eq(map))
                 .fetch();
     }
+
+    public MapPlace findByMapPlace(Map map, User user, Place place)
+    {
+        return queryFactory.selectFrom(QMapPlace.mapPlace)
+                .where(QMapPlace.mapPlace.map.eq(map)
+                        .and(QMapPlace.mapPlace.place.eq(place))
+                        .and(QMapPlace.mapPlace.user.eq(user)))
+                .fetchOne();
+    }
 }
