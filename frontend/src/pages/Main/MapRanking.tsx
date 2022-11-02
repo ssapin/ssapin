@@ -89,20 +89,21 @@ function MapRanking({ maps }: MapProps) {
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       <RankingContainer innerWidth={innerWidth}>
-        {maps?.map(
-          (map, id) =>
-            id <= 2 && (
-              <MapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                icon={map.mapEmoji}
-                title={map.title}
-                user={`${map.userEmoji} ${map.nickname}`}
-                placecnt={map.placeCnt}
-                usercnt={map.userCnt}
-              />
-            ),
-        )}
+        {maps.length !== 0 &&
+          maps.map(
+            (map, id) =>
+              id <= 2 && (
+                <MapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  icon={map.mapEmoji}
+                  title={map.title}
+                  user={`${map.userEmoji} ${map.nickname}`}
+                  placecnt={map.placeCnt}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
         {maps?.length === 0 && <div>없어요</div>}
       </RankingContainer>
       {maps.length >= 3 && (

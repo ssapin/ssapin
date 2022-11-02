@@ -112,7 +112,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - mapList`],
-    () => axiosInstance.get(mapApis.getMapList(campusId, 1, [], "")),
+    () => axiosInstance.get(mapApis.getMapList(campusId, 0, [], "")),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -124,7 +124,7 @@ function MainPage() {
     AxiosResponse<IMap[]>,
     AxiosError
   >(
-    [`${campusId} - mapList`],
+    [`${campusId} - mapRankingList`],
     () => axiosInstance.get(mapApis.getMapRanking(campusId)),
     {
       refetchOnWindowFocus: false,
@@ -144,9 +144,10 @@ function MainPage() {
       setTogethermaps(data1.data);
     }
     if (data2?.data) {
-      setMaps(data2.data);
+      setMaps(data2.data.content);
     }
     if (data3?.data) {
+      console.log(data3.data);
       setRankingmaps(data3.data);
     }
     setLoading(false);
@@ -160,13 +161,13 @@ function MainPage() {
           카카오톡 로그인
         </button>
         <QuestionContainer>
-          <Carousel interval={4500} animation="fade" duration={1000}>
+          {/* <Carousel interval={4500} animation="fade" duration={1000}>
             {!loading &&
               togethermaps.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Question key={i} item={item} />
               ))}
-          </Carousel>
+          </Carousel> */}
         </QuestionContainer>
         <Searchbar>
           <MapSearch width="50%" height="30%" />
