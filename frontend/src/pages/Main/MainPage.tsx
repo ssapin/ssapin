@@ -15,6 +15,8 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -50,7 +52,7 @@ const FixContainer = styled.div`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 999;
+  z-index: 2;
 
   button {
     margin-bottom: 1rem;
@@ -60,12 +62,10 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-    import.meta.env.VITE_KAKAO_API_KEY
-  }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+  const handleModal = () => {
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -119,16 +119,21 @@ function MainPage() {
     <>
       <HeadContainer>
         <Navbar />
-        <button type="button" onClick={handleKakaoLogin}>
-          카카오톡 로그인
+        <button type="button" onClick={handleModal}>
+          로그인
         </button>
+        {modalOpen && (
+          <ModalPortal>
+            <LoginModal onClose={() => setModalOpen(false)} />
+          </ModalPortal>
+        )}
         <QuestionContainer>
-          <Carousel interval={4500} animation="fade" duration={1000}>
+          {/* <Carousel interval={4500} animation="fade" duration={1000}>
             {questions.map((item, i) => (
               // eslint-disable-next-line react/no-array-index-key
               <Question key={i} item={item} />
             ))}
-          </Carousel>
+          </Carousel> */}
         </QuestionContainer>
         <Searchbar>
           <MapSearch width="50%" height="30%" />
