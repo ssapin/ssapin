@@ -9,8 +9,17 @@ const Container = styled.div<{ innerWidth: number }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: ${(props) => (props.innerWidth < 550 ? `7vw` : `15vw`)};
-  padding-right: ${(props) => (props.innerWidth < 550 ? `7vw` : `15vw`)};
+  padding-left: ${(props) => props.innerWidth < 550 && `7vw`};
+  padding-right: ${(props) => props.innerWidth < 550 && `7vw`};
+
+  padding-left: ${(props) => props.innerWidth >= 1700 && `19vw`};
+  padding-right: ${(props) => props.innerWidth >= 1700 && `19vw`};
+
+  padding-left: ${(props) =>
+    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
+  padding-right: ${(props) =>
+    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
+
   margin-top: 3rem;
 `;
 
