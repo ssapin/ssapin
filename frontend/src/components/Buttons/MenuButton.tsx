@@ -10,10 +10,13 @@ const StyledMenu = styled.button`
   border-radius: ${pixelToRem(20)};
   background-color: ${(props) => props.theme.colors.mainBlue};
 `;
-
-export default function MenuButton() {
+type MenuProps = {
+  // eslint-disable-next-line react/require-default-props
+  func?: () => void;
+};
+export default function MenuButton({ func }: MenuProps) {
   return (
-    <StyledMenu type="button">
+    <StyledMenu type="button" onClick={func}>
       <MenuIcon />
     </StyledMenu>
   );
