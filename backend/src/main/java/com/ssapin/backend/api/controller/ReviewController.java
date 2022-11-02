@@ -36,7 +36,7 @@ public class ReviewController {
     }
 
 
-    @PostMapping
+    @PostMapping("/login")
     @ApiOperation(value = "리뷰 생성 ", notes = "리뷰 작성하기")
     public ResponseEntity<?> addReview(@RequestBody ReviewRequest.ReviewAdd reviewRequest) {
         //userId 추가될 예정
@@ -46,7 +46,7 @@ public class ReviewController {
 //            User user = userService.findOneUser(userId);
 //            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 //            else {
-        User user = new User("test", "test", new Campus("test"), "test");
+        User user = new User("test", 1, new Campus("test"), "test");
         reviewService.addReview(reviewRequest, user);
         return new ResponseEntity<String>("리뷰 생성 성공!", HttpStatus.OK);
 //}
@@ -58,14 +58,14 @@ public class ReviewController {
 
     }
 
-    @PatchMapping
+    @PatchMapping("/login")
     @ApiOperation(value = "리뷰 수정", notes = "리뷰를 수정한다.")
     public ResponseEntity<?> updateReview(@RequestBody ReviewRequest.ReviewEdit reviewEdit) {
 
 //        try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-        User user = new User("test", "test", new Campus("test"), "test");
+        User user = new User("test", 1, new Campus("test"), "test");
             long updatedReviewId = reviewService.updateReview(reviewEdit);
                 return new ResponseEntity<String>("리뷰 수정 성공!", HttpStatus.OK);
 //
@@ -78,7 +78,7 @@ public class ReviewController {
     }
 
 
-    @DeleteMapping
+    @DeleteMapping("/login")
     @ApiOperation(value = "리뷰 삭제", notes = "내가 적은 리뷰 삭제")
     public ResponseEntity<?> deleteReview(@RequestBody final Map<String, Long> request) {
         long reviewId = request.get("reviewId");

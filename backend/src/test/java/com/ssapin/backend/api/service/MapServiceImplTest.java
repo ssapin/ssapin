@@ -68,7 +68,7 @@ class MapServiceImplTest {
                 .region("test campus")
                 .build();
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)
@@ -134,7 +134,7 @@ class MapServiceImplTest {
                 .region("test campus2")
                 .build();
         User testuser = User.builder()
-                .token("test token2")
+                .kakaoId(1)
                 .nickname("test nickname2")
                 .emoji("test emoji2")
                 .campus(testcampus)
@@ -226,7 +226,7 @@ class MapServiceImplTest {
                 .itemId(1)
                 .build();
         User testuser = User.builder()
-                .token("test token2")
+                .kakaoId(2)
                 .nickname("test nickname2")
                 .emoji("test emoji2")
                 .campus(originMap.getCampus())
@@ -313,7 +313,7 @@ class MapServiceImplTest {
         createMap();
         Map originMap = mapRepository.findById(1L).get();
         User testuser = User.builder()
-                .token("test token2")
+                .kakaoId(2)
                 .nickname("test nickname2")
                 .emoji("test emoji2")
                 .campus(originMap.getCampus())
@@ -342,7 +342,7 @@ class MapServiceImplTest {
         createMap();
         Map originMap = mapRepository.findById(1L).get();
         User testuser = User.builder()
-                .token("test token2")
+                .kakaoId(2)
                 .nickname("test nickname2")
                 .emoji("test emoji2")
                 .campus(originMap.getCampus())
