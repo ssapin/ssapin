@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
 import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -15,6 +18,12 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import { togethermapApis } from "../../utils/apis/togethermapApi";
+import { campusState } from "../../store/atom";
+import { IMap } from "../../utils/types/map.interface";
+import { mapApis } from "../../utils/apis/mapApi";
+import axiosInstance from "../../utils/apis/api";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -60,6 +69,11 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
+  const [maps, setMaps] = useState<IMap[]>([]);
+  const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
+
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_API_KEY
   }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
@@ -74,60 +88,84 @@ function MainPage() {
     };
     window.addEventListener("resize", resizeListener);
   });
+  const [campusId, setCampusId] = useRecoilState(campusState);
 
-  const questions = [
+  const toggleActive = (key: number) => {
+    setCampusId(key);
+  };
+
+  const { data: data1, refetch: refetch1 } = useQuery<
+    AxiosResponse<ITogetherMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - togetherMapList`],
+    () => axiosInstance.get(togethermapApis.getTogetherMapList(campusId)),
     {
-      emoji: "⏰📝📚🤓💻",
-      place: 129,
-      mapId: 1,
-      description: "싸피 교육이 끝나고 어디서 공부하시나요?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
+  );
+
+  const { data: data2, refetch: refetch2 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(mapApis.getMapList(campusId, 1, [], "")),
     {
-      emoji: "🍜🥂🍴🍲🥘",
-      place: 129,
-      mapId: 1,
-      description: "이 곳은 찐이다.. 내가 뽑은 캠퍼스 근처 최고 맛집은?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
+  );
+
+  const { data: data3, refetch: refetch3 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(mapApis.getMapRanking(campusId)),
     {
-      emoji: "💸😞🌯🍙🥙",
-      place: 129,
-      mapId: 1,
-      description: "히잉.. 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
-    {
-      emoji: "🍦🧁🍷☕🍸",
-      place: 129,
-      mapId: 1,
-      description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페?",
-    },
-    {
-      emoji: "🎬🍻🎳🎮🎤",
-      place: 129,
-      mapId: 1,
-      description:
-        "싸피 끝나고 치맥 한잔! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
-    },
-    {
-      emoji: "🤐🍱🍽🙋‍♂️🥟",
-      place: 129,
-      mapId: 1,
-      description: "아주머니 단무지는 빼주세요.. 혼밥 최고 장소를 찍어주세요",
-    },
-  ];
+  );
+
+  useEffect(() => {
+    refetch1();
+    refetch2();
+    refetch3();
+  }, [campusId]);
+
+  useEffect(() => {
+    if (data1?.data) {
+      setTogethermaps(data1.data);
+    }
+    if (data2?.data) {
+      setMaps(data2.data);
+    }
+    if (data3?.data) {
+      setRankingmaps(data3.data);
+    }
+    setLoading(false);
+  }, [data1, data2, data3]);
 
   return (
     <>
       <HeadContainer>
-        <Navbar />
+        <Navbar func={toggleActive} />
         <button type="button" onClick={handleKakaoLogin}>
           카카오톡 로그인
         </button>
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
-            {questions.map((item, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Question key={i} item={item} />
-            ))}
+            {!loading &&
+              togethermaps.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Question key={i} item={item} />
+              ))}
           </Carousel>
         </QuestionContainer>
         <Searchbar>
@@ -137,9 +175,9 @@ function MainPage() {
       <MainContainer>
         <UserRanking />
         <PlaceRanking />
-        <MapRanking />
-        <MapList />
-        <TogetherMapList />
+        <MapRanking maps={rankingmaps} />
+        <MapList maps={maps} />
+        <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />

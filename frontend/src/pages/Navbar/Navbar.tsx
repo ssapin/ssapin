@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 import MenuButton from "../../components/Buttons/MenuButton";
 import Logo from "../../assets/image/ssapin_logo.png";
 import Kakaotalk from "../../assets/image/ri_kakao-talk-fill.png";
 import CampusButton from "../../components/Buttons/CampusButton";
+import { CAMPUS_LIST } from "../../utils/constants/contant";
+import { campusState } from "../../store/atom";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
 import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
 import Footer from "../../components/etc/Footer";
@@ -162,22 +165,25 @@ const Side = styled.div`
   }
 `;
 
-export default function Navbar() {
+type NavBarProps = {
+  // eslint-disable-next-line react/require-default-props
+  func?: (key: number) => void;
+};
+
+export default function Navbar({ func }: NavBarProps) {
+  const [campusId] = useRecoilState(campusState);
+
   const [isOpen, setIsOpen] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const toggleSide = () => {
     setIsOpen(!isOpen);
   };
 
+  const campus = CAMPUS_LIST;
+
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
-
-  const [btnActive, setBtnActive] = useState(1);
-  const toggleActive = (key: number) => {
-    setBtnActive(key);
-  };
-  const campus = ["0", "서울", "대전", "광주", "구미", "부울경"];
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -203,15 +209,11 @@ export default function Navbar() {
               <img alt="ssapin_logo.png" src={Logo} />
             </button>
             <button type="button" onClick={toggleSide}>
-              {campus[btnActive]} ▼
+              {campus[campusId]} ▼
             </button>
           </LogoContainer>
           {isOpen && (
-            <CampusButton
-              open={toggleSide}
-              select={toggleActive}
-              campusId={btnActive}
-            />
+            <CampusButton open={toggleSide} select={func} campusId={campusId} />
           )}
         </CampusContainer>
         <MenuContainer innerWidth={innerWidth}>

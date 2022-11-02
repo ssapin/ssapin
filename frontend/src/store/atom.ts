@@ -13,3 +13,8 @@ export const loggedInState = selector({
     return !!userInfo.nickName;
   },
 });
+
+export const campusState = atom({
+  key: "campusRecoilState",
+  default: 1,
+});

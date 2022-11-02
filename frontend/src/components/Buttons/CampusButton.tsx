@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 
 const TiedBoxes = styled.div`
@@ -40,9 +41,9 @@ type CampusProps = {
   // eslint-disable-next-line react/require-default-props
   select?: (key: number) => void;
 };
-export default function CampusButton({ campusId, open, select }: CampusProps) {
-  const campus = ["0", "서울", "대전", "광주", "구미", "부울경"];
 
+export default function CampusButton({ campusId, open, select }: CampusProps) {
+  const campus = CAMPUS_LIST;
   const toggleActive = (key: number) => {
     select(key);
     open();
@@ -57,6 +58,8 @@ export default function CampusButton({ campusId, open, select }: CampusProps) {
               value={el}
               className={`${campusId === id ? "active" : ""}`}
               onClick={() => toggleActive(id)}
+              // eslint-disable-next-line react/no-array-index-key
+              key={id}
             >
               {el}
             </StyledCampus>
