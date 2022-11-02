@@ -6,6 +6,8 @@ import UserInfoCard from "../../components/card/UserInfoCard";
 import UserInfoDetailCard from "../../components/card/UserInfoDetailCard";
 import MyPageTab from "./MyPageTab";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
+import CreateButton from "../../components/Buttons/CreateButton";
+import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 
 const PageTopBg = styled.div`
   width: 100%;
@@ -27,9 +29,8 @@ const FixContainer = styled.div`
   bottom: 2rem;
   right: 2rem;
   z-index: 999;
-
   button {
-    margin-bottom: 1rem;
+    margin: 1rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
 `;
@@ -58,6 +59,11 @@ function MyPage() {
       <MyPageTab />
       <FixContainer>
         <MoveToTopButton />
+        {innerWidth > 650 ? (
+          <CreateButton type="button" text="지도 만들기" />
+        ) : (
+          <CreateButtonMobile type="button" />
+        )}
       </FixContainer>
     </div>
   );
