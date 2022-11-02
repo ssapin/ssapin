@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuButton from "../../components/Buttons/MenuButton";
 import Logo from "../../assets/image/ssapin_logo.png";
+import Kakaotalk from "../../assets/image/ri_kakao-talk-fill.png";
 import CampusButton from "../../components/Buttons/CampusButton";
-import SideBar from "./SideBar";
+import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
+import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
+import Footer from "../../components/etc/Footer";
 
 const Container = styled.div<{ innerWidth: number }>`
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -63,8 +66,40 @@ const LogoContainer = styled.div<{ innerWidth: number }>`
   }
 
   button: hover {
-    scale: 1.1;
+    scale: 1.05;
     cursor: pointer;
+  }
+`;
+
+const Page = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 130vh;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 998;
+`;
+
+const MyInfo = styled.div`
+  div {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+    color: ${(props) => props.theme.colors.mainNavy};
+  }
+`;
+const NavContentFirst = styled.div`
+  div {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+    color: black;
+  }
+`;
+
+const NavContentSecond = styled.div`
+  div {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+    color: black;
   }
 `;
 
@@ -72,36 +107,45 @@ const MenuContainer = styled.div<{ innerWidth: number }>`
   width: ${(props) => props.innerWidth < 950 && `14.5%`};
   height: 100%;
 `;
+
 const Side = styled.div`
-  .navbar {
-    background-color: red;
-    height: 80px;
-    display: flex;
-    justify-content: start;
-    align-items: center;
+  hr {
+    width: 100%;
   }
-
-  .menu-bars {
-    margin-left: 2rem;
-    font-size: 2rem;
-    background: none;
-  }
-
+  z-index: 999;
   .nav-menu {
-    background-color: var(--navBg);
-    width: 250px;
+    background-color: white;
+    width: 27vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
+
     position: fixed;
     top: 0;
-    left: -100%;
+    right: -100%;
     transition: 850ms;
   }
 
   .nav-menu.active {
-    left: 0;
+    right: 0;
     transition: 350ms;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-content {
+    padding: 2rem;
+    height: 70%;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    svg {
+      margin-right: 0.5rem;
+    }
+    svg: hover {
+      scale: 1.05;
+      cursor: pointer;
+    }
   }
 
   .nav-text {
@@ -112,39 +156,9 @@ const Side = styled.div`
     list-style: none;
     height: 60px;
   }
-
-  .nav-text a {
-    text-decoration: none;
-    color: #f5f5f5;
-    font-size: 18px;
-    width: 95%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    border-radius: 4px;
-  }
-
-  .nav-text a:hover {
-    background-color: #1a83ff;
-  }
-
-  .nav-menu-items {
-    width: 100%;
-    padding: 0;
-  }
-
-  .navbar-toggle {
-    background-color: var(--navBg);
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
-  span {
-    margin-left: 16px;
+  .nav-text:hover {
+    scale: 1.05;
+    cursor: pointer;
   }
 `;
 
@@ -155,7 +169,10 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => {
+    setSidebar(!sidebar);
+  };
+
   const [btnActive, setBtnActive] = useState(1);
   const toggleActive = (key: number) => {
     setBtnActive(key);
@@ -201,19 +218,36 @@ export default function Navbar() {
           <MenuButton func={showSidebar} />
         </MenuContainer>
       </Container>
-      {sidebar && (
-        <Side>
-          {/* All the icons now are white */}
-          <div className="navbar"></div>
-          <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
-            <ul className="nav-menu-items" onClick={showSidebar}>
-              <li className="navbar-toggle">
-                <Link to="#" className="menu-bars"></Link>
-              </li>
-            </ul>
-          </nav>
-        </Side>
-      )}
+      <Side>
+        <div className={sidebar ? "nav-menu active" : "nav-menu"}>
+          <div className="nav-content">
+            <div className="buttons">
+              <Logout />
+              <Xbutton onClick={showSidebar} />
+            </div>
+            <MyInfo>
+              <div className="nav-text">👨‍🦰 Jiwon Park</div>
+            </MyInfo>
+            <hr />
+            <NavContentFirst>
+              <div className="nav-text">🏠 홈</div>
+              <div className="nav-text">🗺 지도 찾기</div>
+              <div className="nav-text">💡 마이페이지</div>
+            </NavContentFirst>
+            <hr />
+            <NavContentSecond>
+              <div className="nav-text">
+                <img alt="ri_kakao-talk-fill.png" src={Kakaotalk} />
+                &nbsp;카카오톡 채널
+              </div>
+              <div className="nav-text">🗣 건의사항</div>
+            </NavContentSecond>
+          </div>
+
+          <Footer />
+        </div>
+      </Side>
+      {sidebar && <Page onClick={showSidebar} />}
     </>
   );
 }
