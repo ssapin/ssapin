@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
+import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -59,6 +60,13 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_API_KEY
+  }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   useEffect(() => {
     const resizeListener = () => {
@@ -111,6 +119,9 @@ function MainPage() {
     <>
       <HeadContainer>
         <Navbar />
+        <button type="button" onClick={handleKakaoLogin}>
+          카카오톡 로그인
+        </button>
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
             {questions.map((item, i) => (
