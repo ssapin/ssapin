@@ -45,10 +45,8 @@ const Container = styled.div`
 `;
 
 const Contentdiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: red;
+  width: 80%;
+  margin: 0 10%;
 `;
 
 const myPageTab = [
@@ -75,7 +73,9 @@ function MyPageTab() {
         <TabMenu>
           {myPageTab.map((el, index) => {
             return (
+              // eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
               <label
+                // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 className={currentTab === index ? "checked" : "non-checked"}
                 onClick={() => selectTabHandler(index)}
