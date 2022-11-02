@@ -1,4 +1,3 @@
-import React from "react";
 import USER_APIS from "../../utils/apis/useApis";
 
 function MainPage() {
@@ -6,10 +5,10 @@ function MainPage() {
     import.meta.env.VITE_KAKAO_API_KEY
   }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
 
-  console.log(KAKAO_AUTH_URL);
   const handleKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+
   return (
     <div>
       MainPage
