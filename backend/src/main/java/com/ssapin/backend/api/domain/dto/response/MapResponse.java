@@ -36,11 +36,15 @@ public class MapResponse {
         this.mapEmoji = map.getEmoji();
         this.placeList = placeList;
         this.placeCnt = placeList.size();
-        Set<Long> userSet = new HashSet<>();
-        for(PlaceResponse placeResponse : placeList) {
-            userSet.add(placeResponse.getUserId());
+        if(placeList==null || placeList.size()==0) {
+            this.userCnt=0;
+        } else {
+            Set<Long> userSet = new HashSet<>();
+            for(PlaceResponse placeResponse : placeList) {
+                userSet.add(placeResponse.getUserId());
+            }
+            this.userCnt = userSet.size();
         }
-        this.userCnt = userSet.size();
         this.hashtagList = hashtagList;
         this.bookMark = bookMark;
     }
