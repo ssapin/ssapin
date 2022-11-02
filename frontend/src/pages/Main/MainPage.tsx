@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -14,6 +17,10 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import axiosInstance from "../../utils/apis/api";
+import { togethermapApis } from "../../utils/apis/togethermapApi";
+import { campusState } from "../../store/atom";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -59,6 +66,9 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
+  const [campusId] = useRecoilState(campusState);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -67,43 +77,62 @@ function MainPage() {
     window.addEventListener("resize", resizeListener);
   });
 
+  const { data, refetch } = useQuery<AxiosResponse<ITogetherMap[]>, AxiosError>(
+    ["togetherMapList"],
+    () => axiosInstance.get(togethermapApis.getTogetherMapList(campusId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  useEffect(() => {
+    if (data?.data) {
+      setTogethermaps(data.data);
+      console.log(campusId);
+      setLoading(false);
+    }
+  }, [data]);
+
   const questions = [
     {
       emoji: "⏰📝📚🤓💻",
-      place: 129,
-      mapId: 1,
+      place: togethermaps[0]?.userCnt,
+      mapId: togethermaps[0]?.togethermapId,
       description: "싸피 교육이 끝나고 어디서 공부하시나요?",
     },
     {
       emoji: "🍜🥂🍴🍲🥘",
-      place: 129,
-      mapId: 1,
-      description: "이 곳은 찐이다.. 내가 뽑은 캠퍼스 근처 최고 맛집은?",
+      place: togethermaps[1]?.userCnt,
+      mapId: togethermaps[1]?.togethermapId,
+      description: "이 곳은 찐이다..👍 내가 뽑은 캠퍼스 근처 최고 맛집은?",
     },
     {
       emoji: "💸😞🌯🍙🥙",
-      place: 129,
-      mapId: 1,
-      description: "히잉.. 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
+      place: togethermaps[2]?.userCnt,
+      mapId: togethermaps[2]?.togethermapId,
+      description: "히잉..😞 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
     },
     {
       emoji: "🍦🧁🍷☕🍸",
-      place: 129,
-      mapId: 1,
-      description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페?",
+      place: togethermaps[3]?.userCnt,
+      mapId: togethermaps[3]?.togethermapId,
+      description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페는?",
     },
     {
       emoji: "🎬🍻🎳🎮🎤",
-      place: 129,
-      mapId: 1,
+      place: togethermaps[4]?.userCnt,
+      mapId: togethermaps[4]?.togethermapId,
       description:
-        "싸피 끝나고 치맥 한잔! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
+        "싸피 끝나고 치맥 한잔🍻! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
     },
     {
       emoji: "🤐🍱🍽🙋‍♂️🥟",
-      place: 129,
-      mapId: 1,
-      description: "아주머니 단무지는 빼주세요.. 혼밥 최고 장소를 찍어주세요",
+      place: togethermaps[5]?.userCnt,
+      mapId: togethermaps[5]?.togethermapId,
+      description:
+        "아주머니 단무지는 빼주세요..🤐 나만의 혼밥 최고 장소를 찍어주세요",
     },
   ];
 
@@ -113,10 +142,11 @@ function MainPage() {
         <Navbar />
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
-            {questions.map((item, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Question key={i} item={item} />
-            ))}
+            {!loading &&
+              questions.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Question key={i} item={item} />
+              ))}
           </Carousel>
         </QuestionContainer>
         <Searchbar>

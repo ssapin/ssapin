@@ -1,9 +1,12 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import MenuButton from "../../components/Buttons/MenuButton";
 import Logo from "../../assets/image/ssapin_logo.png";
 import CampusButton from "../../components/Buttons/CampusButton";
+import { CAMPUS_LIST } from "../../utils/constants/contant";
+import { campusState } from "../../store/atom";
 
 const Container = styled.div<{ innerWidth: number }>`
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -73,16 +76,18 @@ const MenuContainer = styled.div<{ innerWidth: number }>`
 `;
 
 export default function Navbar() {
+  const [campusId] = useRecoilState(campusState);
+
   const [isOpen, setIsOpen] = useState(false);
   const toggleSide = () => {
     setIsOpen(!isOpen);
   };
 
-  const [btnActive, setBtnActive] = useState(1);
+  const [btnActive, setBtnActive] = useState(campusId);
   const toggleActive = (key: number) => {
     setBtnActive(key);
   };
-  const campus = ["0", "서울", "대전", "광주", "구미", "부울경"];
+  const campus = CAMPUS_LIST;
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
