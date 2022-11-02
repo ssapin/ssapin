@@ -75,7 +75,12 @@ const MenuContainer = styled.div<{ innerWidth: number }>`
   height: 100%;
 `;
 
-export default function Navbar() {
+type NavBarProps = {
+  // eslint-disable-next-line react/require-default-props
+  func?: (key: number) => void;
+};
+
+export default function Navbar({ func }: NavBarProps) {
   const [campusId] = useRecoilState(campusState);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -83,10 +88,6 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const [btnActive, setBtnActive] = useState(campusId);
-  const toggleActive = (key: number) => {
-    setBtnActive(key);
-  };
   const campus = CAMPUS_LIST;
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -112,15 +113,11 @@ export default function Navbar() {
             <img alt="ssapin_logo.png" src={Logo} />
           </button>
           <button type="button" onClick={toggleSide}>
-            {campus[btnActive]} ▼
+            {campus[campusId]} ▼
           </button>
         </LogoContainer>
         {isOpen && (
-          <CampusButton
-            open={toggleSide}
-            select={toggleActive}
-            campusId={btnActive}
-          />
+          <CampusButton open={toggleSide} select={func} campusId={campusId} />
         )}
       </CampusContainer>
       <MenuContainer innerWidth={innerWidth}>

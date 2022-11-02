@@ -21,6 +21,8 @@ import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import axiosInstance from "../../utils/apis/api";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
 import { campusState } from "../../store/atom";
+import { IMap } from "../../utils/types/map.interface";
+import { mapApis } from "../../utils/apis/mapApi";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -68,7 +70,8 @@ function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
-  const [campusId] = useRecoilState(campusState);
+  const [maps, setMaps] = useState<ITogetherMap[]>([]);
+  const [rankingmaps, setRankingmaps] = useState<ITogetherMap[]>([]);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -76,9 +79,17 @@ function MainPage() {
     };
     window.addEventListener("resize", resizeListener);
   });
+  const [campusId, setCampusId] = useRecoilState(campusState);
 
-  const { data, refetch } = useQuery<AxiosResponse<ITogetherMap[]>, AxiosError>(
-    ["togetherMapList"],
+  const toggleActive = (key: number) => {
+    setCampusId(key);
+  };
+
+  const { data: data1, refetch: refetch1 } = useQuery<
+    AxiosResponse<ITogetherMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - togetherMapList`],
     () => axiosInstance.get(togethermapApis.getTogetherMapList(campusId)),
     {
       refetchOnWindowFocus: false,
@@ -87,13 +98,50 @@ function MainPage() {
     },
   );
 
+  const { data: data2, refetch: refetch2 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(mapApis.getMapList(campusId, 1, [], "")),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  const { data: data3, refetch: refetch3 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(mapApis.getMapRanking(campusId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
   useEffect(() => {
-    if (data?.data) {
-      setTogethermaps(data.data);
-      console.log(campusId);
-      setLoading(false);
+    refetch1();
+    refetch2();
+    refetch3();
+  }, [campusId]);
+
+  useEffect(() => {
+    if (data1?.data) {
+      setTogethermaps(data1.data);
     }
-  }, [data]);
+    if (data2?.data) {
+      setMaps(data2.data);
+    }
+    if (data3?.data) {
+      setRankingmaps(data3.data);
+    }
+    setLoading(false);
+  }, [data1, data2, data3]);
 
   const questions = [
     {
@@ -139,7 +187,7 @@ function MainPage() {
   return (
     <>
       <HeadContainer>
-        <Navbar />
+        <Navbar func={toggleActive} />
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
             {!loading &&
@@ -157,8 +205,8 @@ function MainPage() {
         <UserRanking />
         <PlaceRanking />
         <MapRanking />
-        <MapList />
-        <TogetherMapList />
+        <MapList maps={maps} />
+        <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
