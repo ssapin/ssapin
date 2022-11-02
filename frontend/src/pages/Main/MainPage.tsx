@@ -70,8 +70,8 @@ function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
-  const [maps, setMaps] = useState<ITogetherMap[]>([]);
-  const [rankingmaps, setRankingmaps] = useState<ITogetherMap[]>([]);
+  const [maps, setMaps] = useState<IMap[]>([]);
+  const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -204,7 +204,7 @@ function MainPage() {
       <MainContainer>
         <UserRanking />
         <PlaceRanking />
-        <MapRanking />
+        <MapRanking maps={rankingmaps} />
         <MapList maps={maps} />
         <TogetherMapList maps={togethermaps} />
       </MainContainer>
