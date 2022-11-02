@@ -13,14 +13,12 @@ import { themes } from "./styles/theme";
 // }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <RecoilRoot>
-      <HelmetProvider>
-        <ThemeProvider theme={themes}>
-          <GlobalStyle />
-          <App />
-        </ThemeProvider>
-      </HelmetProvider>
-    </RecoilRoot>
-  </React.StrictMode>,
+  <RecoilRoot>
+    <HelmetProvider>
+      <ThemeProvider theme={themes}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </HelmetProvider>
+  </RecoilRoot>,
 );

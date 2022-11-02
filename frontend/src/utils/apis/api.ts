@@ -1,11 +1,92 @@
-import axios, { AxiosInstance } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosInterceptorManager,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
+import { removeCookie, setCookie } from "../functions/cookie";
+// eslint-disable-next-line import/no-cycle
+import { getNewAccessToken } from "./useApis";
 
-const axiosInstance: AxiosInstance = axios.create({
-  // baseURL: "",
-  baseURL: "https://k7a307.p.ssafy.io/api",
+type CustomResponseFormat<T = any> = {
+  response: T;
+};
+interface CustomInstance extends AxiosInstance {
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>;
+    response: AxiosInterceptorManager<AxiosResponse<CustomResponseFormat>>;
+  };
+  getUri(config?: AxiosRequestConfig): string;
+  request<T>(config: AxiosRequestConfig): Promise<T>;
+  get<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  delete<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  head<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  options<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+}
+
+const axiosInstance: CustomInstance = axios.create({
+  baseURL: `${import.meta.env.VITE_BASE_SERVER_URL}/api`,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
+  // withCredentials: true,
 });
 
 export default axiosInstance;
+
+const onResponse = (response: AxiosResponse): AxiosResponse => {
+  return response;
+};
+
+interface IErrorResponse {
+  message: string;
+}
+
+const onResponseError = async (
+  error: AxiosError<IErrorResponse>,
+  // eslint-disable-next-line consistent-return
+): Promise<AxiosError> => {
+  const originalConfig = error.config;
+  const { response } = error;
+  if (response) {
+    if (response.status === 401 && response.data?.message === "Token Expired") {
+      try {
+        const res: AxiosResponse = await getNewAccessToken();
+        const { accessToken } = res.data;
+        setCookie("accessToken", accessToken);
+        axiosInstance.defaults.headers.access_token = accessToken;
+        return await axiosInstance(originalConfig);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          if (err.response.status === 403) {
+            removeCookie("accessToken");
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 2000);
+          }
+        }
+      }
+    } else if (response.status === 403) {
+      removeCookie("accessToken");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } else return Promise.reject(error);
+  } else return Promise.reject(error);
+};
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
+axiosInstance.interceptors.response.use(onResponse, onResponseError);

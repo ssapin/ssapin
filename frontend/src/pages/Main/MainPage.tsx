@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
+import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -18,11 +19,11 @@ import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import axiosInstance from "../../utils/apis/api";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
 import { campusState } from "../../store/atom";
 import { IMap } from "../../utils/types/map.interface";
 import { mapApis } from "../../utils/apis/mapApi";
+import axiosInstance from "../../utils/apis/api";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -72,6 +73,14 @@ function MainPage() {
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
+
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_API_KEY
+  }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   useEffect(() => {
     const resizeListener = () => {
@@ -147,6 +156,9 @@ function MainPage() {
     <>
       <HeadContainer>
         <Navbar func={toggleActive} />
+        <button type="button" onClick={handleKakaoLogin}>
+          카카오톡 로그인
+        </button>
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
             {!loading &&
