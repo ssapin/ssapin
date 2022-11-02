@@ -39,13 +39,11 @@ public class AuthServiceImpl implements AuthService{
 
         String refreshToken = jwtTokenUtil.saveRefreshToken(user);
         String accessToken = jwtTokenUtil.generateJwtToken(user);
-        long accessTokenExpiresIn = jwtTokenUtil.getExpFromToken(accessToken);
 
         addAuth(user, refreshToken);
 
         return AuthResponse.Detail.builder()
                 .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn)
                 .refreshToken(refreshToken)
                 .firstLogin(firstLogin)
                 .build();
@@ -54,17 +52,17 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public AuthResponse.Reissue reissueAccessToken(String refreshToken) {
 
-        if (!jwtTokenUtil.isValidRefreshToken(refreshToken) || !authRepositorySupport.existByRefreshToken(refreshToken))
+        if (refreshToken == null
+                || !jwtTokenUtil.isValidRefreshToken(refreshToken)
+                || !authRepositorySupport.existByRefreshToken(refreshToken))
             throw new CustomException(ErrorCode.AUTHENTICATION_FAILED);
 
         long userId = jwtTokenUtil.getUserIdFromRefreshToken(refreshToken);
         User user = userService.getUserById(userId);
         String accessToken = jwtTokenUtil.generateJwtToken(user);
-        long accessTokenExpiresIn = jwtTokenUtil.getExpFromToken(accessToken);
 
         return AuthResponse.Reissue.builder()
                 .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn)
                 .build();
     }
 

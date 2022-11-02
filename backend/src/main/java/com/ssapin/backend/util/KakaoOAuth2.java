@@ -2,6 +2,7 @@ package com.ssapin.backend.util;
 
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class KakaoOAuth2 {
 
-    // properties 파일에 숨길 예정
-    private static final String CLIENT_ID = "e3a714fa6facdc0a7b2fdc80c4cc85ef";
-    // 테스트용
-    private static final String REDIRECT_URI = "http://localhost:8080/auth/login";
+    @Value("${external.kakao.client-id}")
+    private String CLIENT_ID;
+    @Value("${external.kakao.redirect-uri}")
+    private String REDIRECT_URI;
 
     public String getKakaoToken(String authorizeCode) {
 

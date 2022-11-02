@@ -64,7 +64,7 @@ class ReviewServiceImplTest {
 
 
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(2)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)

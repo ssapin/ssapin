@@ -11,11 +11,15 @@ public class JasyptConfigTest extends JasyptConfig {
     void jasypt_test() {
         String username = "ssapin";
         String password = "ssapin307";
+        String clientId = "e3a714fa6facdc0a7b2fdc80c4cc85ef";
+
         String encryptUsername = jasyptEncrypt(username);
         String encryptPassword = jasyptEncrypt(password);
+        String encryptClientId = jasyptEncrypt(clientId);
 
         System.out.println("encryptUsername : " + encryptUsername);
         System.out.println("encryptPassword : " + encryptPassword);
+        System.out.println("encryptClientId : " + encryptClientId);
 
         Assertions.assertThat(username).isEqualTo(jasyptDecryt(encryptUsername));
     }

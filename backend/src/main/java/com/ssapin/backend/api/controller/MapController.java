@@ -31,13 +31,13 @@ public class MapController {
 
     private final MapServiceImpl mapService;
 
-    @PostMapping
+    @PostMapping("/login")
     @ApiOperation(value = "추천지도 생성 ", notes = "사용자가 추천지도를 생성한다.")
-    public ResponseEntity<?> addMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister) {
+    public ResponseEntity<?> addMap(@RequestHeader("accessToken") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister) {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-              User user = new User("dd", "dd", new Campus("서울"), "dd");
+              User user = new User("dd", 1, new Campus("서울"), "dd");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
@@ -48,13 +48,13 @@ public class MapController {
         }
     }
 
-    @PatchMapping
+    @PatchMapping("/login")
     @ApiOperation(value = "추천지도 수정", notes = "사용자가 추천지도를 수정한다.")
-    public ResponseEntity<?> editMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody MapRequest.MapEdit mapEdit) {
+    public ResponseEntity<?> editMap(@RequestHeader("accessToken") final String accessToken, @RequestBody MapRequest.MapEdit mapEdit) {
         try {
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1, new Campus("test"), "test");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 return new ResponseEntity<Long>(mapService.updateMap(mapEdit), HttpStatus.OK);
@@ -65,14 +65,14 @@ public class MapController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/login")
     @ApiOperation(value = "추천지도 삭제", notes = "사용자가 추천지도를 삭제한다.")
-    public ResponseEntity<?> deleteMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> requestMap) {
+    public ResponseEntity<?> deleteMap(@RequestHeader("accessToken") final String accessToken, @RequestBody Map<String, Long> requestMap) {
         try {
             long mapId = requestMap.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1, new Campus("test"), "test");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 mapService.deleteMap(mapId);
@@ -86,7 +86,7 @@ public class MapController {
 
     @GetMapping("/{mapId}/detail")
     @ApiOperation(value = "추천지도 상세 조회", notes = "사용자가 추천지도를 상세 조회한다.")
-    public ResponseEntity<?> detailMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @PathVariable long mapId) {
+    public ResponseEntity<?> detailMap(@RequestHeader("accessToken") final String accessToken, @PathVariable long mapId) {
         try {
             //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
@@ -100,7 +100,7 @@ public class MapController {
 
     @GetMapping
     @ApiOperation(value = "추천지도 리스트", notes = "필터링을 포함한 추천지도 리스트를 조회한다.")
-    public ResponseEntity<?> getMapList(@RequestHeader("ACCESS_TOKEN") final String accessToken,
+    public ResponseEntity<?> getMapList(@RequestHeader("accessToken") final String accessToken,
                                         @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
         try {
             //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -115,7 +115,7 @@ public class MapController {
 
     @GetMapping("/{campusId}/ranking")
     @ApiOperation(value = "추천지도 랭킹 리스트", notes = "추천지도 랭킹 리스트를 조회한다.")
-    public ResponseEntity<?> getRankingList(@RequestHeader("ACCESS_TOKEN") final String accessToken, @PathVariable long campusId) {
+    public ResponseEntity<?> getRankingList(@RequestHeader("accessToken") final String accessToken, @PathVariable long campusId) {
         try {
             //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
@@ -127,14 +127,14 @@ public class MapController {
         }
     }
 
-    @PostMapping("/bookmark")
+    @PostMapping("/login/bookmark")
     @ApiOperation(value = "추천지도 북마크", notes = "사용자가 추천지도를 북마크한다.")
-    public ResponseEntity<?> addBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> addBookmark(@RequestHeader("accessToken") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1, new Campus("test"), "test");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 mapService.addBookmark(user, mapId);
@@ -146,14 +146,14 @@ public class MapController {
         }
     }
 
-    @DeleteMapping("/bookmark")
+    @DeleteMapping("/login/bookmark")
     @ApiOperation(value = "추천지도 북마크 해제", notes = "사용자가 추천지도 북마크를 해제한다.")
-    public ResponseEntity<?> deleteBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> deleteBookmark(@RequestHeader("accessToken") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
             long mapId = request.get("mapId");
 //            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
 //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1, new Campus("test"), "test");
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
             else {
                 mapService.deleteBookmark(user, mapId);

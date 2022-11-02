@@ -9,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Objects;
 
 @Component
@@ -17,15 +16,11 @@ import java.util.Objects;
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final AuthService authService;
-    private final UserService userService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws IOException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        String accessToken = request.getHeader("ACCESS_TOKEN");
-        String refreshToken = request.getHeader("REFRESH_TOKEN");
+        String accessToken = request.getHeader("accessToken");
 
         if (isPreflightRequest(request)) return true;
 
@@ -34,21 +29,15 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
             if (status == 2) return true;
             else if (status == 1) {
-                if (refreshToken != null) {
-                    if (jwtTokenUtil.isValidRefreshToken(refreshToken)) return true;
-                }
-                else {
-                    response.setStatus(401);
-                    response.setHeader("ACCESS_TOKEN", accessToken);
-                    response.setHeader("REFRESH_TOKEN", refreshToken);
-                    response.setHeader("message", "Token Expired");
-                }
+                response.setStatus(401);
+                response.setHeader("accessToken", accessToken);
+                response.setHeader("message", "Token Expired");
+                return false;
             }
         }
 
         response.setStatus(403);
-        response.setHeader("ACCESS_TOKEN", accessToken);
-        response.setHeader("REFRESH_TOKEN", refreshToken);
+        response.setHeader("accessToken", accessToken);
         response.setHeader("message", "Authentication Failed");
         return false;
     }

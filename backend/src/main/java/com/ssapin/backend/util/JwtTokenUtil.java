@@ -4,6 +4,7 @@ import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.service.UserService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -18,11 +19,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtTokenUtil {
 
-    private static final String SECRET_KEY = "BboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWap";
-    private static final String REFRESH_KEY = "JJuWapslovePoopJJuWapslovePoopJJuWapslovePoopJJuWapslovePoopJJuWapslovePoop";
-    private static final String DATA_KEY = "userId";
+    @Value("${external.jwt.secret-key")
+    private String SECRET_KEY;
 
-    private static final String EXP_KEY = "exp";
+    @Value("${external.jwt.refresh-key")
+    private String REFRESH_KEY;
+    private final static String DATA_KEY = "userId";
+
+    private final static String EXP_KEY = "exp";
 
     private final UserService userService;
 
