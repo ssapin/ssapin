@@ -110,10 +110,8 @@ export default function FilterChoiceButton({ type }: Filterprops) {
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
       setHashTag([...hashTag, item]);
-      console.log(hashTag);
     } else if (!checked) {
       setHashTag(hashTag.filter((el: any) => el !== item));
-      console.log(hashTag);
     }
   };
 
@@ -128,9 +126,9 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, e.target.value);
+                onChangeTag(e.target.checked, el.key);
               }}
-              checked={hashTag.includes(el.value)}
+              checked={hashTag.includes(el.key)}
             />
             <span className="checkbox_text">{el.value}</span>
           </label>
@@ -145,9 +143,9 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, e.target.value);
+                onChangeTag(e.target.checked, el.key);
               }}
-              checked={hashTag.includes(el.value)}
+              checked={hashTag.includes(el.key)}
             />
             <span className="checkbox_text">{el.value}</span>
           </label>
@@ -162,9 +160,9 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, e.target.value);
+                onChangeTag(e.target.checked, el.key);
               }}
-              checked={hashTag.includes(el.value)}
+              checked={hashTag.includes(el.key)}
             />
             <span className="checkbox_text">{el.value}</span>
           </label>
@@ -179,9 +177,9 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, e.target.value);
+                onChangeTag(e.target.checked, el.key);
               }}
-              checked={hashTag.includes(el.value)}
+              checked={hashTag.includes(el.key)}
             />
             <span className="checkbox_text">{el.value}</span>
           </label>

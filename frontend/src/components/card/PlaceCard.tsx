@@ -54,6 +54,11 @@ const Container = styled.div<{ isAdmin: boolean }>`
     flex-direction: row;
     justify-content: space-between;
   }
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
+  }
 `;
 
 function PlaceCard({

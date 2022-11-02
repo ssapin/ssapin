@@ -20,9 +20,15 @@ const StyledEmotion = styled.button`
   padding: 10px 0;
   margin: 6px;
   flex-grow: 0;
-  box-shadow: ${pixelToRem(4)} ${pixelToRem(4)} ${pixelToRem(13)} 0
-    rgba(177, 177, 177, 0.6);
+  margin: 0 ${pixelToRem(20)} 0 0;
+  padding: ${pixelToRem(12)};
   border-radius: ${pixelToRem(15)};
+  box-shadow: 4px 4px 13px 0 rgba(177, 177, 177, 0.6);
+  background-color: ${(props) => props.theme.colors.gray0};
+  .emoji {
+    width: ${pixelToRem(45)};
+    height: ${pixelToRem(45)};
+  }
   flex-grow: 0;
   font-size: 4vh;
   line-height: 1.21;

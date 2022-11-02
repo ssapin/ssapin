@@ -32,6 +32,8 @@ const StyledBigYellow = styled.button`
   text-align: center;
   &:hover {
     background-color: #ffdf1d;
+    scale: 1.06;
+    cursor: pointer;
   }
   .red-textbox {
     color: ${(props) => props.theme.colors.mainRed};

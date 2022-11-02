@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 
 const StyledShowMore = styled.button`
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,6 +19,7 @@ const StyledShowMore = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
   }
+
   .text {
     font-size: ${(props) => props.theme.fontSizes.h3};
     line-height: 1.21;
