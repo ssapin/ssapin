@@ -13,6 +13,7 @@ public class JasyptConfigTest extends JasyptConfig {
         String password = "ssapin307";
         String clientId = "e3a714fa6facdc0a7b2fdc80c4cc85ef";
 
+
         String encryptUsername = jasyptEncrypt(username);
         String encryptPassword = jasyptEncrypt(password);
         String encryptClientId = jasyptEncrypt(clientId);
