@@ -7,13 +7,17 @@ const StyledUp = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: ${pixelToRem(3)};
   width: 7vh;
   height: 7vh;
   border-radius: 50%;
   box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   background-color: ${(props) => props.theme.colors.gray0};
   padding: ${pixelToRem(2)};
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
+  }
 `;
 
 export default function MoveToTopButton() {

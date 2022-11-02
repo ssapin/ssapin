@@ -21,9 +21,18 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  min-width: 350px;
+
+  :focus-within {
+    background-color: ${(props) => props.theme.colors.gray50};
+
+    .searchButton {
+      fill: ${(props) => props.theme.colors.mainBlue};
+    }
+  }
 
   input {
-    width: 85%;
+    width: 90%;
     height: 100%;
     background-color: transparent;
     border: 0;
@@ -32,6 +41,7 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     font-family: ${(props) => props.theme.fontFamily.h4};
     color: ${(props) => props.theme.colors.gray50};
     outline: none;
+    margin-left: 3rem;
   }
 
   input::placeholder {
@@ -41,10 +51,17 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     font-family: ${(props) => props.theme.fontFamily.h4};
   }
 
+  input:focus {
+    background-color: ${(props) => props.theme.colors.gray50};
+    color: ${(props) => props.theme.colors.mainBlue};
+  }
+
   .searchButton {
     background-color: transparent;
     width: auto;
-    height: 70%;
+    height: 50%;
+    margin-right: 1rem;
+    fill: ${(props) => props.theme.colors.gray50};
   }
 `;
 

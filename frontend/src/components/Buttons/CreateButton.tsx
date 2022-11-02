@@ -17,6 +17,7 @@ const StyledCreate = styled.button`
   text-align: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
+    scale: 1.06;
   }
   .text {
     bottom: 25%;

@@ -5,7 +5,7 @@ import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg
 
 const Container = styled.div`
   width: inherit;
-  height: 20vh;
+  height: 30vh;
   background-color: transparent;
   text-align: center;
   display: flex;
@@ -23,9 +23,9 @@ const SNSContainer = styled.div`
   justify-content: space-between;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.s1};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray400};
-    font-family: ${(props) => props.theme.fontFamily.s1};
+    font-family: ${(props) => props.theme.fontFamily.h5};
     letter-spacing: 0.5px;
   }
 `;
@@ -44,9 +44,9 @@ const CopyRight = styled.div`
   padding: 10px;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.s1};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray400};
-    font-family: ${(props) => props.theme.fontFamily.s1};
+    font-family: ${(props) => props.theme.fontFamily.h5};
     padding: 5px;
     letter-spacing: 0.7px;
   }

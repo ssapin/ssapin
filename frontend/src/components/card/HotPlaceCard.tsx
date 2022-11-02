@@ -38,10 +38,15 @@ const Container = styled.div`
   }
 
   .message {
-    margin-top: 1rem;
-    font-size: ${(props) => props.theme.fontSizes.s2};
+    margin-top: 1.5rem;
+    font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainBlue};
-    font-family: ${(props) => props.theme.fontFamily.s2bold};
+    font-family: ${(props) => props.theme.fontFamily.s1bold};
+  }
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
   }
 `;
 

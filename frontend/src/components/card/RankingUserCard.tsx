@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
 
 type UserRankingProps = {
-  emoji: string;
-  nickname: string;
-  mapcnt: number;
+  user: {
+    emoji: string;
+    nickname: string;
+    mapcnt: number;
+  };
+  // eslint-disable-next-line react/require-default-props
+  type?: string;
 };
 
-const Container = styled.div`
+const Container = styled.div<{ type: string }>`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
-  width: 10.6rem;
+  margin: 1rem 0.5rem 1rem 0.5rem;
+  width: ${(props) => (props.type === "large" ? `23rem` : `11rem`)};
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -20,15 +24,15 @@ const Container = styled.div`
   padding: 1rem;
 
   .emoji {
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4};
+    font-family: ${(props) => props.theme.fontFamily.h3};
   }
 
   .nickname {
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
   }
 
   .mapcnt {
@@ -38,12 +42,12 @@ const Container = styled.div`
   }
 `;
 
-function RankingUserCard({ emoji, nickname, mapcnt }: UserRankingProps) {
+function RankingUserCard({ user, type }: UserRankingProps) {
   return (
-    <Container>
-      <p className="emoji">{emoji}</p>
-      <p className="nickname">{nickname}</p>
-      <p className="mapcnt">{mapcnt}개의 지도</p>
+    <Container type={type}>
+      <p className="emoji">{user.emoji}</p>
+      <p className="nickname">{user.nickname}</p>
+      <p className="mapcnt">{user.mapcnt}개의 지도</p>
     </Container>
   );
 }

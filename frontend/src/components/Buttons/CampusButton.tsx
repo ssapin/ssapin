@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 
@@ -12,7 +11,7 @@ const TiedBoxes = styled.div`
 `;
 
 const StyledCampus = styled.button`
-  width: ${pixelToRem(65)};
+  width: ${pixelToRem(60)};
   height: ${pixelToRem(28)};
   flex-grow: 0;
   border-radius: ${pixelToRem(20)};
@@ -22,42 +21,47 @@ const StyledCampus = styled.button`
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
+  margin-right: 0.2rem;
   line-height: 1.21;
   letter-spacing: ${pixelToRem(-0.7)};
   text-align: center;
   background-color: ${(props) => props.theme.colors.gray0};
   &:hover {
     background-color: ${(props) => props.theme.colors.subYellow};
+    scale: 1.05;
   }
 `;
 
-export default function CampusButton() {
-  const campus = [
-    { key: "1", value: "서울" },
-    { key: "2", value: "대전" },
-    { key: "3", value: "광주" },
-    { key: "4", value: "구미" },
-    { key: "5", value: "부울경" },
-  ];
+type CampusProps = {
+  // eslint-disable-next-line react/require-default-props
+  campusId?: number;
+  // eslint-disable-next-line react/require-default-props
+  open?: () => void;
+  // eslint-disable-next-line react/require-default-props
+  select?: (key: number) => void;
+};
+export default function CampusButton({ campusId, open, select }: CampusProps) {
+  const campus = ["0", "서울", "대전", "광주", "구미", "부울경"];
 
-  const [btnActive, setBtnActive] = useState("1");
-
-  const toggleActive = (key: string) => {
-    setBtnActive(key);
+  const toggleActive = (key: number) => {
+    select(key);
+    open();
   };
+
   return (
     <TiedBoxes>
-      {campus.map((el) => {
-        return (
-          <StyledCampus
-            value={el.value}
-            className={`${btnActive === el.key ? "active" : ""}`}
-            onClick={() => toggleActive(el.key)}
-          >
-            {el.value}
-          </StyledCampus>
-        );
-      })}
+      {campus.map(
+        (el, id) =>
+          id >= 1 && (
+            <StyledCampus
+              value={el}
+              className={`${campusId === id ? "active" : ""}`}
+              onClick={() => toggleActive(id)}
+            >
+              {el}
+            </StyledCampus>
+          ),
+      )}
     </TiedBoxes>
   );
 }
