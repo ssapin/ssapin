@@ -1,13 +1,9 @@
 package com.ssapin.backend.api.service;
 
-import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.dto.response.TogethermapResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.CampusRepository;
-import com.ssapin.backend.api.domain.repository.PlaceRepository;
 import com.ssapin.backend.api.domain.repository.TogethermapRepository;
-import com.ssapin.backend.api.domain.repository.UserRepository;
-import com.ssapin.backend.api.domain.repository.TogethermapPlaceRepository;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapPlaceRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.TogethermapRepositorySupport;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class TogethermapServiceTest {
+class TogethermapServiceImplTest {
     @Mock
     private TogethermapRepository togethermapRepository;
 
@@ -65,7 +61,7 @@ class TogethermapServiceTest {
                 .itemId(1)
                 .build();
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)
@@ -109,7 +105,7 @@ class TogethermapServiceTest {
                 .itemId(1)
                 .build();
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)

@@ -31,8 +31,7 @@ public class Review extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
-    public Review update(Place place, int emojiType, String content){
-        this.place = place;
+    public Review update(int emojiType, String content){
         this.emojiType = emojiType;
         this.content = content;
         return this;
