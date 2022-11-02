@@ -20,7 +20,7 @@ const Container = styled.div<{ innerWidth: number }>`
   padding-right: ${(props) =>
     props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
 
-  margin-top: 3rem;
+  margin-top: 4rem;
 `;
 
 const RankingContainer = styled.div<{ innerWidth?: number }>`
