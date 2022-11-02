@@ -30,7 +30,7 @@ const FixContainer = styled.div`
   right: 2rem;
   z-index: 999;
   button {
-    margin: 1rem;
+    margin: 0.5rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
 `;
