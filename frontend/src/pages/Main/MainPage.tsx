@@ -143,47 +143,6 @@ function MainPage() {
     setLoading(false);
   }, [data1, data2, data3]);
 
-  const questions = [
-    {
-      emoji: "⏰📝📚🤓💻",
-      place: togethermaps[0]?.userCnt,
-      mapId: togethermaps[0]?.togethermapId,
-      description: "싸피 교육이 끝나고 어디서 공부하시나요?",
-    },
-    {
-      emoji: "🍜🥂🍴🍲🥘",
-      place: togethermaps[1]?.userCnt,
-      mapId: togethermaps[1]?.togethermapId,
-      description: "이 곳은 찐이다..👍 내가 뽑은 캠퍼스 근처 최고 맛집은?",
-    },
-    {
-      emoji: "💸😞🌯🍙🥙",
-      place: togethermaps[2]?.userCnt,
-      mapId: togethermaps[2]?.togethermapId,
-      description: "히잉..😞 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
-    },
-    {
-      emoji: "🍦🧁🍷☕🍸",
-      place: togethermaps[3]?.userCnt,
-      mapId: togethermaps[3]?.togethermapId,
-      description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페는?",
-    },
-    {
-      emoji: "🎬🍻🎳🎮🎤",
-      place: togethermaps[4]?.userCnt,
-      mapId: togethermaps[4]?.togethermapId,
-      description:
-        "싸피 끝나고 치맥 한잔🍻! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
-    },
-    {
-      emoji: "🤐🍱🍽🙋‍♂️🥟",
-      place: togethermaps[5]?.userCnt,
-      mapId: togethermaps[5]?.togethermapId,
-      description:
-        "아주머니 단무지는 빼주세요..🤐 나만의 혼밥 최고 장소를 찍어주세요",
-    },
-  ];
-
   return (
     <>
       <HeadContainer>
@@ -191,7 +150,7 @@ function MainPage() {
         <QuestionContainer>
           <Carousel interval={4500} animation="fade" duration={1000}>
             {!loading &&
-              questions.map((item, i) => (
+              togethermaps.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Question key={i} item={item} />
               ))}
