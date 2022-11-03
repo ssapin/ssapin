@@ -1,7 +1,9 @@
 package com.ssapin.backend.api.domain.repositorysupport;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssapin.backend.api.domain.dto.response.PopularPlaceRankingResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -24,10 +26,13 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
 
     }
 
-    public Place findPopularPlaceByBookmark(Campus campus){
+    public PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus){
 
-        return queryFactory.select(QPlaceBookmark.review.place).from(QPlaceBookmark.review,QMapPlace.mapPlace,QMap.map)
-                .where(campusEq(campus),QMap.map.id.eq(QMapPlace.mapPlace.map.id),QMapPlace.mapPlace.place.eq(QPlaceBookmark.review.place))
+        return queryFactory.select(Projections.bean(PopularPlaceRankingResponse.class,QPlaceBookmark.placeBookmark.place.id,QPlaceBookmark.placeBookmark.place.id.count()))
+                .from(QPlaceBookmark.placeBookmark,QMapPlace.mapPlace,QMap.map)
+                .where(campusEq(campus),QMapPlace.mapPlace.place.eq(QPlaceBookmark.placeBookmark.place))
+                .groupBy(QPlaceBookmark.placeBookmark.place.id)
+                .orderBy(QPlaceBookmark.placeBookmark.place.id.count().desc())
                 .fetchFirst();
 
     }
