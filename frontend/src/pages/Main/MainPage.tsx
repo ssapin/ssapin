@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
-import Carousel from "react-material-ui-carousel";
-import { useRecoilValue } from "recoil";
-import USER_APIS from "../../utils/apis/useApis";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -21,7 +24,17 @@ import LoginModal from "../Login/LoginModal";
 import useUserActions, {
   useGetUserInformation,
 } from "../../utils/hooks/useUserActions";
-import { authState } from "../../store/atom";
+import { authState, campusState } from "../../store/atom";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import { togethermapApis } from "../../utils/apis/togethermapApi";
+
+import { IMap } from "../../utils/types/map.interface";
+import { mapApis } from "../../utils/apis/mapApi";
+import axiosInstance from "../../utils/apis/api";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -36,6 +49,41 @@ const QuestionContainer = styled.div`
   width: 100%;
   height: 55%;
   text-align: center;
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    text-align: center;
+    background-color: ${(props) => props.theme.colors.mainBlue};
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .swiper {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Searchbar = styled.div`
@@ -71,6 +119,10 @@ function MainPage() {
   const useUserAction = useUserActions();
   const auth = useRecoilValue(authState);
   const useGetInformation = useGetUserInformation();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
+  const [maps, setMaps] = useState<IMap[]>([]);
+  const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
 
   const handleModal = () => {
     setModalOpen(true);
@@ -82,46 +134,69 @@ function MainPage() {
     };
     window.addEventListener("resize", resizeListener);
   });
+  const [campusId, setCampusId] = useRecoilState(campusState);
 
-  const questions = [
+  const toggleActive = (key: number) => {
+    setCampusId(key);
+  };
+
+  const { data: data1, refetch: refetch1 } = useQuery<
+    AxiosResponse<ITogetherMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - togetherMapList`],
+    () => axiosInstance.get(togethermapApis.getTogetherMapList(campusId)),
     {
-      emoji: "⏰📝📚🤓💻",
-      place: 129,
-      mapId: 1,
-      description: "싸피 교육이 끝나고 어디서 공부하시나요?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
+  );
+
+  const { data: data2, refetch: refetch2 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(mapApis.getMapList(campusId, 0, [], "")),
     {
-      emoji: "🍜🥂🍴🍲🥘",
-      place: 129,
-      mapId: 1,
-      description: "이 곳은 찐이다.. 내가 뽑은 캠퍼스 근처 최고 맛집은?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
+  );
+
+  const { data: data3, refetch: refetch3 } = useQuery<
+    AxiosResponse<IMap[]>,
+    AxiosError
+  >(
+    [`${campusId} - mapRankingList`],
+    () => axiosInstance.get(mapApis.getMapRanking(campusId)),
     {
-      emoji: "💸😞🌯🍙🥙",
-      place: 129,
-      mapId: 1,
-      description: "히잉.. 꼬르륵.. 돈이없을 때 먹는 갓성비 식당은?",
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
     },
-    {
-      emoji: "🍦🧁🍷☕🍸",
-      place: 129,
-      mapId: 1,
-      description: "싸피의 Refresh Time! 점심시간에 가장 많이 가는 카페?",
-    },
-    {
-      emoji: "🎬🍻🎳🎮🎤",
-      place: 129,
-      mapId: 1,
-      description:
-        "싸피 끝나고 치맥 한잔! 캠퍼스 근처 놀기 좋은 장소는 어디인가요?",
-    },
-    {
-      emoji: "🤐🍱🍽🙋‍♂️🥟",
-      place: 129,
-      mapId: 1,
-      description: "아주머니 단무지는 빼주세요.. 혼밥 최고 장소를 찍어주세요",
-    },
-  ];
+  );
+
+  useEffect(() => {
+    refetch1();
+    refetch2();
+    refetch3();
+  }, [campusId]);
+
+  useEffect(() => {
+    if (data1?.data) {
+      setTogethermaps(data1.data);
+    }
+    if (data2?.data) {
+      setMaps(data2.data.content);
+    }
+    if (data3?.data) {
+      setRankingmaps(data3.data);
+    }
+    setLoading(false);
+  }, [data1, data2, data3]);
 
   const handleLogout = () => {
     useUserAction.logout();
@@ -130,7 +205,7 @@ function MainPage() {
   return (
     <>
       <HeadContainer>
-        <Navbar />
+        <Navbar func={toggleActive} />
         <button type="button" onClick={() => useGetInformation.getUser()}>
           정보주세요
         </button>
@@ -149,12 +224,30 @@ function MainPage() {
           </ModalPortal>
         )}
         <QuestionContainer>
-          {/* <Carousel interval={4500} animation="fade" duration={1000}>
-            {questions.map((item, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Question key={i} item={item} />
-            ))}
-          </Carousel> */}
+          <Swiper
+            slidesPerView={1}
+            loop
+            pagination={{
+              clickable: true,
+            }}
+            effect="fade"
+            navigation
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            speed={800}
+            modules={[Pagination, Navigation, Autoplay, EffectFade]}
+            className="mySwiper"
+          >
+            {!loading &&
+              togethermaps.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <SwiperSlide key={i}>
+                  <Question item={item} />
+                </SwiperSlide>
+              ))}
+          </Swiper>
         </QuestionContainer>
         <Searchbar>
           <MapSearch width="50%" height="30%" />
@@ -163,9 +256,9 @@ function MainPage() {
       <MainContainer>
         <UserRanking />
         <PlaceRanking />
-        <MapRanking />
-        <MapList />
-        <TogetherMapList />
+        <MapRanking maps={rankingmaps} />
+        <MapList maps={maps} />
+        <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />

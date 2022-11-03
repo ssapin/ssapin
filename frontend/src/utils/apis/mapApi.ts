@@ -5,12 +5,12 @@ export const mapApis = {
   getMapList: (
     campusId: number,
     page: number,
-    hashtagList?: number[],
-    keyword?: string,
+    hashtagList: number[],
+    keyword: string,
   ) => {
     let api: string = `/map?campusId=${campusId}&page=${page}`;
     let str: string = "";
-    if (keyword != null) {
+    if (keyword != null && keyword !== "") {
       api += `&keyword=${keyword}`;
     }
     const { length } = hashtagList;

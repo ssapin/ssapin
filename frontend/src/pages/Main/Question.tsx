@@ -1,14 +1,10 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { BigYellowButton } from "../../components/Buttons/YellowButton";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 type QuestionProps = {
-  item: {
-    emoji: string;
-    place: number;
-    mapId: number;
-    description: string;
-  };
+  item: ITogetherMap;
 };
 
 const QuestionContainer = styled.div<{ size: number }>`
@@ -38,12 +34,12 @@ function Question({ item }: QuestionProps) {
     window.addEventListener("resize", resizeListener);
   });
 
-  const placeText = `${item.place}개의 장소들!`;
+  const placeText = `${item.userCnt}개의 장소들!`;
 
   return (
     <QuestionContainer size={innerWidth}>
       <p>{item.emoji}</p>
-      <p>{item.description}</p>
+      <p>{item.question}</p>
       <BigYellowButton type="button" text1={placeText} text2="참여하러 가기" />
     </QuestionContainer>
   );

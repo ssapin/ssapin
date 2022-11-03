@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import TogetherMapCard from "../../components/card/TogetherMapCard";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 const Container = styled.div<{ innerWidth: number }>`
   width: 100%;
@@ -53,7 +54,11 @@ const Description = styled.div<{ innerWidth: number }>`
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
 `;
 
-function TogetherMapList() {
+type TogetherMapProps = {
+  maps: ITogetherMap[];
+};
+
+function TogetherMapList({ maps }: TogetherMapProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -62,51 +67,6 @@ function TogetherMapList() {
     };
     window.addEventListener("resize", resizeListener);
   });
-
-  const maps = [
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-  ];
 
   return (
     <Container innerWidth={innerWidth}>
@@ -124,7 +84,7 @@ function TogetherMapList() {
                 // eslint-disable-next-line react/no-array-index-key
                 key={id}
                 title={map.title}
-                usercnt={map.usercnt}
+                usercnt={map.userCnt}
               />
             ),
         )}
@@ -137,7 +97,7 @@ function TogetherMapList() {
                 // eslint-disable-next-line react/no-array-index-key
                 key={id}
                 title={map.title}
-                usercnt={map.usercnt}
+                usercnt={map.userCnt}
               />
             ),
         )}

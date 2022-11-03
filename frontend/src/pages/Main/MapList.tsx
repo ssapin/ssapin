@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 import MapCard from "../../components/card/MapCard";
+import { IMap } from "../../utils/types/map.interface";
 
 const Container = styled.div<{ innerWidth: number }>`
   width: 100%;
@@ -54,7 +55,11 @@ const Description = styled.div<{ innerWidth: number }>`
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
 `;
 
-function MapList() {
+type MapProps = {
+  maps: IMap[];
+};
+
+function MapList({ maps }: MapProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -63,51 +68,6 @@ function MapList() {
     };
     window.addEventListener("resize", resizeListener);
   });
-
-  const maps = [
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-    {
-      icon: "🍩☕🍰",
-      title: "싸피 근처 맛있는 카페",
-      user: "🎈허설헬륨",
-      placecnt: 12,
-      usercnt: 13,
-    },
-  ];
 
   return (
     <Container innerWidth={innerWidth}>
@@ -119,35 +79,41 @@ function MapList() {
         🤩
       </Description>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.map(
-          (map, id) =>
-            id <= 2 && (
-              <MapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                icon={map.icon}
-                title={map.title}
-                user={map.user}
-                placecnt={map.placecnt}
-                usercnt={map.usercnt}
-              />
-            ),
-        )}
+        {maps.length !== 0 &&
+          maps.map(
+            (map, id) =>
+              id <= 2 && (
+                <MapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  icon={map.mapEmoji}
+                  title={map.title}
+                  user={`${map.userEmoji} ${map.nickname}`}
+                  placecnt={map.placeCnt}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
+        {maps?.length === 0 && <div>없어요</div>}
       </RankingContainer>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.map(
-          (map, id) =>
-            id >= 3 && (
-              <MapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                icon={map.icon}
-                title={map.title}
-                user={map.user}
-                placecnt={map.placecnt}
-                usercnt={map.usercnt}
-              />
-            ),
+        {maps.length >= 3 && (
+          <RankingContainer innerWidth={innerWidth}>
+            {maps.map(
+              (map, id) =>
+                id >= 3 && (
+                  <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    icon={map.mapEmoji}
+                    title={map.title}
+                    user={`${map.userEmoji} ${map.nickname}`}
+                    placecnt={map.placeCnt}
+                    usercnt={map.userCnt}
+                  />
+                ),
+            )}
+          </RankingContainer>
         )}
       </RankingContainer>
       <ShowMoreButton />

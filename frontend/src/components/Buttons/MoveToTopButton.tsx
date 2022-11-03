@@ -3,6 +3,11 @@ import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as UpArrowIcon } from "../../assets/svgs/upperarrow.svg";
 
+const RightFixed = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const StyledUp = styled.button`
   display: flex;
   justify-content: center;
@@ -27,8 +32,10 @@ export default function MoveToTopButton() {
   };
 
   return (
-    <StyledUp onClick={goUp}>
-      <UpArrowIcon />
-    </StyledUp>
+    <RightFixed>
+      <StyledUp onClick={goUp}>
+        <UpArrowIcon />
+      </StyledUp>
+    </RightFixed>
   );
 }

@@ -30,3 +30,8 @@ export const loggedInState = selector({
     return !!userInfo.accessToken;
   },
 });
+
+export const campusState = atom({
+  key: "campusRecoilState",
+  default: 1,
+});
