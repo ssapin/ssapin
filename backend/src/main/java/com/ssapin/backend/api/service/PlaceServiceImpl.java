@@ -209,7 +209,30 @@ public class PlaceServiceImpl implements PlaceService{
      */
     @Override
     public Long registerBookmark(User user, BookmarkRequest bookmarkRequest) {
-        return null;
+        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+
+        if(placeResponse.isEmpty())
+        {
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+
+        Place place = Place.builder()
+                .itemId(placeResponse.get().getItemId())
+                .title(placeResponse.get().getTitle())
+                .lat(placeResponse.get().getLat())
+                .lng(placeResponse.get().getLng())
+                .address(placeResponse.get().getAddress())
+                .build();
+
+                PlaceBookmark placeBookmark = PlaceBookmark.builder()
+                .user(user)
+                .place(place)
+                .build();
+
+
+        long id = placeBookmarkRepository.save(placeBookmark).getId();
+
+        return id;
     }
 
     /**
@@ -217,7 +240,34 @@ public class PlaceServiceImpl implements PlaceService{
      */
     @Override
     public Long removeBookmark(User user, BookmarkRequest bookmarkRequest) {
-        return null;
+
+        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+
+        if(placeResponse.isEmpty())
+        {
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+
+        Place place = Place.builder()
+                .itemId(placeResponse.get().getItemId())
+                .title(placeResponse.get().getTitle())
+                .lat(placeResponse.get().getLat())
+                .lng(placeResponse.get().getLng())
+                .address(placeResponse.get().getAddress())
+                .build();
+
+
+        PlaceBookmark placeBookmark = PlaceBookmark.builder()
+                .user(user)
+                .place(place)
+                .build();
+
+        PlaceBookmark result = placeBookmarkRepository.findById(placeBookmark.getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+        placeBookmarkRepository.delete(placeBookmark);
+
+        long id = result.getId();
+
+       return id;
     }
 
 
