@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
-import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -19,9 +19,15 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import LoginModal from "../Login/LoginModal";
+import useUserActions, {
+  useGetUserInformation,
+} from "../../utils/hooks/useUserActions";
+import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
-import { campusState } from "../../store/atom";
+
 import { IMap } from "../../utils/types/map.interface";
 import { mapApis } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
@@ -99,7 +105,7 @@ const FixContainer = styled.div`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 999;
+  z-index: 2;
 
   button {
     margin-bottom: 1rem;
@@ -109,17 +115,17 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [modalOpen, setModalOpen] = useState(false);
+  const useUserAction = useUserActions();
+  const auth = useRecoilValue(authState);
+  const useGetInformation = useGetUserInformation();
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
 
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-    import.meta.env.VITE_KAKAO_API_KEY
-  }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
-
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+  const handleModal = () => {
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -192,13 +198,31 @@ function MainPage() {
     setLoading(false);
   }, [data1, data2, data3]);
 
+  const handleLogout = () => {
+    useUserAction.logout();
+  };
+
   return (
     <>
       <HeadContainer>
         <Navbar func={toggleActive} />
-        <button type="button" onClick={handleKakaoLogin}>
-          카카오톡 로그인
+        <button type="button" onClick={() => useGetInformation.getUser()}>
+          정보주세요
         </button>
+        {auth?.accessToken ? (
+          <button type="button" onClick={handleLogout}>
+            로그아웃
+          </button>
+        ) : (
+          <button type="button" onClick={handleModal}>
+            로그인
+          </button>
+        )}
+        {modalOpen && (
+          <ModalPortal>
+            <LoginModal onClose={() => setModalOpen(false)} />
+          </ModalPortal>
+        )}
         <QuestionContainer>
           <Swiper
             slidesPerView={1}

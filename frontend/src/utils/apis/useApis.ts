@@ -10,7 +10,9 @@ const USER_APIS = {
   USER_INFORMATION: "/user/login/info",
 };
 
-export const login = async (authorizeCode: string): Promise<AxiosResponse> => {
+export const getAccessToken = async (
+  authorizeCode: string,
+): Promise<AxiosResponse> => {
   const body = { authorizeCode };
   return axiosInstance.post(USER_APIS.LOGIN, body);
 };

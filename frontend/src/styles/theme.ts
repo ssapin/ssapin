@@ -64,10 +64,16 @@ const fontFamily = {
   s4bold: "S-CoreDream-6Bold",
 };
 
+const mq = {
+  tablet: `@media only screen and (min-width: ${pixelToRem(900)})`,
+  mobile: `@media only screen and (min-width: ${pixelToRem(500)})`,
+};
+
 export const themes = {
   colors,
   fontSizes,
   fontFamily,
+  mq,
 };
 
 export default themes;
