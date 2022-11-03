@@ -1,4 +1,6 @@
 package com.ssapin.backend.interceptor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssapin.backend.api.domain.dto.response.InterceptorResponse;
 import com.ssapin.backend.api.service.AuthService;
 import com.ssapin.backend.api.service.UserService;
 import com.ssapin.backend.util.JwtTokenUtil;
@@ -9,6 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Objects;
 
 @Component
@@ -16,29 +20,43 @@ import java.util.Objects;
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
     private final JwtTokenUtil jwtTokenUtil;
+    private final static String TOKEN_EXPIRED = "Token Expired";
+    private final static String AUTHENTICATION_FAILED = "Authentication Failed";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 
         String accessToken = request.getHeader("accessToken");
 
         if (isPreflightRequest(request)) return true;
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        InterceptorResponse.Jwt jwtResponse;
+
         if (accessToken != null) {
             int status = jwtTokenUtil.isValidToken(accessToken);
 
-            if (status == 2) return true;
+            if (status == 2) {
+                return true;
+            }
             else if (status == 1) {
                 response.setStatus(401);
-                response.setHeader("accessToken", accessToken);
-                response.setHeader("message", "Token Expired");
+                jwtResponse = InterceptorResponse.Jwt.builder()
+                        .message(TOKEN_EXPIRED)
+                        .build();
+
+                response.getWriter().write(objectMapper.writeValueAsString(jwtResponse));
+                response.getWriter().close();
                 return false;
             }
         }
 
         response.setStatus(403);
-        response.setHeader("accessToken", accessToken);
-        response.setHeader("message", "Authentication Failed");
+        jwtResponse = InterceptorResponse.Jwt.builder()
+                .message(AUTHENTICATION_FAILED)
+                .build();
+        response.getWriter().write(objectMapper.writeValueAsString(jwtResponse));
+        response.getWriter().close();
         return false;
     }
 
