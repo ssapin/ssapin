@@ -35,4 +35,12 @@ public class UserRepositorySupport extends QuerydslRepositorySupport {
                         .fetchOne()
                 );
     }
+
+    public boolean existByNickname(String nickname) {
+        return queryFactory
+                .from(QUser.user)
+                .where(QUser.user.nickname.eq(nickname))
+                .select(QUser.user.nickname)
+                .fetchFirst() != null;
+    }
 }
