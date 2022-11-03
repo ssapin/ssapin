@@ -4,18 +4,18 @@ import com.ssapin.backend.api.domain.dto.request.UserRequest;
 import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.domain.entity.Campus;
 import com.ssapin.backend.api.domain.entity.PlaceBookmark;
+import com.ssapin.backend.api.domain.entity.Review;
 import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.domain.repository.UserRepository;
-import com.ssapin.backend.api.domain.repositorysupport.CampusRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.UserRepositorySupport;
 import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService{
     public Page<UserResponse.BookmarkedPlace> findBookmarkedPlaceList(long userId, Pageable pageable) {
 
         List<PlaceBookmark> placeBookmarkList = placeBookmarkService.findPlaceBookmarkByUserId(userId);
+        Review review = null;
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), placeBookmarkList.size());
         return null;
     }
 

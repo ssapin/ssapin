@@ -15,20 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 @Service
 @RequiredArgsConstructor
 public class JwtTokenUtil {
 
+
     @Value("${external.jwt.secret-key}")
-    String SECRET_KEY;
-
+    private String SECRET_KEY;
     @Value("${external.jwt.refresh-key}")
-    String REFRESH_KEY;
+    private String REFRESH_KEY;
     private final static String DATA_KEY = "userId";
-
     private final static String EXP_KEY = "exp";
-
     private final UserService userService;
 
     //AccessToken 발급
@@ -37,7 +34,7 @@ public class JwtTokenUtil {
                 .setSubject(user.getId() + "")
                 .setHeader(createHeader())
                 .setClaims(createClaims(user))
-                .setExpiration(createExpireDate(1000 * 60)) // 토큰 만료시간 24hour
+                .setExpiration(createExpireDate(1000 * 60 * 60 * 24)) // 토큰 만료시간 24hour
                 .signWith(createSigningKey(SECRET_KEY), SignatureAlgorithm.HS256) //HS256 , key로 sign
                 .compact(); // 토큰 생성
     }
@@ -48,7 +45,7 @@ public class JwtTokenUtil {
                 .setSubject(user.getId() + "")
                 .setHeader(createHeaderRefresh())
                 .setClaims(createClaims(user))
-                .setExpiration(createExpireDate(1000 * 60 * 3)) // 토큰 만료시간 7일
+                .setExpiration(createExpireDate(1000 * 60 * 60 * 24 * 7)) // 토큰 만료시간 7일
                 .signWith(createSigningKey(REFRESH_KEY), SignatureAlgorithm.HS256)
                 .compact();
     }

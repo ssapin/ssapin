@@ -14,16 +14,24 @@ public class TogethermapResponse {
     private long campusId;
     private List<PlaceResponse> placeList;
     private long userCnt;
+    private String emoji;
+    private String question;
 
     public TogethermapResponse (Togethermap togethermap, List<PlaceResponse> placeList) {
         this.togethermapId = togethermap.getId();
         this.title = togethermap.getTitle();
         this.campusId = togethermap.getCampus().getId();
         this.placeList = placeList;
-        Set<Long> userSet = new HashSet<>();
-        for(PlaceResponse placeResponse : placeList) {
-            userSet.add(placeResponse.getUserId());
+        if(placeList==null || placeList.size()==0) {
+            this.userCnt=0;
+        } else {
+            Set<Long> userSet = new HashSet<>();
+            for(PlaceResponse placeResponse : placeList) {
+                userSet.add(placeResponse.getUserId());
+            }
+            this.userCnt = userSet.size();
         }
-        this.userCnt = userSet.size();
+        this.emoji = togethermap.getEmoji();
+        this.question = togethermap.getQuestion();
     }
 }
