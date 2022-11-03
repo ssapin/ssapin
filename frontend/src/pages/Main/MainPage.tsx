@@ -144,10 +144,10 @@ function MainPage() {
       setTogethermaps(data1.data);
     }
     if (data2?.data) {
+      console.log(data2.data);
       setMaps(data2.data.content);
     }
     if (data3?.data) {
-      console.log(data3.data);
       setRankingmaps(data3.data);
     }
     setLoading(false);
