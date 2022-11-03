@@ -35,7 +35,7 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
             builder.and(QMap.map.title.containsIgnoreCase(keyword));
         }
 
-        List<Map> result = queryFactory.select(QMapHashtag.mapHashtag.map)
+        List<Map> result = queryFactory.select(QMapHashtag.mapHashtag.map).distinct()
                 .from(QMapHashtag.mapHashtag)
                 .rightJoin(QMapHashtag.mapHashtag.map, QMap.map)
                 .where(builder)
