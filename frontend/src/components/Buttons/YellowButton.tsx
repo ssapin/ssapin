@@ -10,7 +10,7 @@ interface MoreTextProps extends IButtonProps {
 
 const StyledYellow = styled.button`
   flex-grow: 0;
-  padding: ${pixelToRem(18)} ${pixelToRem(40)};
+  padding: ${pixelToRem(18)} ${pixelToRem(20)};
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.mainYellow};
   font-family: ${(props) => props.theme.fontFamily.h3};
