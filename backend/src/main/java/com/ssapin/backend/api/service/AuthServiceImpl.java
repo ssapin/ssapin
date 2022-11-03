@@ -24,6 +24,7 @@ public class AuthServiceImpl implements AuthService{
     private final AuthRepository authRepository;
 
     @Override
+    @Transactional
     public AuthResponse.Detail login(String authorizeCode) {
 
         boolean firstLogin = false;
@@ -52,6 +53,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public AuthResponse.Reissue reissueAccessToken(String refreshToken) {
+
 
         if (refreshToken == null
                 || !jwtTokenUtil.isValidRefreshToken(refreshToken)
@@ -85,7 +87,6 @@ public class AuthServiceImpl implements AuthService{
         Auth auth = authRepositorySupport
                 .findByUserId(user.getId())
                 .orElseThrow(()-> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
         auth.update(refreshToken);
     }
 
