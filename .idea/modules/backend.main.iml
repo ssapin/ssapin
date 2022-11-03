@@ -24,6 +24,16 @@
     <content url="file://$MODULE_DIR$/../../backend/build/generated/querydsl">
       <sourceFolder url="file://$MODULE_DIR$/../../backend/build/generated/querydsl" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../../backend/build/generated/querydsl">
+      <sourceFolder url="file://$MODULE_DIR$/../../backend/build/generated/querydsl" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../backend/build/generated/sources/annotationProcessor/java/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../backend/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../backend/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../backend/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../backend/src/main/resources" type="java-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../backend/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../backend/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../backend/src/main/resources" type="java-resource" />

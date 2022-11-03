@@ -2,6 +2,7 @@ package com.ssapin.backend.api.domain.repositorysupport;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssapin.backend.api.domain.dto.response.RankingResponse;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -25,17 +26,19 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    private BooleanExpression campusEq(Long campusId) {
-        if (campusId==null) {
+    //동적쿼리
+    private BooleanExpression campusEq(Campus campus) {
+        if (campus==null) {
             return null;
         }
-        return QReview.review.eq(campusId);
+        return QMap.map.campus.eq(campus);
     }
 
-    public Review findPopularPlaceBywPlace(Campus campus)
+    public Place findPopularPlaceByPlace(Campus campus, Map map)
     {
 
-        return qu
-        return null;
+        return queryFactory.select(QReview.review.place).from(QReview.review,QMapPlace.mapPlace,QMap.map)
+                .where(campusEq(campus),QMap.map.id.eq(QMapPlace.mapPlace.map.id),QMapPlace.mapPlace.place.eq(QReview.review.place))
+                .fetchFirst();
     }
 }
