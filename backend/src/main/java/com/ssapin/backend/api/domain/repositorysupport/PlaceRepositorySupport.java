@@ -13,4 +13,7 @@ public class PlaceRepositorySupport extends QuerydslRepositorySupport {
         super(Place.class);
         this.queryFactory = queryFactory;
     }
+
+
+
 }
