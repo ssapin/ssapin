@@ -53,7 +53,7 @@ function SearchList() {
   return (
     <Container innerWidth={innerWidth}>
       <Title innerWidth={innerWidth}>
-        <span>🗺 모여지도(테스트용) 🗺</span>
+        <span>🗺 추천지도 🗺</span>
       </Title>
       <MemoInfiniteList
         url={mapApis.getMapList(campusId)}
