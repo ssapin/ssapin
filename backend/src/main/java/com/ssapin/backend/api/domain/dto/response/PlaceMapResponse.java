@@ -10,11 +10,11 @@ public class PlaceMapResponse {
     @Getter
     static public class RankingResponse
     {
-        private List<PlaceResponse> review;
-        private List<PlaceResponse> bookmark;
-        private List<PlaceResponse> pin;
+        private PlaceResponse review;
+        private PlaceResponse bookmark;
+        private PlaceResponse pin;
 
-        public RankingResponse(List<PlaceResponse> review, List<PlaceResponse> bookmark, List<PlaceResponse> pin) {
+        public RankingResponse(PlaceResponse review, PlaceResponse bookmark, PlaceResponse pin) {
             this.review = review;
             this.bookmark = bookmark;
             this.pin = pin;

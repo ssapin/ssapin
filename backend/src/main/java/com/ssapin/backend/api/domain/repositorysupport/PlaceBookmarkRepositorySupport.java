@@ -3,6 +3,7 @@ package com.ssapin.backend.api.domain.repositorysupport;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -25,9 +26,9 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
 
     }
 
-    public PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus){
+    public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus){
 
-        return queryFactory.select(Projections.bean(PopularPlaceRankingResponse.class,QPlaceBookmark.placeBookmark.place.id,QPlaceBookmark.placeBookmark.place.id.count()))
+        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QPlaceBookmark.placeBookmark.place.id,QPlaceBookmark.placeBookmark.place.id.count()))
                 .from(QPlaceBookmark.placeBookmark,QMapPlace.mapPlace,QMap.map)
                 .where(campusEq(campus),QMapPlace.mapPlace.place.eq(QPlaceBookmark.placeBookmark.place))
                 .groupBy(QPlaceBookmark.placeBookmark.place.id)
