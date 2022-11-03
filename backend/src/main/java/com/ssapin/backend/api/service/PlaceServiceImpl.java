@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -224,6 +225,16 @@ public class PlaceServiceImpl implements PlaceService{
         else if(place.isPresent())
         {
             List<MapPlace> list = mapPlaceRepository.findByPlace(place.get().getId());
+
+            List<Map> mapList = new ArrayList<Map>();
+
+            for(MapPlace mp : list)
+            {
+                Map map = mapRepository.findById(mp.getMap().getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+                mapList.add(map);
+            }
+
+            PlaceMapResponse.MapListResponse result = new PlaceMapResponse.MapListResponse(mapList);
         }
 
 
