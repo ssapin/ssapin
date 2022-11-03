@@ -1,5 +1,6 @@
 package com.ssapin.backend.api.domain.dto.request;
 
+import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.entity.Place;
 import lombok.Getter;
 
@@ -21,6 +22,5 @@ public class PlaceRequest {
         this.lng = place.getLng();
         this.address = place.getAddress();
     }
-    
 
 }

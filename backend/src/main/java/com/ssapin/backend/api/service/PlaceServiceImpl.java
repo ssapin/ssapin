@@ -1,11 +1,6 @@
 package com.ssapin.backend.api.service;
 
-import com.ssapin.backend.api.domain.dto.request.PlaceRegisterRequest;
-import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
-import com.ssapin.backend.api.domain.dto.response.MapResponse;
-import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
-import com.ssapin.backend.api.domain.dto.response.PopularPlaceRankingResponse;
-import com.ssapin.backend.api.domain.dto.response.RankingResponse;
+import com.ssapin.backend.api.domain.dto.response.*;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.*;
 import com.ssapin.backend.api.domain.repositorysupport.*;
@@ -13,10 +8,8 @@ import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +72,7 @@ public class PlaceServiceImpl implements PlaceService{
                 .address(placeRequest.getPlace().get(0).getAddress())
                 .build();
 
-        Optional<PlaceResponse> placeResponse = placeRepository.findByItemId(placeRequest.getItemId());
+        Optional<PlaceResponse> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().get(0).getItemId());
 
         //디비에 없으면 저장하기
         if(placeResponse.isEmpty())
@@ -106,9 +99,9 @@ public class PlaceServiceImpl implements PlaceService{
      */
     @Override
     @Transactional
-    public Long addPlaceInTogetherMap(User user,long mapId,PlaceRequest placeRequest)
+    public Long addPlaceInTogetherMap(User user, PlaceAPIRequest.TogetherMapRequest togetherMapRequest)
     {
-        Togethermap map =togethermapRepository.findById(mapId).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Togethermap map =togethermapRepository.findById(togetherMapRequest.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         Place place = Place.builder()
                 .itemId(placeRequest.getItemId())
@@ -137,12 +130,14 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public List<Place> getListPlaceRanking(User user) {
+    public PlaceAPIResponse getListPlaceRanking(User user, long campusId) {
 
-        Campus campus =campusRepository.findById(user.getCampus().getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Campus campus =campusRepository.findById(campusId).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         PopularPlaceRankingResponse review =reviewRepositorySupport.findPopularPlaceByReview(campus);
         Place reviewPlace = placeRepository.findById(review.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+     //   PlaceResponse r =PlaceResponse.
 
 
 
@@ -152,11 +147,9 @@ public class PlaceServiceImpl implements PlaceService{
         PopularPlaceRankingResponse map =mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
         Place mapPlace = placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
+        PlaceAPIResponse result = new PlaceAPIResponse(reviewPlace,bookmarkPlace,mapPlace);
 
-        List<Place> result = new ArrayList<Place>();
-        result.add(reviewPlace);
-        result.add(bookmarkPlace);
-        result.add(mapPlace);
+
 
 
         /**

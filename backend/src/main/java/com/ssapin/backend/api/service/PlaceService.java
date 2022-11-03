@@ -1,6 +1,5 @@
 package com.ssapin.backend.api.service;
 
-import com.ssapin.backend.api.domain.dto.request.PlaceRegisterRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
@@ -17,7 +16,7 @@ public interface PlaceService {
 
     Long addPlaceInTogetherMap(User user,long mapId,PlaceRequest placeRequest);
 
-    List<Place> getListPlaceRanking(User user) ;
+    List<Place> getListPlaceRanking(User user, long campus) ;
 
     Long removePlaceInMap(User user,long mapId, long placeId);
 
