@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { pixelToRem } from "../../utils/functions/util";
@@ -24,7 +23,6 @@ export default function BackButton() {
   const navigate = useNavigate();
 
   const moveBack = () => {
-    console.log("뒤로가기 눌림");
     navigate(-1);
   };
 

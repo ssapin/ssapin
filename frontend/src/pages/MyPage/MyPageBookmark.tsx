@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import MapCard from "../../components/card/MapCard";
 import PlaceCard from "../../components/card/PlaceCard";
 
 const MyBookmarkContainer = styled.div`
-  background-color: orange;
   display: block;
   justify-content: center;
   align-items: center;
 `;
 
-// 북마크 - 지도 div
 const BookmarkMapContainer = styled.div`
   display: block;
   justify-content: center;
@@ -22,7 +20,6 @@ const BookmarkMapContainer = styled.div`
   }
 `;
 
-// 북마크 - 장소 div
 const BookmarkPlaceContainer = styled.div`
   display: block;
   justify-content: center;
@@ -36,6 +33,14 @@ const BookmarkPlaceContainer = styled.div`
 const ToggleGroup = styled.div`
   width: 33%;
   height: ${pixelToRem(41)};
+  ${(props) => props.theme.mq.mobile} {
+    height: ${pixelToRem(32)};
+    border-radius: ${pixelToRem(15)};
+  }
+  ${(props) => props.theme.mq.tablet} {
+    height: ${pixelToRem(32)};
+    border-radius: ${pixelToRem(15)};
+  }
   background-color: ${(props) => props.theme.colors.lightLightBlue};
   text-align: center;
   border-radius: ${pixelToRem(10)};
@@ -45,19 +50,39 @@ const ToggleGroup = styled.div`
     height: 100%;
     border-radius: ${pixelToRem(10)};
     background-color: transparent;
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraph};
+    ${(props) => props.theme.mq.mobile} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+    }
+    ${(props) => props.theme.mq.tablet} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+    }
+    background-color: transparent;
+    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-family: ${(props) => props.theme.fontFamily.h5};
     color: ${(props) => props.theme.colors.gray500};
   }
-
   .active {
     width: 50%;
     height: 100%;
     border-radius: ${pixelToRem(10)};
+    ${(props) => props.theme.mq.mobile} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    }
+    ${(props) => props.theme.mq.tablet} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    }
     background-color: ${(props) => props.theme.colors.lightBlue};
     color: ${(props) => props.theme.colors.gray0};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
   }
 `;
 
@@ -114,69 +139,10 @@ export default function MyBookmark() {
                 placecnt={50}
               />
             </div>
-            <div>
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-            </div>
-            <div>
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-            </div>
           </BookmarkMapContainer>
         )}
         {type === 1 && (
           <BookmarkPlaceContainer>
-            <div>
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-            </div>
             <div>
               <PlaceCard
                 isAdmin
