@@ -17,6 +17,12 @@ public class KakaoOAuth2 {
     @Value("${external.kakao.redirect-uri}")
     private String REDIRECT_URI;
 
+    @Value("${external.jwt.secret-key}")
+    String SECRET_KEY;
+
+    @Value("${external.jwt.refresh-key}")
+    String REFRESH_KEY;
+
     public String getKakaoToken(String authorizeCode) {
 
         WebClient webClient = WebClient.builder()

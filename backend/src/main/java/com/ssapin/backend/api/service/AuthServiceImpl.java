@@ -40,7 +40,8 @@ public class AuthServiceImpl implements AuthService{
         String refreshToken = jwtTokenUtil.saveRefreshToken(user);
         String accessToken = jwtTokenUtil.generateJwtToken(user);
 
-        addAuth(user, refreshToken);
+        if (firstLogin) addAuth(user, refreshToken);
+        else updateAuth(user, refreshToken);
 
         return AuthResponse.Detail.builder()
                 .accessToken(accessToken)
@@ -69,12 +70,23 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void addAuth(User user, String refreshToken) {
+
         Auth auth = Auth.builder()
                 .user(user)
                 .refreshToken(refreshToken)
                 .build();
 
         authRepository.save(auth);
+    }
+
+    @Override
+    @Transactional
+    public void updateAuth(User user, String refreshToken) {
+        Auth auth = authRepositorySupport
+                .findByUserId(user.getId())
+                .orElseThrow(()-> new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        auth.update(refreshToken);
     }
 
     @Override

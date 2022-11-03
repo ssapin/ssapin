@@ -24,4 +24,22 @@ public class AuthRepositorySupport extends QuerydslRepositorySupport {
                 .select(QAuth.auth.refreshToken)
                 .fetchFirst() != null;
     }
+
+    public boolean existByUserId(long userId) {
+        return queryFactory
+                .from(QAuth.auth)
+                .where(QAuth.auth.user.id.eq(userId))
+                .select(QAuth.auth.user.id)
+                .fetchFirst() != null;
+    }
+
+    public Optional<Auth> findByUserId(long userId) {
+
+        return Optional.of(
+                queryFactory
+                        .selectFrom(QAuth.auth)
+                        .where(QUser.user.id.eq(userId))
+                        .fetchOne()
+        );
+    }
 }
