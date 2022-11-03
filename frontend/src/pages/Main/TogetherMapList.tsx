@@ -54,6 +54,18 @@ const Description = styled.div<{ innerWidth: number }>`
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
 `;
 
+const NoContainer = styled.div`
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: ${(props) => props.theme.fontSizes.h5};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+`;
+
 type TogetherMapProps = {
   maps: ITogetherMap[];
 };
@@ -77,30 +89,34 @@ function TogetherMapList({ maps }: TogetherMapProps) {
         테마별 자신의 베스트 1위! 장소를 등록해보세요 🥳
       </Description>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.map(
-          (map, id) =>
-            id <= 2 && (
-              <TogetherMapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                title={map.title}
-                usercnt={map.userCnt}
-              />
-            ),
-        )}
+        {maps.length !== 0 &&
+          maps.map(
+            (map, id) =>
+              id <= 2 && (
+                <TogetherMapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  title={map.title}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
+        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.map(
-          (map, id) =>
-            id >= 3 && (
-              <TogetherMapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                title={map.title}
-                usercnt={map.userCnt}
-              />
-            ),
-        )}
+        {maps.length >= 3 &&
+          maps.map(
+            (map, id) =>
+              id >= 3 && (
+                <TogetherMapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  title={map.title}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
+        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
     </Container>
   );

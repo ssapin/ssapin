@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import HotPlaceCard from "../../components/card/HotPlaceCard";
+import { IPlaceRanking } from "../../utils/types/place.interface";
 
 const Container = styled.div<{ innerWidth: number }>`
   width: 100%;
@@ -53,7 +54,11 @@ const Description = styled.div<{ innerWidth: number }>`
   text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
 `;
 
-function PlaceRanking() {
+type PlaceProps = {
+  places: IPlaceRanking;
+};
+
+function PlaceRanking({ places }: PlaceProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -73,18 +78,42 @@ function PlaceRanking() {
       </Description>
       <RankingContainer innerWidth={innerWidth}>
         <HotPlaceCard
-          place="바나프레소 테헤란로점"
-          address="서울특별시 강남구 역삼동 718-2"
+          place={
+            places !== undefined && places.review !== null
+              ? places.review.title
+              : "장소가 없습니다."
+          }
+          address={
+            places !== undefined && places.review !== null
+              ? places.review.address
+              : "장소가 없습니다."
+          }
           message="🔥 리뷰가 불타고 있어요"
         />
         <HotPlaceCard
-          place="바나프레소 테헤란로점"
-          address="서울특별시 강남구 역삼동 718-2"
+          place={
+            places !== undefined && places.pin !== null
+              ? places.review.title
+              : "장소가 없습니다."
+          }
+          address={
+            places !== undefined && places.pin !== null
+              ? places.review.address
+              : "장소가 없습니다."
+          }
           message="📌 가장 많은 지도에 찍힌 장소"
         />
         <HotPlaceCard
-          place="바나프레소 테헤란로점"
-          address="서울특별시 강남구 역삼동 718-2"
+          place={
+            places !== undefined && places.bookmark !== null
+              ? places.review.title
+              : "장소가 없습니다."
+          }
+          address={
+            places !== undefined && places.bookmark !== null
+              ? places.review.address
+              : "장소가 없습니다."
+          }
           message="💘 싸핀러들이 킹왕짱 찜한 장소"
         />
       </RankingContainer>

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import RankingUserCard from "../../components/card/RankingUserCard";
+import { IUserRanking } from "../../utils/types/user.interface";
 
 const Container = styled.div<{ innerWidth: number }>`
   width: 100%;
@@ -22,10 +23,13 @@ const Container = styled.div<{ innerWidth: number }>`
   margin-top: 4rem;
 `;
 
-const RankingContainer = styled.div<{ innerWidth?: number }>`
+const RankingContainer = styled.div<{ innerWidth?: number; size?: number }>`
   display: flex;
   flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.size < 5 && props.innerWidth > 950
+      ? `space-evenly`
+      : `space-between`};
   align-items: center;
   margin-top: 0.5rem;
 `;
@@ -64,7 +68,23 @@ const Description = styled.div<{ innerWidth: number }>`
   }
 `;
 
-function UserRanking() {
+const NoContainer = styled.div`
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: ${(props) => props.theme.fontSizes.h5};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+`;
+
+type UserProps = {
+  users: IUserRanking[];
+};
+
+function UserRanking({ users }: UserProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -73,34 +93,6 @@ function UserRanking() {
     };
     window.addEventListener("resize", resizeListener);
   });
-
-  const users = [
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-  ];
 
   return (
     <Container innerWidth={innerWidth}>
@@ -112,23 +104,34 @@ function UserRanking() {
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       {innerWidth >= 950 ? (
-        <RankingContainer innerWidth={innerWidth}>
-          {users.map((user, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <RankingUserCard key={i} user={user} />
-          ))}
+        <RankingContainer innerWidth={innerWidth} size={users.length}>
+          {users.length !== 0 &&
+            users.map((user, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <RankingUserCard key={i} user={user} />
+            ))}
+          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       ) : (
         <RankingContainer innerWidth={innerWidth}>
-          <RankingUserCard user={users[0]} type="large" />
-          <RankingContainer>
-            <RankingUserCard user={users[1]} />
-            <RankingUserCard user={users[2]} />
-          </RankingContainer>
-          <RankingContainer>
-            <RankingUserCard user={users[3]} />
-            <RankingUserCard user={users[4]} />
-          </RankingContainer>
+          {users.length !== 0 && (
+            <>
+              <RankingUserCard user={users[0]} type="large" />
+              {users.length >= 2 && (
+                <RankingContainer>
+                  {users.length >= 2 && <RankingUserCard user={users[1]} />}
+                  {users.length >= 3 && <RankingUserCard user={users[2]} />}
+                </RankingContainer>
+              )}
+              {users.length >= 4 && (
+                <RankingContainer>
+                  {users.length >= 4 && <RankingUserCard user={users[3]} />}
+                  {users.length >= 5 && <RankingUserCard user={users[4]} />}
+                </RankingContainer>
+              )}
+            </>
+          )}
+          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       )}
     </Container>
