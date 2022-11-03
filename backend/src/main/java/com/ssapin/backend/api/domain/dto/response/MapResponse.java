@@ -35,7 +35,7 @@ public class MapResponse {
         this.userEmoji = map.getUser().getEmoji();
         this.mapEmoji = map.getEmoji();
         this.placeList = placeList;
-        this.placeCnt = placeList.size();
+        this.placeCnt = placeList==null? 0 : placeList.size();
         if(placeList==null || placeList.size()==0) {
             this.userCnt=0;
         } else {
