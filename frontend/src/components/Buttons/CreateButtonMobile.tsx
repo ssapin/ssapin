@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";

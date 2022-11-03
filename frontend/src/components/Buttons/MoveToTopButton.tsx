@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as UpArrowIcon } from "../../assets/svgs/upperarrow.svg";
@@ -27,7 +26,6 @@ const StyledUp = styled.button`
 
 export default function MoveToTopButton() {
   const goUp = () => {
-    console.log("안녕히 계세요 여러분! 저는 올라가유~~");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
