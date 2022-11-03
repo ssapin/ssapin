@@ -42,7 +42,6 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             else if (status == 1) {
                 response.setStatus(401);
                 jwtResponse = InterceptorResponse.Jwt.builder()
-                        .accessToken(accessToken)
                         .message(TOKEN_EXPIRED)
                         .build();
 
@@ -54,7 +53,6 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
         response.setStatus(403);
         jwtResponse = InterceptorResponse.Jwt.builder()
-                .accessToken(accessToken)
                 .message(AUTHENTICATION_FAILED)
                 .build();
         response.getWriter().write(objectMapper.writeValueAsString(jwtResponse));

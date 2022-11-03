@@ -7,12 +7,10 @@ public class InterceptorResponse {
 
     @Getter
     public static class Jwt {
-        private String accessToken;
         private String message;
 
         @Builder
-        Jwt(String accessToken, String message){
-            this.accessToken = accessToken;
+        Jwt(String message){
             this.message = message;
         }
     }
