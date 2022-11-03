@@ -37,7 +37,7 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
 
         List<Map> result = queryFactory.select(QMapHashtag.mapHashtag.map)
                 .from(QMapHashtag.mapHashtag)
-                .join(QMapHashtag.mapHashtag.map, QMap.map)
+                .rightJoin(QMapHashtag.mapHashtag.map, QMap.map)
                 .where(builder)
                 .orderBy(QMap.map.id.desc())
                 .fetch();
