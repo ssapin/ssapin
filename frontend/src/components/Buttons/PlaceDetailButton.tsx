@@ -3,11 +3,9 @@ import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as PinIcon } from "../../assets/svgs/mappin.svg";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
-// import UserProfileImge from "../etc/UserProfileImage";
 
 const StyledPlaceDetail = styled.div`
   width: ${pixelToRem(240)};
-  background-color: red;
   display: flex;
   justify-content: center;
   align-items: center;

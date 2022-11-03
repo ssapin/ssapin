@@ -6,7 +6,6 @@ import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 
 const StyledPlaceDetail = styled.div`
   width: ${pixelToRem(240)};
-  background-color: red;
   display: flex;
   justify-content: center;
   align-items: center;
