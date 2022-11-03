@@ -4,7 +4,7 @@ import { cookie } from "../utils/functions/cookie";
 
 interface UserInformation {
   campusId: number;
-  nickName: string;
+  nickname: string;
   emoji: string;
   userId: number;
 }
@@ -20,7 +20,7 @@ export const authState = atom<Auth>({
 
 export const userInformationState = atom<UserInformation>({
   key: "userInformation",
-  default: { campusId: null, nickName: "", emoji: "", userId: null },
+  default: { campusId: null, nickname: "", emoji: "", userId: null },
 });
 
 export const loggedInState = selector({
