@@ -43,7 +43,7 @@ function useUserActions() {
 
   function logout() {
     cookie.remove("accessToken", { path: "/" });
-    setUser({ campusId: null, nickName: "", emoji: "", userId: null });
+    setUser({ campusId: null, nickname: "", emoji: "", userId: null });
     setAuth({ accessToken: "" });
     console.log("fuck 왜안지워져?");
     navigate("/");
