@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import styled from "@emotion/styled";
-import { ElementType, memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { QueryFunctionContext } from "react-query";
 import axiosInstance from "../../utils/apis/api";
 import { isQueryError } from "../../utils/functions/util";
@@ -11,34 +11,27 @@ import MapCard from "../card/MapCard";
 interface InifinteListProps {
   url: string;
   queryKey: string[];
-  SkeletonCardComponent: ElementType;
   zeroDataText: string;
   func?: object;
-  count: number;
   isEditMode?: boolean;
   isCreated?: boolean;
   change?: (bool: boolean) => void;
 }
 
-type GridProps = {
-  gridColumnCount: number;
-};
-
-const GridContainer = styled.div<GridProps>`
+const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.gridColumnCount && `repeat(${props.gridColumnCount}, 1fr)`};
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
   grid-gap: 1rem;
   margin-bottom: 1rem;
+  justify-items: center;
 `;
 
 function InfiniteList({
   url,
   queryKey,
-  SkeletonCardComponent,
   zeroDataText,
   func,
-  count,
   isEditMode,
   isCreated,
   change,
@@ -102,7 +95,7 @@ function InfiniteList({
       {isSuccess && targetList?.length < 1 && <div>{zeroDataText}</div>}
       {isError && isQueryError(error) && <p>{error?.message}</p>}
       {targetList && (
-        <GridContainer gridColumnCount={count}>
+        <GridContainer>
           {targetList?.map((target, idx) => (
             <MapCard
               {...target}
@@ -123,9 +116,16 @@ function InfiniteList({
       )}
       <div ref={bottom} />
       {isFetchingNextPage && (
-        <GridContainer gridColumnCount={count}>
-          {Array.from({ length: count }, (_, idx) => idx).map((i) => (
-            <SkeletonCardComponent key={i} />
+        <GridContainer>
+          {Array.from({ length: 1 }, (_, idx) => idx).map((i) => (
+            <MapCard
+              key={i}
+              icon="loading"
+              title="loading"
+              user="loading"
+              placecnt={0}
+              usercnt={0}
+            />
           ))}
         </GridContainer>
       )}
