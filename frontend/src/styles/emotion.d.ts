@@ -59,8 +59,9 @@ declare module "@emotion/react" {
       s4bold: string;
     };
     mq: {
-      table: string;
+      tablet: string;
       mobile: string;
+      pc: string;
     };
   }
 }
