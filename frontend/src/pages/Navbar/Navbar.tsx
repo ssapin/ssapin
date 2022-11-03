@@ -119,7 +119,7 @@ const MyInfo = styled.div`
   }
 `;
 const NavContentFirst = styled.div`
-  div {
+  button {
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: black;
@@ -250,6 +250,14 @@ function NavigationBar({ func }: NavBarProps) {
     navigate("/");
   };
 
+  const moveToSearch = () => {
+    navigate("/search");
+  };
+
+  const moveToMyPage = () => {
+    navigate("/mypage");
+  };
+
   return (
     <>
       <Container>
@@ -311,10 +319,20 @@ function NavigationBar({ func }: NavBarProps) {
             )}
             <hr />
             <NavContentFirst>
-              <div className="nav-text">🏠 홈</div>
-              <div className="nav-text">🗺 지도 찾기</div>
+              <button type="button" className="nav-text" onClick={moveToHome}>
+                🏠 홈
+              </button>
+              <button type="button" className="nav-text" onClick={moveToSearch}>
+                🗺 지도 찾기
+              </button>
               {auth.accessToken && (
-                <div className="nav-text">💡 마이페이지</div>
+                <button
+                  type="button"
+                  className="nav-text"
+                  onClick={moveToMyPage}
+                >
+                  💡 마이페이지
+                </button>
               )}
             </NavContentFirst>
             <hr />

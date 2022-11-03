@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import MapCard from "../../components/card/MapCard";
-import PlaceCard from "../../components/card/PlaceCard";
+import { MemoInfiniteList as MapInfiniteList } from "../../components/infinite/MyMapInfiniteList";
+// eslint-disable-next-line import/extensions
+import { MemoInfiniteList as PlaceInfiniteList } from "../../components/infinite/MyPlaceInfiniteList";
+import USER_APIS from "../../utils/apis/useApis";
 
 const MyBookmarkContainer = styled.div`
   display: block;
@@ -116,53 +118,20 @@ export default function MyBookmark() {
       <div>
         {type === 0 && (
           <BookmarkMapContainer>
-            <div>
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-              <MapCard
-                icon="🧛‍♂️"
-                title="나 오늘 집에 안갈래"
-                user="허설래미저쩔래미"
-                usercnt={5000}
-                placecnt={50}
-              />
-            </div>
+            {/* <MapInfiniteList
+              url={USER_APIS.BOOKMARK_MAP}
+              queryKey={["BOOKMARK - MapList"]}
+              zeroDataText="없어시붕"
+            /> */}
           </BookmarkMapContainer>
         )}
         {type === 1 && (
           <BookmarkPlaceContainer>
-            <div>
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-              <PlaceCard
-                isAdmin
-                place="역삼 멀티캠퍼스"
-                address="서울시 남은열의 더보기 롯데월드타월"
-                review="내가 여기서 더보기를 구경하다니 말도 안돼 놀랄 노자야!"
-              />
-            </div>
+            {/* <PlaceInfiniteList
+              url={USER_APIS.BOOKMARK_PLACE}
+              queryKey={["BOOKMARK - PlaceList"]}
+              zeroDataText="없어시붕"
+            /> */}
           </BookmarkPlaceContainer>
         )}
       </div>
