@@ -3,6 +3,7 @@ package com.ssapin.backend.api.service;
 import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
+import com.ssapin.backend.api.domain.dto.response.PopularPlaceRankingResponse;
 import com.ssapin.backend.api.domain.dto.response.RankingResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,17 +38,17 @@ public class PlaceServiceImpl implements PlaceService{
      * */
 
     private final MapRepository mapRepository;
-    private final MapPlaceRepositorySupport mapPlaceRepositorySupport;
+
     private final MapRepositorySupport mapRepositorySupport;
     private final CampusRepository campusRepository;
-    private final HashtagRepository hashtagRepository;
-    private final MapHashtagRepositorySupport mapHashtagRepositorySupport;
-    private final MapHashtagRepository mapHashtagRepository;
-    private final MapRankingRepositorySupport mapRankingRepositorySupport;
+
     private final MapBookmarkRepository mapBookmarkRepository;
     private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
 
-    private final UserRankingRepositorySupport userRankingRepositorySupport;
+    private final MapPlaceRepositorySupport mapPlaceRepositorySupport;
+    private final PlaceBookmarkRepositorySupport placeBookmarkRepositorySupport;
+    private final ReviewRepositorySupport reviewRepositorySupport;
+
 
     private final PlaceRepository placeRepository;
     private final MapPlaceRepository mapPlaceRepository;
@@ -134,7 +136,27 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public List<RankingResponse> getListPlaceRanking(User user) {
+    public List<Place> getListPlaceRanking(User user) {
+
+        Campus campus =campusRepository.findById(user.getCampus().getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        PopularPlaceRankingResponse review =reviewRepositorySupport.findPopularPlaceByReview(campus);
+        Place reviewPlace = placeRepository.findById(review.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+
+
+        PopularPlaceRankingResponse bookmark=placeBookmarkRepositorySupport.findPopularPlaceByBookmark(campus);
+        Place bookmarkPlace = placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        PopularPlaceRankingResponse map =mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
+        Place mapPlace = placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+
+        List<Place> result = new ArrayList<Place>();
+        result.add(reviewPlace);
+        result.add(bookmarkPlace);
+        result.add(mapPlace);
+
 
         /**
          * 내가 랭킹 짜서 줘야 되자나 시발
@@ -163,7 +185,9 @@ public class PlaceServiceImpl implements PlaceService{
 
 
 
-        return null;
+
+
+        return result;
 
     }
 
