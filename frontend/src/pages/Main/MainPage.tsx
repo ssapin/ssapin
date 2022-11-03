@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import Carousel from "react-material-ui-carousel";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
+import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -24,6 +25,10 @@ import { campusState } from "../../store/atom";
 import { IMap } from "../../utils/types/map.interface";
 import { mapApis } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -38,6 +43,41 @@ const QuestionContainer = styled.div`
   width: 100%;
   height: 55%;
   text-align: center;
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    text-align: center;
+    background-color: ${(props) => props.theme.colors.mainBlue};
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .swiper {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Searchbar = styled.div`
@@ -144,7 +184,6 @@ function MainPage() {
       setTogethermaps(data1.data);
     }
     if (data2?.data) {
-      console.log(data2.data);
       setMaps(data2.data.content);
     }
     if (data3?.data) {
@@ -161,13 +200,30 @@ function MainPage() {
           카카오톡 로그인
         </button>
         <QuestionContainer>
-          {/* <Carousel interval={4500} animation="fade" duration={1000}>
+          <Swiper
+            slidesPerView={1}
+            loop
+            pagination={{
+              clickable: true,
+            }}
+            effect="fade"
+            navigation
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            speed={800}
+            modules={[Pagination, Navigation, Autoplay, EffectFade]}
+            className="mySwiper"
+          >
             {!loading &&
               togethermaps.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Question key={i} item={item} />
+                <SwiperSlide key={i}>
+                  <Question item={item} />
+                </SwiperSlide>
               ))}
-          </Carousel> */}
+          </Swiper>
         </QuestionContainer>
         <Searchbar>
           <MapSearch width="50%" height="30%" />
