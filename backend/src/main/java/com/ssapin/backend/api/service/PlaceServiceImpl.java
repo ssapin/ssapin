@@ -116,7 +116,6 @@ public class PlaceServiceImpl implements PlaceService{
             placeRepository.save(place);
         }
 
-        //Optional<TogethermapPlace> togethermapPlace = togethermapPlaceRepository.findById()
 
     return null;
     }
