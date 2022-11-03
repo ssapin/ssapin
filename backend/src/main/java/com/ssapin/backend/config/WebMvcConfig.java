@@ -17,7 +17,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenInterceptor)
                 .addPathPatterns("/map/login/**")
                 .addPathPatterns("/togethermap/login/**")
-                .addPathPatterns("/review/login/**");
+                .addPathPatterns("/review/login/**")
+                .addPathPatterns("/user/login/**");
     }
 
     @Override
