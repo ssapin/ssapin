@@ -4,7 +4,7 @@ import { pixelToRem } from "../../utils/functions/util";
 
 const TiedBoxes = styled.div`
   display: block;
-  // height: 523.2px;
+  //height: 523.2px;
   padding-left: 10px;
 `;
 const TagName = styled.span<{ type?: string }>`
