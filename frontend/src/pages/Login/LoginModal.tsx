@@ -28,8 +28,10 @@ const KaKakoLoginButton = styled.button`
   font-family: ${(props) => props.theme.fontFamily.h3};
   font-size: ${(props) => props.theme.fontSizes.h4};
   height: fit-content;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
+  transition: all 0.2s ease-in;
   & > div {
     display: flex;
     align-items: center;
@@ -38,6 +40,10 @@ const KaKakoLoginButton = styled.button`
   svg {
     align-items: center;
     margin-right: 0.5rem;
+  }
+  &:hover {
+    transform: translateY(-2px);
+    background-color: #dfc908;
   }
 `;
 

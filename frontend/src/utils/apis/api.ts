@@ -5,7 +5,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios";
-import { removeCookie, setCookie } from "../functions/cookie";
+import { cookie } from "../functions/cookie";
 // eslint-disable-next-line import/no-cycle
 import { getNewAccessToken } from "./useApis";
 
@@ -58,13 +58,13 @@ const onResponseError = async (
       try {
         const res: AxiosResponse = await getNewAccessToken();
         const { accessToken } = res.data;
-        setCookie("accessToken", accessToken);
+        cookie.set("accessToken", accessToken);
         axiosInstance.defaults.headers.access_token = accessToken;
         return await axiosInstance(originalConfig);
       } catch (err) {
         if (err instanceof AxiosError) {
           if (err.response.status === 403) {
-            removeCookie("accessToken");
+            cookie.remove("accessToken");
             setTimeout(() => {
               window.location.href = "/";
             }, 2000);
@@ -72,7 +72,7 @@ const onResponseError = async (
         }
       }
     } else if (response.status === 403) {
-      removeCookie("accessToken");
+      cookie.remove("accessToken");
       setTimeout(() => {
         window.location.href = "/";
       }, 2000);
@@ -82,6 +82,11 @@ const onResponseError = async (
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    const token = cookie.get("accessToken");
+    if (token) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.accessToken = token;
+    }
     return config;
   },
   (error) => {

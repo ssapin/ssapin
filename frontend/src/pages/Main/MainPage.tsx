@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Carousel from "react-material-ui-carousel";
+import { useRecoilValue } from "recoil";
 import USER_APIS from "../../utils/apis/useApis";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -17,6 +18,10 @@ import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import LoginModal from "../Login/LoginModal";
+import useUserActions, {
+  useGetUserInformation,
+} from "../../utils/hooks/useUserActions";
+import { authState } from "../../store/atom";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -63,6 +68,9 @@ const FixContainer = styled.div`
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [modalOpen, setModalOpen] = useState(false);
+  const useUserAction = useUserActions();
+  const auth = useRecoilValue(authState);
+  const useGetInformation = useGetUserInformation();
 
   const handleModal = () => {
     setModalOpen(true);
@@ -115,13 +123,26 @@ function MainPage() {
     },
   ];
 
+  const handleLogout = () => {
+    useUserAction.logout();
+  };
+
   return (
     <>
       <HeadContainer>
         <Navbar />
-        <button type="button" onClick={handleModal}>
-          로그인
+        <button type="button" onClick={() => useGetInformation.getUser()}>
+          정보주세요
         </button>
+        {auth?.accessToken ? (
+          <button type="button" onClick={handleLogout}>
+            로그아웃
+          </button>
+        ) : (
+          <button type="button" onClick={handleModal}>
+            로그인
+          </button>
+        )}
         {modalOpen && (
           <ModalPortal>
             <LoginModal onClose={() => setModalOpen(false)} />
