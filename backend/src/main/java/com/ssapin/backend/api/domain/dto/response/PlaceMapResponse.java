@@ -33,5 +33,13 @@ public class PlaceMapResponse {
         }
     }
 
+    static public class MapListResponse
+    {
+        private List<PlaceResponse> mapList;
+
+        public MapListResponse(List<PlaceResponse> mapList) {
+            this.mapList = mapList;
+        }
+    }
 
 }
