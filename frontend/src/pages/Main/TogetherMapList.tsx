@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TogetherMapCard from "../../components/card/TogetherMapCard";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
@@ -72,6 +73,7 @@ type TogetherMapProps = {
 
 function TogetherMapList({ maps }: TogetherMapProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const resizeListener = () => {
@@ -98,6 +100,9 @@ function TogetherMapList({ maps }: TogetherMapProps) {
                   key={id}
                   title={map.title}
                   usercnt={map.userCnt}
+                  func={() =>
+                    navigate(`/togethermaps/${map.togethermapId}/detail`)
+                  }
                 />
               ),
           )}

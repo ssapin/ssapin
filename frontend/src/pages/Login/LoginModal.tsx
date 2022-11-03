@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import ModalContainer from "../../components/containers/ModalContainer";
 import { ReactComponent as KakaoLogo } from "../../assets/svgs/kakao.svg";
-import USER_APIS from "../../utils/apis/useApis";
+import USER_APIS from "../../utils/apis/userApis";
 
 interface LoginModalProps {
   onClose: () => void;

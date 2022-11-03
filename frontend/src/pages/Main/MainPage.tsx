@@ -19,12 +19,8 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import LoginModal from "../Login/LoginModal";
-import useUserActions, {
-  useGetUserInformation,
-} from "../../utils/hooks/useUserActions";
-import { authState, campusState } from "../../store/atom";
+import useUserActions from "../../utils/hooks/useUserActions";
+import { campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
 
@@ -38,6 +34,7 @@ import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
 import { placeApis } from "../../utils/apis/placeApi";
+import USER_APIS from "../../utils/apis/userApis";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -119,8 +116,6 @@ const FixContainer = styled.div`
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const useUserAction = useUserActions();
-  const auth = useRecoilValue(authState);
-  const useGetInformation = useGetUserInformation();
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
@@ -238,10 +233,6 @@ function MainPage() {
     userRankingData,
     placeRankingData,
   ]);
-
-  const handleLogout = () => {
-    useUserAction.logout();
-  };
 
   return (
     <>
