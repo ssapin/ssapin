@@ -79,36 +79,41 @@ function MapList({ maps }: MapProps) {
         🤩
       </Description>
       <RankingContainer innerWidth={innerWidth}>
-        {maps?.map(
-          (map, id) =>
-            id <= 2 && (
-              <MapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                icon={map.mapEmoji}
-                title={map.title}
-                user={`${map.userEmoji} ${map.nickname}`}
-                placecnt={map.placeCnt}
-                usercnt={map.userCnt}
-              />
-            ),
-        )}
+        {maps.length !== 0 &&
+          maps.map(
+            (map, id) =>
+              id <= 2 && (
+                <MapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  icon={map.mapEmoji}
+                  title={map.title}
+                  user={`${map.userEmoji} ${map.nickname}`}
+                  placecnt={map.placeCnt}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
         {maps?.length === 0 && <div>없어요</div>}
       </RankingContainer>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.map(
-          (map, id) =>
-            id >= 3 && (
-              <MapCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={id}
-                icon={map.mapEmoji}
-                title={map.title}
-                user={`${map.userEmoji} ${map.nickname}`}
-                placecnt={map.placeCnt}
-                usercnt={map.userCnt}
-              />
-            ),
+        {maps.length >= 3 && (
+          <RankingContainer innerWidth={innerWidth}>
+            {maps.map(
+              (map, id) =>
+                id >= 3 && (
+                  <MapCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    icon={map.mapEmoji}
+                    title={map.title}
+                    user={`${map.userEmoji} ${map.nickname}`}
+                    placecnt={map.placeCnt}
+                    usercnt={map.userCnt}
+                  />
+                ),
+            )}
+          </RankingContainer>
         )}
       </RankingContainer>
       <ShowMoreButton />
