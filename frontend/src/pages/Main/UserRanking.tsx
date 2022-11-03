@@ -22,10 +22,13 @@ const Container = styled.div<{ innerWidth: number }>`
   margin-top: 4rem;
 `;
 
-const RankingContainer = styled.div<{ innerWidth?: number }>`
+const RankingContainer = styled.div<{ innerWidth?: number; size?: number }>`
   display: flex;
   flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.size < 5 && props.innerWidth > 950
+      ? `space-evenly`
+      : `space-between`};
   align-items: center;
   margin-top: 0.5rem;
 `;
@@ -64,6 +67,18 @@ const Description = styled.div<{ innerWidth: number }>`
   }
 `;
 
+const NoContainer = styled.div`
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: ${(props) => props.theme.fontSizes.h5};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+`;
+
 function UserRanking() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -75,16 +90,6 @@ function UserRanking() {
   });
 
   const users = [
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
     {
       emoji: "🎈",
       nickname: "허설헬륨",
@@ -112,23 +117,34 @@ function UserRanking() {
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       {innerWidth >= 950 ? (
-        <RankingContainer innerWidth={innerWidth}>
-          {users.map((user, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <RankingUserCard key={i} user={user} />
-          ))}
+        <RankingContainer innerWidth={innerWidth} size={users.length}>
+          {users.length !== 0 &&
+            users.map((user, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <RankingUserCard key={i} user={user} />
+            ))}
+          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       ) : (
         <RankingContainer innerWidth={innerWidth}>
-          <RankingUserCard user={users[0]} type="large" />
-          <RankingContainer>
-            <RankingUserCard user={users[1]} />
-            <RankingUserCard user={users[2]} />
-          </RankingContainer>
-          <RankingContainer>
-            <RankingUserCard user={users[3]} />
-            <RankingUserCard user={users[4]} />
-          </RankingContainer>
+          {users.length !== 0 && (
+            <>
+              <RankingUserCard user={users[0]} type="large" />
+              {users.length >= 2 && (
+                <RankingContainer>
+                  {users.length >= 2 && <RankingUserCard user={users[1]} />}
+                  {users.length >= 3 && <RankingUserCard user={users[2]} />}
+                </RankingContainer>
+              )}
+              {users.length >= 4 && (
+                <RankingContainer>
+                  {users.length >= 4 && <RankingUserCard user={users[3]} />}
+                  {users.length >= 5 && <RankingUserCard user={users[4]} />}
+                </RankingContainer>
+              )}
+            </>
+          )}
+          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       )}
     </Container>

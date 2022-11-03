@@ -65,6 +65,18 @@ const Description = styled.div<{ innerWidth: number }>`
   }
 `;
 
+const NoContainer = styled.div`
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: ${(props) => props.theme.fontSizes.h5};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+`;
+
 type MapProps = {
   maps: IMap[];
 };
@@ -104,7 +116,7 @@ function MapRanking({ maps }: MapProps) {
                 />
               ),
           )}
-        {maps?.length === 0 && <div>없어요</div>}
+        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
       {maps.length >= 3 && (
         <RankingContainer innerWidth={innerWidth}>
