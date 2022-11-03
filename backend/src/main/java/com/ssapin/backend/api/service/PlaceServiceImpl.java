@@ -226,19 +226,22 @@ public class PlaceServiceImpl implements PlaceService{
         {
             List<MapPlace> list = mapPlaceRepository.findByPlace(place.get().getId());
 
-            List<Map> mapList = new ArrayList<Map>();
+            List<PlaceMapResponse.MapResponse> result = new ArrayList<PlaceMapResponse.MapResponse>();
 
             for(MapPlace mp : list)
             {
                 Map map = mapRepository.findById(mp.getMap().getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
-                mapList.add(map);
+                PlaceMapResponse.MapResponse resultMap = new PlaceMapResponse.MapResponse(map);
+
+                result.add(resultMap);
             }
 
-            PlaceMapResponse.MapListResponse result = new PlaceMapResponse.MapListResponse(mapList);
+            PlaceMapResponse.MapListResponse resultMapList = new PlaceMapResponse.MapListResponse(result);
+
+            return resultMapList;
         }
 
-
-        return placeResponse;
+        throw new CustomException(ErrorCode.DATA_NOT_FOUND);
     }
 
     /**

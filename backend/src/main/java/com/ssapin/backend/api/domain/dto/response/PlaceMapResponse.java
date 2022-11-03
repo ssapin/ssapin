@@ -37,9 +37,9 @@ public class PlaceMapResponse {
     @Getter
     static public class MapListResponse
     {
-        private List<MapResponse> mapList;
+        private List<PlaceMapResponse.MapResponse> mapList;
 
-        public MapListResponse(List<MapResponse> mapList) {
+        public MapListResponse(List<PlaceMapResponse.MapResponse> mapList) {
             this.mapList = mapList;
         }
     }
