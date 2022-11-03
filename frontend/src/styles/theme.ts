@@ -65,8 +65,8 @@ const fontFamily = {
 };
 
 const mq = {
-  tablet: `@media only screen and (min-width: ${pixelToRem(900)})`,
-  mobile: `@media only screen and (min-width: ${pixelToRem(500)})`,
+  tablet: `@media only screen and (max-width: ${pixelToRem(900)})`,
+  mobile: `@media only screen and (max-width: ${pixelToRem(500)})`,
 };
 
 export const themes = {

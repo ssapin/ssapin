@@ -16,7 +16,7 @@ const ModalBackground = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 999;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -24,10 +24,10 @@ const ModalWrapper = styled.div`
   width: fit-content;
   height: fit-content;
   background-color: ${(props) => props.theme.colors.gray0};
-  padding: 2rem;
   border-radius: 20px;
+  padding: ${pixelToRem(60)};
   ${(props) => props.theme.mq.mobile} {
-    padding: ${pixelToRem(60)};
+    padding: 2rem;
   }
 `;
 

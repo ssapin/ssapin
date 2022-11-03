@@ -1,16 +1,19 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import React, { memo, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import MenuButton from "../../components/Buttons/MenuButton";
 import Logo from "../../assets/image/ssapin_logo.png";
 import Kakaotalk from "../../assets/image/ri_kakao-talk-fill.png";
 import CampusButton from "../../components/Buttons/CampusButton";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
-import { campusState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
 import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
 import Footer from "../../components/etc/Footer";
+import useUserActions from "../../utils/hooks/useUserActions";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import LoginModal from "../Login/LoginModal";
 
 const Container = styled.div<{ innerWidth: number }>`
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -19,6 +22,10 @@ const Container = styled.div<{ innerWidth: number }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 1rem 1rem 0rem 1rem;
+  ${(props) => props.theme.mq.tablet} {
+    padding: 1rem 0.5rem 0.5rem 1.5rem;
+  }
   padding: ${(props) =>
     props.innerWidth >= 950
       ? `1rem 0.5rem 0.5rem 1.5rem`
@@ -38,7 +45,7 @@ const EmptyContainer = styled.div`
   height: 100%;
 `;
 
-const LogoContainer = styled.div<{ innerWidth: number }>`
+const LogoContainer = styled.h1<{ innerWidth: number }>`
   width: 100%;
   height: ${(props) => (props.innerWidth >= 950 ? `50%` : `80%`)};
   display: flex;
@@ -62,15 +69,14 @@ const LogoContainer = styled.div<{ innerWidth: number }>`
     margin-top: ${(props) => props.innerWidth >= 950 && `2.3rem`};
     margin-left: ${(props) => props.innerWidth >= 950 && `0.5rem`};
     background-color: transparent;
-    decoration: none;
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.subYellow};
-  }
 
-  button: hover {
-    scale: 1.05;
-    cursor: pointer;
+    &:hover {
+      scale: 1.05;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -80,7 +86,7 @@ const Page = styled.div`
   height: 130vh;
   background-color: black;
   opacity: 0.5;
-  z-index: 998;
+  z-index: 3;
 `;
 
 const MyInfo = styled.div`
@@ -142,12 +148,12 @@ const Side = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    svg {
-      margin-right: 0.5rem;
-    }
-    svg: hover {
-      scale: 1.05;
-      cursor: pointer;
+    gap: 0.5rem;
+    button {
+      transition: transform 0.2s ease-in;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
@@ -170,14 +176,19 @@ type NavBarProps = {
   func?: (key: number) => void;
 };
 
-export default function Navbar({ func }: NavBarProps) {
+function NavigationBar({ func }: NavBarProps) {
   const [campusId] = useRecoilState(campusState);
-
   const [isOpen, setIsOpen] = useState(false);
   const [sidebar, setSidebar] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const auth = useRecoilValue(authState);
+  const useUserAction = useUserActions();
+
   const toggleSide = () => {
     setIsOpen(!isOpen);
   };
+  const userInformation = useRecoilValue(userInformationState);
 
   const campus = CAMPUS_LIST;
 
@@ -185,7 +196,9 @@ export default function Navbar({ func }: NavBarProps) {
     setSidebar(!sidebar);
   };
 
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const handleModal = () => {
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     const resizeListener = () => {
@@ -224,12 +237,40 @@ export default function Navbar({ func }: NavBarProps) {
         <div className={sidebar ? "nav-menu active" : "nav-menu"}>
           <div className="nav-content">
             <div className="buttons">
-              <Logout />
-              <Xbutton onClick={showSidebar} />
+              {auth.accessToken && (
+                <button
+                  type="button"
+                  aria-label="logout"
+                  onClick={useUserAction.logout}
+                >
+                  <Logout />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={showSidebar}
+                aria-label="close button"
+              >
+                <Xbutton />
+              </button>
             </div>
-            <MyInfo>
-              <div className="nav-text">👨‍🦰 Jiwon Park</div>
-            </MyInfo>
+            {auth.accessToken ? (
+              <MyInfo>
+                <div className="nav-text">
+                  {userInformation.emoji} {userInformation.nickname}
+                </div>
+              </MyInfo>
+            ) : (
+              <button type="button" onClick={handleModal}>
+                까까오똑 로꾸인
+              </button>
+            )}
+
+            {modalOpen && (
+              <ModalPortal>
+                <LoginModal onClose={() => setModalOpen(false)} />
+              </ModalPortal>
+            )}
             <hr />
             <NavContentFirst>
               <div className="nav-text">🏠 홈</div>
@@ -253,3 +294,6 @@ export default function Navbar({ func }: NavBarProps) {
     </>
   );
 }
+
+const NavBar = memo(NavigationBar);
+export default NavBar;
