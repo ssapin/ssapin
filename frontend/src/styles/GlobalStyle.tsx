@@ -163,6 +163,8 @@ export default function GlobalStyle() {
           button {
             cursor: pointer;
             border: none;
+            background-color: transparent;
+            padding: 0;
           }
           *::-webkit-scrollbar {
             width: 5px;

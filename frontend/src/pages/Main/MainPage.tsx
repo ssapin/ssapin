@@ -117,7 +117,6 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const [modalOpen, setModalOpen] = useState(false);
   const useUserAction = useUserActions();
   const auth = useRecoilValue(authState);
   const useGetInformation = useGetUserInformation();
@@ -128,16 +127,13 @@ function MainPage() {
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
 
-  const handleModal = () => {
-    setModalOpen(true);
-  };
-
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
     };
     window.addEventListener("resize", resizeListener);
-  });
+    return () => window.removeEventListener("resize", resizeListener);
+  }, []);
   const [campusId, setCampusId] = useRecoilState(campusState);
 
   const toggleActive = (key: number) => {
@@ -250,23 +246,6 @@ function MainPage() {
     <>
       <HeadContainer>
         <Navbar func={toggleActive} />
-        <button type="button" onClick={() => useGetInformation.getUser()}>
-          정보주세요
-        </button>
-        {auth?.accessToken ? (
-          <button type="button" onClick={handleLogout}>
-            로그아웃
-          </button>
-        ) : (
-          <button type="button" onClick={handleModal}>
-            로그인
-          </button>
-        )}
-        {modalOpen && (
-          <ModalPortal>
-            <LoginModal onClose={() => setModalOpen(false)} />
-          </ModalPortal>
-        )}
         <QuestionContainer>
           <Swiper
             slidesPerView={1}

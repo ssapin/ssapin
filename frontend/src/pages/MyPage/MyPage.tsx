@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import Navbar from "../Navbar/Navbar";
@@ -22,6 +22,12 @@ const UserInfos = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  ${(props) => props.theme.mq.mobile} {
+    flex-direction: column;
+  }
+  ${(props) => props.theme.mq.tablet} {
+    flex-direction: column;
+  }
 `;
 
 const FixContainer = styled.div`
@@ -36,30 +42,59 @@ const FixContainer = styled.div`
 `;
 
 function MyPage() {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const resizeListener = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
+  }, []);
+
   return (
     <div>
       <Navbar />
       <PageTopBg>
         <UserInfos>
-          <UserInfoCard
-            type="pc"
-            emoji="🧛‍♂️"
-            nickname="허설래미저쩔래미"
-            campus="서울"
-          />
-          <UserInfoDetailCard
-            type="pc"
-            nickname="허설래미저쩔래미"
-            mapcnt={35}
-            placecnt={35}
-            participatecnt={3500}
-          />
+          {innerWidth > 1000 ? (
+            <UserInfoCard
+              type="pc"
+              emoji="🧛‍♂️"
+              nickname="허설래미저쩔래미"
+              campus="서울"
+            />
+          ) : (
+            <UserInfoCard
+              type="mobile"
+              emoji="🧛‍♂️"
+              nickname="허설래미저쩔래미"
+              campus="서울"
+            />
+          )}
+          {innerWidth > 1000 ? (
+            <UserInfoDetailCard
+              type="pc"
+              nickname="허설래미저쩔래미"
+              mapcnt={35}
+              placecnt={35}
+              participatecnt={3500}
+            />
+          ) : (
+            <UserInfoDetailCard
+              type="mobile"
+              nickname="허설래미저쩔래미"
+              mapcnt={35}
+              placecnt={35}
+              participatecnt={3500}
+            />
+          )}
         </UserInfos>
       </PageTopBg>
       <MyPageTab />
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 650 ? (
+        {innerWidth > 900 ? (
           <CreateButton type="button" text="지도 만들기" />
         ) : (
           <CreateButtonMobile type="button" />
