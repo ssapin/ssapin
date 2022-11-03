@@ -7,6 +7,7 @@ export interface IButtonProps {
   func?: () => void;
   disabled?: boolean;
   color?: string;
+  emoji?: string | undefined;
 }
 
 export interface IToggleButton {
@@ -19,7 +20,7 @@ export interface IToggleButton {
 }
 
 export interface ICheckboxProps {
-  type: "button" | "reset" | undefined;
+  type?: "button" | "reset" | undefined;
   checked?: boolean;
   onChange?: () => void;
   label?: string | null;
