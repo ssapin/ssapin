@@ -1,5 +1,6 @@
 package com.ssapin.backend.api.service;
 
+import com.ssapin.backend.api.domain.dto.request.PlaceRegisterRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
@@ -65,17 +66,17 @@ public class PlaceServiceImpl implements PlaceService{
      */
     @Override
     @Transactional
-    public Long addPlaceInMap(User user, long mapId, PlaceRequest placeRequest)  {
+    public Long addPlaceInMap(User user, PlaceRegisterRequest placeRequest)  {
 
-        Map map =mapRepository.findById(mapId).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Map map =mapRepository.findById(placeRequest.getMapId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         //디비에 장소 저장
         Place place = Place.builder()
-                .itemId(placeRequest.getItemId())
-                .title(placeRequest.getTitle())
-                .lat(placeRequest.getLat())
-                .lng(placeRequest.getLng())
-                .address(placeRequest.getAddress())
+                .itemId(placeRequest.getPlace().get(0).getItemId())
+                .title(placeRequest.getPlace().get(0).getTitle())
+                .lat(placeRequest.getPlace().get(0).getLat())
+                .lng(placeRequest.getPlace().get(0).getLng())
+                .address(placeRequest.getPlace().get(0).getAddress())
                 .build();
 
         Optional<PlaceResponse> placeResponse = placeRepository.findByItemId(placeRequest.getItemId());

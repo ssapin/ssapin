@@ -20,4 +20,6 @@ public class PlaceResponse {
         this.lng = place.getLng();
         this.address = place.getAddress();
     }
+
+
 }

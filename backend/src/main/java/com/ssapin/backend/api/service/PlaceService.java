@@ -1,5 +1,6 @@
 package com.ssapin.backend.api.service;
 
+import com.ssapin.backend.api.domain.dto.request.PlaceRegisterRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public interface PlaceService {
 
 
-    Long addPlaceInMap(User user, long mapId, PlaceRequest placeRequest) ;
+    Long addPlaceInMap(User user, PlaceRegisterRequest placeRequest) ;
 
     Long addPlaceInTogetherMap(User user,long mapId,PlaceRequest placeRequest);
 
