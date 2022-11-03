@@ -1,7 +1,9 @@
 package com.ssapin.backend.api.domain.repositorysupport;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssapin.backend.api.domain.dto.response.PopularPlaceRankingResponse;
 import com.ssapin.backend.api.domain.dto.response.RankingResponse;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
 import com.ssapin.backend.api.domain.entity.*;
@@ -34,11 +36,14 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
         return QMap.map.campus.eq(campus);
     }
 
-    public Place findPopularPlaceByPlace(Campus campus, Map map)
+    public PopularPlaceRankingResponse findPopularPlaceByReview(Campus campus)
     {
 
-        return queryFactory.select(QReview.review.place).from(QReview.review,QMapPlace.mapPlace,QMap.map)
+        return queryFactory.select(Projections.bean(PopularPlaceRankingResponse.class,QReview.review.place.id,QReview.review.place.id.count()))
+                .from(QReview.review,QMapPlace.mapPlace,QMap.map)
                 .where(campusEq(campus),QMap.map.id.eq(QMapPlace.mapPlace.map.id),QMapPlace.mapPlace.place.eq(QReview.review.place))
+                .groupBy(QReview.review.place.id)
+                .orderBy(QReview.review.place.id.count().desc())
                 .fetchFirst();
     }
 }
