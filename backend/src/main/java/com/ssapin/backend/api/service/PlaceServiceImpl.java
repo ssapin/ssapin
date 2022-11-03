@@ -155,11 +155,15 @@ public class PlaceServiceImpl implements PlaceService{
         Map map = mapRepository.findById(removePlaceInMapRequest.getMapId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place =placeRepository.findById(removePlaceInMapRequest.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        MapPlace result = mapPlaceRepositorySupport.findByMapPlace(map,user,place);
+        MapPlace mapPlace = mapPlaceRepositorySupport.findByMapPlace(map,user,place);
+
+        MapPlace result = mapPlaceRepository.findById(mapPlace.getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        long id = result.getId();
 
         mapPlaceRepository.delete(result);
 
-        return null;
+        return id;
     }
     /**
      * (5) 모여지도에 장소 삭제
@@ -170,9 +174,13 @@ public class PlaceServiceImpl implements PlaceService{
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place =placeRepository.findById(removePlaceInTogethermapRequest.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        TogethermapPlace result = togethermapPlaceRepositorySupport.findByPlace(map,user,place);
+        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map,user,place);
 
-        return null;
+        TogethermapPlace result = togethermapPlaceRepository.findById(togethermapPlace.getId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        long id = result.getId();
+
+        return id;
     }
 
     /**
@@ -180,7 +188,25 @@ public class PlaceServiceImpl implements PlaceService{
      */
     @Override
     public PlaceResponse getPlaceInfo(User user, long itemId) {
-        return null;
+
+        Optional<Place> placeResponse = placeRepository.findByItemId(itemId);
+
+        if(placeResponse.isEmpty())
+        {
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+        Place place = Place.builder()
+                .itemId(placeResponse.get().getItemId())
+                .title(placeResponse.get().getTitle())
+                .lat(placeResponse.get().getLat())
+                .lng(placeResponse.get().getLng())
+                .address(placeResponse.get().getAddress())
+                .build();
+
+        PlaceResponse result = new PlaceResponse(place);
+
+
+        return result;
     }
 
     /**
