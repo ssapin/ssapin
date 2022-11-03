@@ -8,6 +8,7 @@ const USER_APIS = {
   LOGIN: "/auth/login",
   REISSUE: "/auth/reissue",
   USER_INFORMATION: "/user/login/info",
+  getUserRanking: (campusId: number) => `/user/ranking/${campusId}`,
 };
 
 export const getAccessToken = async (

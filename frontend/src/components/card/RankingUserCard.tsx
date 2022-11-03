@@ -1,11 +1,8 @@
 import styled from "@emotion/styled";
+import { IUserRanking } from "../../utils/types/user.interface";
 
 type UserRankingProps = {
-  user: {
-    emoji: string;
-    nickname: string;
-    mapcnt: number;
-  };
+  user: IUserRanking;
   // eslint-disable-next-line react/require-default-props
   type?: string;
 };
@@ -47,7 +44,7 @@ function RankingUserCard({ user, type }: UserRankingProps) {
     <Container type={type}>
       <p className="emoji">{user.emoji}</p>
       <p className="nickname">{user.nickname}</p>
-      <p className="mapcnt">{user.mapcnt}개의 지도</p>
+      <p className="mapcnt">{user.mapCount}개의 지도</p>
     </Container>
   );
 }
