@@ -29,6 +29,9 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { IUserRanking } from "../../utils/types/user.interface";
+import { IPlaceRanking } from "../../utils/types/place.interface";
+import { placeApis } from "../../utils/apis/placeApi";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -113,6 +116,8 @@ function MainPage() {
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
+  const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
+  const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_API_KEY
@@ -134,7 +139,7 @@ function MainPage() {
     setCampusId(key);
   };
 
-  const { data: data1, refetch: refetch1 } = useQuery<
+  const { data: togetherData, refetch: togetherRefetch } = useQuery<
     AxiosResponse<ITogetherMap[]>,
     AxiosError
   >(
@@ -147,7 +152,7 @@ function MainPage() {
     },
   );
 
-  const { data: data2, refetch: refetch2 } = useQuery<
+  const { data: mapData, refetch: mapRefetch } = useQuery<
     AxiosResponse<IMap[]>,
     AxiosError
   >(
@@ -160,7 +165,7 @@ function MainPage() {
     },
   );
 
-  const { data: data3, refetch: refetch3 } = useQuery<
+  const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
     AxiosResponse<IMap[]>,
     AxiosError
   >(
@@ -173,24 +178,64 @@ function MainPage() {
     },
   );
 
+  const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
+    AxiosResponse<IUserRanking[]>,
+    AxiosError
+  >(
+    [`${campusId} - userRankingList`],
+    () => axiosInstance.get(USER_APIS.getUserRanking(campusId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
+    AxiosResponse<IPlaceRanking>,
+    AxiosError
+  >(
+    [`${campusId} - placeRankingList`],
+    () => axiosInstance.get(placeApis.getPlaceRanking(campusId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
   useEffect(() => {
-    refetch1();
-    refetch2();
-    refetch3();
+    togetherRefetch();
+    mapRefetch();
+    mapRankingRefetch();
+    userRankingRefetch();
+    placeRankingRefetch();
   }, [campusId]);
 
   useEffect(() => {
-    if (data1?.data) {
-      setTogethermaps(data1.data);
+    if (togetherData?.data) {
+      setTogethermaps(togetherData.data);
     }
-    if (data2?.data) {
-      setMaps(data2.data.content);
+    if (mapData?.data) {
+      setMaps(mapData.data.content);
     }
-    if (data3?.data) {
-      setRankingmaps(data3.data);
+    if (mapRankingData?.data) {
+      setRankingmaps(mapRankingData.data);
+    }
+    if (userRankingData?.data) {
+      setRankingusers(userRankingData.data);
+    }
+    if (placeRankingData?.data) {
+      setRankingplaces(placeRankingData.data);
     }
     setLoading(false);
-  }, [data1, data2, data3]);
+  }, [
+    togetherData,
+    mapData,
+    mapRankingData,
+    userRankingData,
+    placeRankingData,
+  ]);
 
   return (
     <>
@@ -230,8 +275,8 @@ function MainPage() {
         </Searchbar>
       </HeadContainer>
       <MainContainer>
-        <UserRanking />
-        <PlaceRanking />
+        <UserRanking users={rankingusers} />
+        <PlaceRanking places={rankingplaces} />
         <MapRanking maps={rankingmaps} />
         <MapList maps={maps} />
         <TogetherMapList maps={togethermaps} />

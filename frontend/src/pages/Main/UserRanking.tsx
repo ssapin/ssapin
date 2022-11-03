@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import RankingUserCard from "../../components/card/RankingUserCard";
+import { IUserRanking } from "../../utils/types/user.interface";
 
 const Container = styled.div<{ innerWidth: number }>`
   width: 100%;
@@ -79,7 +80,11 @@ const NoContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.h5};
 `;
 
-function UserRanking() {
+type UserProps = {
+  users: IUserRanking[];
+};
+
+function UserRanking({ users }: UserProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -88,24 +93,6 @@ function UserRanking() {
     };
     window.addEventListener("resize", resizeListener);
   });
-
-  const users = [
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-    {
-      emoji: "🎈",
-      nickname: "허설헬륨",
-      mapcnt: 125,
-    },
-  ];
 
   return (
     <Container innerWidth={innerWidth}>
