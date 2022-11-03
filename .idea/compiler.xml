@@ -10,11 +10,6 @@
         <module name="backend.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="backend" target="11" />
-      <module name="backend.main" target="11" />
-      <module name="backend.querydsl" target="11" />
-      <module name="backend.test" target="11" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

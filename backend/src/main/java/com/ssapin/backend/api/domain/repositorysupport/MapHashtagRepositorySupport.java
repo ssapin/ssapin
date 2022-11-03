@@ -23,8 +23,8 @@ public class MapHashtagRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public MapHashtag findByMapAndHashtag(Map map, Hashtag hashtag) {
-        return (MapHashtag) queryFactory.selectOne().from(QMapHashtag.mapHashtag)
+        return queryFactory.selectFrom(QMapHashtag.mapHashtag)
                 .where(QMapHashtag.mapHashtag.map.eq(map).and(QMapHashtag.mapHashtag.hashtag.eq(hashtag)))
-                .fetch();
+                .fetchFirst();
     }
 }

@@ -2,6 +2,7 @@ package com.ssapin.backend.api.domain.repositorysupport;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssapin.backend.api.domain.entity.Place;
+import com.ssapin.backend.api.domain.entity.QPlace;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

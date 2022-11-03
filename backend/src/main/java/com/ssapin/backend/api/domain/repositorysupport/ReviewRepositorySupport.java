@@ -43,4 +43,11 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(QReview.review.place.id.count().desc())
                 .fetchFirst();
     }
+
+//    public List<Review> findAllByPlaceIds(List<Place> placeList) {
+//        return queryFactory.selectFrom(QReview.review)
+//                .where(QReview.review.place.id.in(placeList))
+//                .fetch();
+//
+//    }
 }

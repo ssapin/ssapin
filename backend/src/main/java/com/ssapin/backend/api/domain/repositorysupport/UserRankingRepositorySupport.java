@@ -22,12 +22,12 @@ public class UserRankingRepositorySupport extends QuerydslRepositorySupport {
     }
     public List<UserRankingResponse> findUsersByCampus(Campus campus) {
         return queryFactory.
-                select(Projections.bean(UserRankingResponse.class, QMap.map.user,QMap.map.count()))
+                select(Projections.bean(UserRankingResponse.class, QMap.map.user,QMap.map.id.count().as("mapCount")))
                 .from(QMap.map)
                 .join(QMap.map.user, QUser.user)
                 .where(QUser.user.campus.eq(campus))
                 .groupBy(QUser.user.id)
-                .orderBy(QMap.map.count().desc())
+                .orderBy(QMap.map.id.count().desc())
                 .limit(5)
                 .fetch();
     }
