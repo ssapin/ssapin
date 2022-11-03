@@ -109,24 +109,21 @@ function MapList({ maps }: MapProps) {
         {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
       <RankingContainer innerWidth={innerWidth}>
-        {maps.length >= 3 && (
-          <RankingContainer innerWidth={innerWidth}>
-            {maps.map(
-              (map, id) =>
-                id >= 3 && (
-                  <MapCard
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={id}
-                    icon={map.mapEmoji}
-                    title={map.title}
-                    user={`${map.userEmoji} ${map.nickname}`}
-                    placecnt={map.placeCnt}
-                    usercnt={map.userCnt}
-                  />
-                ),
-            )}
-          </RankingContainer>
-        )}
+        {maps.length >= 3 &&
+          maps.map(
+            (map, id) =>
+              id >= 3 && (
+                <MapCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  icon={map.mapEmoji}
+                  title={map.title}
+                  user={`${map.userEmoji} ${map.nickname}`}
+                  placecnt={map.placeCnt}
+                  usercnt={map.userCnt}
+                />
+              ),
+          )}
       </RankingContainer>
       <ShowMoreButton />
     </Container>
