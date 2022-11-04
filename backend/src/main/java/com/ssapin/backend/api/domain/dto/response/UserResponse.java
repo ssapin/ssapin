@@ -21,13 +21,20 @@ public class UserResponse {
         private String nickname;
         private long campusId;
         private String emoji;
+        private long mapCnt;
+        private long placeCnt;
+        private long participateCnt;
 
         @Builder
-        Detail (long userId, String nickname, long campusId, String emoji){
+        Detail (long userId, String nickname, long campusId, String emoji,
+                long mapCnt, long placeCnt, long participateCnt){
             this.userId = userId;
             this.nickname = nickname;
             this.campusId = campusId;
             this.emoji = emoji;
+            this.mapCnt = mapCnt;
+            this.placeCnt = placeCnt;
+            this.participateCnt = participateCnt;
         }
     }
 

@@ -1,21 +1,17 @@
 package com.ssapin.backend.api.controller;
 
 import com.ssapin.backend.api.domain.dto.request.UserRequest;
-import com.ssapin.backend.api.domain.dto.response.MapResponse;
-import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.service.UserService;
 import com.ssapin.backend.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Api(value = "유저 API", tags={"User"})
 @RestController
@@ -54,6 +50,10 @@ public class UserController {
     @ApiOperation(value = "장소 북마크 리스트", notes = "사용자가 북마크한 장소 목록 조회")
     public ResponseEntity<?> getBookmarkedPlace(@RequestHeader("accessToken") final String accessToken,
                                         @PageableDefault(size=6) Pageable pageable) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(
+                userService.findBookmarkedPlaceList(
+                        jwtTokenUtil.getUserIdFromToken(accessToken),
+                        pageable),
+                HttpStatus.OK);
     }
 }

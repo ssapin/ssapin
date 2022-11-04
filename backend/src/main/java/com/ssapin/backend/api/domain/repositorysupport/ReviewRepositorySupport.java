@@ -1,11 +1,14 @@
 package com.ssapin.backend.api.domain.repositorysupport;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.Max;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +28,16 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
 
     }
 
-//    public List<Review> findAllByPlaceIds(List<Place> placeList) {
-//        return queryFactory.selectFrom(QReview.review)
-//                .where(QReview.review.place.id.in(placeList))
-//                .fetch();
-//
-//    }
+    public Map<Integer, String> findByBookmarkedPlace(BooleanBuilder builder) {
+
+        return queryFactory.select(Projections.bean(Map.class))
+                .from(QReview.review)
+                .where(QReview.review.id.in(
+                        JPAExpressions
+                                .select(QReview.review.id.max())
+                                .from(QReview.review)
+                                .groupBy(QReview.review.place.id)
+                                .having(builder)))
+                .fetch();
+    }
 }
