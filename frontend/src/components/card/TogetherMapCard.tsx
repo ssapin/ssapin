@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
 
@@ -10,7 +9,7 @@ type TogetherMapProps = {
   func?: () => void;
 };
 
-const Container = styled.div<{ innerWidth: number }>`
+const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
@@ -25,7 +24,7 @@ const Container = styled.div<{ innerWidth: number }>`
   .icon {
     position: absolute;
     max-width: 17rem;
-    width: ${(props) => (props.innerWidth >= 950 ? `17vw` : `17rem`)};
+    width: 17vw;
     margin-bottom: 4rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
@@ -34,6 +33,10 @@ const Container = styled.div<{ innerWidth: number }>`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    ${(props) => props.theme.mq.tablet} {
+      width: 17rem;
+    }
   }
 
   .title {
@@ -60,17 +63,8 @@ const Container = styled.div<{ innerWidth: number }>`
 `;
 
 function TogetherMapCard({ title, usercnt, func }: TogetherMapProps) {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
-
   return (
-    <Container onClick={func} innerWidth={innerWidth}>
+    <Container onClick={func}>
       <p className="icon">
         <Quotesstart />
         <Quotesend />

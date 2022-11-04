@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
@@ -27,7 +26,6 @@ import useUserActions, {
 import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
-
 import { IMap } from "../../utils/types/map.interface";
 import { mapApis } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
@@ -38,6 +36,7 @@ import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
 import { placeApis } from "../../utils/apis/placeApi";
+import USER_APIS from "../../utils/apis/useApis";
 
 const HeadContainer = styled.div`
   width: 100%;

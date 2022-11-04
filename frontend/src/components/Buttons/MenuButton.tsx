@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as MenuIcon } from "../../assets/svgs/hamburgerbar.svg";

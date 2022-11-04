@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as PinIcon } from "../../assets/svgs/mappin.svg";
