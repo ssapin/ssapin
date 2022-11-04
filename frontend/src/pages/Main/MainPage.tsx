@@ -280,10 +280,10 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 650 ? (
+        {innerWidth > 950 ? (
           <CreateButton type="button" text="지도 만들기" func={handleModal} />
         ) : (
-          <CreateButtonMobile type="button" func={handleModal} />
+          <CreateButtonMobile type="button" />
         )}
         {modalOpen && (
           <ModalPortal>

@@ -11,8 +11,9 @@ interface ModalProps {
 }
 
 const Container = styled.div`
-  width: fit-content;
-  height: fit-content;
+  max-width: 814px;
+  width: 50vw;
+  height: 100%;
   background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
