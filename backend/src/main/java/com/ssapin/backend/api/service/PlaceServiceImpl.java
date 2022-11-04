@@ -131,14 +131,14 @@ public class PlaceServiceImpl implements PlaceService{
         Campus campus =campusRepository.findById(campusId).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         PlaceMapResponse.PopularPlaceRankingResponse review =reviewRepositorySupport.findPopularPlaceByReview(campus);
-        PlaceResponse reviewPlace =new PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        PlaceResponse reviewPlace =new PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)),"\uD83D\uDD25 리뷰가 불타고 있어요 ️\u200D",user);
 
 
         PlaceMapResponse.PopularPlaceRankingResponse bookmark=placeBookmarkRepositorySupport.findPopularPlaceByBookmark(campus);
-        PlaceResponse bookmarkPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        PlaceResponse bookmarkPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)),"\uD83D\uDCCC 가장 많은 지도에 찍힌 Pin!",user);
 
         PlaceMapResponse.PopularPlaceRankingResponse map =mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
-        PlaceResponse mapPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        PlaceResponse mapPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(()->new CustomException(ErrorCode.DATA_NOT_FOUND)),"\uD83D\uDC9F 싸핀러들이 킹왕짱 찜한 장소",user);
 
         PlaceMapResponse.RankingResponse result = new PlaceMapResponse.RankingResponse(reviewPlace,bookmarkPlace,mapPlace);
 
@@ -203,7 +203,7 @@ public class PlaceServiceImpl implements PlaceService{
                 .address(placeResponse.get().getAddress())
                 .build();
 
-        PlaceResponse result = new PlaceResponse(place);
+        PlaceResponse result = new PlaceResponse(place,null,null);
 
 
         return result;
