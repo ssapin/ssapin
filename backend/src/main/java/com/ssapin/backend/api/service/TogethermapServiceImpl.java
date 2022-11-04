@@ -30,7 +30,7 @@ public class TogethermapServiceImpl implements TogethermapService {
     private final ReviewRepositorySupport reviewRepositorySupport;
 
     @Override
-    public TogethermapResponse findOne(long togethermapId) {
+    public TogethermapResponse findOne(long togethermapId, boolean isList) {
         Togethermap togethermap = togethermapRepository.findById(togethermapId).orElseThrow(() ->  new CustomException(ErrorCode.DATA_NOT_FOUND) );
         List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(togethermap);
         List<PlaceResponse> placeList = new ArrayList<>();
@@ -39,7 +39,7 @@ public class TogethermapServiceImpl implements TogethermapService {
             if(review.isEmpty()) placeList.add(new PlaceResponse(togethermapPlace.getPlace(), null, togethermapPlace.getUser()));
             else placeList.add(new PlaceResponse(togethermapPlace.getPlace(), review.get(review.size()-1).getContent(), togethermapPlace.getUser()));
         }
-        return new TogethermapResponse(togethermap, placeList);
+        return new TogethermapResponse(togethermap, placeList, isList);
     }
 
     @Override
@@ -50,11 +50,11 @@ public class TogethermapServiceImpl implements TogethermapService {
         for(Togethermap map : togethermaps) {
             List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(map);
             if (togethermapPlaceList.isEmpty()) {
-                result.add(new TogethermapResponse(map, null));
+                result.add(new TogethermapResponse(map, null,true));
             }
             else {
                 for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
-                    result.add(findOne(togethermapPlace.getId()));
+                    result.add(findOne(togethermapPlace.getId(),true));
                 }
 
             }
