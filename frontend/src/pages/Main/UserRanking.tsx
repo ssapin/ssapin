@@ -9,18 +9,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 19vw;
-  padding-right: 19vw;
+  padding-left: 17vw;
+  padding-right: 17vw;
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
     padding-left: 7vw;
     padding-right: 7vw;
-  }
-
-  ${(props) => props.theme.mq.pc} {
-    padding-left: 14vw;
-    padding-right: 14vw;
   }
 `;
 
@@ -136,7 +131,7 @@ function UserRanking({ users }: UserProps) {
         <RankingContainer>
           {users.length !== 0 && (
             <>
-              <RankingUserCard user={users[0]} type="large" />
+              <RankingUserCard user={users[0]} />
               {users.length >= 2 && (
                 <RankingContainer>
                   {users.length >= 2 && <RankingUserCard user={users[1]} />}

@@ -1,31 +1,28 @@
 import styled from "@emotion/styled";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 type TogetherMapProps = {
-  title: string;
-  usercnt: number;
-  // eslint-disable-next-line react/require-default-props
-  func?: () => void;
+  prop: ITogetherMap;
 };
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: 100%;
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2.5rem;
+  align-items: center;
+  padding: 1rem;
 
   .icon {
-    position: absolute;
-    max-width: 17rem;
-    width: 17vw;
-    margin-bottom: 4rem;
+    width: 85%;
+    height: 15%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray400};
@@ -33,15 +30,11 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    ${(props) => props.theme.mq.tablet} {
-      width: 17rem;
-    }
   }
 
   .title {
-    margin-top: 0.8rem;
     text-align: center;
+    height: 30%;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
@@ -49,7 +42,7 @@ const Container = styled.div`
   }
 
   .participate {
-    margin-top: 0.4rem;
+    height: 10%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
@@ -62,15 +55,19 @@ const Container = styled.div`
   }
 `;
 
-function TogetherMapCard({ title, usercnt, func }: TogetherMapProps) {
+function TogetherMapCard({ prop }: TogetherMapProps) {
+  const onClickTogetherMap = () => {
+    alert(`${prop.togethermapId}번 모여지도~`);
+  };
+
   return (
-    <Container onClick={func}>
+    <Container onClick={onClickTogetherMap}>
       <p className="icon">
         <Quotesstart />
         <Quotesend />
       </p>
-      <p className="title">{title}</p>
-      <p className="participate">🙋‍♂️ {usercnt}명이 참여</p>
+      <p className="title">{prop.title}</p>
+      <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
     </Container>
   );
 }

@@ -8,14 +8,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 19vw;
-  padding-right: 19vw;
+  padding-left: 17vw;
+  padding-right: 17vw;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.pc} {
-    padding-left: 14vw;
-    padding-right: 14vw;
-  }
 
   ${(props) => props.theme.mq.mobile} {
     padding-left: 7vw;
@@ -24,15 +19,14 @@ const Container = styled.div`
 `;
 
 const RankingContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-
-  ${(props) => props.theme.mq.tablet} {
-    flex-direction: column;
-  }
+  width: 95%;
+  display: grid;
+  margin: auto;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-gap: 2rem;
+  margin-bottom: 1rem;
+  justify-items: center;
 `;
 
 const Title = styled.div`
@@ -86,39 +80,22 @@ function PlaceRanking({ places }: PlaceProps) {
         <HotPlaceCard
           place={
             places !== undefined && places.review !== null
-              ? places.review.title
-              : "장소가 없습니다."
-          }
-          address={
-            places !== undefined && places.review !== null
-              ? places.review.address
-              : "장소가 없습니다."
+              ? places.review
+              : undefined
           }
           message="🔥 리뷰가 불타고 있어요"
         />
         <HotPlaceCard
           place={
-            places !== undefined && places.pin !== null
-              ? places.review.title
-              : "장소가 없습니다."
-          }
-          address={
-            places !== undefined && places.pin !== null
-              ? places.review.address
-              : "장소가 없습니다."
+            places !== undefined && places.pin !== null ? places.pin : undefined
           }
           message="📌 가장 많은 지도에 찍힌 장소"
         />
         <HotPlaceCard
           place={
             places !== undefined && places.bookmark !== null
-              ? places.review.title
-              : "장소가 없습니다."
-          }
-          address={
-            places !== undefined && places.bookmark !== null
-              ? places.review.address
-              : "장소가 없습니다."
+              ? places.bookmark
+              : undefined
           }
           message="💘 싸핀러들이 킹왕짱 찜한 장소"
         />

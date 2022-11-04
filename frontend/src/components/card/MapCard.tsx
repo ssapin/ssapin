@@ -1,20 +1,17 @@
 import styled from "@emotion/styled";
+import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { IMap } from "../../utils/types/map.interface";
 
 type MapCardProps = {
-  icon: string;
-  title: string;
-  user: string;
-  placecnt: number;
-  usercnt: number;
-  // eslint-disable-next-line react/require-default-props
-  func?: () => void;
+  prop: IMap;
+  isAdmin: boolean;
 };
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: 100%;
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -61,15 +58,30 @@ const Container = styled.div`
   }
 `;
 
-function MapCard({ icon, title, user, placecnt, usercnt, func }: MapCardProps) {
+function MapCard({ prop, isAdmin }: MapCardProps) {
+  const onClickMap = () => {
+    alert(`${prop.mapId}번 지도~`);
+  };
+
+  const onDeletePlace = () => {
+    alert(`${prop.mapId}번 장소~ 지우고 싶대`);
+  };
+
+  console.log(prop);
+
   return (
-    <Container onClick={func}>
-      <p className="icon">{icon}</p>
-      <p className="title">{title}</p>
-      <p className="user">{user}</p>
+    <Container onClick={onClickMap}>
+      <p className="icon">{prop.mapEmoji}</p>
+      <p className="title">{prop.title}</p>
+      <p className="user">{`${prop.userEmoji} ${prop.nickname}`}</p>
       <p className="summary">
-        📌 {placecnt} &nbsp; 🙋‍♂️ {usercnt}
+        📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
       </p>
+      {isAdmin && (
+        <div className="delete">
+          <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+        </div>
+      )}
     </Container>
   );
 }
