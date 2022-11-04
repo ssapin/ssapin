@@ -32,6 +32,8 @@ import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
 import { placeApis } from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/useApis";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import CreateMapModal from "../CreateMap/CreateMapModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -230,6 +232,11 @@ function MainPage() {
     placeRankingData,
   ]);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModal = () => {
+    setModalOpen(true);
+  };
+
   return (
     <>
       <HeadContainer>
@@ -273,10 +280,15 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 650 ? (
-          <CreateButton type="button" text="지도 만들기" />
+        {innerWidth > 950 ? (
+          <CreateButton type="button" text="지도 만들기" func={handleModal} />
         ) : (
           <CreateButtonMobile type="button" />
+        )}
+        {modalOpen && (
+          <ModalPortal>
+            <CreateMapModal onClose={() => setModalOpen(false)} />
+          </ModalPortal>
         )}
       </FixContainer>
       <Footer />
