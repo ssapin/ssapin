@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
-import MapCard from "../../components/card/MapCard";
-import TogetherMapCard from "../../components/card/TogetherMapCard";
 import { pixelToRem } from "../../utils/functions/util";
+import { MemoInfiniteList } from "../../components/infinite/MyMapInfiniteList";
+import USER_APIS from "../../utils/apis/useApis";
 
 const MyMapsContainer = styled.div`
   display: block;
@@ -113,47 +113,20 @@ export default function MyMaps() {
       </ToggleGroup>
       {type === 0 && (
         <WriteMapContainer>
-          <div>
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-          </div>
+          {/* <MemoInfiniteList
+            url={USER_APIS.MY_MAP}
+            queryKey={["MyMapList"]}
+            zeroDataText="없어시붕"
+          /> */}
         </WriteMapContainer>
       )}
       {type === 1 && (
         <JoinedMapContainer>
-          <div>
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-          </div>
+          {/* <MemoInfiniteList
+            url={USER_APIS.JOIN_MAP}
+            queryKey={["JoinMapList"]}
+            zeroDataText="없어시붕"
+          /> */}
         </JoinedMapContainer>
       )}
     </MyMapsContainer>

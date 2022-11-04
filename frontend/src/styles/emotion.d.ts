@@ -61,6 +61,7 @@ declare module "@emotion/react" {
     mq: {
       tablet: string;
       mobile: string;
+      pc: string;
     };
   }
 }

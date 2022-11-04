@@ -7,6 +7,7 @@ import { isQueryError } from "../../utils/functions/util";
 import useFetchTripsInformation from "../../utils/hooks/useFecthTripsInformation";
 import useObserver from "../../utils/hooks/useObserver";
 import MapCard from "../card/MapCard";
+import PlaceCard from "../card/PlaceCard";
 
 interface InifinteListProps {
   url: string;
@@ -43,7 +44,7 @@ function InfiniteList({
   }: QueryFunctionContext) => {
     try {
       console.log(pageParam);
-      const res = await axiosInstance.get(`${url}&page=${pageParam}`);
+      const res = await axiosInstance.get(`${url}?page=${pageParam}`);
       return { result: res?.data, page: pageParam };
     } catch {
       setHasError(true);
@@ -97,7 +98,7 @@ function InfiniteList({
       {targetList && (
         <GridContainer>
           {targetList?.map((target, idx) => (
-            <MapCard
+            <PlaceCard
               {...target}
               index={idx}
               // eslint-disable-next-line react/no-array-index-key
@@ -105,11 +106,10 @@ function InfiniteList({
               func={func}
               isEditMode={isEditMode}
               refetch={refetchData}
-              icon={target.mapEmoji}
-              title={target.title}
-              user={`${target.userEmoji} ${target.nickname}`}
-              placecnt={target.placeCnt}
-              usercnt={target.userCnt}
+              address={target.address}
+              place={target.title}
+              review={target.content}
+              isAdmin={false}
             />
           ))}
         </GridContainer>

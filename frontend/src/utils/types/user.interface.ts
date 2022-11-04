@@ -3,6 +3,9 @@ export interface IUser {
   nickname: string;
   campusId: number;
   emoji: string;
+  mapCnt: number;
+  placeCnt: number;
+  participateCnt: number;
 }
 
 export interface IUserRanking {

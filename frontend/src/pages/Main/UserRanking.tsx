@@ -3,68 +3,88 @@ import { useEffect, useState } from "react";
 import RankingUserCard from "../../components/card/RankingUserCard";
 import { IUserRanking } from "../../utils/types/user.interface";
 
-const Container = styled.div<{ innerWidth: number }>`
+const Container = styled.div`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: ${(props) => props.innerWidth < 550 && `7vw`};
-  padding-right: ${(props) => props.innerWidth < 550 && `7vw`};
-
-  padding-left: ${(props) => props.innerWidth >= 1700 && `19vw`};
-  padding-right: ${(props) => props.innerWidth >= 1700 && `19vw`};
-
-  padding-left: ${(props) =>
-    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
-  padding-right: ${(props) =>
-    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
-
+  padding-left: 19vw;
+  padding-right: 19vw;
   margin-top: 4rem;
+
+  ${(props) => props.theme.mq.mobile} {
+    padding-left: 7vw;
+    padding-right: 7vw;
+  }
+
+  ${(props) => props.theme.mq.pc} {
+    padding-left: 14vw;
+    padding-right: 14vw;
+  }
 `;
 
-const RankingContainer = styled.div<{ innerWidth?: number; size?: number }>`
+const RankingContainer = styled.div<{ size?: number }>`
   display: flex;
-  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
-  justify-content: ${(props) =>
-    props.size < 5 && props.innerWidth > 950
-      ? `space-evenly`
-      : `space-between`};
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
+  justify-content: space-between;
+
+  ${(props) => props.theme.mq.tablet} {
+    flex-direction: column;
+    justify-content: ${(props) => props.size < 5 && `space-evenly`};
+  }
 `;
 
-const Title = styled.div<{ innerWidth: number }>`
-  padding-left: ${(props) => (props.innerWidth < 950 ? `0` : `1rem`)};
+const Title = styled.div`
+  padding-left: 1rem;
   font-size: ${(props) => props.theme.fontSizes.h2};
   color: ${(props) => props.theme.colors.gray900};
   font-family: ${(props) => props.theme.fontFamily.h2bold};
-  text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  text-align: left;
 
   span {
     display: inline;
     box-shadow: inset 0 -25px 0 ${(props) => props.theme.colors.subYellow};
   }
+
+  ${(props) => props.theme.mq.tablet} {
+    text-align: center;
+    padding-left: 0;
+  }
 `;
 
-const Description = styled.div<{ innerWidth: number }>`
+const Description = styled.div`
   padding-top: 1rem;
-  padding-left: ${(props) => (props.innerWidth < 950 ? `1rem` : `2rem`)};
-  padding-right: ${(props) => (props.innerWidth < 950 ? `1rem` : `0`)};
+  padding-left: 2rem;
+  padding-right: 0;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
-  text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  text-align: left;
   display: flex;
-  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
+  flex-direction: row;
   justify-content: space-between;
 
   .textRight {
     padding-top: 0.5rem;
-    padding-right: ${(props) => (props.innerWidth < 950 ? `0` : `1rem`)};
+    padding-right: 1rem;
     color: ${(props) => props.theme.colors.gray400};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.paragraph};
+
+    ${(props) => props.theme.mq.tablet} {
+      padding-right: 0;
+    }
+  }
+
+  ${(props) => props.theme.mq.tablet} {
+    text-align: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    flex-direction: column;
   }
 `;
 
@@ -95,16 +115,16 @@ function UserRanking({ users }: UserProps) {
   });
 
   return (
-    <Container innerWidth={innerWidth}>
-      <Title innerWidth={innerWidth}>
+    <Container>
+      <Title>
         🔥 <span>열정적인 싸핀러 Top 5</span>
       </Title>
-      <Description innerWidth={innerWidth}>
+      <Description>
         <p>싸핀을 열심히 이용하는 열.정.적.인 싸핀러들을 소개합니다 😎</p>
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       {innerWidth >= 950 ? (
-        <RankingContainer innerWidth={innerWidth} size={users.length}>
+        <RankingContainer size={users.length}>
           {users.length !== 0 &&
             users.map((user, i) => (
               // eslint-disable-next-line react/no-array-index-key
@@ -113,7 +133,7 @@ function UserRanking({ users }: UserProps) {
           {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       ) : (
-        <RankingContainer innerWidth={innerWidth}>
+        <RankingContainer>
           {users.length !== 0 && (
             <>
               <RankingUserCard user={users[0]} type="large" />

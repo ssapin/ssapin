@@ -43,7 +43,7 @@ function InfiniteList({
   }: QueryFunctionContext) => {
     try {
       console.log(pageParam);
-      const res = await axiosInstance.get(`${url}&page=${pageParam}`);
+      const res = await axiosInstance.get(`${url}?page=${pageParam}`);
       return { result: res?.data, page: pageParam };
     } catch {
       setHasError(true);

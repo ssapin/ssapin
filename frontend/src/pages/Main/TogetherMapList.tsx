@@ -1,57 +1,72 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import TogetherMapCard from "../../components/card/TogetherMapCard";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
-const Container = styled.div<{ innerWidth: number }>`
+const Container = styled.div`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: ${(props) => props.innerWidth < 550 && `7vw`};
-  padding-right: ${(props) => props.innerWidth < 550 && `7vw`};
-
-  padding-left: ${(props) => props.innerWidth >= 1700 && `19vw`};
-  padding-right: ${(props) => props.innerWidth >= 1700 && `19vw`};
-
-  padding-left: ${(props) =>
-    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
-  padding-right: ${(props) =>
-    props.innerWidth >= 550 && props.innerWidth < 1700 && `14vw`};
-
+  padding-left: 19vw;
+  padding-right: 19vw;
   margin-top: 4rem;
+
+  ${(props) => props.theme.mq.pc} {
+    padding-left: 14vw;
+    padding-right: 14vw;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    padding-left: 7vw;
+    padding-right: 7vw;
+  }
 `;
 
-const RankingContainer = styled.div<{ innerWidth?: number }>`
+const RankingContainer = styled.div`
   display: flex;
-  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
+
+  ${(props) => props.theme.mq.tablet} {
+    flex-direction: column;
+  }
 `;
 
-const Title = styled.div<{ innerWidth: number }>`
-  padding-left: ${(props) => (props.innerWidth < 950 ? `0` : `1rem`)};
+const Title = styled.div`
+  padding-left: 1rem;
   font-size: ${(props) => props.theme.fontSizes.h2};
   color: ${(props) => props.theme.colors.gray900};
   font-family: ${(props) => props.theme.fontFamily.h2bold};
-  text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  text-align: left;
 
   span {
     display: inline;
     box-shadow: inset 0 -25px 0 ${(props) => props.theme.colors.subYellow};
   }
+
+  ${(props) => props.theme.mq.tablet} {
+    text-align: center;
+    padding-left: 0;
+  }
 `;
 
-const Description = styled.div<{ innerWidth: number }>`
+const Description = styled.div`
   padding-top: 1rem;
-  padding-left: ${(props) => (props.innerWidth < 950 ? `1rem` : `2rem`)};
-  padding-right: ${(props) => (props.innerWidth < 950 ? `1rem` : `0`)};
+  padding-left: 2rem;
+  padding-right: 0;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
-  text-align: ${(props) => (props.innerWidth < 950 ? `center` : `left`)};
+  text-align: left;
+
+  ${(props) => props.theme.mq.tablet} {
+    text-align: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 `;
 
 const NoContainer = styled.div`
@@ -71,24 +86,15 @@ type TogetherMapProps = {
 };
 
 function TogetherMapList({ maps }: TogetherMapProps) {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
-
   return (
-    <Container innerWidth={innerWidth}>
-      <Title innerWidth={innerWidth}>
+    <Container>
+      <Title>
         🎪 <span>모여지도</span>
       </Title>
-      <Description innerWidth={innerWidth}>
+      <Description>
         테마별 자신의 베스트 1위! 장소를 등록해보세요 🥳
       </Description>
-      <RankingContainer innerWidth={innerWidth}>
+      <RankingContainer>
         {maps.length !== 0 &&
           maps.map(
             (map, id) =>
@@ -103,7 +109,7 @@ function TogetherMapList({ maps }: TogetherMapProps) {
           )}
         {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
-      <RankingContainer innerWidth={innerWidth}>
+      <RankingContainer>
         {maps.length >= 3 &&
           maps.map(
             (map, id) =>

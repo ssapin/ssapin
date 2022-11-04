@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { pixelToRem } from "../../utils/functions/util";
 import Navbar from "../Navbar/Navbar";
 import UserInfoCard from "../../components/card/UserInfoCard";
@@ -8,12 +9,16 @@ import MyPageTab from "./MyPageTab";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
+import { campusState, userInformationState } from "../../store/atom";
+import { CAMPUS_LIST } from "../../utils/constants/contant";
 
 const PageTopBg = styled.div`
   width: 100%;
-  padding: ${pixelToRem(0)} ${pixelToRem(20)} ${pixelToRem(40)}
-    ${pixelToRem(20)};
+  height: 65vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   color: ${(props) => props.theme.colors.gray0};
 `;
 
@@ -22,9 +27,7 @@ const UserInfos = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  ${(props) => props.theme.mq.mobile} {
-    flex-direction: column;
-  }
+
   ${(props) => props.theme.mq.tablet} {
     flex-direction: column;
   }
@@ -34,7 +37,7 @@ const FixContainer = styled.div`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 999;
+  z-index: 50;
   button {
     margin: 0.5rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
@@ -43,6 +46,12 @@ const FixContainer = styled.div`
 
 function MyPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const userInformation = useRecoilValue(userInformationState);
+  const campus = CAMPUS_LIST;
+  const [campusId, setCampusId] = useRecoilState(campusState);
+  const toggleActive = (key: number) => {
+    setCampusId(key);
+  };
 
   useEffect(() => {
     const resizeListener = () => {
@@ -53,40 +62,40 @@ function MyPage() {
   }, []);
 
   return (
-    <div>
-      <Navbar />
+    <>
       <PageTopBg>
+        <Navbar func={toggleActive} />
         <UserInfos>
           {innerWidth > 1000 ? (
             <UserInfoCard
               type="pc"
-              emoji="🧛‍♂️"
-              nickname="허설래미저쩔래미"
-              campus="서울"
+              emoji={userInformation.emoji}
+              nickname={userInformation.nickname}
+              campus={campus[userInformation.campusId]}
             />
           ) : (
             <UserInfoCard
               type="mobile"
-              emoji="🧛‍♂️"
-              nickname="허설래미저쩔래미"
-              campus="서울"
+              emoji={userInformation.emoji}
+              nickname={userInformation.nickname}
+              campus={campus[userInformation.campusId]}
             />
           )}
           {innerWidth > 1000 ? (
             <UserInfoDetailCard
               type="pc"
-              nickname="허설래미저쩔래미"
-              mapcnt={35}
-              placecnt={35}
-              participatecnt={3500}
+              nickname={userInformation.nickname}
+              mapcnt={userInformation.mapCnt}
+              placecnt={userInformation.placeCnt}
+              participatecnt={userInformation.participateCnt}
             />
           ) : (
             <UserInfoDetailCard
               type="mobile"
-              nickname="허설래미저쩔래미"
-              mapcnt={35}
-              placecnt={35}
-              participatecnt={3500}
+              nickname={userInformation.nickname}
+              mapcnt={userInformation.mapCnt}
+              placecnt={userInformation.placeCnt}
+              participatecnt={userInformation.participateCnt}
             />
           )}
         </UserInfos>
@@ -100,7 +109,7 @@ function MyPage() {
           <CreateButtonMobile type="button" />
         )}
       </FixContainer>
-    </div>
+    </>
   );
 }
 
