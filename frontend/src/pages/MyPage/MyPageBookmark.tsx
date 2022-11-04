@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import { MemoInfiniteList as MapInfiniteList } from "../../components/infinite/MyMapInfiniteList";
-// eslint-disable-next-line import/extensions
-import { MemoInfiniteList as PlaceInfiniteList } from "../../components/infinite/MyPlaceInfiniteList";
+import { MemoInfiniteList } from "../../components/infinite/InfiniteList";
 import USER_APIS from "../../utils/apis/useApis";
+import PlaceCard from "../../components/card/PlaceCard";
+import MapCard from "../../components/card/MapCard";
 
 const MyBookmarkContainer = styled.div`
   display: block;
@@ -118,20 +118,22 @@ export default function MyBookmark() {
       <div>
         {type === 0 && (
           <BookmarkMapContainer>
-            {/* <MapInfiniteList
+            <MemoInfiniteList
               url={USER_APIS.BOOKMARK_MAP}
               queryKey={["BOOKMARK - MapList"]}
               zeroDataText="없어시붕"
-            /> */}
+              CardComponent={MapCard}
+            />
           </BookmarkMapContainer>
         )}
         {type === 1 && (
           <BookmarkPlaceContainer>
-            {/* <PlaceInfiniteList
+            <MemoInfiniteList
               url={USER_APIS.BOOKMARK_PLACE}
               queryKey={["BOOKMARK - PlaceList"]}
               zeroDataText="없어시붕"
-            /> */}
+              CardComponent={PlaceCard}
+            />
           </BookmarkPlaceContainer>
         )}
       </div>

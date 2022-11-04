@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
-import { MemoInfiniteList } from "../../components/infinite/MapInfiniteList";
+import MapCard from "../../components/card/MapCard";
+import { MemoInfiniteList } from "../../components/infinite/ParamsInfiniteList";
 import { campusState } from "../../store/atom";
 import { mapApis } from "../../utils/apis/mapApi";
 
@@ -10,14 +11,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 19vw;
-  padding-right: 19vw;
+  padding-left: 17vw;
+  padding-right: 17vw;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.pc} {
-    padding-left: 14vw;
-    padding-right: 14vw;
-  }
 
   ${(props) => props.theme.mq.mobile} {
     padding-left: 7vw;
@@ -52,6 +48,7 @@ function SearchList() {
         url={mapApis.getMapList(campusId)}
         queryKey={["MapList"]}
         zeroDataText="없어시붕"
+        CardComponent={MapCard}
       />
     </Container>
   );

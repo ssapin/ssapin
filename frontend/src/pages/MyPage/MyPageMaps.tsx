@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import { MemoInfiniteList } from "../../components/infinite/MyMapInfiniteList";
 import USER_APIS from "../../utils/apis/useApis";
+import { MemoInfiniteList } from "../../components/infinite/InfiniteList";
+import MapCard from "../../components/card/MapCard";
 
 const MyMapsContainer = styled.div`
   display: block;
@@ -113,20 +114,22 @@ export default function MyMaps() {
       </ToggleGroup>
       {type === 0 && (
         <WriteMapContainer>
-          {/* <MemoInfiniteList
+          <MemoInfiniteList
             url={USER_APIS.MY_MAP}
             queryKey={["MyMapList"]}
             zeroDataText="없어시붕"
-          /> */}
+            CardComponent={MapCard}
+          />
         </WriteMapContainer>
       )}
       {type === 1 && (
         <JoinedMapContainer>
-          {/* <MemoInfiniteList
+          <MemoInfiniteList
             url={USER_APIS.JOIN_MAP}
             queryKey={["JoinMapList"]}
             zeroDataText="없어시붕"
-          /> */}
+            CardComponent={MapCard}
+          />
         </JoinedMapContainer>
       )}
     </MyMapsContainer>
