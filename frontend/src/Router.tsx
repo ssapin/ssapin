@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SearchPage from "./pages/Search/MapSearchPage";
 import MainPage from "./pages/Main/MainPage";
 import MyPage from "./pages/MyPage/MyPage";
+import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
 
 // const Main = lazy(() => import("./pages/Main/MainPage"));
 const Login = lazy(() => import("./pages/Login/LoginPage"));
@@ -17,6 +18,7 @@ function Router() {
         <Route path="/auth/kakao/login" element={<Login />} />
         <Route path="mypage" element={<MyPage />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="mobileCreate" element={<CreateMapMobilePage />} />
       </Routes>
     </BrowserRouter>
   );

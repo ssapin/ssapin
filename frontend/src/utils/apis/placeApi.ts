@@ -1,3 +1,3 @@
 export const placeApis = {
-  getPlaceRanking: (campusId: number) => `/place/ranking${campusId}`,
+  getPlaceRanking: (campusId: number) => `/place/ranking/${campusId}`,
 };
