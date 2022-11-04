@@ -8,31 +8,25 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 19vw;
-  padding-right: 19vw;
+  padding-left: 17vw;
+  padding-right: 17vw;
   margin-top: 4rem;
 
-  ${(props) => props.theme.mq.pc} {
-    padding-left: 14vw;
-    padding-right: 14vw;
-  }
-
   ${(props) => props.theme.mq.mobile} {
-    padding-left: 7vw;
-    padding-right: 7vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 `;
 
 const RankingContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-
-  ${(props) => props.theme.mq.tablet} {
-    flex-direction: column;
-  }
+  width: 95%;
+  display: grid;
+  margin: auto;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-gap: 2rem;
+  margin-bottom: 1rem;
+  justify-items: center;
 `;
 
 const Title = styled.div`
@@ -113,40 +107,16 @@ function MapRanking({ maps }: MapProps) {
       </Description>
       <RankingContainer>
         {maps.length !== 0 &&
-          maps.map(
-            (map, id) =>
-              id <= 2 && (
-                <MapCard
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={id}
-                  icon={map.mapEmoji}
-                  title={map.title}
-                  user={`${map.userEmoji} ${map.nickname}`}
-                  placecnt={map.placeCnt}
-                  usercnt={map.userCnt}
-                />
-              ),
-          )}
-        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
+          maps.map((map, id) => (
+            <MapCard
+              // eslint-disable-next-line react/no-array-index-key
+              key={id}
+              prop={map}
+              isAdmin={false}
+            />
+          ))}
       </RankingContainer>
-      {maps.length >= 3 && (
-        <RankingContainer>
-          {maps.map(
-            (map, id) =>
-              id >= 3 && (
-                <MapCard
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={id}
-                  icon={map.mapEmoji}
-                  title={map.title}
-                  user={`${map.userEmoji} ${map.nickname}`}
-                  placecnt={map.placeCnt}
-                  usercnt={map.userCnt}
-                />
-              ),
-          )}
-        </RankingContainer>
-      )}
+      {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
     </Container>
   );
 }
