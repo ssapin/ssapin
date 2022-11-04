@@ -17,11 +17,11 @@ public class TogethermapResponse {
     private String emoji;
     private String question;
 
-    public TogethermapResponse (Togethermap togethermap, List<PlaceResponse> placeList) {
+    public TogethermapResponse (Togethermap togethermap, List<PlaceResponse> placeList, boolean isList) {
         this.togethermapId = togethermap.getId();
         this.title = togethermap.getTitle();
         this.campusId = togethermap.getCampus().getId();
-        this.placeList = placeList;
+        if(!isList) this.placeList = placeList;
         if(placeList==null || placeList.size()==0) {
             this.userCnt=0;
         } else {
