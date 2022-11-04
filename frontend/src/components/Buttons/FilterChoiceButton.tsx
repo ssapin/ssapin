@@ -5,6 +5,9 @@ const TiedBoxes = styled.div`
   display: block;
   height: fit-content;
   padding-left: 10px;
+  ${(props) => props.theme.mq.tablet} {
+    padding-left: 0;
+  }
 `;
 
 const TagName = styled.span<{ type?: string }>`
@@ -25,6 +28,7 @@ const TagName = styled.span<{ type?: string }>`
       ? props.theme.fontSizes.h5
       : props.theme.fontSizes.h3};
 `;
+
 const OpenTag = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -52,11 +56,22 @@ const OpenTag = styled.div`
       background-color: ${(props) => props.theme.colors.lightBlue};
       color: ${(props) => props.theme.colors.gray0};
     }
+
+    ${(props) => props.theme.mq.tablet} {
+      justify-content: center;
+      margin-left: 0;
+    }
   }
   .checkbox input:checked + .checkbox_text {
     color: ${(props) => props.theme.colors.gray0};
     background-color: ${(props) => props.theme.colors.lightBlue};
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  }
+
+  ${(props) => props.theme.mq.tablet} {
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 15px;
   }
 `;
 
