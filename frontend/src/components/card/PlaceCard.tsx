@@ -1,22 +1,17 @@
 import styled from "@emotion/styled";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { IPlace } from "../../utils/types/place.interface";
 
 type PlaceCardProps = {
-  place: string;
-  address: string;
-  review: string;
+  prop: IPlace;
   isAdmin: boolean;
-  // eslint-disable-next-line react/require-default-props
-  func: () => void;
-  // eslint-disable-next-line react/require-default-props
-  deleteFunc?: () => void;
 };
 
-const Container = styled.div<{ isAdmin: boolean }>`
+const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: 100%;
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -61,22 +56,29 @@ const Container = styled.div<{ isAdmin: boolean }>`
   }
 `;
 
-function PlaceCard({
-  place,
-  address,
-  review,
-  isAdmin,
-  func,
-  deleteFunc,
-}: PlaceCardProps) {
+function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
+  const onClickPlace = () => {
+    alert(`${prop.placeId}번 장소~`);
+  };
+
+  const onDeletePlace = () => {
+    alert(`${prop.placeId}번 장소~ 지우고 싶대`);
+  };
+
   return (
-    <Container onClick={func} isAdmin={isAdmin}>
-      <p className="place">{place}</p>
-      <p className="address">{address}</p>
-      <p className="review">{review}</p>
+    <Container onClick={onClickPlace}>
+      <p className="place">
+        {prop !== undefined ? prop.title : "장소가 없습니다"}
+      </p>
+      <p className="address">
+        {prop !== undefined ? prop.address : "장소가 없습니다"}
+      </p>
+      <p className="review">
+        {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
+      </p>
       {isAdmin && (
         <div className="delete">
-          <TrashIcon className="trashIcon" onClick={deleteFunc} />
+          <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>
       )}
     </Container>

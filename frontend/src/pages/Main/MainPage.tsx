@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
@@ -18,12 +18,7 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import LoginModal from "../Login/LoginModal";
-import useUserActions, {
-  useGetUserInformation,
-} from "../../utils/hooks/useUserActions";
-import { authState, campusState } from "../../store/atom";
+import { campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { togethermapApis } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
@@ -117,9 +112,6 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const useUserAction = useUserActions();
-  const auth = useRecoilValue(authState);
-  const useGetInformation = useGetUserInformation();
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
@@ -237,10 +229,6 @@ function MainPage() {
     userRankingData,
     placeRankingData,
   ]);
-
-  const handleLogout = () => {
-    useUserAction.logout();
-  };
 
   return (
     <>

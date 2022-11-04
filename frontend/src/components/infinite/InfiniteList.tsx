@@ -10,36 +10,27 @@ import useObserver from "../../utils/hooks/useObserver";
 interface InifinteListProps {
   url: string;
   queryKey: string[];
-  CardComponent: ElementType;
-  SkeletonCardComponent: ElementType;
   zeroDataText: string;
-  func?: object;
-  count: number;
   isEditMode?: boolean;
   isCreated?: boolean;
+  CardComponent: ElementType;
   change?: (bool: boolean) => void;
 }
 
-type GridProps = {
-  gridColumnCount: number;
-};
-
-const GridContainer = styled.div<GridProps>`
+const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.gridColumnCount && `repeat(${props.gridColumnCount}, 1fr)`};
-  grid-gap: 1rem;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-gap: 2rem;
   margin-bottom: 1rem;
+  justify-items: center;
 `;
 
 function InfiniteList({
   url,
   queryKey,
-  CardComponent,
-  SkeletonCardComponent,
   zeroDataText,
-  func,
-  count,
+  CardComponent,
   isEditMode,
   isCreated,
   change,
@@ -97,30 +88,60 @@ function InfiniteList({
     if (change) change(false);
   }, [isCreated]);
 
+  const noMap = {
+    mapId: 0,
+    title: "map이 없습니다.",
+    userId: 0,
+    nickname: "undefined",
+    campusId: 0,
+    access: 0,
+    userEmoji: "undefined",
+    mapEmoji: "undefined",
+    placeCnt: 0,
+    userCnt: 0,
+    bookMark: 0,
+    placeList: [
+      {
+        placeId: 0,
+        itemId: 0,
+        title: "undefined",
+        lat: 0,
+        lng: 0,
+        address: "undefined",
+        reviewContent: "undefined",
+        userId: 0,
+        userEmoji: "undefined",
+        nickname: "undefined",
+      },
+    ],
+    hashtagList: [{ hastagId: 0 }],
+  };
+
   return (
     <div>
       {isSuccess && targetList?.length < 1 && <div>{zeroDataText}</div>}
       {isError && isQueryError(error) && <p>{error?.message}</p>}
       {targetList && (
-        <GridContainer gridColumnCount={count}>
+        <GridContainer>
           {targetList?.map((target, idx) => (
             <CardComponent
               {...target}
               index={idx}
               // eslint-disable-next-line react/no-array-index-key
               key={idx}
-              func={func}
               isEditMode={isEditMode}
               refetch={refetchData}
+              prop={target}
+              isAdmin={false}
             />
           ))}
         </GridContainer>
       )}
       <div ref={bottom} />
       {isFetchingNextPage && (
-        <GridContainer gridColumnCount={count}>
-          {Array.from({ length: count }, (_, idx) => idx).map((i) => (
-            <SkeletonCardComponent key={i} />
+        <GridContainer>
+          {Array.from({ length: 1 }, (_, idx) => idx).map((i) => (
+            <CardComponent key={i} prop={noMap} isAdmin={false} />
           ))}
         </GridContainer>
       )}

@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 
 const StyledShowMore = styled.button`
-  width: 100%;
+  width: 95%;
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;

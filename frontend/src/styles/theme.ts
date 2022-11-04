@@ -65,7 +65,6 @@ const fontFamily = {
 };
 
 const mq = {
-  pc: `@media only screen and (max-width: ${pixelToRem(1700)})`,
   tablet: `@media only screen and (max-width: ${pixelToRem(950)})`,
   mobile: `@media only screen and (max-width: ${pixelToRem(550)})`,
 };
