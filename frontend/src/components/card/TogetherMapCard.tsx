@@ -21,7 +21,7 @@ const Container = styled.div`
   padding: 1rem;
 
   .icon {
-    width: 85%;
+    width: 90%;
     height: 15%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
@@ -38,7 +38,6 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
-    z-index: 999;
   }
 
   .participate {

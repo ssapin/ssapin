@@ -14,8 +14,8 @@ const Container = styled.div`
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
-    padding-left: 7vw;
-    padding-right: 7vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 `;
 

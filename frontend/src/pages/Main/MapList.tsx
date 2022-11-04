@@ -14,8 +14,8 @@ const Container = styled.div`
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
-    padding-left: 7vw;
-    padding-right: 7vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 `;
 
@@ -26,7 +26,7 @@ const RankingContainer = styled.div`
   margin-top: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
   grid-gap: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   justify-items: center;
 `;
 
@@ -100,8 +100,8 @@ function MapList({ maps }: MapProps) {
               isAdmin={false}
             />
           ))}
-        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
+      {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       <ShowMoreButton />
     </Container>
   );

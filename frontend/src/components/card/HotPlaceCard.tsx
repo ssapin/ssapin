@@ -50,7 +50,8 @@ const Container = styled.div`
 
 function HotPlaceCard({ place, message }: HotPlaceProps) {
   const onClickPlace = () => {
-    alert(`${place.placeId}번 장소~`);
+    if (place !== undefined) alert(`${place.placeId}번 장소~`);
+    else alert("힝~ 장소없어~");
   };
 
   return (

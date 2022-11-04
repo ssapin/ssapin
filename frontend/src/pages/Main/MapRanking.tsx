@@ -13,8 +13,8 @@ const Container = styled.div`
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
-    padding-left: 7vw;
-    padding-right: 7vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 `;
 
@@ -115,8 +115,8 @@ function MapRanking({ maps }: MapProps) {
               isAdmin={false}
             />
           ))}
-        {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
       </RankingContainer>
+      {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
     </Container>
   );
 }
