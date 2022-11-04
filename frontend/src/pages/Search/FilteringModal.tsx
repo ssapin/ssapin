@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
 import ModalContainer from "../../components/containers/ModalContainer";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
@@ -6,6 +7,10 @@ import CancelButton from "../../components/Buttons/CancelButton";
 import { IMap } from "../../utils/types/map.interface";
 import { mapApis } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
+import { campusState } from "../../store/atom";
+import { useRecoilState } from "recoil";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
 
 interface FilterModalProps {
   onClose: () => void;
@@ -15,7 +20,6 @@ const Container = styled.div`
   max-width: 600px;
   height: 100%;
 
-  text-align: center;
   font-family: ${(props) => props.theme.fontFamily.h3};
   font-size: ${(props) => props.theme.fontSizes.h4};
   line-height: 29px;
@@ -23,27 +27,39 @@ const Container = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  margin-top: 4rem;
-  display: flex;
+  text-align: center;
+
+  margin-top: 1rem;
   flex-direction: row;
-  justify-content: center;
   button {
-    margin-right: 2rem;
+    margin: 1rem;
   }
 `;
 
 function FilterModal({ onClose }: FilterModalProps) {
-  con
-  const filterCheck = () => {
-    console.log(props.hashTag);
+  const [hashTag, setHashTag] = useState([]);
+  const [campusId] = useRecoilState(campusState);
+  const onChangeTag = (checked: any, item: any) => {
+    if (checked) {
+      setHashTag([...hashTag, item]);
+    } else if (!checked) {
+      setHashTag(hashTag.filter((el: any) => el !== item));
+    }
   };
+
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
-        <FilterChoiceButton />
+        <FilterChoiceButton func={onChangeTag} hashTag={hashTag} />
         <ButtonContainer>
-          <ConfirmButton type="submit" text="검색" func={filterCheck} />
-          <CancelButton type="button" text="취소" func={onClose} />
+          <ConfirmButton
+            used="modal"
+            type="submit"
+            text="검색"
+            func={mapApis.getMapList(campusId, 0, hashTag, "")}
+          />
+          <CancelButton used="modal" type="button" text="취소" func={onClose} />
         </ButtonContainer>
       </Container>
     </ModalContainer>
