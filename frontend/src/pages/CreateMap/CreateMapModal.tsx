@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
@@ -59,6 +60,16 @@ const Flex = styled.div`
 `;
 
 function CreateMapModal({ onClose }: ModalProps) {
+  const [hashTag, setHashTag] = useState([]);
+
+  const onChangeTag = (checked: any, item: any) => {
+    if (checked) {
+      setHashTag([...hashTag, item]);
+    } else if (!checked) {
+      setHashTag(hashTag.filter((el: any) => el !== item));
+    }
+  };
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
@@ -88,7 +99,11 @@ function CreateMapModal({ onClose }: ModalProps) {
               <Input width="" height="41px" placeholder="" />
             </Content>
           </DivBox>
-          <FilterChoiceButton type="create" />
+          <FilterChoiceButton
+            type="create"
+            func={onChangeTag}
+            hashTag={hashTag}
+          />
           <Flex>
             <ConfirmButton type="submit" text="만들기" />
             <CancelButton type="button" text="취소" func={onClose} />
