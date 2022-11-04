@@ -25,7 +25,7 @@ public class PlaceController {
 
     @PostMapping("/map")
     @ApiOperation(value = "추천지도에 장소 추가 ", notes = "미리 생성된 추천지도에 장소 추가")
-    public ResponseEntity<?> addPlaceInMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
+    public ResponseEntity<?> addPlaceInMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
 
 
         try {  //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -48,7 +48,7 @@ public class PlaceController {
 
     @PostMapping("/togethermap")
     @ApiOperation(value = "모여지도에 장소 추가/업데이트", notes = "미리 생성된 추천지도에 장소 추가")
-    public ResponseEntity<?> addPlaceInTogetherMap(@RequestHeader("ACCESS_TOKEN") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
+    public ResponseEntity<?> addPlaceInTogetherMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
 
         try {  //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
@@ -71,7 +71,7 @@ public class PlaceController {
 
     @GetMapping("/ranking/{campusId}")
     @ApiOperation(value = "장소 랭킹 리스트", notes = "미리 생성된 추천지도에 장소 추가")
-    public ResponseEntity<?> getListPlaceRanking(@RequestHeader("ACCESS_TOKEN") final String accessToken,@PathVariable long campusId) {
+    public ResponseEntity<?> getListPlaceRanking(@RequestHeader("accessToken") final String accessToken,@PathVariable long campusId) {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
@@ -96,7 +96,7 @@ public class PlaceController {
 
     @DeleteMapping("/map")
     @ApiOperation(value = "추천 지도에 장소 삭제", notes = "미리 생성된 추천지도에 장소 추가")
-    public ResponseEntity<?> removePlaceInMap(@RequestHeader("ACCESS_TOKEN") final String accessToken,@RequestBody PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest) {
+    public ResponseEntity<?> removePlaceInMap(@RequestHeader("accessToken") final String accessToken,@RequestBody PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -121,7 +121,7 @@ public class PlaceController {
 
     @DeleteMapping("/together")
     @ApiOperation(value = "모아지도에 장소 삭제", notes = "미리 생성된 모아지도에 장소 추가")
-    public ResponseEntity<?> removePlaceInTogetherMap(@RequestHeader("ACCESS_TOKEN") final String accessToken,@RequestBody PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
+    public ResponseEntity<?> removePlaceInTogetherMap(@RequestHeader("accessToken") final String accessToken,@RequestBody PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -146,7 +146,7 @@ public class PlaceController {
 
     @GetMapping("/{itemId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
-    public ResponseEntity<?> getPlaceInfo(@RequestHeader("ACCESS_TOKEN") final String accessToken,@PathVariable long itemId) {
+    public ResponseEntity<?> getPlaceInfo(@RequestHeader("accessToken") final String accessToken,@PathVariable long itemId) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -171,7 +171,7 @@ public class PlaceController {
 
     @GetMapping("/map/{itemId}")
     @ApiOperation(value = "해당 장소가 추가된 추천지도 리스트 조회", notes = "해당 장소가 추가된 추천지도 리스트 조회")
-    public ResponseEntity<?> getMapListInPlace(@RequestHeader("ACCESS_TOKEN") final String accessToken,@PathVariable long itemId) {
+    public ResponseEntity<?> getMapListInPlace(@RequestHeader("accessToken") final String accessToken,@PathVariable long itemId) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -196,7 +196,7 @@ public class PlaceController {
 
     @PostMapping("/bookmark")
     @ApiOperation(value = "장소 북마크 등록", notes = "장소 북마크 등록")
-    public ResponseEntity<?> registerBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken,@RequestBody BookmarkRequest bookmarkRequest) {
+    public ResponseEntity<?> registerBookmark(@RequestHeader("accessToken") final String accessToken,@RequestBody BookmarkRequest bookmarkRequest) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
@@ -221,7 +221,7 @@ public class PlaceController {
 
     @DeleteMapping("/bookmark")
     @ApiOperation(value = "장소 북마크 해제", notes = "장소 북마크 해제")
-    public ResponseEntity<?> removeBookmark(@RequestHeader("ACCESS_TOKEN") final String accessToken,@RequestBody BookmarkRequest bookmarkRequest) {
+    public ResponseEntity<?> removeBookmark(@RequestHeader("accessToken") final String accessToken,@RequestBody BookmarkRequest bookmarkRequest) {
 
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
