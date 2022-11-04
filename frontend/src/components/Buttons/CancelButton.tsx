@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
-const StyledCancel = styled.button<{ used: string }>`
+const StyledCancel = styled.button<{ used: string | undefined }>`
   height: ${(props) => (props.used === "modal" ? `35px` : `45px`)};
   flex-grow: 0;
   padding: 0 ${pixelToRem(30)};
