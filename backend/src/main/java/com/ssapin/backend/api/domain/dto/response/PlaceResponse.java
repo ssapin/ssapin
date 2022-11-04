@@ -30,4 +30,6 @@ public class PlaceResponse {
         this.userEmoji = user.getEmoji();
         this.nickname = user.getNickname();
     }
+
+
 }
