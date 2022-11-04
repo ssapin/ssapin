@@ -1,6 +1,6 @@
 export const mapApis = {
-  map: "/map",
-  bookmark: "/map/bookmark",
+  map: "/map/login",
+  bookmark: "/map/login/bookmark",
   getMap: (mapId: number) => `/map/${mapId}/detail`,
   getMapList: (
     campusId: number,

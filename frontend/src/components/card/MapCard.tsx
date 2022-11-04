@@ -67,8 +67,6 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
     alert(`${prop.mapId}번 장소~ 지우고 싶대`);
   };
 
-  console.log(prop);
-
   return (
     <Container onClick={onClickMap}>
       <p className="icon">{prop.mapEmoji}</p>

@@ -3,9 +3,10 @@ import { pixelToRem } from "../../utils/functions/util";
 
 const TiedBoxes = styled.div`
   display: block;
-  height: 523.2px;
+  height: fit-content;
   padding-left: 10px;
 `;
+
 const TagName = styled.span<{ type?: string }>`
   width: 62px;
   height: 29px;
