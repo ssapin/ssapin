@@ -25,7 +25,7 @@ public class MapResponse {
     private long userCnt;
     private boolean bookMark;
 
-    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList, boolean bookMark) {
+    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList, boolean bookMark, boolean isList) {
         this.mapId = map.getId();
         this.title = map.getTitle();
         this.userId = map.getUser().getId();
@@ -34,7 +34,7 @@ public class MapResponse {
         this.access = map.isAccess();
         this.userEmoji = map.getUser().getEmoji();
         this.mapEmoji = map.getEmoji();
-        this.placeList = placeList;
+        if(!isList) this.placeList = placeList;
         this.placeCnt = placeList==null? 0 : placeList.size();
         if(placeList==null || placeList.size()==0) {
             this.userCnt=0;

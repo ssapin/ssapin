@@ -7,5 +7,5 @@ import java.util.List;
 public interface TogethermapService {
     List<TogethermapResponse> findAll(long campusId);
 
-    TogethermapResponse findOne(long togethermapId);
+    TogethermapResponse findOne(long togethermapId, boolean isList);
 }

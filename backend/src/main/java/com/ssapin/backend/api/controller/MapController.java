@@ -94,7 +94,7 @@ public class MapController {
                 long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
                 user = userService.getUserById(userId);
             }
-            return new ResponseEntity<MapResponse>(mapService.detailMap(mapId, user), HttpStatus.OK);
+            return new ResponseEntity<MapResponse>(mapService.detailMap(mapId, user, false), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
