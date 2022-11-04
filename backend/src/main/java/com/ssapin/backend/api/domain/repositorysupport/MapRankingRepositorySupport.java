@@ -23,11 +23,11 @@ public class MapRankingRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public List<Map> findMapsByCampus(Campus campus) {
-        return queryFactory.
-                select(QMapPlace.mapPlace.map)
+        return queryFactory.select(QMap.map)
                 .from(QMapPlace.mapPlace)
-                .where(QMapPlace.mapPlace.user.campus.eq(campus))
-                .groupBy(QMapPlace.mapPlace.map.id)
+                .rightJoin(QMapPlace.mapPlace.map,QMap.map)
+                .where(QMap.map.campus.eq(campus))
+                .groupBy(QMap.map)
                 .orderBy(QMapPlace.mapPlace.place.count().desc())
                 .limit(6)
                 .fetch();
