@@ -30,7 +30,7 @@ public class PlaceController {
 
         try {  //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ public class PlaceController {
 
         try {  //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -75,7 +75,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -101,7 +101,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -126,7 +126,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -151,7 +151,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -176,7 +176,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -201,7 +201,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
@@ -226,7 +226,7 @@ public class PlaceController {
         try {
             //   long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             //            User user = userService.findOneUser(userId);
-            User user = new User("test", "test", new Campus("test"), "test");
+            User user = new User("test", 1L, new Campus("test"), "test");
 
 
             if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
