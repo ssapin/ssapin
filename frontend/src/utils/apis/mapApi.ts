@@ -1,8 +1,8 @@
-export const mapApis = {
-  map: "/map",
-  bookmark: "/map/bookmark",
-  getMap: (mapId: number) => `/map/${mapId}/detail`,
-  getMapList: (
+export const MAP_APIS = {
+  MAP: "/map",
+  BOOKMARK: "/map/bookmark",
+  GET_MAP: (mapId: number) => `/map/${mapId}/detail`,
+  GET_MAP_LIST: (
     campusId: number,
     page?: number,
     hashtagList?: number[],
@@ -29,5 +29,5 @@ export const mapApis = {
     api += str;
     return api;
   },
-  getMapRanking: (campusId: number) => `/map/${campusId}/ranking`,
+  GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
 };

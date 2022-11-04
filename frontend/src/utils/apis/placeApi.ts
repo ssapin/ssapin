@@ -1,3 +1,3 @@
-export const placeApis = {
-  getPlaceRanking: (campusId: number) => `/place/ranking${campusId}`,
+export const PLACE_APIS = {
+  GET_PLACE_RANKING: (campusId: number) => `/place/ranking${campusId}`,
 };

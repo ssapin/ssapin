@@ -13,6 +13,10 @@ const StyledPlaceDetail = styled.div`
   > div {
     position: relative;
   }
+  svg {
+    width: 39px;
+    height: 52px;
+  }
 `;
 
 const BubbleButton = styled.button`
@@ -52,18 +56,17 @@ const UserEmoji = styled.div<{ size?: number }>`
 `;
 
 export default function UpperIconPlaceDetailButton({
-  type,
   text,
   func,
   emoji,
 }: IButtonProps) {
   return (
     <StyledPlaceDetail>
-      <UserEmoji size={45}>
-        <a href="https://www.naver.com/">{emoji}</a>
-      </UserEmoji>
+      <UserEmoji size={45}>{emoji}</UserEmoji>
 
-      <BubbleButton onClick={func}>{text}</BubbleButton>
+      <BubbleButton type="button" onClick={func}>
+        {text}
+      </BubbleButton>
       <SpeechPolygon />
       <PinIcon />
     </StyledPlaceDetail>

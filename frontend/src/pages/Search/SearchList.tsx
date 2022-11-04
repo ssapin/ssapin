@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 // import MapCard from "../../components/card/MapCard";
 import { MemoInfiniteList } from "../../components/infinite/MapInfiniteList";
 import { campusState } from "../../store/atom";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 // import { IMap } from "../../utils/types/map.interface";
 import Skeleton from "./Skeleton";
 
@@ -56,7 +56,7 @@ function SearchList() {
         <span>🗺 추천지도 🗺</span>
       </Title>
       <MemoInfiniteList
-        url={mapApis.getMapList(campusId)}
+        url={MAP_APIS.GET_MAP_LIST(campusId)}
         queryKey={["MapList"]}
         SkeletonCardComponent={Skeleton}
         zeroDataText="없어시붕"
