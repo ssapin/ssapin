@@ -9,6 +9,8 @@ import com.ssapin.backend.api.domain.entity.Campus;
 import com.ssapin.backend.api.domain.entity.PlaceBookmark;
 import com.ssapin.backend.api.domain.entity.QCampus;
 import com.ssapin.backend.api.domain.entity.QPlaceBookmark;
+import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
+import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
