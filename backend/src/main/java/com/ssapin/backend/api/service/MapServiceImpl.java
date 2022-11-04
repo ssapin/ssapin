@@ -35,8 +35,8 @@ public class MapServiceImpl implements MapService {
     private final MapRankingRepositorySupport mapRankingRepositorySupport;
     private final MapBookmarkRepository mapBookmarkRepository;
     private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
-
     private final UserRankingRepositorySupport userRankingRepositorySupport;
+    private final ReviewRepositorySupport reviewRepositorySupport;
 
     @Override
     @Transactional
@@ -83,16 +83,18 @@ public class MapServiceImpl implements MapService {
 
         //변경된 sticker
         List<HashtagRequest> newHashtagList = mapEdit.getHashtagList();
+        Collections.sort(newHashtagList);
         List<Hashtag> updateHashTagList = new ArrayList<>();
+        List<Hashtag> newHashTagList = new ArrayList<>();
         for (HashtagRequest hashtagId : newHashtagList) {
             Hashtag hashtag = hashtagRepository.findById(hashtagId.getHashtagId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
             updateHashTagList.add(hashtag);
+            newHashTagList.add(hashtag);
         }
 
-        Collections.sort(newHashtagList);
-        if (!newHashtagList.equals(originHashtagList)) {
+        if (!updateHashTagList.equals(originHashtagList)) {
             updateHashTagList.removeAll(originHashtagList);
-            deleteHashtagList.removeAll(newHashtagList);
+            deleteHashtagList.removeAll(newHashTagList);
 
             if (deleteHashtagList.size() != 0) {
                 for (Hashtag hashtag : deleteHashtagList) {
@@ -135,14 +137,16 @@ public class MapServiceImpl implements MapService {
         } else {
             List<PlaceResponse> placeList = new ArrayList<>();
             for (MapPlace mapPlace : mapPlaceList) {
-                placeList.add(new PlaceResponse(mapPlace.getPlace()));
+                List<Review> review = reviewRepositorySupport.findAllByPlace(mapPlace.getPlace());
+                if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null, mapPlace.getUser()));
+                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(review.size()-1).getContent(), mapPlace.getUser()));
             }
             return new MapResponse(map, placeList, hashtagList, bookMark);
         }
     }
 
     @Override
-    public Page<MapResponse> getMapList(long campusId, List<HashtagRequest> hashtagList, String keyword, User user, Pageable pageable) {
+    public Page<MapResponse> getMapList(long campusId, List<Long> hashtagList, String keyword, User user, Pageable pageable) {
         List<MapResponse> mapResponseList = new ArrayList<>();
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<Map> mapList = mapRepositorySupport.findAllByFiltering(campus, hashtagList, keyword);
@@ -190,5 +194,12 @@ public class MapServiceImpl implements MapService {
     public List<UserRankingResponse> get5UserByCampus(long campusId) {
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         return userRankingRepositorySupport.findUsersByCampus(campus);
+    }
+
+    @Override
+    @Transactional
+    public List<Map> get6MapsByCampus(long campusId) {
+        Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        return mapRankingRepositorySupport.findMapsByCampus(campus);
     }
 }

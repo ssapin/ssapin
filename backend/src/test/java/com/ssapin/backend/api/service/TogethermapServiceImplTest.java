@@ -61,7 +61,7 @@ class TogethermapServiceImplTest {
                 .itemId(1)
                 .build();
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)
@@ -105,7 +105,7 @@ class TogethermapServiceImplTest {
                 .itemId(1)
                 .build();
         User testuser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testcampus)

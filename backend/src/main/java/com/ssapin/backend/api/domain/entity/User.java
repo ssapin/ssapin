@@ -20,7 +20,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String token;
+    private long kakaoId;
 
     @ManyToOne
     @JoinColumn(name="campus_id")
@@ -38,9 +38,9 @@ public class User extends BaseEntity {
     }
 
     @Builder
-    public User(String nickname, String token, Campus campus, String emoji){
+    public User(String nickname, long kakaoId, Campus campus, String emoji){
         this.nickname = nickname;
-        this.token = token;
+        this.kakaoId = kakaoId;
         this.campus = campus;
         this.emoji = emoji;
     }
