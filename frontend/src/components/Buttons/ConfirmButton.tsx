@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { IButtonProps } from "../../utils/interfaces/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
-const StyledConfirm = styled.button`
-  height: 4.761904761904762vh;
+const StyledConfirm = styled.button<{ used: string | undefined }>`
+  height: ${(props) => (props.used === "modal" ? `35px` : `45px`)};
   flex-grow: 0;
   padding: 0 ${pixelToRem(30)};
   border-radius: ${pixelToRem(10)};
@@ -21,9 +21,10 @@ export default function ConfirmButton({
   type,
   func,
   disabled,
+  used,
 }: IButtonProps) {
   return (
-    <StyledConfirm type={type} onClick={func} disabled={disabled}>
+    <StyledConfirm used={used} type={type} onClick={func} disabled={disabled}>
       {text}
     </StyledConfirm>
   );
