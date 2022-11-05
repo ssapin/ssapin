@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { KakaoPlaceObj } from "../../utils/types/common";
 
 const MapContainer = styled.div`
@@ -23,11 +17,19 @@ function NewPlace() {
     map: null,
     ps: null,
     infowindow: null,
+    bounds: null,
   });
   const [placeList, setPlaceList] = useState<KakaoPlaceObj[]>([]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
+  };
+
+  const displayInfoWindow = (marker: any, title: string) => {
+    mapObj.infowindow?.setContent(
+      `<div style="padding:5px;font-size:12px;">${title}</div>`,
+    );
+    mapObj.infowindow?.open(mapObj.map, marker);
   };
 
   const displayMarker = (place: KakaoPlaceObj) => {
@@ -36,25 +38,28 @@ function NewPlace() {
       position: new kakao.maps.LatLng(place.y, place.x),
     });
 
-    kakao.maps.event.addListener(marker, "click", () => {
-      mapObj.infowindow?.setContent(
-        `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`,
-      );
-      mapObj.infowindow?.open(mapObj.map, marker);
+    kakao.maps.event.addListener(marker, "mouseover", () => {
+      displayInfoWindow(marker, place.place_name);
+    });
+    kakao.maps.event.addListener(marker, "mouseout", () => {
+      mapObj.infowindow.close();
     });
   };
 
-  const placesSearchCB = (data: KakaoPlaceObj[], status: string) => {
-    console.log(data, status);
+  const placesSearchCB = (
+    data: KakaoPlaceObj[],
+    status: string,
+    pagination: number,
+  ) => {
+    console.log(data, status, pagination);
     if (status === kakao.maps.services.Status.OK) {
-      const bounds = new kakao.maps.LatLngBounds();
-
-      for (let i = 0; i < data.length; i + 1) {
+      console.log(status);
+      for (let i = 0; i < data.length; i++) {
         displayMarker(data[i]);
-        bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        mapObj.bounds?.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
       }
-
-      mapObj.map?.setBounds(bounds);
+      console.log(mapObj.bounds);
+      mapObj.map?.setBounds(mapObj.bounds);
     }
   };
 
@@ -72,10 +77,11 @@ function NewPlace() {
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
-
     const ps = new kakao.maps.services.Places();
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-    setMapObj({ map, ps, infowindow });
+    const bounds = new kakao.maps.LatLngBounds();
+
+    setMapObj({ map, ps, infowindow, bounds });
   }, []);
 
   return (
@@ -92,11 +98,11 @@ function NewPlace() {
           />
           <button type="submit">검색</button>
         </form>
-        {/* <ul>
+        <ul style={{ position: "fixed", top: "100px", zIndex: "999" }}>
           {placeList?.map((place) => (
             <li>{place.place_name}</li>
           ))}
-        </ul> */}
+        </ul>
       </div>
       <MapContainer ref={mapRefs} />
     </>

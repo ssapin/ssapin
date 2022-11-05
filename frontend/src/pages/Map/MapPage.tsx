@@ -1,7 +1,5 @@
-import React from "react";
-
 function MapPage() {
-  return <div>MapPage</div>;
+  return <div>Map</div>;
 }
 
 export default MapPage;

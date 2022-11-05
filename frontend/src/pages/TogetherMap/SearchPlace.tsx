@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NewPlace from "./NewPlace";
+import NewPlace from "../NewPlace/NewPlacePage";
 
 function SearchPlace() {
   const [inputText, setInputText] = useState("");
