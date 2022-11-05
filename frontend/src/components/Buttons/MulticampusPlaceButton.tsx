@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import { ReactComponent as PinIcon } from "../../assets/svgs/mappin.svg";
+import { ReactComponent as BuildingIcon } from "../../assets/svgs/building.svg";
+import { ReactComponent as SsafyIcon } from "../../assets/svgs/ssafylogo.svg";
 import { IButtonProps } from "../../utils/types/buttons.interface";
 
-const StyledPlaceDetail = styled.div`
+const StyledDetailPlace = styled.div`
   width: ${pixelToRem(240)};
   display: flex;
   justify-content: center;
@@ -15,6 +16,8 @@ const StyledPlaceDetail = styled.div`
 `;
 
 const BubbleButton = styled.button`
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 45px;
   border-radius: ${pixelToRem(15)};
@@ -38,48 +41,25 @@ const SpeechPolygon = styled.div`
   margin-bottom: 8px;
 `;
 
-const EmojiContainer = styled.div`
+const EmojiLocation = styled.div<{ size?: number }>`
   position: absolute;
-  width: 40%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: -70px;
-  margin-left: 15.5px;
-`;
-
-const UserEmoji = styled.div<{ size?: number }>`
+  z-index: 1;
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
-  background-color: ${(props) => props.theme.colors.lightLightBlue};
-  font-family: ${(props) => props.theme.fontFamily.h3bold};
-  border-radius: 50%;
   text-align: center;
-  margin: 0.5rem;
-  padding-top: ${(props) => `${props.size * 0.05}px`};
+  padding-top: ${(props) => `${props.size * 0.35}px`};
   font-size: ${(props) => `${props.size * 0.7}px`};
 `;
 
-export default function PlaceDetailButton({
-  type,
-  text,
-  func,
-  emoji,
-}: IButtonProps) {
+export default function MulticampusPlaceButton({ text, func }: IButtonProps) {
   return (
-    <StyledPlaceDetail>
+    <StyledDetailPlace>
+      <EmojiLocation size={45}>
+        <SsafyIcon />
+      </EmojiLocation>
       <BubbleButton onClick={func}>{text}</BubbleButton>
       <SpeechPolygon />
-      <div>
-        <PinIcon />
-        <EmojiContainer>
-          <UserEmoji size={35}>
-            <a href="https://www.naver.com/">{emoji}</a>
-          </UserEmoji>
-        </EmojiContainer>
-      </div>
-    </StyledPlaceDetail>
+      <BuildingIcon fill="red" />
+    </StyledDetailPlace>
   );
 }
