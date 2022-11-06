@@ -39,6 +39,9 @@ const Title = styled.div`
 
 function SearchList() {
   const [campusId] = useRecoilState(campusState);
+  // const page: number;
+  // const hashTagList: number[];
+  // const keyword: string;
   return (
     <Container>
       <Title>

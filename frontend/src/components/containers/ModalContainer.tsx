@@ -22,7 +22,7 @@ const ModalBackground = styled.div`
 
 const ModalWrapper = styled.div`
   width: fit-content;
-  height: fit-content;
+  //height: fit-content;
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 20px;
   padding: ${pixelToRem(60)};
