@@ -39,16 +39,16 @@ const Title = styled.div`
 
 function SearchList() {
   const [campusId] = useRecoilState(campusState);
-  const page: number;
-  const hashTagList: number[];
-  const keyword: string;
+  // const page: number;
+  // const hashTagList: number[];
+  // const keyword: string;
   return (
     <Container>
       <Title>
         <span>🗺 추천지도 🗺</span>
       </Title>
       <MemoInfiniteList
-        url={mapApis.getMapList(campusId, page, hashTagList, keyword)}
+        url={mapApis.getMapList(campusId)}
         queryKey={["MapList"]}
         zeroDataText="없어시붕"
         CardComponent={MapCard}
