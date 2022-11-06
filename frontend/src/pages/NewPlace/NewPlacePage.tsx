@@ -31,11 +31,17 @@ const SearchContainer = styled.div`
   right: 2rem;
   z-index: 999;
   width: 378px;
-  height: 50vh;
+  max-height: 80vh;
+  ${(props) => props.theme.mq.tablet} {
+    max-height: 50vh;
+  }
   ${(props) => props.theme.mq.mobile} {
-    top: 50vh;
     right: 0;
-    width: 100%;
+    left: 0;
+    top: 50vh;
+    width: 90%;
+    height: 50vh;
+    margin: 0 auto;
   }
 `;
 
@@ -70,12 +76,12 @@ const SearchButton = styled.button`
 
 const SearchInformationContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
-  height: calc(50vh - 83px);
+  max-height: inherit;
   border-radius: 0 0 15px 15px;
   padding: 0 0.5rem 0.5rem 0.5rem;
   overflow-y: scroll;
   ${(props) => props.theme.mq.mobile} {
-    /* max-height: 38vh; */
+    height: calc(50vh - 83px);
   }
 `;
 
@@ -99,7 +105,6 @@ function NewPlace() {
   const menuWrapRef = useRef<HTMLDivElement>();
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
-  const markers: any[] = [];
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -182,12 +187,6 @@ function NewPlace() {
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mapObj.infowindow.close();
         });
-        // itemRefs.current[i].onmouseover = () => {
-        //   displayInfoWindow(mark, title);
-        // };
-        // itemRefs.current[i].onmouseout = () => {
-        //   mapObj.infowindow.close();
-        // };
       })(marker, places[i].place_name);
     }
     setMarkerList((prev) => {
@@ -290,7 +289,6 @@ const List = styled.li`
   min-height: 65px;
 `;
 const MarkerBg = styled.span<{ index: number }>`
-  /* float: left; */
   position: absolute;
   width: 36px;
   height: 37px;
