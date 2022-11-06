@@ -12,7 +12,6 @@ import {
   forwardRef,
   LegacyRef,
 } from "react";
-import { preview } from "vite";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import { KakaoPlaceObj } from "../../utils/types/common";
 
@@ -32,6 +31,12 @@ const SearchContainer = styled.div`
   right: 2rem;
   z-index: 999;
   width: 378px;
+  height: 50vh;
+  ${(props) => props.theme.mq.mobile} {
+    top: 50vh;
+    right: 0;
+    width: 100%;
+  }
 `;
 
 const Form = styled.form`
@@ -65,11 +70,13 @@ const SearchButton = styled.button`
 
 const SearchInformationContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
-  min-height: 300px;
-  max-height: 70vh;
+  height: calc(50vh - 83px);
   border-radius: 0 0 15px 15px;
   padding: 0 0.5rem 0.5rem 0.5rem;
   overflow-y: scroll;
+  ${(props) => props.theme.mq.mobile} {
+    /* max-height: 38vh; */
+  }
 `;
 
 const PaginationButton = styled.button`
