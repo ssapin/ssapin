@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { IButtonProps } from "../../utils/interfaces/buttons.interface";
+import { IButtonProps } from "../../utils/types/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 

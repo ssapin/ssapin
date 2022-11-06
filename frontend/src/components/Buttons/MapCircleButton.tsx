@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import { IButtonProps } from "../../utils/interfaces/buttons.interface";
+import { IButtonProps } from "../../utils/types/buttons.interface";
 import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg";
 import { ReactComponent as LinkShareIcon } from "../../assets/svgs/linkshare.svg";
 import { ReactComponent as EHeartIcon } from "../../assets/svgs/emptyheart.svg";
