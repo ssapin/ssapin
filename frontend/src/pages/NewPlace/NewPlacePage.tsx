@@ -12,6 +12,7 @@ import {
   forwardRef,
   LegacyRef,
 } from "react";
+import { preview } from "vite";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import { KakaoPlaceObj } from "../../utils/types/common";
 
@@ -84,13 +85,14 @@ function NewPlace() {
     ps: null,
     infowindow: null,
   });
+  const [markerList, setMarkerList] = useState([]);
   const [placeList, setPlaceList] = useState([]);
   const [paginationList, setPaginationList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
   const menuWrapRef = useRef<HTMLDivElement>();
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
-  let markers: any[] = [];
+  const markers: any[] = [];
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -115,26 +117,29 @@ function NewPlace() {
       image: markerImage,
     });
     marker.setMap(mapObj.map);
-    markers.push(marker);
+    // markers.push(marker);
+    // setMarkerList((prev) => [...prev, marker]);
     return marker;
   };
 
   const displayInfoWindow = (marker: any, title: string) => {
     mapObj.infowindow?.setContent(
-      `<div style="padding:5px;font-size:12px;">${title}</div>`,
+      `<div style="padding:10px;font-size:16px;width:150px;">${title}</div>`,
     );
     mapObj.infowindow?.open(mapObj.map, marker);
   };
 
   const removeMarker = () => {
-    for (let i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-    }
-    markers = [];
+    // for (let i = 0; i < markers.length; i++) {
+    //   console.log(markers[i]);
+    //   markers[i].setMap(null);
+    // }
+    // markers = [];
     // for (let i = 0; i < markerList.length; i++) {
     //   console.log(markerList[i]);
     //   markerList[i].setMap(null);
     // }
+    // setMarkerList([]);
   };
 
   const displayPagination = (pagination: number) => {
@@ -153,12 +158,15 @@ function NewPlace() {
   const displayPlaces = (places: any) => {
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    removeMarker();
-    setPlaceList([]);
+    // removeMarker();
+    const newPlaceList = [];
+    const newMarkerList = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
-      setPlaceList((prev) => [...prev, { index: i, place: places[i] }]);
+      newMarkerList.push(marker);
+      newPlaceList.push({ index: i, place: places[i] });
+
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -167,14 +175,19 @@ function NewPlace() {
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mapObj.infowindow.close();
         });
-        itemRefs.current[i].onmouseover = () => {
-          displayInfoWindow(mark, title);
-        };
-        itemRefs.current[i].onmouseout = () => {
-          mapObj.infowindow.close();
-        };
+        // itemRefs.current[i].onmouseover = () => {
+        //   displayInfoWindow(mark, title);
+        // };
+        // itemRefs.current[i].onmouseout = () => {
+        //   mapObj.infowindow.close();
+        // };
       })(marker, places[i].place_name);
     }
+    setMarkerList((prev) => {
+      prev.forEach((marker) => marker.setMap(null));
+      return newMarkerList;
+    });
+    setPlaceList(newPlaceList);
     menuWrap.scrollTop = 0;
     mapObj.map.setBounds(bounds);
   };
@@ -193,7 +206,7 @@ function NewPlace() {
   const searchKeyword = (e: FormEvent) => {
     e.preventDefault();
     if (!keyword) return;
-    mapObj.ps?.keywordSearch(keyword, placesSearchCB);
+    mapObj.ps?.keywordSearch(`서울 ${keyword}`, placesSearchCB);
   };
 
   useEffect(() => {
@@ -207,6 +220,14 @@ function NewPlace() {
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     setMapObj({ map, ps, infowindow });
   }, []);
+
+  const mouseOver = (idx: number, title: string) => {
+    displayInfoWindow(markerList[idx], title);
+  };
+
+  const mouseLeave = () => {
+    mapObj.infowindow.close();
+  };
 
   return (
     <Conatiner>
@@ -228,6 +249,8 @@ function NewPlace() {
                 {...place}
                 key={place.index}
                 ref={(el) => (itemRefs.current[idx] = el)}
+                mouseOver={() => mouseOver(idx, place.place.place_name)}
+                mouseLeave={mouseLeave}
               />
             ))}
           </ul>
@@ -322,13 +345,10 @@ const Jibun = styled.span`
   color: ${(props) => props.theme.colors.gray400};
 `;
 
-const TelSpan = styled.span`
-  color: #009900;
-`;
 const PlaceCard = forwardRef(
-  ({ index, place }, ref: LegacyRef<HTMLUListElement>) => {
+  ({ index, place, mouseOver, mouseLeave }, ref: LegacyRef<HTMLLIElement>) => {
     return (
-      <List ref={ref}>
+      <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         <MarkerBg index={index} />
         <PlaceInfoContainer>
           <InfoInnerContainer>
