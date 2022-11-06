@@ -119,7 +119,7 @@ public class PlaceController {
         }
     }
 
-    @DeleteMapping("/together")
+    @DeleteMapping("/togethermap")
     @ApiOperation(value = "모아지도에 장소 삭제", notes = "미리 생성된 모아지도에 장소 추가")
     public ResponseEntity<?> removePlaceInTogetherMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
 
