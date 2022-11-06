@@ -52,7 +52,7 @@ const LogoContainer = styled.h1`
   margin-bottom: 0.7rem;
 
   ${(props) => props.theme.mq.tablet} {
-    height: 80%;
+    height: 70%;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 0;

@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
+import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -132,6 +133,11 @@ function MainPage() {
 
   const toggleActive = (key: number) => {
     setCampusId(key);
+  };
+
+  const navigate = useNavigate();
+  const moveToCreate = () => {
+    navigate("/mobileCreate");
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
@@ -283,7 +289,7 @@ function MainPage() {
         {innerWidth > 950 ? (
           <CreateButton type="button" text="지도 만들기" func={handleModal} />
         ) : (
-          <CreateButtonMobile type="button" />
+          <CreateButtonMobile type="button" func={moveToCreate} />
         )}
         {modalOpen && (
           <ModalPortal>

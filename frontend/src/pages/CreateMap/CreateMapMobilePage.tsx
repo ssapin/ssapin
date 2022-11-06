@@ -6,25 +6,22 @@ import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
 import SwitchButton from "../../components/Buttons/SwitchButton";
-import ModalContainer from "../../components/containers/ModalContainer";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { mapApis } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
-
-interface ModalProps {
-  onClose: () => void;
-}
+import NavBar from "../Navbar/Navbar";
 
 const Container = styled.div`
-  max-width: 814px;
-  width: 50vw;
-  max-width: 925px;
-  height: 100%;
+  width: 90%;
+  height: fit-content;
   background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 `;
 
 const Form = styled.form`
@@ -43,17 +40,20 @@ const Form = styled.form`
   }
 `;
 const DivBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  margin-bottom: 1rem;
 `;
 
 const FilterBox = styled.div`
   padding: 0.5rem;
+  text-align: center;
+
+  div {
+    margin-bottom: 1rem;
+  }
 `;
 
 const Content = styled.div`
-  width: 45%;
+  width: 100%;
   height: 80px;
   margin: auto;
 
@@ -76,7 +76,7 @@ const SubTitle = styled.h5`
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
   font-family: ${(props) => props.theme.fontFamily.h5};
-  margin-left: 10px;
+  text-align: center;
 `;
 
 const Flex = styled.div`
@@ -90,14 +90,27 @@ const Flex = styled.div`
   }
 `;
 
-function CreateMapModal({ onClose }: ModalProps) {
+const HeadContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  background-color: ${(props) => props.theme.colors.mainBlue};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+function CreateMapMobilePage() {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
-  const [defaultCampusId] = useRecoilState(campusState);
+  const [defaultCampusId, setCampusdefaultId] = useRecoilState(campusState);
   const [campusId, setCampusId] = useState(defaultCampusId);
   const [title, setTitle] = useState("");
   const [emoji, setEmoji] = useState("");
   const [access, setAccess] = useState(false);
+
+  const toggleActive = (key: number) => {
+    setCampusdefaultId(key);
+  };
 
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
@@ -124,6 +137,9 @@ function CreateMapModal({ onClose }: ModalProps) {
   };
 
   const navigate = useNavigate();
+  const moveToPrev = () => {
+    navigate(-1);
+  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -182,7 +198,10 @@ function CreateMapModal({ onClose }: ModalProps) {
   };
 
   return (
-    <ModalContainer onClose={onClose}>
+    <>
+      <HeadContainer>
+        <NavBar func={toggleActive} />
+      </HeadContainer>
       <Container>
         <Form onSubmit={handleSubmit}>
           <p className="title">지도만들기</p>
@@ -196,6 +215,8 @@ function CreateMapModal({ onClose }: ModalProps) {
                 changeFunc={onChangeTitle}
               />
             </Content>
+          </DivBox>
+          <DivBox>
             <Content>
               <SubTitle>캠퍼스</SubTitle>
               <select
@@ -227,6 +248,8 @@ function CreateMapModal({ onClose }: ModalProps) {
                 func={onChangeAccess}
               />
             </Content>
+          </DivBox>
+          <DivBox>
             <Content>
               <SubTitle>아이콘(3개까지)</SubTitle>
               <Input
@@ -246,12 +269,12 @@ function CreateMapModal({ onClose }: ModalProps) {
           </FilterBox>
           <Flex>
             <ConfirmButton type="submit" text="만들기" />
-            <CancelButton type="button" text="취소" func={onClose} />
+            <CancelButton type="button" text="취소" func={moveToPrev} />
           </Flex>
         </Form>
       </Container>
-    </ModalContainer>
+    </>
   );
 }
 
-export default CreateMapModal;
+export default CreateMapMobilePage;
