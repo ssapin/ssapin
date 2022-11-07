@@ -19,17 +19,11 @@ const TagName = styled.span<{ type?: string }>`
   letter-spacing: ${pixelToRem(-1.2)};
   text-align: left;
   color: ${(props) => props.theme.colors.gray900};
-  font-family: ${(props) =>
-    props.type === "create"
-      ? props.theme.fontFamily.h5
-      : props.theme.fontFamily.h3};
-  font-size: ${(props) =>
-    props.type === "create"
-      ? props.theme.fontSizes.h5
-      : props.theme.fontSizes.h3};
+  font-family: ${(props) => props.theme.fontFamily.h4};
+  font-size: ${(props) => props.theme.fontSizes.h4};
 `;
 
-const OpenTag = styled.div`
+const OpenTag = styled.div<{ type?: string }>`
   display: flex;
   flex-wrap: wrap;
   margin: 10px;
@@ -45,7 +39,8 @@ const OpenTag = styled.div`
   .checkbox_text {
     display: flex;
     background-color: ${(props) => props.theme.colors.lightLightBlue};
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-top: 2px;
     font-family: ${(props) => props.theme.fontFamily.paragraph};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.gray500};
@@ -60,6 +55,8 @@ const OpenTag = styled.div`
     ${(props) => props.theme.mq.tablet} {
       justify-content: center;
       margin-left: 0;
+      margin-top: 0;
+      padding: ${(props) => props.type !== "create" && `7px 10px`};
     }
   }
   .checkbox input:checked + .checkbox_text {
@@ -69,7 +66,7 @@ const OpenTag = styled.div`
   }
 
   ${(props) => props.theme.mq.tablet} {
-    justify-content: center;
+    justify-content: ${(props) => props.type === "create" && "center"};
     margin-left: 0;
     margin-top: 15px;
   }
@@ -130,7 +127,7 @@ export default function FilterChoiceButton({
   return (
     <TiedBoxes>
       <TagName type={type}># 인원</TagName>
-      <OpenTag>
+      <OpenTag type={type}>
         {countPerson.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
           <label className="checkbox" key={el.key}>
@@ -147,7 +144,7 @@ export default function FilterChoiceButton({
         ))}
       </OpenTag>
       <TagName type={type}># 특징</TagName>
-      <OpenTag>
+      <OpenTag type={type}>
         {featureData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
           <label className="checkbox" key={el.key}>
@@ -164,7 +161,7 @@ export default function FilterChoiceButton({
         ))}
       </OpenTag>
       <TagName type={type}># 목적</TagName>
-      <OpenTag>
+      <OpenTag type={type}>
         {goalData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
           <label className="checkbox" key={el.key}>
@@ -181,7 +178,7 @@ export default function FilterChoiceButton({
         ))}
       </OpenTag>
       <TagName type={type}># 시간</TagName>
-      <OpenTag>
+      <OpenTag type={type}>
         {timeData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control
           <label className="checkbox" key={el.key}>

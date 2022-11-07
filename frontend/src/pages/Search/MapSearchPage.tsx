@@ -67,8 +67,9 @@ const Side = styled.div`
 
   .nav-menu {
     background-color: white;
-    width: 27vw;
+    width: 30vw;
     height: 100vh;
+    padding: 1rem;
 
     ${(props) => props.theme.mq.tablet} {
       width: 70vw;
@@ -89,36 +90,6 @@ const Side = styled.div`
     transition: 350ms;
     display: flex;
     flex-direction: column;
-  }
-
-  .nav-content {
-    padding: 2rem;
-    height: 70%;
-  }
-  .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    button {
-      transition: transform 0.2s ease-in;
-      &:hover {
-        transform: scale(1.05);
-      }
-    }
-  }
-
-  .nav-text {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    padding: 8px 0 8px 16px;
-    list-style: none;
-    height: 60px;
-  }
-  .nav-text:hover {
-    scale: 1.05;
-    cursor: pointer;
   }
 `;
 
@@ -178,6 +149,11 @@ function SearchPage() {
     setKeyword(fakeKeyword);
   };
 
+  const onSearch = () => {
+    setKeyword(fakeKeyword);
+    setSidebar(!sidebar);
+  };
+
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
@@ -199,9 +175,10 @@ function SearchPage() {
             <div className={sidebar ? "nav-menu active" : "nav-menu"}>
               <FilterModal
                 hashTag={hashTag}
-                onClose={showSidebar}
+                onChangeKeyword={onChangeKeyword}
                 onChangeTag={onChangeTag}
                 onReset={onResetTag}
+                onSearch={onSearch}
               />
             </div>
           </Side>
