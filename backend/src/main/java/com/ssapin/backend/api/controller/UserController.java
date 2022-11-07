@@ -1,21 +1,22 @@
 package com.ssapin.backend.api.controller;
 
 import com.ssapin.backend.api.domain.dto.request.UserRequest;
-import com.ssapin.backend.api.domain.dto.response.MapResponse;
-import com.ssapin.backend.api.domain.entity.User;
+import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.service.UserService;
 import com.ssapin.backend.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Api(value = "유저 API", tags={"User"})
 @RestController
@@ -54,6 +55,55 @@ public class UserController {
     @ApiOperation(value = "장소 북마크 리스트", notes = "사용자가 북마크한 장소 목록 조회")
     public ResponseEntity<?> getBookmarkedPlace(@RequestHeader("accessToken") final String accessToken,
                                         @PageableDefault(size=6) Pageable pageable) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(
+                userService.findBookmarkedPlaceList(
+                        jwtTokenUtil.getUserIdFromToken(accessToken),
+                        pageable),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/login/map/bookmark")
+    @ApiOperation(value = "추천지도 북마크 리스트", notes = "사용자가 북마크한 추천지도 목록 조회")
+    public ResponseEntity<?> getBookmarkedMaps(@RequestHeader("accessToken") final String accessToken,
+                                                @PageableDefault(size=6) Pageable pageable) {
+        return new ResponseEntity<>(
+                userService.findBookmarkedMapList(
+                        jwtTokenUtil.getUserIdFromToken(accessToken),
+                        pageable),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/login/map/mine")
+    @ApiOperation(value = "작성한 추천지도 리스트", notes = "사용자가 생성한 추천지도 목록 조회")
+    public ResponseEntity<?> getMyMaps(@RequestHeader("accessToken") final String accessToken,
+                                               @PageableDefault(size=6) Pageable pageable) {
+        return new ResponseEntity<>(
+                userService.findMyMapList(
+                        jwtTokenUtil.getUserIdFromToken(accessToken),
+                        pageable),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/login/map/join")
+    @ApiOperation(value = "참가한 추천지도 리스트", notes = "사용자가 참가한 추천지도 목록 조회")
+    public ResponseEntity<?> getJoinMaps(@RequestHeader("accessToken") final String accessToken,
+                                       @PageableDefault(size=6) Pageable pageable) {
+        return new ResponseEntity<>(
+                userService.findJoinMapList(
+                        jwtTokenUtil.getUserIdFromToken(accessToken),
+                        pageable),
+                HttpStatus.OK);
+    }
+
+
+    @GetMapping("/ranking/{campusId}")
+    @ApiOperation(value = "유저랭킹 리스트", notes = "사용자의 캠퍼스ID를 기준으로 TOP5 유저를 조회")
+    public ResponseEntity<?> getUserRankingList(@PathVariable long campusId) {
+
+        Map<String, List<UserResponse.UserRanking>> responseMap = new HashMap<>();
+        responseMap.put("userRankingList", userService.findUsersTopFiveByMapCnt(campusId));
+        return new ResponseEntity<>(
+                responseMap
+                , HttpStatus.OK);
     }
 }

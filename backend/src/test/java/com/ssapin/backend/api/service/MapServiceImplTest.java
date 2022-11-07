@@ -134,7 +134,7 @@ class MapServiceImplTest {
                 .region("test campus2")
                 .build();
         User testuser = User.builder()
-                .kakaoId(1)
+                .kakaoId(2)
                 .nickname("test nickname2")
                 .emoji("test emoji2")
                 .campus(testcampus)

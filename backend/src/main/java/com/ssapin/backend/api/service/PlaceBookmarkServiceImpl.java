@@ -13,8 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaceBookmarkServiceImpl implements PlaceBookmarkService{
 
-    PlaceBookmarkRepository placeBookmarkRepository;
-    PlaceBookmarkRepositorySupport placeBookmarkRepositorySupport;
+    private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final PlaceBookmarkRepositorySupport placeBookmarkRepositorySupport;
 
     @Override
     @Transactional(readOnly = true)

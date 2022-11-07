@@ -1,11 +1,11 @@
 package com.ssapin.backend.api.service;
 
 
+import com.querydsl.core.BooleanBuilder;
 import com.ssapin.backend.api.domain.dto.request.ReviewRequest;
+import com.ssapin.backend.api.domain.dto.response.ReviewQueryResponse;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
-import com.ssapin.backend.api.domain.entity.Place;
-import com.ssapin.backend.api.domain.entity.Review;
-import com.ssapin.backend.api.domain.entity.User;
+import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.PlaceRepository;
 import com.ssapin.backend.api.domain.repository.ReviewRepository;
 import com.ssapin.backend.api.domain.repository.UserRepository;
@@ -70,6 +70,22 @@ public class ReviewServiceImpl implements ReviewService {
             result.add(new ReviewResponse(r));
         }
         return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewQueryResponse> findReviewByBookmarkedPlace(List<PlaceBookmark> placeBookmarkList) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        for (PlaceBookmark placeBookmark : placeBookmarkList)
+            builder.or(QReview.review.place.id.eq(placeBookmark.getPlace().getId()));
+
+        List<ReviewQueryResponse> ret = reviewRepositorySupport.findByBookmarkedPlace(builder);
+        for (ReviewQueryResponse review : ret) {
+            System.out.println("==============" + review.getContent() + ", " + review.getPlaceId());
+        }
+        return reviewRepositorySupport.findByBookmarkedPlace(builder);
     }
 
 }
