@@ -1,16 +1,16 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
 import ModalContainer from "../../components/containers/ModalContainer";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import CancelButton from "../../components/Buttons/CancelButton";
 import { IMap } from "../../utils/types/map.interface";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
 import { campusState } from "../../store/atom";
-import { useRecoilState } from "recoil";
-import { AxiosError, AxiosResponse } from "axios";
-import { useQuery } from "react-query";
 
 interface FilterModalProps {
   onClose: () => void;
@@ -46,7 +46,6 @@ function FilterModal({ onClose }: FilterModalProps) {
       setHashTag(hashTag.filter((el: any) => el !== item));
     }
   };
-
 
   return (
     <ModalContainer onClose={onClose}>

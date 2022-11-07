@@ -158,7 +158,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - mapList`],
-    () => axiosInstance.get(MAP_APIS.GET_MAP_LIST(campusId, 0, [], "")),
+    () => axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -197,7 +197,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - placeRankingList`],
-    () => axiosInstance.get(PLACE_APIS.GET_PLACE_RANKING(campusId)),
+    () => axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,

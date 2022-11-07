@@ -9,7 +9,7 @@ import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
 // const Main = lazy(() => import("./pages/Main/MainPage"));
 const Login = lazy(() => import("./pages/Login/LoginPage"));
 const User = lazy(() => import("./pages/MyPage/MyPage"));
-const Search = lazy(() => import("./pages/Search/MapSearchPage"));
+// const Search = lazy(() => import("./pages/Search/MapSearchPage"));
 // const TogetherMap = lazy(() => import("./pages/TogetherMap/TogetherMapPage"));
 const Maps = lazy(() => import("./pages/Map/MapPage"));
 // const User = lazy(() => import("./pages/MyPage/MyPage"));
@@ -19,10 +19,9 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="auth/kakao/login" element={<Login />} />
         <Route path="user" element={<User />} />
-        <Route path="search" element={<Search />} />
         <Route
           path="togethermaps/:togethermapId/detail"
           element={<TogetherMap />}
