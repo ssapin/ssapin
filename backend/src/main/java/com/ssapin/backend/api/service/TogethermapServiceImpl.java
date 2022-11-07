@@ -51,12 +51,8 @@ public class TogethermapServiceImpl implements TogethermapService {
             List<TogethermapPlace> togethermapPlaceList = togethermapPlaceRepositorySupport.findByTogethermap(map);
             if (togethermapPlaceList.isEmpty()) {
                 result.add(new TogethermapResponse(map, null,true));
-            }
-            else {
-                for(TogethermapPlace togethermapPlace : togethermapPlaceList) {
-                    result.add(findOne(togethermapPlace.getId(),true));
-                }
-
+            }  else {
+                result.add(findOne(map.getId(),true));
             }
         }
         return result;
