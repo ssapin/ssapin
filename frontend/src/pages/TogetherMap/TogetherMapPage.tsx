@@ -64,8 +64,10 @@ function TogetherMap() {
   useEffect(() => {
     const [lat, lan]: Coordinate = togetherMapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lan,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .lat,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .lan,
         ]
       : [
           CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,

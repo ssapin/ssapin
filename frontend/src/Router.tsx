@@ -7,7 +7,10 @@ const Login = lazy(() => import("./pages/Login/LoginPage"));
 const User = lazy(() => import("./pages/MyPage/MyPage"));
 const TogetherMap = lazy(() => import("./pages/TogetherMap/TogetherMapPage"));
 const Maps = lazy(() => import("./pages/Map/MapPage"));
-const NewMap = lazy(() => import("./pages/NewPlace/NewPlacePage"));
+const TogetherNewPlace = lazy(
+  () => import("./pages/NewPlace/TogetherNewPlacePage"),
+);
+const MapNewPlace = lazy(() => import("./pages/NewPlace/MapNewPlacePage"));
 const Search = lazy(() => import("./pages/Search/MapSearchPage"));
 
 function Router() {
@@ -20,7 +23,11 @@ function Router() {
           path="togethermaps/:togethermapId/detail"
           element={<TogetherMap />}
         />
-        <Route path="togethermaps/:togethermapId/new" element={<NewMap />} />
+        <Route
+          path="togethermaps/:togethermapId/new"
+          element={<TogetherNewPlace />}
+        />
+        <Route path="maps/:mapId/new" element={<MapNewPlace />} />
         <Route path="maps/:mapId/detail" element={<Maps />} />
         <Route path="mypage" element={<User />} />
         <Route path="search" element={<Search />} />
