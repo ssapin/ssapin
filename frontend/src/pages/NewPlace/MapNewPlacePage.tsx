@@ -18,14 +18,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import { campusState } from "../../store/atom";
-import { getTogetherMap } from "../../utils/apis/togethermapApi";
+import { getMap } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
-import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import { IMap } from "../../utils/types/map.interface";
 
 const Conatiner = styled.section`
   position: relative;
@@ -119,7 +119,7 @@ export interface Pagination {
   prevPage: () => void;
 }
 
-function NewPlace() {
+function MapNewPlace() {
   const [keyword, setKeyword] = useState("");
   const [mapObj, setMapObj] = useState({
     map: null,
@@ -133,12 +133,11 @@ function NewPlace() {
   const menuWrapRef = useRef<HTMLDivElement>();
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
-  const { togethermapId } = useParams();
+  const { mapId } = useParams();
   const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
-  const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
-    ["together-map", togethermapId],
-    () => getTogetherMap(Number(togethermapId)),
+  const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
+    getMap(Number(mapId)),
   );
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -231,14 +230,17 @@ function NewPlace() {
   const searchKeyword = (e: FormEvent) => {
     e.preventDefault();
     if (!keyword) return;
-    mapObj.ps?.keywordSearch(`서울 ${keyword}`, placesSearchCB);
+    mapObj.ps?.keywordSearch(
+      `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
+      placesSearchCB,
+    );
   };
 
   useEffect(() => {
-    const [lat, lan]: Coordinate = togetherMapData
+    const [lat, lan]: Coordinate = mapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lan,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lat,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lan,
         ]
       : [
           CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
@@ -308,7 +310,7 @@ function NewPlace() {
   );
 }
 
-export default NewPlace;
+export default MapNewPlace;
 
 const List = styled.li`
   position: relative;

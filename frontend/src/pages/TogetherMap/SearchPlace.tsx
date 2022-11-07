@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import NewPlace from "../NewPlace/NewPlacePage";
+import NewPlace from "../NewPlace/TogetherNewPlacePage";
 
 function SearchPlace() {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
 
-  const onChange = (e) => {
+  const onChange = (e: { target: { value: React.SetStateAction<string> } }) => {
     setInputText(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setPlace(inputText);
     setInputText("");
