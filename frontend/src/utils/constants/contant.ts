@@ -32,3 +32,5 @@ export const HASHTAG_LIST = [
   "🌅 아침일찍",
   "🌃 밤늦게",
 ];
+
+export const RATING_LIST = ["0", "😄", "🙄", "😡"];

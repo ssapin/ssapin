@@ -16,6 +16,7 @@ import SearchList from "./SearchList";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import LoginModal from "../Login/LoginModal";
 import FilterModal from "./FilteringModal";
+import AddPlaceModal from "./AddPlaceModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -60,6 +61,7 @@ function SearchPage() {
   const [campusId, setCampusId] = useRecoilState(campusState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [modalOpen, setModalOpen] = useState(false);
+  const [placemodalOpen, setPlaceModalOpen] = useState(false);
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -72,6 +74,10 @@ function SearchPage() {
   };
   const handleModal = () => {
     setModalOpen(true);
+  };
+
+  const handlePlaceModal = () => {
+    setPlaceModalOpen(true);
   };
 
   return (
@@ -87,6 +93,16 @@ function SearchPage() {
             </ModalPortal>
           )}
         </Searchbar>
+        <YellowButton
+          type="button"
+          text="모달테스트용"
+          func={handlePlaceModal}
+        />
+        {placemodalOpen && (
+          <ModalPortal>
+            <AddPlaceModal onClose={() => setPlaceModalOpen(false)} />
+          </ModalPortal>
+        )}
       </HeadContainer>
       <MainContainer>
         <SearchList />
