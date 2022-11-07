@@ -74,16 +74,13 @@ public class PlaceController {
 
     @GetMapping("/ranking/{campusId}")
     @ApiOperation(value = "장소 랭킹 리스트", notes = "미리 생성된 추천지도에 장소 추가")
-    public ResponseEntity<?> getListPlaceRanking( @PathVariable long campusId) {
+    public ResponseEntity<?> getListPlaceRanking(@PathVariable(required = false) Long campusId) {
         try {
-//            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-//            User user = userService.getUserById(userId);
-//            User user = new User("test", 1L, new Campus("test"), "test");
 
+            System.out.println("campusID : " +campusId);
+            PlaceMapResponse.RankingResponse result = placeService.getListPlaceRanking(campusId);
 
-                PlaceMapResponse.RankingResponse result = placeService.getListPlaceRanking(campusId);
-
-                return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -9,6 +9,8 @@ import com.ssapin.backend.api.domain.repositorysupport.*;
 import com.ssapin.backend.exception.CustomException;
 import com.ssapin.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -128,23 +130,26 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     @Transactional
-    public PlaceMapResponse.RankingResponse getListPlaceRanking( long campusId) {
+    public PlaceMapResponse.RankingResponse getListPlaceRanking(long campusId) {
+
+        System.out.println("캠퍼스 내용 : 서비스" + campusId);
 
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        PlaceMapResponse.PopularPlaceRankingResponse review = reviewRepositorySupport.findPopularPlaceByReview(campus);
-        PlaceResponse reviewPlace = new PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDD25 리뷰가 불타고 있어요 ️\u200D", null);
 
+        PlaceMapResponse.PopularPlaceRankingResponse review = reviewRepositorySupport.findPopularPlaceByReview(campus);
+        PlaceMapResponse.PlaceResponse reviewPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.PopularPlaceRankingResponse bookmark = placeBookmarkRepositorySupport.findPopularPlaceByBookmark(campus);
-        PlaceResponse bookmarkPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDCCC 가장 많은 지도에 찍힌 Pin!", null);
+        PlaceMapResponse.PlaceResponse bookmarkPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.PopularPlaceRankingResponse map = mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
-        PlaceResponse mapPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDC9F 싸핀러들이 킹왕짱 찜한 장소", null);
+        PlaceMapResponse.PlaceResponse mapPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.RankingResponse result = new PlaceMapResponse.RankingResponse(reviewPlace, bookmarkPlace, mapPlace);
 
         return result;
+
     }
 
     /**
