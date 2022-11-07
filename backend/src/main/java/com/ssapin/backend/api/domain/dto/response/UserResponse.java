@@ -1,9 +1,11 @@
 package com.ssapin.backend.api.domain.dto.response;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class UserResponse {
+public class    UserResponse {
     @Getter
     public static class Nickname {
 
@@ -53,6 +55,49 @@ public class UserResponse {
             this.title = title;
             this.address = address;
             this.content = content;
+        }
+    }
+
+    @Getter
+    public static class Map {
+        private long mapId;
+        private long userId;
+        private String title;
+        private String emoji;
+        private String nickname;
+        private long placeCnt;
+        private long userCnt;
+
+        @Builder
+        Map(long mapId, long userId, String title, String emoji, String nickname,
+                      long placeCnt, long userCnt){
+            this.mapId = mapId;
+            this.userId = userId;
+            this.title = title;
+            this.emoji = emoji;
+            this.nickname = nickname;
+            this.placeCnt = placeCnt;
+            this.userCnt = userCnt;
+        }
+    }
+
+
+
+    @Data
+    @NoArgsConstructor
+    public static class UserRanking {
+        private long userId;
+        private String nickname;
+        private String emoji;
+        private long mapCount;
+
+        @Builder
+        UserRanking (long userId, String nickname, String emoji,
+                long mapCount){
+            this.userId = userId;
+            this.nickname = nickname;
+            this.emoji = emoji;
+            this.mapCount = mapCount;
         }
     }
 }

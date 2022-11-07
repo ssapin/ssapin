@@ -31,4 +31,6 @@ public interface MapService {
     List<UserRankingResponse> get5UserByCampus(long campusId);
 
     List<Map> get6MapsByCampus(long campusId);
+    List<Map> getMapListByUserId(long userId);
+    long getMapCntByUserId(long userId);
 }

@@ -3,6 +3,7 @@ package com.ssapin.backend.api.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.ssapin.backend.api.domain.dto.request.ReviewRequest;
+import com.ssapin.backend.api.domain.dto.response.ReviewQueryResponse;
 import com.ssapin.backend.api.domain.dto.response.ReviewResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.domain.repository.PlaceRepository;
@@ -73,13 +74,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Review> findReviewByBookmarkedPlace(List<PlaceBookmark> placeBookmarkList) {
+    public List<ReviewQueryResponse> findReviewByBookmarkedPlace(List<PlaceBookmark> placeBookmarkList) {
 
         BooleanBuilder builder = new BooleanBuilder();
 
         for (PlaceBookmark placeBookmark : placeBookmarkList)
             builder.or(QReview.review.place.id.eq(placeBookmark.getPlace().getId()));
 
+        List<ReviewQueryResponse> ret = reviewRepositorySupport.findByBookmarkedPlace(builder);
+        for (ReviewQueryResponse review : ret) {
+            System.out.println("==============" + review.getContent() + ", " + review.getPlaceId());
+        }
         return reviewRepositorySupport.findByBookmarkedPlace(builder);
     }
 

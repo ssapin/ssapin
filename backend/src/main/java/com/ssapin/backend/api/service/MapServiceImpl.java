@@ -202,4 +202,16 @@ public class MapServiceImpl implements MapService {
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         return mapRankingRepositorySupport.findMapsByCampus(campus);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Map> getMapListByUserId(long userId) {
+        return mapRepositorySupport.findAllByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getMapCntByUserId(long userId) {
+        return mapRepositorySupport.countMapByUserId(userId);
+    }
 }

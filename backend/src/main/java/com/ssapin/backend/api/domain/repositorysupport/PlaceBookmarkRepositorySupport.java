@@ -23,7 +23,6 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
         return queryFactory
                 .selectFrom(QPlaceBookmark.placeBookmark)
                 .leftJoin(QPlaceBookmark.placeBookmark.place, QPlace.place)
-                .fetchJoin()
                 .where(QPlaceBookmark.placeBookmark.user.id.eq(userId))
                 .orderBy(QPlaceBookmark.placeBookmark.id.desc())
                 .fetch();
