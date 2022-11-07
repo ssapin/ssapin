@@ -26,6 +26,7 @@
     "react-router-dom": "^6.4.2",
     "recoil": "^0.7.6",
     "save": "^2.9.0",
+    "storybook-builder-vite": "^0.1.23",
     "swiper": "^8.4.4",
     "uuid": "^9.0.0",
     "vite-plugin-svgr": "^2.2.2"
@@ -35,6 +36,7 @@
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+    "@react-theming/storybook-addon": "^1.1.7",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-interactions": "^6.5.12",
@@ -66,12 +68,15 @@
     "jest-environment-jsdom": "^29.2.2",
     "msw": "^0.47.4",
     "prettier": "^2.7.1",
+    "storybook-addon-react-router-v6": "^0.2.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.6.4",
-    "vite": "^3.1.0"
+    "vite": "^3.1.0",
+    "vite-plugin-env-compatible": "^1.1.1"
   },
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  "packageManager": "yarn@1.22.5"
 }

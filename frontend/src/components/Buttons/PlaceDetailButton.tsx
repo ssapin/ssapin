@@ -75,9 +75,7 @@ export default function PlaceDetailButton({
       <div>
         <PinIcon />
         <EmojiContainer>
-          <UserEmoji size={35}>
-            <a href="https://www.naver.com/">{emoji}</a>
-          </UserEmoji>
+          <UserEmoji size={35}>{emoji}</UserEmoji>
         </EmojiContainer>
       </div>
     </StyledPlaceDetail>

@@ -11,7 +11,11 @@ export default defineConfig({
         plugins: ["@emotion/babel-plugin"],
       },
     }),
-    svgr(),
+    svgr({
+      svgrOptions: {
+        icon: true,
+      },
+    }),
   ],
   server: {
     port: 3000,

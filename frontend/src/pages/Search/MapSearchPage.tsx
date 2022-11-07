@@ -11,7 +11,7 @@ import { pixelToRem } from "../../utils/functions/util";
 import Navbar from "../Navbar/Navbar";
 import YellowButton from "../../components/Buttons/YellowButton";
 // import MapList from "../Main/MapList";
-// import { mapApis } from "../../utils/apis/mapApi";
+// import { MAP_APIS } from "../../utils/apis/mapApi";
 import SearchList from "./SearchList";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import LoginModal from "../Login/LoginModal";
