@@ -114,8 +114,12 @@ function SearchPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
-  const [keyword, setKeyword] = useState("");
-  const [fakeKeyword, setFakeKeyword] = useState("");
+  const [keyword, setKeyword] = useState(
+    new URLSearchParams(window.location.search).get("keyword"),
+  );
+  const [fakeKeyword, setFakeKeyword] = useState(
+    new URLSearchParams(window.location.search).get("keyword"),
+  );
   const [sidebar, setSidebar] = useState(false);
 
   useEffect(() => {
@@ -172,7 +176,7 @@ function SearchPage() {
       <HeadContainer>
         <Navbar func={toggleActive} />
         <Searchbar>
-          <p>추천 지도 검색</p>
+          <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
             width="50%"
             height="15%"
