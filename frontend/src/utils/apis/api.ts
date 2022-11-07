@@ -7,7 +7,7 @@ import axios, {
 } from "axios";
 import { cookie } from "../functions/cookie";
 // eslint-disable-next-line import/no-cycle
-import { getNewAccessToken } from "./useApis";
+import { getNewAccessToken } from "./userApis";
 
 type CustomResponseFormat<T = any> = {
   response: T;

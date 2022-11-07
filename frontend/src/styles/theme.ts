@@ -69,7 +69,7 @@ const mq = {
   mobile: `@media only screen and (max-width: ${pixelToRem(550)})`,
 };
 
-export const themes = {
+const themes = {
   colors,
   fontSizes,
   fontFamily,

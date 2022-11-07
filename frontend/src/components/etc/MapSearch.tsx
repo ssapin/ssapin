@@ -8,6 +8,8 @@ type MapSearchProps = {
   changeFunc?: (e: any) => void;
   // eslint-disable-next-line react/require-default-props
   clickFunc?: () => void;
+  // eslint-disable-next-line react/require-default-props
+  value?: string;
 };
 
 const SearchBar = styled.div<{ width?: string; height?: string }>`
@@ -62,17 +64,36 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     height: 50%;
     margin-right: 1rem;
     fill: ${(props) => props.theme.colors.gray50};
+    cursor: pointer;
+    :hover {
+      scale: 1.05;
+    }
   }
 `;
 
-function MapSearch({ width, height, changeFunc, clickFunc }: MapSearchProps) {
+function MapSearch({
+  width,
+  height,
+  changeFunc,
+  clickFunc,
+  value,
+}: MapSearchProps) {
   return (
     <SearchBar width={width} height={height}>
-      <input
-        type="text"
-        onChange={changeFunc}
-        placeholder="내가 원하는 지도 찾기"
-      />
+      {value ? (
+        <input
+          type="text"
+          onChange={changeFunc}
+          placeholder="내가 원하는 지도 찾기"
+          value={value}
+        />
+      ) : (
+        <input
+          type="text"
+          onChange={changeFunc}
+          placeholder="내가 원하는 지도 찾기"
+        />
+      )}
       <SearchIcon className="searchButton" onClick={clickFunc} />
     </SearchBar>
   );

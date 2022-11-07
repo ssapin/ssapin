@@ -22,12 +22,9 @@ export const getAccessToken = async (
   return axiosInstance.post(USER_APIS.LOGIN, body);
 };
 
-export const getUserInformation = async (): Promise<AxiosResponse> => {
-  return axiosInstance.get(USER_APIS.USER_INFORMATION);
-};
+export const getUserInformation = async (): Promise<AxiosResponse> =>
+  axiosInstance.get(USER_APIS.USER_INFORMATION);
 
-export const getNewAccessToken = async (): Promise<AxiosResponse> => {
-  return axiosInstance.get(USER_APIS.REISSUE);
-};
-
+export const getNewAccessToken = async (): Promise<AxiosResponse> =>
+  axiosInstance.get(USER_APIS.REISSUE);
 export default USER_APIS;

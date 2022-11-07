@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -21,9 +21,9 @@ import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
 import { campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import { togethermapApis } from "../../utils/apis/togethermapApi";
+import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -31,8 +31,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
-import { placeApis } from "../../utils/apis/placeApi";
-import USER_APIS from "../../utils/apis/useApis";
+import { PLACE_APIS } from "../../utils/apis/placeApi";
+import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 
@@ -145,7 +145,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - togetherMapList`],
-    () => axiosInstance.get(togethermapApis.getTogetherMapList(campusId)),
+    () => axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -158,7 +158,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - mapList`],
-    () => axiosInstance.get(mapApis.getMapList(campusId, 0, [], "")),
+    () => axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -171,7 +171,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - mapRankingList`],
-    () => axiosInstance.get(mapApis.getMapRanking(campusId)),
+    () => axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -197,7 +197,7 @@ function MainPage() {
     AxiosError
   >(
     [`${campusId} - placeRankingList`],
-    () => axiosInstance.get(placeApis.getPlaceRanking(campusId)),
+    () => axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -224,7 +224,7 @@ function MainPage() {
       setRankingmaps(mapRankingData.data);
     }
     if (userRankingData?.data) {
-      setRankingusers(userRankingData.data);
+      setRankingusers(userRankingData.data?.userRankingList);
     }
     if (placeRankingData?.data) {
       setRankingplaces(placeRankingData.data);
@@ -241,6 +241,17 @@ function MainPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const handleModal = () => {
     setModalOpen(true);
+  };
+
+  const [keyword, setKeyword] = useState("");
+  const onChangeKeyword = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setKeyword(e.target.value);
+  };
+
+  const moveToSearch = () => {
+    navigate(`/search?keyword=${keyword}`);
   };
 
   return (
@@ -274,7 +285,12 @@ function MainPage() {
           </Swiper>
         </QuestionContainer>
         <Searchbar>
-          <MapSearch width="50%" height="30%" />
+          <MapSearch
+            width="50%"
+            height="30%"
+            changeFunc={onChangeKeyword}
+            clickFunc={moveToSearch}
+          />
         </Searchbar>
       </HeadContainer>
       <MainContainer>

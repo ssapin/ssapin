@@ -10,7 +10,7 @@ import ModalContainer from "../../components/containers/ModalContainer";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 
 interface ModalProps {
@@ -168,7 +168,7 @@ function CreateMapModal({ onClose }: ModalProps) {
       hashtagList: hashTag,
     });
 
-    const response = await axiosInstance.post(mapApis.map, body);
+    const response = await axiosInstance.post(MAP_APIS.MAP, body);
 
     try {
       if (response.status === 200) {

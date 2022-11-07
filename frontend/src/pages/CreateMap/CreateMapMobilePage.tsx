@@ -9,7 +9,7 @@ import SwitchButton from "../../components/Buttons/SwitchButton";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import NavBar from "../Navbar/Navbar";
 
@@ -184,7 +184,7 @@ function CreateMapMobilePage() {
       hashtagList: hashTag,
     });
 
-    const response = await axiosInstance.post(mapApis.map, body);
+    const response = await axiosInstance.post(MAP_APIS.MAP, body);
 
     try {
       if (response.status === 200) {
