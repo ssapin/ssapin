@@ -3,8 +3,8 @@ import { useRecoilState } from "recoil";
 import MapCard from "../../components/card/MapCard";
 import { MemoInfiniteList } from "../../components/infinite/ParamsInfiniteList";
 import { campusState } from "../../store/atom";
-import { mapApis } from "../../utils/apis/mapApi";
-
+import { MAP_APIS } from "../../utils/apis/mapApi";
+// import { IMap } from "../../utils/types/map.interface";
 const Container = styled.div`
   width: 100%;
   height: fit-content;
@@ -48,7 +48,7 @@ function SearchList() {
         <span>🗺 추천지도 🗺</span>
       </Title>
       <MemoInfiniteList
-        url={mapApis.getMapList(campusId)}
+        url={MAP_APIS.getMapList(campusId)}
         queryKey={["MapList"]}
         zeroDataText="없어시붕"
         CardComponent={MapCard}

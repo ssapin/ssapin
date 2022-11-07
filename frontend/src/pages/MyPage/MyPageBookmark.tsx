@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 import { MemoInfiniteList } from "../../components/infinite/InfiniteList";
-import USER_APIS from "../../utils/apis/useApis";
+import USER_APIS from "../../utils/apis/userApis";
 import PlaceCard from "../../components/card/PlaceCard";
 import MapCard from "../../components/card/MapCard";
 

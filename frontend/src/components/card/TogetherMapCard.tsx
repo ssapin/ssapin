@@ -5,6 +5,7 @@ import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 type TogetherMapProps = {
   prop: ITogetherMap;
+  func: () => void;
 };
 
 const Container = styled.div`
@@ -54,13 +55,9 @@ const Container = styled.div`
   }
 `;
 
-function TogetherMapCard({ prop }: TogetherMapProps) {
-  const onClickTogetherMap = () => {
-    alert(`${prop.togethermapId}번 모여지도~`);
-  };
-
+function TogetherMapCard({ prop, func }: TogetherMapProps) {
   return (
-    <Container onClick={onClickTogetherMap}>
+    <Container onClick={func}>
       <p className="icon">
         <Quotesstart />
         <Quotesend />
