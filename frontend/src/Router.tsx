@@ -21,7 +21,7 @@ function Router() {
           element={<TogetherMap />}
         />
         <Route path="togethermaps/:togethermapId/new" element={<NewMap />} />
-        <Route path="mpas/:mapId/detatil" element={<Maps />} />
+        <Route path="maps/:mapId/detail" element={<Maps />} />
         <Route path="mypage" element={<User />} />
         <Route path="search" element={<Search />} />
         <Route path="mobileCreate" element={<CreateMapMobilePage />} />
