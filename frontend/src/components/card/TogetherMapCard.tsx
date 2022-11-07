@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 type TogetherMapProps = {
   prop: ITogetherMap;
-  func: () => void;
 };
 
 const Container = styled.div`
@@ -55,9 +55,14 @@ const Container = styled.div`
   }
 `;
 
-function TogetherMapCard({ prop, func }: TogetherMapProps) {
+function TogetherMapCard({ prop }: TogetherMapProps) {
+  const navigate = useNavigate();
   return (
-    <Container onClick={func}>
+    <Container
+      onClick={() => {
+        navigate(`/togethermaps/${prop.togethermapId}/detail`);
+      }}
+    >
       <p className="icon">
         <Quotesstart />
         <Quotesend />

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
 import TogetherMapCard from "../../components/card/TogetherMapCard";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
@@ -81,7 +80,6 @@ type TogetherMapProps = {
 };
 
 function TogetherMapList({ maps }: TogetherMapProps) {
-  const navigate = useNavigate();
   return (
     <Container>
       <Title>
@@ -97,7 +95,6 @@ function TogetherMapList({ maps }: TogetherMapProps) {
               // eslint-disable-next-line react/no-array-index-key
               key={id}
               prop={map}
-              func={() => navigate(`/togethermaps/${map.togethermapId}/detail`)}
             />
           ))}
       </RankingContainer>

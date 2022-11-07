@@ -153,10 +153,6 @@ const Side = styled.div`
     width: 27vw;
     height: 100vh;
 
-    ${(props) => props.theme.mq.pc} {
-      width: 40vw;
-    }
-
     ${(props) => props.theme.mq.tablet} {
       width: 70vw;
     }

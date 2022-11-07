@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { userInformationState } from "../../store/atom";
 import { IMap } from "../../utils/types/map.interface";
 
 type MapCardProps = {
@@ -59,14 +62,16 @@ const Container = styled.div`
 `;
 
 function MapCard({ prop, isAdmin }: MapCardProps) {
+  const navigate = useNavigate();
   const onClickMap = () => {
-    alert(`${prop.mapId}번 지도~`);
+    navigate(`/maps/${prop.mapId}/detail`);
   };
 
   const onDeletePlace = () => {
     alert(`${prop.mapId}번 장소~ 지우고 싶대`);
   };
 
+  const user = useRecoilState(userInformationState);
   return (
     <Container onClick={onClickMap}>
       <p className="icon">{prop.mapEmoji}</p>
@@ -75,7 +80,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
       <p className="summary">
         📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
       </p>
-      {isAdmin && (
+      {isAdmin && prop.userId === user[0].userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>

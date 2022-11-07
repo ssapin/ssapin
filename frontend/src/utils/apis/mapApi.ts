@@ -9,13 +9,13 @@ export const MAP_APIS = {
     keyword?: string,
   ) => {
     let api: string = `/map?campusId=${campusId}`;
-    let str: string = "";
     if (page) {
       api += `&page=${page}`;
     }
     if (keyword && keyword != null && keyword !== "") {
       api += `&keyword=${keyword}`;
     }
+    let str: string = "&hashtagList=";
     if (hashtagList) {
       const { length } = hashtagList;
       if (length !== 0) {
