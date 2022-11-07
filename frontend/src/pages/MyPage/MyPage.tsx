@@ -11,6 +11,7 @@ import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import { campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
+
 // 모달
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { ChangeInfoModal } from "./ChangeMyInfo";
@@ -97,7 +98,12 @@ function MyPage() {
           )}
           {modalOpen && (
             <ModalPortal>
-              {/* <ChangeInfoModal onClose={() => setModalOpen(false)} /> */}
+              <ChangeInfoModal
+                emoji={userInformation.emoji}
+                nickname={userInformation.nickname}
+                mycampus={campus[userInformation.campusId]}
+                onClose={() => setModalOpen(false)}
+              />
             </ModalPortal>
           )}
           {innerWidth > 950 ? (
