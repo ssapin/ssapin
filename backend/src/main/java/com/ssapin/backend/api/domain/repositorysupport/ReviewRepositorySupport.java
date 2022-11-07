@@ -33,21 +33,22 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
         return QMap.map.campus.eq(campus);
     }
 
+
     public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByReview(Campus campus)
     {
-
-        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QReview.review.place.id,QReview.review.place.id.count()))
-                .from(QReview.review,QMapPlace.mapPlace,QMap.map)
-                .where(campusEq(campus),QMap.map.id.eq(QMapPlace.mapPlace.map.id),QMapPlace.mapPlace.place.eq(QReview.review.place))
-                .groupBy(QReview.review.place.id)
-                .orderBy(QReview.review.place.id.count().desc())
-                .fetchFirst();
+        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QMapPlace.mapPlace.place.id.as("placeId"),QMapPlace.mapPlace.place.id.count().as("cnt")))
+                .from(QMapPlace.mapPlace)
+                .join(QMap.map)
+                .on(campusEq(campus))
+                .join(QPlace.place)
+                .on(QMapPlace.mapPlace.place.id.eq(QPlace.place.id))
+                .join(QReview.review)
+                .on(QMapPlace.mapPlace.place.id.eq(QReview.review.place.id))
+                .groupBy(QMapPlace.mapPlace.place.id)
+                .orderBy(QMapPlace.mapPlace.place.id.count().desc())
+                . limit(1).fetchOne();
     }
 
-//    public List<Review> findAllByPlaceIds(List<Place> placeList) {
-//        return queryFactory.selectFrom(QReview.review)
-//                .where(QReview.review.place.id.in(placeList))
-//                .fetch();
-//
-//    }
+
+
 }
