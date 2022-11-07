@@ -144,7 +144,7 @@ public class PlaceServiceImpl implements PlaceService {
         PlaceMapResponse.PlaceResponse bookmarkPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.PopularPlaceRankingResponse map = mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
-        PlaceMapResponse.PlaceResponse mapPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        PlaceMapResponse.PlaceResponse mapPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(map.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.RankingResponse result = new PlaceMapResponse.RankingResponse(reviewPlace, bookmarkPlace, mapPlace);
 
@@ -195,7 +195,7 @@ public class PlaceServiceImpl implements PlaceService {
      * (6) 장소 정보조회
      */
     @Override
-    public PlaceResponse getPlaceInfo(User user, long itemId) {
+    public PlaceResponse getPlaceInfo(long itemId) {
 
         Optional<Place> placeResponse = placeRepository.findByItemId(itemId);
 
@@ -220,7 +220,7 @@ public class PlaceServiceImpl implements PlaceService {
      * (7)해당장소가 추가된 추천지도 리스트 조회
      */
     @Override
-    public PlaceMapResponse.MapListResponse getMapListInPlace(User user, long itemId) {
+    public PlaceMapResponse.MapListResponse getMapListInPlace(long itemId) {
         Optional<Place> place = placeRepository.findByItemId(itemId);
 
 

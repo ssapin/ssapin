@@ -25,9 +25,9 @@ public interface PlaceService {
 
     Long removePlaceInTogetherMap(User user,PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest);
 
-    PlaceResponse getPlaceInfo(User user, long itemId);
+    PlaceResponse getPlaceInfo(long itemId);
 
-    PlaceMapResponse.MapListResponse getMapListInPlace (User user, long itemId);
+    PlaceMapResponse.MapListResponse getMapListInPlace (long itemId);
 
     Long registerBookmark(User user, BookmarkRequest bookmarkRequest);
 
