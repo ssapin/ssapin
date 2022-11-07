@@ -19,7 +19,7 @@ public interface PlaceService {
 
     Long addPlaceInTogetherMap(User user,PlaceMapRequest.RegisterPlaceToMapRequest placeRequest);
 
-    PlaceMapResponse.RankingResponse getListPlaceRanking(User user, long campus) ;
+    PlaceMapResponse.RankingResponse getListPlaceRanking(long campus) ;
 
     Long removePlaceInMap(User user,PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest);
 

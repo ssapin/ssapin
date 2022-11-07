@@ -128,19 +128,19 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     @Transactional
-    public PlaceMapResponse.RankingResponse getListPlaceRanking(User user, long campusId) {
+    public PlaceMapResponse.RankingResponse getListPlaceRanking( long campusId) {
 
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         PlaceMapResponse.PopularPlaceRankingResponse review = reviewRepositorySupport.findPopularPlaceByReview(campus);
-        PlaceResponse reviewPlace = new PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDD25 리뷰가 불타고 있어요 ️\u200D", user);
+        PlaceResponse reviewPlace = new PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDD25 리뷰가 불타고 있어요 ️\u200D", null);
 
 
         PlaceMapResponse.PopularPlaceRankingResponse bookmark = placeBookmarkRepositorySupport.findPopularPlaceByBookmark(campus);
-        PlaceResponse bookmarkPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDCCC 가장 많은 지도에 찍힌 Pin!", user);
+        PlaceResponse bookmarkPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDCCC 가장 많은 지도에 찍힌 Pin!", null);
 
         PlaceMapResponse.PopularPlaceRankingResponse map = mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
-        PlaceResponse mapPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDC9F 싸핀러들이 킹왕짱 찜한 장소", user);
+        PlaceResponse mapPlace = new PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)), "\uD83D\uDC9F 싸핀러들이 킹왕짱 찜한 장소", null);
 
         PlaceMapResponse.RankingResponse result = new PlaceMapResponse.RankingResponse(reviewPlace, bookmarkPlace, mapPlace);
 
