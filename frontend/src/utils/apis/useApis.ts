@@ -30,4 +30,9 @@ export const getNewAccessToken = async (): Promise<AxiosResponse> => {
   return axiosInstance.get(USER_APIS.REISSUE);
 };
 
+export interface IuserInfo {
+  nickname: string | number | undefined;
+  campus?: string | number | undefined;
+}
+
 export default USER_APIS;
