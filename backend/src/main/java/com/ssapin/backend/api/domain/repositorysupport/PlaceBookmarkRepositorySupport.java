@@ -2,6 +2,7 @@ package com.ssapin.backend.api.domain.repositorysupport;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
 import com.ssapin.backend.api.domain.entity.*;
@@ -10,6 +11,8 @@ import com.ssapin.backend.api.domain.entity.PlaceBookmark;
 import com.ssapin.backend.api.domain.entity.QCampus;
 import com.ssapin.backend.api.domain.entity.QPlaceBookmark;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
+import com.ssapin.backend.api.domain.entity.*;
+import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -56,6 +59,7 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
     public List<PlaceBookmark> findByUserId(long userId) {
         return queryFactory
                 .selectFrom(QPlaceBookmark.placeBookmark)
+                .leftJoin(QPlaceBookmark.placeBookmark.place, QPlace.place)
                 .where(QPlaceBookmark.placeBookmark.user.id.eq(userId))
                 .orderBy(QPlaceBookmark.placeBookmark.id.desc())
                 .fetch();
