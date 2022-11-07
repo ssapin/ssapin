@@ -27,4 +27,7 @@ public class PlaceRepositorySupport extends QuerydslRepositorySupport {
 //                .fetch();
 //
 //    }
+
+
+
 }

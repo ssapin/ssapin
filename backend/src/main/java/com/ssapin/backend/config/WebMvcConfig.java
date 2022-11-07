@@ -18,7 +18,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/map/login/**")
                 .addPathPatterns("/togethermap/login/**")
                 .addPathPatterns("/review/login/**")
-                .addPathPatterns("/user/login/**");
+                .addPathPatterns("/user/login/**")
+                .addPathPatterns("/place/login/**");
     }
 
     @Override

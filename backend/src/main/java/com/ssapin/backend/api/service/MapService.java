@@ -18,7 +18,7 @@ public interface MapService {
 
     void deleteMap(long mapId);
 
-    MapResponse detailMap(long mapId, User user);
+    MapResponse detailMap(long mapId, User user, boolean isList);
 
     Page<MapResponse> getMapList(long campusId, List<Long> hashtagList, String keyword, User user, Pageable pageable);
 

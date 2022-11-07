@@ -244,7 +244,7 @@ class MapServiceImplTest {
         given(mapHashtagRepositorySupport.findAllByMap(originMap)).willReturn(originList);
 
         //when
-        MapResponse result = mapService.detailMap(originMap.getId(), testuser);
+        MapResponse result = mapService.detailMap(originMap.getId(), testuser, false);
 
         //then
         assertEquals(originMap.getEmoji(), result.getMapEmoji());

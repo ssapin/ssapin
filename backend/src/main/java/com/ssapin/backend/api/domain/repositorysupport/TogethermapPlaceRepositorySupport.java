@@ -39,4 +39,13 @@ public class TogethermapPlaceRepositorySupport extends QuerydslRepositorySupport
                 .where(QTogethermapPlace.togethermapPlace.user.id.eq(userId))
                 .fetchOne();
     }
+
+    public TogethermapPlace findByPlace(Togethermap togethermap, User user, Place place)
+    {
+        return queryFactory.selectFrom(QTogethermapPlace.togethermapPlace)
+                .where(QTogethermapPlace.togethermapPlace.togethermap.eq(togethermap)
+                .and(QTogethermapPlace.togethermapPlace.place.eq(place))
+                .and(QTogethermapPlace.togethermapPlace.user.eq(user)))
+                .fetchOne();
+    }
 }

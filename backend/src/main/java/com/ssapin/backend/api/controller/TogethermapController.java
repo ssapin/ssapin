@@ -29,6 +29,6 @@ public class TogethermapController {
     @GetMapping("/{togethermapId}/detail")
     @ApiOperation(value = "모여지도 상세 조회 ", notes = "모여지도의 상세 정보를 반환한다.")
     public ResponseEntity<?> getTogethermap(@PathVariable long togethermapId) {
-        return new ResponseEntity<TogethermapResponse>(togethermapService.findOne(togethermapId), HttpStatus.OK);
+        return new ResponseEntity<TogethermapResponse>(togethermapService.findOne(togethermapId,false), HttpStatus.OK);
     }
 }

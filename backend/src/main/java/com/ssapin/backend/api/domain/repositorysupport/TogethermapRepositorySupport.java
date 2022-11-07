@@ -22,6 +22,7 @@ public class TogethermapRepositorySupport extends QuerydslRepositorySupport {
     public List<Togethermap> findAllByCampus(Campus campus) {
         return queryFactory.selectFrom(QTogethermap.togethermap)
                 .where(QTogethermap.togethermap.campus.eq(campus))
+                .orderBy(QTogethermap.togethermap.id.asc())
                 .fetch();
     }
 }
