@@ -184,7 +184,7 @@ function CreateMapMobilePage() {
       hashtagList: hashTag,
     });
 
-    const response = await axiosInstance.post(MAP_APIS.map, body);
+    const response = await axiosInstance.post(MAP_APIS.MAP, body);
 
     try {
       if (response.status === 200) {

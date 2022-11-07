@@ -3,7 +3,7 @@ import { IMap } from "../types/map.interface";
 import axiosInstance from "./api";
 
 export const MAP_APIS = {
-  MAP: "/map",
+  MAP: "/map/login",
   BOOKMARK: "/map/bookmark",
   getMap: (mapId: number) => `/map/${mapId}/detail`,
   getMapList: (
