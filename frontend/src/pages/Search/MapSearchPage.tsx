@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { SetStateAction, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -171,6 +172,11 @@ function SearchPage() {
     setSidebar(!sidebar);
   };
 
+  const navigate = useNavigate();
+  const moveToCreate = () => {
+    navigate("/mobileCreate");
+  };
+
   return (
     <>
       <HeadContainer>
@@ -212,7 +218,7 @@ function SearchPage() {
             func={handleCreateModal}
           />
         ) : (
-          <CreateButtonMobile type="button" />
+          <CreateButtonMobile type="button" func={moveToCreate} />
         )}
         {createModalOpen && (
           <ModalPortal>

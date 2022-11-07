@@ -224,7 +224,7 @@ function MainPage() {
       setRankingmaps(mapRankingData.data);
     }
     if (userRankingData?.data) {
-      setRankingusers(userRankingData.data);
+      setRankingusers(userRankingData.data?.userRankingList);
     }
     if (placeRankingData?.data) {
       setRankingplaces(placeRankingData.data);
