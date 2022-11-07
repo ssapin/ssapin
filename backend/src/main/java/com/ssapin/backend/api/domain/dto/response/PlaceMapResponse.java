@@ -1,7 +1,10 @@
 package com.ssapin.backend.api.domain.dto.response;
 
 import com.ssapin.backend.api.domain.entity.Map;
+import com.ssapin.backend.api.domain.entity.Place;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -22,13 +25,14 @@ public class PlaceMapResponse {
         }
     }
 
-   @Getter
+    @Data
+    @NoArgsConstructor
    static public class PopularPlaceRankingResponse{
 
         private long placeId;
-        private int cnt;
+        private long cnt;
 
-        public PopularPlaceRankingResponse(int placeId, int cnt) {
+        public PopularPlaceRankingResponse(long placeId, long cnt) {
             this.placeId = placeId;
             this.cnt = cnt;
         }
@@ -68,4 +72,23 @@ public class PlaceMapResponse {
         }
     }
 
+    @Getter
+    static public class PlaceResponse
+    {
+        private long placeId;
+        private long itemId;
+        private String title;
+        private float lat;
+        private float lng;
+        private String address;
+
+        public PlaceResponse(Place place) {
+            this.placeId = place.getId();
+            this.itemId = place.getItemId();
+            this.title = place.getTitle();
+            this.lat = place.getLat();
+            this.lng = place.getLng();
+            this.address = place.getAddress();
+        }
+    }
 }

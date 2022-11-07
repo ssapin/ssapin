@@ -19,15 +19,15 @@ public interface PlaceService {
 
     Long addPlaceInTogetherMap(User user,PlaceMapRequest.RegisterPlaceToMapRequest placeRequest);
 
-    PlaceMapResponse.RankingResponse getListPlaceRanking(User user, long campus) ;
+    PlaceMapResponse.RankingResponse getListPlaceRanking(long campus) ;
 
     Long removePlaceInMap(User user,PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest);
 
     Long removePlaceInTogetherMap(User user,PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest);
 
-    PlaceResponse getPlaceInfo(User user, long itemId);
+    PlaceResponse getPlaceInfo(long itemId);
 
-    PlaceMapResponse.MapListResponse getMapListInPlace (User user, long itemId);
+    PlaceMapResponse.MapListResponse getMapListInPlace (long itemId);
 
     Long registerBookmark(User user, BookmarkRequest bookmarkRequest);
 

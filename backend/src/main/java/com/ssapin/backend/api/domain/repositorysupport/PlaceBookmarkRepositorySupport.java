@@ -37,13 +37,17 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
 
     public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus){
 
-        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QPlaceBookmark.placeBookmark.place.id,QPlaceBookmark.placeBookmark.place.id.count()))
-                .from(QPlaceBookmark.placeBookmark,QMapPlace.mapPlace,QMap.map)
-                .where(campusEq(campus),QMapPlace.mapPlace.place.eq(QPlaceBookmark.placeBookmark.place))
-                .groupBy(QPlaceBookmark.placeBookmark.place.id)
-                .orderBy(QPlaceBookmark.placeBookmark.place.id.count().desc())
-                .fetchFirst();
-
+        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QMapPlace.mapPlace.place.id.as("placeId"),QMapPlace.mapPlace.place.id.count().as("cnt")))
+                .from(QMapPlace.mapPlace)
+                .join(QMap.map)
+                .on(campusEq(campus))
+                .join(QPlace.place)
+                .on(QMapPlace.mapPlace.place.id.eq(QPlace.place.id))
+                .join(QPlaceBookmark.placeBookmark)
+                .on(QMapPlace.mapPlace.place.id.eq(QPlaceBookmark.placeBookmark.place.id))
+                .groupBy(QMapPlace.mapPlace.place.id)
+                .orderBy(QMapPlace.mapPlace.place.id.count().desc())
+                . limit(1).fetchOne();
     }
 
 
