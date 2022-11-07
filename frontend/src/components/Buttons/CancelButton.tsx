@@ -1,10 +1,9 @@
-import React from "react";
 import styled from "@emotion/styled";
-import { IButtonProps } from "../../utils/interfaces/buttons.interface";
+import { IButtonProps } from "../../utils/types/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
-const StyledCancel = styled.button`
-  height: 4.761904761904762vh;
+const StyledCancel = styled.button<{ used: string | undefined }>`
+  height: ${(props) => (props.used === "modal" ? `35px` : `45px`)};
   flex-grow: 0;
   padding: 0 ${pixelToRem(30)};
   border-radius: ${pixelToRem(10)};
@@ -22,9 +21,10 @@ export default function CancelButton({
   type,
   func,
   disabled,
+  used,
 }: IButtonProps) {
   return (
-    <StyledCancel type={type} onClick={func} disabled={disabled}>
+    <StyledCancel used={used} type={type} onClick={func} disabled={disabled}>
       {text}
     </StyledCancel>
   );

@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
-import { ReactComponent as PinIcon } from "../../assets/svgs/pin-ver2.svg";
+import { ReactComponent as BuildingIcon } from "../../assets/svgs/building.svg";
+import { ReactComponent as SsafyIcon } from "../../assets/svgs/ssafylogo.svg";
 import { IButtonProps } from "../../utils/types/buttons.interface";
 
-const StyledPlaceDetail = styled.div`
+const StyledDetailPlace = styled.div`
   width: ${pixelToRem(240)};
   display: flex;
   justify-content: center;
@@ -11,10 +12,6 @@ const StyledPlaceDetail = styled.div`
   flex-direction: column;
   > div {
     position: relative;
-  }
-  svg {
-    width: 39px;
-    height: 52px;
   }
 `;
 
@@ -44,7 +41,7 @@ const SpeechPolygon = styled.div`
   margin-bottom: 8px;
 `;
 
-const UserEmoji = styled.div<{ size?: number }>`
+const EmojiLocation = styled.div<{ size?: number }>`
   position: absolute;
   z-index: 1;
   width: ${(props) => `${props.size}px`};
@@ -54,20 +51,15 @@ const UserEmoji = styled.div<{ size?: number }>`
   font-size: ${(props) => `${props.size * 0.7}px`};
 `;
 
-export default function UpperIconPlaceDetailButton({
-  text,
-  func,
-  emoji,
-}: IButtonProps) {
+export default function MulticampusPlaceButton({ text, func }: IButtonProps) {
   return (
-    <StyledPlaceDetail>
-      <UserEmoji size={45}>{emoji}</UserEmoji>
-
-      <BubbleButton type="button" onClick={func}>
-        {text}
-      </BubbleButton>
+    <StyledDetailPlace>
+      <EmojiLocation size={45}>
+        <SsafyIcon />
+      </EmojiLocation>
+      <BubbleButton onClick={func}>{text}</BubbleButton>
       <SpeechPolygon />
-      <PinIcon />
-    </StyledPlaceDetail>
+      <BuildingIcon fill="red" />
+    </StyledDetailPlace>
   );
 }

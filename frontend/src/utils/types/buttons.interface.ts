@@ -8,6 +8,7 @@ export interface IButtonProps {
   disabled?: boolean;
   color?: string;
   emoji?: string | undefined;
+  used?: string | undefined;
 }
 
 export interface IToggleButton {

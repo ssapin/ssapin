@@ -1,8 +1,7 @@
-import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 const ToggleGroup = styled.div`
-  width: 350px;
+  width: 100%;
   height: 41px;
   background-color: ${(props) => props.theme.colors.lightLightBlue};
   text-align: center;
@@ -32,27 +31,29 @@ const ToggleGroup = styled.div`
 type SwitchProps = {
   textLeft: string;
   textRight: string;
+  type: boolean;
+  func: (e: any) => void;
 };
 
-export default function SwitchButton({ textLeft, textRight }: SwitchProps) {
-  const [type, setType] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const changeType = (type: number) => {
-    setType(type);
-  };
+export default function SwitchButton({
+  textLeft,
+  textRight,
+  func,
+  type,
+}: SwitchProps) {
   return (
     <ToggleGroup>
       <button
         type="button"
-        className={type === 0 ? "active" : "inactive"}
-        onClick={() => changeType(0)}
+        className={type === false ? "active" : "inactive"}
+        onClick={() => func(false)}
       >
         {textLeft}
       </button>
       <button
         type="button"
-        className={type === 1 ? "active" : "inactive"}
-        onClick={() => changeType(1)}
+        className={type === true ? "active" : "inactive"}
+        onClick={() => func(true)}
       >
         {textRight}
       </button>

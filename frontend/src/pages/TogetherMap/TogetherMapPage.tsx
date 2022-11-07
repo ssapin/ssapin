@@ -14,8 +14,6 @@ import {
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import NewPlace from "../NewPlace/NewPlacePage";
-import SearchPlace from "./SearchPlace";
 
 declare global {
   interface Window {

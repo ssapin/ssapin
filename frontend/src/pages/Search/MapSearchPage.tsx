@@ -13,6 +13,9 @@ import YellowButton from "../../components/Buttons/YellowButton";
 // import MapList from "../Main/MapList";
 // import { MAP_APIS } from "../../utils/apis/mapApi";
 import SearchList from "./SearchList";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import LoginModal from "../Login/LoginModal";
+import FilterModal from "./FilteringModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -56,6 +59,7 @@ function SearchPage() {
 
   const [campusId, setCampusId] = useRecoilState(campusState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -66,6 +70,9 @@ function SearchPage() {
   const toggleActive = (key: number) => {
     setCampusId(key);
   };
+  const handleModal = () => {
+    setModalOpen(true);
+  };
 
   return (
     <>
@@ -73,7 +80,12 @@ function SearchPage() {
         <Navbar func={toggleActive} />
         <Searchbar>
           <MapSearch width="50%" height="15%" />
-          <YellowButton type="button" text="필터링" />
+          <YellowButton type="button" text="필터링" func={handleModal} />
+          {modalOpen && (
+            <ModalPortal>
+              <FilterModal onClose={() => setModalOpen(false)} />
+            </ModalPortal>
+          )}
         </Searchbar>
       </HeadContainer>
       <MainContainer>

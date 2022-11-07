@@ -2,67 +2,54 @@
 import styled from "@emotion/styled";
 import { ElementType, memo, useEffect, useMemo, useRef, useState } from "react";
 import { QueryFunctionContext } from "react-query";
-import { v4 } from "uuid";
 import axiosInstance from "../../utils/apis/api";
 import { isQueryError } from "../../utils/functions/util";
 import useFetchTripsInformation from "../../utils/hooks/useFecthTripsInformation";
 import useObserver from "../../utils/hooks/useObserver";
-import spinner from "../../assets/image/spinner.gif";
 
 interface InifinteListProps {
   url: string;
   queryKey: string[];
-  CardComponent: ElementType;
-  SkeletonCardComponent: ElementType;
   zeroDataText: string;
-  func?: object;
-  count: number;
-  listName: string;
   isEditMode?: boolean;
   isCreated?: boolean;
+  CardComponent: ElementType;
+  change?: (bool: boolean) => void;
 }
 
-type GridProps = {
-  gridColumnCount: number;
-};
-
-const GridContainer = styled.div<GridProps>`
+const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.gridColumnCount && `repeat(${props.gridColumnCount}, 1fr)`};
-  grid-gap: 1rem;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-gap: 2rem;
   margin-bottom: 1rem;
+  justify-items: center;
 `;
 
 function InfiniteList({
   url,
   queryKey,
-  CardComponent,
-  SkeletonCardComponent,
   zeroDataText,
-  func,
-  count,
-  listName,
+  CardComponent,
   isEditMode,
   isCreated,
+  change,
 }: InifinteListProps) {
   const [hasError, setHasError] = useState(false);
   const bottom = useRef(null);
-
   const getTargetComponentList = async ({
     pageParam = 0,
   }: QueryFunctionContext) => {
     try {
       const res = await axiosInstance.get(`${url}&page=${pageParam}`);
       return { result: res?.data, page: pageParam };
-    } catch (_) {
+    } catch {
       setHasError(true);
       return undefined;
     }
   };
 
   const {
-    isLoading,
     data,
     error,
     isError,
@@ -77,9 +64,10 @@ function InfiniteList({
 
   const targetList = useMemo(
     () =>
-      data
-        ? data.pages?.flatMap((page) => page?.result && page?.result[listName])
-        : [],
+      data &&
+      data.pages?.flatMap(
+        (page) => page?.result?.content && page?.result.content,
+      ),
     [data],
   );
 
@@ -97,55 +85,63 @@ function InfiniteList({
 
   useEffect(() => {
     if (isCreated) refetchData();
+    if (change) change(false);
   }, [isCreated]);
-  // FIXME: key change
+
+  const noMap = {
+    mapId: 0,
+    title: "map이 없습니다.",
+    userId: 0,
+    nickname: "undefined",
+    campusId: 0,
+    access: 0,
+    userEmoji: "undefined",
+    mapEmoji: "undefined",
+    placeCnt: 0,
+    userCnt: 0,
+    bookMark: 0,
+    placeList: [
+      {
+        placeId: 0,
+        itemId: 0,
+        title: "undefined",
+        lat: 0,
+        lng: 0,
+        address: "undefined",
+        reviewContent: "undefined",
+        userId: 0,
+        userEmoji: "undefined",
+        nickname: "undefined",
+      },
+    ],
+    hashtagList: [{ hastagId: 0 }],
+  };
 
   return (
     <div>
-      {isSuccess && (targetList?.length < 1 || targetList[0] === undefined) && (
-        <div style={{ textAlign: "center", marginTop: "20px", color: "white" }}>
-          {zeroDataText}
-        </div>
-      )}
-      {isLoading && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={spinner}
-            style={{ width: "auto", height: "20%", textAlign: "center" }}
-            alt="로딩 스피너"
-          />
-        </div>
-      )}
+      {isSuccess && targetList?.length < 1 && <div>{zeroDataText}</div>}
       {isError && isQueryError(error) && <p>{error?.message}</p>}
-      {isSuccess && !(targetList?.length < 1 || targetList[0] === undefined) && (
-        <GridContainer gridColumnCount={count}>
+      {targetList && (
+        <GridContainer>
           {targetList?.map((target, idx) => (
             <CardComponent
               {...target}
               index={idx}
-              key={v4()}
-              func={func}
+              // eslint-disable-next-line react/no-array-index-key
+              key={idx}
               isEditMode={isEditMode}
               refetch={refetchData}
+              prop={target}
+              isAdmin={false}
             />
           ))}
         </GridContainer>
       )}
       <div ref={bottom} />
       {isFetchingNextPage && (
-        <GridContainer gridColumnCount={count}>
-          {Array.from({ length: count }, (_, idx) => idx).map((i) => (
-            <SkeletonCardComponent key={i} />
+        <GridContainer>
+          {Array.from({ length: 1 }, (_, idx) => idx).map((i) => (
+            <CardComponent key={i} prop={noMap} isAdmin={false} />
           ))}
         </GridContainer>
       )}

@@ -1,32 +1,29 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
+import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 type TogetherMapProps = {
-  title: string;
-  usercnt: number;
-  // eslint-disable-next-line react/require-default-props
-  func?: () => void;
+  prop: ITogetherMap;
+  func: () => void;
 };
 
-const Container = styled.div<{ innerWidth: number }>`
+const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: 100%;
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2.5rem;
+  align-items: center;
+  padding: 1rem;
 
   .icon {
-    position: absolute;
-    max-width: 17rem;
-    width: ${(props) => (props.innerWidth >= 950 ? `17vw` : `17rem`)};
-    margin-bottom: 4rem;
+    width: 90%;
+    height: 15%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray400};
@@ -37,16 +34,15 @@ const Container = styled.div<{ innerWidth: number }>`
   }
 
   .title {
-    margin-top: 0.8rem;
     text-align: center;
+    height: 30%;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
-    z-index: 999;
   }
 
   .participate {
-    margin-top: 0.4rem;
+    height: 10%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
@@ -59,24 +55,15 @@ const Container = styled.div<{ innerWidth: number }>`
   }
 `;
 
-function TogetherMapCard({ title, usercnt, func }: TogetherMapProps) {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
-
+function TogetherMapCard({ prop, func }: TogetherMapProps) {
   return (
-    <Container onClick={func} innerWidth={innerWidth}>
+    <Container onClick={func}>
       <p className="icon">
         <Quotesstart />
         <Quotesend />
       </p>
-      <p className="title">{title}</p>
-      <p className="participate">🙋‍♂️ {usercnt}명이 참여</p>
+      <p className="title">{prop.title}</p>
+      <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
     </Container>
   );
 }

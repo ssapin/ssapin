@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
-import MapCard from "../../components/card/MapCard";
-import TogetherMapCard from "../../components/card/TogetherMapCard";
 import { pixelToRem } from "../../utils/functions/util";
+import USER_APIS from "../../utils/apis/userApis";
+import { MemoInfiniteList } from "../../components/infinite/InfiniteList";
+import MapCard from "../../components/card/MapCard";
 
-// 두 개를 묶고 있는 div
 const MyMapsContainer = styled.div`
-  background-color: beige;
   display: block;
   justify-content: center;
   align-items: center;
 `;
 
-// 지도 - 작성 부분 div
 const WriteMapContainer = styled.div`
   display: block;
   justify-content: center;
@@ -23,7 +21,6 @@ const WriteMapContainer = styled.div`
   }
 `;
 
-// 지도 - 참여 부분 div
 const JoinedMapContainer = styled.div`
   display: block;
   justify-content: center;
@@ -40,14 +37,32 @@ const ToggleGroup = styled.div`
   background-color: ${(props) => props.theme.colors.lightLightBlue};
   text-align: center;
   border-radius: ${pixelToRem(10)};
+  ${(props) => props.theme.mq.mobile} {
+    height: ${pixelToRem(32)};
+    border-radius: ${pixelToRem(15)};
+  }
+  ${(props) => props.theme.mq.tablet} {
+    height: ${pixelToRem(32)};
+    border-radius: ${pixelToRem(15)};
+  }
   margin: 5% 33.5%;
   .inactive {
     width: 50%;
     height: 100%;
     border-radius: ${pixelToRem(10)};
+    ${(props) => props.theme.mq.mobile} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+    }
+    ${(props) => props.theme.mq.tablet} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+    }
     background-color: transparent;
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-family: ${(props) => props.theme.fontFamily.h5};
     color: ${(props) => props.theme.colors.gray500};
   }
 
@@ -55,10 +70,20 @@ const ToggleGroup = styled.div`
     width: 50%;
     height: 100%;
     border-radius: ${pixelToRem(10)};
+    ${(props) => props.theme.mq.mobile} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    }
+    ${(props) => props.theme.mq.tablet} {
+      border-radius: ${pixelToRem(15)};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    }
     background-color: ${(props) => props.theme.colors.lightBlue};
     color: ${(props) => props.theme.colors.gray0};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
   }
 `;
 
@@ -89,92 +114,22 @@ export default function MyMaps() {
       </ToggleGroup>
       {type === 0 && (
         <WriteMapContainer>
-          <div>
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-          </div>
-          <div>
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-          </div>
-          <div>
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-            <MapCard
-              icon="🧛‍♂️"
-              title="나 오늘 집에 안갈래"
-              user="허설래미저쩔래미"
-              usercnt={5000}
-              placecnt={50}
-            />
-          </div>
+          <MemoInfiniteList
+            url={USER_APIS.MY_MAP}
+            queryKey={["MyMapList"]}
+            zeroDataText="없어시붕"
+            CardComponent={MapCard}
+          />
         </WriteMapContainer>
       )}
       {type === 1 && (
         <JoinedMapContainer>
-          <div>
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-          </div>
-          <div>
-            <TogetherMapCard
-              title="오늘은 허설님이 한 턱 쏘는 날!"
-              usercnt={50000000}
-            />
-          </div>
+          <MemoInfiniteList
+            url={USER_APIS.JOIN_MAP}
+            queryKey={["JoinMapList"]}
+            zeroDataText="없어시붕"
+            CardComponent={MapCard}
+          />
         </JoinedMapContainer>
       )}
     </MyMapsContainer>

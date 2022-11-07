@@ -15,29 +15,28 @@ import useUserActions from "../../utils/hooks/useUserActions";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import LoginModal from "../Login/LoginModal";
 
-const Container = styled.div<{ innerWidth: number }>`
+const Container = styled.div`
   background-color: ${(props) => props.theme.colors.mainBlue};
   width: 100%;
   height: 15vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 1rem 0rem 1rem;
+  padding: 1rem 0.5rem 0.5rem 1.5rem;
   ${(props) => props.theme.mq.tablet} {
-    padding: 1rem 0.5rem 0.5rem 1.5rem;
+    padding: 1rem 1rem 0rem 1rem;
   }
-  padding: ${(props) =>
-    props.innerWidth >= 950
-      ? `1rem 0.5rem 0.5rem 1.5rem`
-      : `1rem 1rem 0rem 1rem`};
 `;
 
-const CampusContainer = styled.div<{ innerWidth: number }>`
+const CampusContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: ${(props) => props.innerWidth < 950 && `71%`};
   justify-content: flex-start;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 71%;
+  }
 `;
 
 const EmptyContainer = styled.div`
@@ -45,19 +44,30 @@ const EmptyContainer = styled.div`
   height: 100%;
 `;
 
-const LogoContainer = styled.h1<{ innerWidth: number }>`
+const LogoContainer = styled.h1`
   width: 100%;
-  height: ${(props) => (props.innerWidth >= 950 ? `50%` : `80%`)};
+  height: 50%;
   display: flex;
-  flex-direction: ${(props) => (props.innerWidth < 950 ? `column` : `row`)};
-  justify-content: ${(props) => props.innerWidth < 950 && `center`};
-  margin-bottom: ${(props) => props.innerWidth >= 950 && `0.7rem`};
-  text-align: ${(props) => props.innerWidth < 950 && `center`};
-  align-items: ${(props) => props.innerWidth < 950 && `center`};
+  flex-direction: row;
+  margin-bottom: 0.7rem;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: 70%;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 0;
+    text-align: center;
+    align-items: center;
+  }
 
   .logo {
-    height: ${(props) => (props.innerWidth >= 950 ? `100%` : `40%`)};
+    height: 100%;
     margin: 0;
+
+    ${(props) => props.theme.mq.tablet} {
+      height: 40%;
+    }
+
     img {
       width: auto;
       height: 100%;
@@ -66,12 +76,17 @@ const LogoContainer = styled.h1<{ innerWidth: number }>`
 
   button {
     height: 35%;
-    margin-top: ${(props) => props.innerWidth >= 950 && `2.3rem`};
-    margin-left: ${(props) => props.innerWidth >= 950 && `0.5rem`};
+    margin-top: 2.3rem;
+    margin-left: 0.5rem;
     background-color: transparent;
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.subYellow};
+
+    ${(props) => props.theme.mq.tablet} {
+      margin-top: 0;
+      margin-left: 0;
+    }
 
     &:hover {
       scale: 1.05;
@@ -90,14 +105,21 @@ const Page = styled.div`
 `;
 
 const MyInfo = styled.div`
+  margin-bottom: 1rem;
   div {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+    color: ${(props) => props.theme.colors.mainNavy};
+  }
+
+  button {
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.mainNavy};
   }
 `;
 const NavContentFirst = styled.div`
-  div {
+  button {
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: black;
@@ -112,9 +134,12 @@ const NavContentSecond = styled.div`
   }
 `;
 
-const MenuContainer = styled.div<{ innerWidth: number }>`
-  width: ${(props) => props.innerWidth < 950 && `14.5%`};
+const MenuContainer = styled.div`
   height: 100%;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 14.5%;
+  }
 `;
 
 const Side = styled.div`
@@ -122,10 +147,23 @@ const Side = styled.div`
     width: 100%;
   }
   z-index: 999;
+
   .nav-menu {
     background-color: white;
     width: 27vw;
     height: 100vh;
+
+    ${(props) => props.theme.mq.pc} {
+      width: 40vw;
+    }
+
+    ${(props) => props.theme.mq.tablet} {
+      width: 70vw;
+    }
+
+    ${(props) => props.theme.mq.mobile} {
+      width: 90vw;
+    }
 
     position: fixed;
     top: 0;
@@ -209,15 +247,23 @@ function NavigationBar({ func }: NavBarProps) {
 
   const navigate = useNavigate();
   const moveToHome = () => {
-    navigate("");
+    navigate("/");
+  };
+
+  const moveToSearch = () => {
+    navigate("/search");
+  };
+
+  const moveToMyPage = () => {
+    navigate("/mypage");
   };
 
   return (
     <>
-      <Container innerWidth={innerWidth}>
+      <Container>
         {innerWidth < 950 && <EmptyContainer />}
-        <CampusContainer innerWidth={innerWidth}>
-          <LogoContainer innerWidth={innerWidth}>
+        <CampusContainer>
+          <LogoContainer>
             <button type="button" onClick={moveToHome} className="logo">
               <img alt="ssapin_logo.png" src={Logo} />
             </button>
@@ -229,7 +275,7 @@ function NavigationBar({ func }: NavBarProps) {
             <CampusButton open={toggleSide} select={func} campusId={campusId} />
           )}
         </CampusContainer>
-        <MenuContainer innerWidth={innerWidth}>
+        <MenuContainer>
           <MenuButton func={showSidebar} />
         </MenuContainer>
       </Container>
@@ -254,17 +300,17 @@ function NavigationBar({ func }: NavBarProps) {
                 <Xbutton />
               </button>
             </div>
-            {auth.accessToken ? (
-              <MyInfo>
+            <MyInfo>
+              {auth.accessToken ? (
                 <div className="nav-text">
                   {userInformation.emoji} {userInformation.nickname}
                 </div>
-              </MyInfo>
-            ) : (
-              <button type="button" onClick={handleModal}>
-                까까오똑 로꾸인
-              </button>
-            )}
+              ) : (
+                <button type="button" onClick={handleModal}>
+                  로그인
+                </button>
+              )}
+            </MyInfo>
 
             {modalOpen && (
               <ModalPortal>
@@ -273,9 +319,21 @@ function NavigationBar({ func }: NavBarProps) {
             )}
             <hr />
             <NavContentFirst>
-              <div className="nav-text">🏠 홈</div>
-              <div className="nav-text">🗺 지도 찾기</div>
-              <div className="nav-text">💡 마이페이지</div>
+              <button type="button" className="nav-text" onClick={moveToHome}>
+                🏠 홈
+              </button>
+              <button type="button" className="nav-text" onClick={moveToSearch}>
+                🗺 지도 찾기
+              </button>
+              {auth.accessToken && (
+                <button
+                  type="button"
+                  className="nav-text"
+                  onClick={moveToMyPage}
+                >
+                  💡 마이페이지
+                </button>
+              )}
             </NavContentFirst>
             <hr />
             <NavContentSecond>
