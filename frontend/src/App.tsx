@@ -24,8 +24,9 @@ function App(): JSX.Element {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<div>로딩중 ...</div>} />
-        {loading && <Router />}
+        <Suspense fallback={<div>로딩중 ...</div>}>
+          {loading && <Router />}
+        </Suspense>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </div>
