@@ -4,7 +4,7 @@ import axiosInstance from "./api";
 
 export const MAP_APIS = {
   MAP: "/map/login",
-  BOOKMARK: "/map/bookmark",
+  BOOKMARK: "/map/login/bookmark",
   getMap: (mapId: number) => `/map/${mapId}/detail`,
   getMapList: (
     campusId: number,
