@@ -35,6 +35,8 @@ const Searchbar = styled.div`
   button {
     margin-top: 1.5rem;
     width: 8%;
+    height: 50px;
+    min-width: 100px;
   }
   p {
     height: 20%;
@@ -43,10 +45,12 @@ const Searchbar = styled.div`
     font-size: ${(props) => props.theme.fontSizes.h1};
   }
 `;
+
 const MainContainer = styled.div`
   width: 100%;
   height: fit-content;
 `;
+
 const FixContainer = styled.div`
   position: fixed;
   bottom: 2rem;
@@ -70,13 +74,16 @@ const Side = styled.div`
     width: 30vw;
     height: 100vh;
     padding: 1rem;
+    min-width: 500px;
 
     ${(props) => props.theme.mq.tablet} {
       width: 70vw;
+      min-width: 300px;
     }
 
     ${(props) => props.theme.mq.mobile} {
       width: 90vw;
+      min-width: 300px;
     }
 
     position: fixed;
@@ -128,6 +135,8 @@ function SearchPage() {
 
   const onResetTag = () => {
     setHashTag([]);
+    setFakeKeyword("");
+    setKeyword("");
     setSidebar(!sidebar);
   };
 
@@ -169,6 +178,7 @@ function SearchPage() {
             height="15%"
             changeFunc={onChangeKeyword}
             clickFunc={onClickKeyword}
+            value={fakeKeyword}
           />
           <YellowButton type="button" text="필터링" func={showSidebar} />
           <Side>
@@ -179,6 +189,7 @@ function SearchPage() {
                 onChangeTag={onChangeTag}
                 onReset={onResetTag}
                 onSearch={onSearch}
+                keyword={fakeKeyword}
               />
             </div>
           </Side>

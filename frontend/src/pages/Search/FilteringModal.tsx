@@ -10,6 +10,7 @@ interface FilterModalProps {
   onSearch: () => void;
   onReset: () => void;
   onChangeKeyword: (e: any) => void;
+  keyword: string;
 }
 
 const Container = styled.div`
@@ -114,6 +115,7 @@ function FilterModal({
   onChangeTag,
   onReset,
   onChangeKeyword,
+  keyword,
 }: FilterModalProps) {
   return (
     <Container>
@@ -122,6 +124,7 @@ function FilterModal({
           type="text"
           placeholder="검색어를 입력하세요."
           onChange={onChangeKeyword}
+          value={keyword}
         />
         <SearchIcon className="searchButton" onClick={onChangeKeyword} />
       </SearchBar>
