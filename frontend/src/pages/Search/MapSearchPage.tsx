@@ -14,6 +14,7 @@ import YellowButton from "../../components/Buttons/YellowButton";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
+import AddPlaceModal from "./AddPlaceModal";
 import SearchList from "./SearchList";
 
 const HeadContainer = styled.div`
@@ -113,6 +114,8 @@ const Page = styled.div`
 function SearchPage() {
   const [campusId, setCampusId] = useRecoilState(campusState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [placemodalOpen, setPlaceModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
@@ -177,6 +180,10 @@ function SearchPage() {
     navigate("/mobileCreate");
   };
 
+  const handlePlaceModal = () => {
+    setPlaceModalOpen(true);
+  };
+
   return (
     <>
       <HeadContainer>
@@ -205,6 +212,16 @@ function SearchPage() {
           </Side>
           {sidebar && <Page onClick={showSidebar} />}
         </Searchbar>
+        <YellowButton
+          type="button"
+          text="모달테스트용"
+          func={handlePlaceModal}
+        />
+        {placemodalOpen && (
+          <ModalPortal>
+            <AddPlaceModal onClose={() => setPlaceModalOpen(false)} />
+          </ModalPortal>
+        )}
       </HeadContainer>
       <MainContainer>
         <SearchList hashtag={hashTag} keyword={keyword} />
