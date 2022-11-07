@@ -3,7 +3,6 @@ package com.ssapin.backend.api.domain.repositorysupport;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssapin.backend.api.domain.dto.response.PlaceIdResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
