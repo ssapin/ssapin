@@ -62,6 +62,10 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     height: 50%;
     margin-right: 1rem;
     fill: ${(props) => props.theme.colors.gray50};
+    cursor: pointer;
+    :hover {
+      scale: 1.05;
+    }
   }
 `;
 

@@ -8,14 +8,18 @@ export const mapApis = {
     hashtagList?: number[],
     keyword?: string,
   ) => {
+    console.log(campusId);
+    console.log(page);
+    console.log(hashtagList);
+    console.log(keyword);
     let api: string = `/map?campusId=${campusId}`;
-    let str: string = "";
     if (page) {
       api += `&page=${page}`;
     }
     if (keyword && keyword != null && keyword !== "") {
       api += `&keyword=${keyword}`;
     }
+    let str: string = "&hashtagList=";
     if (hashtagList) {
       const { length } = hashtagList;
       if (length !== 0) {
