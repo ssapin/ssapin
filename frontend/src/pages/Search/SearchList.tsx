@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import MapCard from "../../components/card/MapCard";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { mapApis } from "../../utils/apis/mapApi";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import useFetchTripsInformation from "../../utils/hooks/useFecthTripsInformation";
 import useObserver from "../../utils/hooks/useObserver";
 
@@ -75,7 +75,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
   }: QueryFunctionContext) => {
     try {
       const res = await axiosInstance.get(
-        `${mapApis.getMapList(campusId, pageParam, hashtag, keyword)}`,
+        `${MAP_APIS.getMapList(campusId, pageParam, hashtag, keyword)}`,
       );
       return { result: res?.data, page: pageParam };
     } catch {

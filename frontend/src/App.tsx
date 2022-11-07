@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { useRecoilValue } from "recoil";
@@ -8,13 +8,12 @@ import { useGetUserInformation } from "./utils/hooks/useUserActions";
 
 function App(): JSX.Element {
   const [queryClient] = useState(() => new QueryClient());
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const auth = useRecoilValue(authState);
   const useGetUser = useGetUserInformation();
 
   useEffect(() => {
     (async () => {
-      console.log(auth.accessToken);
       if (auth.accessToken) {
         await useGetUser.getUser();
       }
@@ -25,6 +24,7 @@ function App(): JSX.Element {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<div>로딩중 ...</div>} />
         {loading && <Router />}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

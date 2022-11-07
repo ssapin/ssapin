@@ -3,7 +3,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authState, userInformationState } from "../../store/atom";
-import { getAccessToken, getUserInformation } from "../apis/useApis";
+import { getAccessToken, getUserInformation } from "../apis/userApis";
 import { cookie } from "../functions/cookie";
 
 function useUserActions() {
@@ -45,7 +45,6 @@ function useUserActions() {
     cookie.remove("accessToken", { path: "/" });
     setUser({ campusId: null, nickname: "", emoji: "", userId: null });
     setAuth({ accessToken: "" });
-    console.log("fuck 왜안지워져?");
     navigate("/");
   }
 }

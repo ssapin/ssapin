@@ -10,10 +10,10 @@ import { campusState } from "../../store/atom";
 import { pixelToRem } from "../../utils/functions/util";
 import Navbar from "../Navbar/Navbar";
 import YellowButton from "../../components/Buttons/YellowButton";
-import SearchList from "./SearchList";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
+import SearchList from "./SearchList";
 
 const HeadContainer = styled.div`
   width: 100%;

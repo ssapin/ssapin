@@ -1,6 +1,6 @@
-export const mapApis = {
-  map: "/map/login",
-  bookmark: "/map/login/bookmark",
+export const MAP_APIS = {
+  MAP: "/map",
+  BOOKMARK: "/map/bookmark",
   getMap: (mapId: number) => `/map/${mapId}/detail`,
   getMapList: (
     campusId: number,
@@ -8,10 +8,6 @@ export const mapApis = {
     hashtagList?: number[],
     keyword?: string,
   ) => {
-    console.log(campusId);
-    console.log(page);
-    console.log(hashtagList);
-    console.log(keyword);
     let api: string = `/map?campusId=${campusId}`;
     if (page) {
       api += `&page=${page}`;
@@ -23,7 +19,7 @@ export const mapApis = {
     if (hashtagList) {
       const { length } = hashtagList;
       if (length !== 0) {
-        hashtagList.forEach(function (hashtag) {
+        hashtagList.forEach((hashtag) => {
           str += hashtag.toString();
           str += ",";
         });
@@ -33,5 +29,5 @@ export const mapApis = {
     api += str;
     return api;
   },
-  getMapRanking: (campusId: number) => `/map/${campusId}/ranking`,
+  GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
 };
