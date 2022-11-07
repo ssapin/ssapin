@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -242,6 +242,18 @@ function MainPage() {
   const handleModal = () => {
     setModalOpen(true);
   };
+
+  const [keyword, setKeyword] = useState("");
+  const onChangeKeyword = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setKeyword(e.target.value);
+  };
+
+  const moveToSearch = () => {
+    navigate(`/search?keyword=${keyword}`);
+  };
+
   return (
     <>
       <HeadContainer>
@@ -273,7 +285,12 @@ function MainPage() {
           </Swiper>
         </QuestionContainer>
         <Searchbar>
-          <MapSearch width="50%" height="30%" />
+          <MapSearch
+            width="50%"
+            height="30%"
+            changeFunc={onChangeKeyword}
+            clickFunc={moveToSearch}
+          />
         </Searchbar>
       </HeadContainer>
       <MainContainer>
