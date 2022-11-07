@@ -1,8 +1,8 @@
 export const MAP_APIS = {
   MAP: "/map",
   BOOKMARK: "/map/bookmark",
-  GET_MAP: (mapId: number) => `/map/${mapId}/detail`,
-  GET_MAP_LIST: (
+  getMap: (mapId: number) => `/map/${mapId}/detail`,
+  getMapList: (
     campusId: number,
     page?: number,
     hashtagList?: number[],
@@ -19,7 +19,7 @@ export const MAP_APIS = {
     if (hashtagList) {
       const { length } = hashtagList;
       if (length !== 0) {
-        hashtagList.forEach(function (hashtag) {
+        hashtagList.forEach((hashtag) => {
           str += hashtag.toString();
           str += ",";
         });

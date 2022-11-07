@@ -1,18 +1,16 @@
 import styled from "@emotion/styled";
+import { RankingPlace } from "../../utils/types/place.interface";
 
 type HotPlaceProps = {
-  place: string;
-  address: string;
+  place: RankingPlace;
   message: string;
-  // eslint-disable-next-line react/require-default-props
-  func?: () => void;
 };
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: 100%;
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -50,11 +48,20 @@ const Container = styled.div`
   }
 `;
 
-function HotPlaceCard({ place, address, message, func }: HotPlaceProps) {
+function HotPlaceCard({ place, message }: HotPlaceProps) {
+  const onClickPlace = () => {
+    if (place !== undefined) alert(`${place.placeId}번 장소~`);
+    else alert("힝~ 장소없어~");
+  };
+
   return (
-    <Container onClick={func}>
-      <p className="place">{place}</p>
-      <p className="address">{address}</p>
+    <Container onClick={onClickPlace}>
+      <p className="place">
+        {place !== undefined ? place.title : "장소가 없습니다"}
+      </p>
+      <p className="address">
+        {place !== undefined ? place.address : "장소가 없습니다"}
+      </p>
       <p className="message">{message}</p>
     </Container>
   );

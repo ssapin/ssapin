@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "@emotion/styled";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
+import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -19,11 +19,9 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
-import useUserActions from "../../utils/hooks/useUserActions";
 import { campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
-
 import { IMap } from "../../utils/types/map.interface";
 import { MAP_APIS } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
@@ -35,6 +33,8 @@ import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
 import { PLACE_APIS } from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import CreateMapModal from "../CreateMap/CreateMapModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -115,7 +115,6 @@ const FixContainer = styled.div`
 
 function MainPage() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const useUserAction = useUserActions();
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
@@ -134,6 +133,11 @@ function MainPage() {
 
   const toggleActive = (key: number) => {
     setCampusId(key);
+  };
+
+  const navigate = useNavigate();
+  const moveToCreate = () => {
+    navigate("/mobileCreate");
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
@@ -234,6 +238,10 @@ function MainPage() {
     placeRankingData,
   ]);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModal = () => {
+    setModalOpen(true);
+  };
   return (
     <>
       <HeadContainer>
@@ -277,10 +285,15 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 650 ? (
-          <CreateButton type="button" text="지도 만들기" />
+        {innerWidth > 950 ? (
+          <CreateButton type="button" text="지도 만들기" func={handleModal} />
         ) : (
-          <CreateButtonMobile type="button" />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+        )}
+        {modalOpen && (
+          <ModalPortal>
+            <CreateMapModal onClose={() => setModalOpen(false)} />
+          </ModalPortal>
         )}
       </FixContainer>
       <Footer />
