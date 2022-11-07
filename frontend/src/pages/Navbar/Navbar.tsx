@@ -127,7 +127,7 @@ const NavContentFirst = styled.div`
 `;
 
 const NavContentSecond = styled.div`
-  div {
+  button {
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: black;
@@ -333,11 +333,27 @@ function NavigationBar({ func }: NavBarProps) {
             </NavContentFirst>
             <hr />
             <NavContentSecond>
-              <div className="nav-text">
+              <button
+                type="button"
+                className="nav-text"
+                onClick={() => {
+                  window.open("http://pf.kakao.com/_mLgKxj");
+                }}
+              >
                 <img alt="ri_kakao-talk-fill.png" src={Kakaotalk} />
                 &nbsp;카카오톡 채널
-              </div>
-              <div className="nav-text">🗣 건의사항</div>
+              </button>
+              <button
+                type="button"
+                className="nav-text"
+                onClick={() => {
+                  window.open(
+                    "https://docs.google.com/forms/d/1PcgzJyhUO4gG550dDawSxQiCff_3mr6KYzNIyKrVvdU/prefill",
+                  );
+                }}
+              >
+                🗣 건의사항
+              </button>
             </NavContentSecond>
           </div>
 
