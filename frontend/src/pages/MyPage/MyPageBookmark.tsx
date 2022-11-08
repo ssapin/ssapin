@@ -13,23 +13,13 @@ const MyBookmarkContainer = styled.div`
 `;
 
 const BookmarkMapContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 90%;
+  margin: auto;
 `;
 
 const BookmarkPlaceContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 90%;
+  margin: auto;
 `;
 
 const ToggleGroup = styled.div`
