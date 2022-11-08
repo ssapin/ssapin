@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { RankingPlace } from "../../utils/types/place.interface";
+import { IPlaceMin } from "../../utils/types/place.interface";
 
 type HotPlaceProps = {
-  place: RankingPlace;
+  place: IPlaceMin;
   message: string;
 };
 

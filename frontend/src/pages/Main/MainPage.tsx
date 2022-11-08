@@ -31,7 +31,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
-import { PLACE_APIS } from "../../utils/apis/placeApi";
+import PLACE_APIS from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
