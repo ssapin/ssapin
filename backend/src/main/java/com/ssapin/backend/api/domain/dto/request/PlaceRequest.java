@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class PlaceRequest {
 
-    private long placeId;
     private long itemId;
     private String title;
     private float lat;
@@ -15,7 +14,6 @@ public class PlaceRequest {
     private String address;
 
     public PlaceRequest(Place place) {
-        this.placeId = place.getId();
         this.itemId = place.getItemId();
         this.title = place.getTitle();
         this.lat = place.getLat();
