@@ -35,9 +35,8 @@ export const HASHTAG_LIST = [
   "🌃 밤늦게",
 ];
 
-<<<<<<< HEAD
 export const RATING_LIST = ["0", "😄", "🙄", "😡"];
-=======
+
 export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
   서울: { lat: 37.5012896829276, lan: 127.0396470750927 },
   광주: { lat: 35.20528528929143, lan: 126.81158503905786 },
@@ -45,4 +44,3 @@ export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
   대전: { lat: 36.355246983779615, lan: 127.29833653752476 },
   부울경: { lat: 35.09372804997492, lan: 128.85628470609004 },
 };
->>>>>>> 209cc8e4ce92346d8059a84f65dbe970a09f6809
