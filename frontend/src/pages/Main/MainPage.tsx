@@ -35,6 +35,7 @@ import { PLACE_APIS } from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
+import YellowButton from "../../components/Buttons/YellowButton";
 
 const HeadContainer = styled.div`
   width: 100%;
