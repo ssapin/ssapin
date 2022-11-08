@@ -355,7 +355,7 @@ function NavigationBar({ func }: NavBarProps) {
                 className="nav-text"
                 onClick={() => {
                   window.open(
-                    "https://docs.google.com/forms/d/1PcgzJyhUO4gG550dDawSxQiCff_3mr6KYzNIyKrVvdU/prefill",
+                    "https://docs.google.com/forms/d/1PcgzJyhUO4gG550dDawSxQiCff_3mr6KYzNIyKrVvdU",
                   );
                 }}
               >
