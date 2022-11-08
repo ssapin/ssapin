@@ -44,10 +44,18 @@ const Title = styled.div`
 const GridContainer = styled.div`
   display: grid;
   margin-top: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   grid-gap: 2rem;
   margin-bottom: 1rem;
   justify-items: center;
+
+  ${(props) => props.theme.mq.tablet} {
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(80%, 1fr));
+  }
 `;
 
 const NoContainer = styled.div`
@@ -135,6 +143,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
           {targetList?.length &&
             targetList?.map((target, idx) => (
               <MapCard
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...target}
                 index={idx}
                 // eslint-disable-next-line react/no-array-index-key

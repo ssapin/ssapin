@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { userInformationState } from "../../store/atom";
 import { IPlace } from "../../utils/types/place.interface";
 
 type PlaceCardProps = {
@@ -19,16 +21,40 @@ const Container = styled.div`
   justify-content: space-around;
   padding: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin: 0;
+  }
+
   .place {
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .address {
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .review {
@@ -36,6 +62,13 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .delete {
@@ -65,6 +98,7 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
     alert(`${prop.placeId}번 장소~ 지우고 싶대`);
   };
 
+  const user = useRecoilValue(userInformationState);
   return (
     <Container onClick={onClickPlace}>
       <p className="place">
@@ -76,7 +110,7 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
       <p className="review">
         {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
       </p>
-      {isAdmin && (
+      {isAdmin && prop.userId === user.userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>

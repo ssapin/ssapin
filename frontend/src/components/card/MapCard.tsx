@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 import { userInformationState } from "../../store/atom";
 import { IMap } from "../../utils/types/map.interface";
@@ -24,11 +24,21 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin: 0;
+  }
+
   .icon {
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
   }
 
   .title {
@@ -37,6 +47,19 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .user {
@@ -45,6 +68,10 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+    }
   }
 
   .summary {
@@ -53,6 +80,10 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+    }
   }
 
   :hover {
@@ -71,7 +102,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
     alert(`${prop.mapId}번 장소~ 지우고 싶대`);
   };
 
-  const user = useRecoilState(userInformationState);
+  const user = useRecoilValue(userInformationState);
   return (
     <Container onClick={onClickMap}>
       <p className="icon">{prop.mapEmoji}</p>
@@ -80,7 +111,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
       <p className="summary">
         📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
       </p>
-      {isAdmin && prop.userId === user[0].userId && (
+      {isAdmin && prop.userId === user.userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>

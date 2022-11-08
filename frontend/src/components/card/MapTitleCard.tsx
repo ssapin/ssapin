@@ -10,13 +10,14 @@ const Container = styled.div`
   border-radius: 10px;
   margin: 1rem;
   width: 22rem;
-  height: 4.5rem;
+  height: 4rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  padding: 1rem 2rem 1rem 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 
   .user {
     font-size: ${(props) => props.theme.fontSizes.s2};

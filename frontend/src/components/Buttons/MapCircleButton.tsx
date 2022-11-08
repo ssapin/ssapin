@@ -12,6 +12,7 @@ interface ChooseFeature extends IButtonProps {
   // eslint-disable-next-line react/require-default-props
   height?: string;
 }
+
 const WhiteCircle = styled.button<{ height?: string }>`
   width: ${(props) => (props.height ? props.height : `7vh`)};
   height: ${(props) => (props.height ? props.height : `7vh`)};

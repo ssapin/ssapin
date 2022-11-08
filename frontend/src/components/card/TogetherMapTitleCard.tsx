@@ -11,24 +11,34 @@ const Container = styled.div`
   border-radius: 10px;
   margin: 1rem;
   width: 22rem;
-  height: 4.5rem;
+  height: 4rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray50};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
 
   .icon {
-    position: absolute;
-    width: 18rem;
-    margin-bottom: 1rem;
+    width: 100%;
+    height: 10%;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
-    z-index: 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    ${(props) => props.theme.mq.mobile} {
+      width: 100%;
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+  }
+
+  .quotes {
+    fill: ${(props) => props.theme.colors.subYellow};
   }
 
   .title {
@@ -44,10 +54,10 @@ const Container = styled.div`
 function TogetherMapTitleCard({ title }: TogetherMapTitleProps) {
   return (
     <Container>
-      <p className="icon">
-        <Quotesstart />
-        <Quotesend />
-      </p>
+      <div className="icon">
+        <Quotesstart className="quotes" />
+        <Quotesend className="quotes" />
+      </div>
       <p className="title">{title}</p>
     </Container>
   );

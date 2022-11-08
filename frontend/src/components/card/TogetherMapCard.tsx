@@ -21,6 +21,11 @@ const Container = styled.div`
   align-items: center;
   padding: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin: 0;
+  }
+
   .icon {
     width: 90%;
     height: 15%;
@@ -31,6 +36,16 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    ${(props) => props.theme.mq.mobile} {
+      width: 100%;
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+
+    .quotes {
+      fill: ${(props) => props.theme.colors.gray300};
+    }
   }
 
   .title {
@@ -39,6 +54,18 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .participate {
@@ -47,6 +74,11 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.s1};
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
 
   :hover {
@@ -64,8 +96,8 @@ function TogetherMapCard({ prop }: TogetherMapProps) {
       }}
     >
       <p className="icon">
-        <Quotesstart />
-        <Quotesend />
+        <Quotesstart className="quotes" />
+        <Quotesend className="quotes" />
       </p>
       <p className="title">{prop.title}</p>
       <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
