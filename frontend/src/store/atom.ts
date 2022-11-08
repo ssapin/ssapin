@@ -1,13 +1,7 @@
 import { atom, selector } from "recoil";
 import { v1 } from "uuid";
 import { cookie } from "../utils/functions/cookie";
-
-interface UserInformation {
-  campusId: number;
-  nickname: string;
-  emoji: string;
-  userId: number;
-}
+import { IUser } from "../utils/types/user.interface";
 
 interface Auth {
   accessToken: string;
@@ -18,9 +12,17 @@ export const authState = atom<Auth>({
   default: { accessToken: cookie.get("accessToken") },
 });
 
-export const userInformationState = atom<UserInformation>({
+export const userInformationState = atom<IUser>({
   key: "userInformation",
-  default: { campusId: null, nickname: "", emoji: "", userId: null },
+  default: {
+    campusId: null,
+    nickname: "",
+    emoji: "",
+    userId: null,
+    mapCnt: 0,
+    placeCnt: 0,
+    participateCnt: 0,
+  },
 });
 
 export const loggedInState = selector({

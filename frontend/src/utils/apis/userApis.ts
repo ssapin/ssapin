@@ -9,6 +9,10 @@ const USER_APIS = {
   REISSUE: "/auth/reissue",
   USER_INFORMATION: "/user/login/info",
   getUserRanking: (campusId: number) => `/user/ranking/${campusId}`,
+  MY_MAP: "/user/login/map/mine",
+  JOIN_MAP: "/user/login/map/join",
+  BOOKMARK_MAP: "/user/login/map/bookmark",
+  BOOKMARK_PLACE: "/user/login/place/bookmark",
 };
 
 export const getAccessToken = async (
@@ -23,5 +27,4 @@ export const getUserInformation = async (): Promise<AxiosResponse> =>
 
 export const getNewAccessToken = async (): Promise<AxiosResponse> =>
   axiosInstance.get(USER_APIS.REISSUE);
-
 export default USER_APIS;

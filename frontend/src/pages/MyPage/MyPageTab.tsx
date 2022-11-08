@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import MyBookmark from "./MyPageBookmark";
 import MyMaps from "./MyPageMaps";
@@ -23,6 +23,16 @@ const TabMenu = styled.div`
     cursor: pointer;
     font-family: ${(props) => props.theme.fontFamily.h1};
     font-size: ${(props) => props.theme.fontSizes.h1};
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      padding: 10px;
+    }
+    ${(props) => props.theme.mq.tablet} {
+      font-family: ${(props) => props.theme.fontFamily.h3};
+      font-size: ${(props) => props.theme.fontSizes.h3};
+      padding: 15px;
+    }
     background-color: ${(props) => props.theme.colors.mediumBlue};
     color: ${(props) => props.theme.colors.gray500};
   }
@@ -35,6 +45,16 @@ const TabMenu = styled.div`
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h1bold};
     font-size: ${(props) => props.theme.fontSizes.h1};
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+      font-size: ${(props) => props.theme.fontSizes.paragraph};
+      padding: 10px;
+    }
+    ${(props) => props.theme.mq.tablet} {
+      font-family: ${(props) => props.theme.fontFamily.h3bold};
+      font-size: ${(props) => props.theme.fontSizes.h3};
+      padding: 15px;
+    }
   }
 `;
 

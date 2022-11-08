@@ -1,12 +1,15 @@
-import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { pixelToRem } from "../../utils/functions/util";
 
 const TiedBoxes = styled.div`
   display: block;
-  height: 523.2px;
+  height: fit-content;
   padding-left: 10px;
+  ${(props) => props.theme.mq.tablet} {
+    padding-left: 0;
+  }
 `;
+
 const TagName = styled.span<{ type?: string }>`
   width: 62px;
   height: 29px;
@@ -25,6 +28,7 @@ const TagName = styled.span<{ type?: string }>`
       ? props.theme.fontSizes.h5
       : props.theme.fontSizes.h3};
 `;
+
 const OpenTag = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -52,68 +56,76 @@ const OpenTag = styled.div`
       background-color: ${(props) => props.theme.colors.lightBlue};
       color: ${(props) => props.theme.colors.gray0};
     }
+
+    ${(props) => props.theme.mq.tablet} {
+      justify-content: center;
+      margin-left: 0;
+    }
   }
   .checkbox input:checked + .checkbox_text {
     color: ${(props) => props.theme.colors.gray0};
     background-color: ${(props) => props.theme.colors.lightBlue};
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
   }
+
+  ${(props) => props.theme.mq.tablet} {
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 15px;
+  }
 `;
 
 type Filterprops = {
   // eslint-disable-next-line react/require-default-props
   type?: string;
+  // eslint-disable-next-line react/require-default-props
+  func?: (item: any, check: any) => void;
+  hashTag: number[];
 };
 
-export default function FilterChoiceButton({ type }: Filterprops) {
-  const [hashTag, setHashTag] = useState([]);
-
+export default function FilterChoiceButton({
+  type,
+  func,
+  hashTag,
+}: Filterprops) {
   const countPerson = [
-    { key: "1", value: "👤 1인", checked: false, index: 0 },
-    { key: "2", value: "👥 다수", checked: false, index: 0 },
+    { key: 1, value: "👤 1인", checked: false, index: 0 },
+    { key: 2, value: "👥 다수", checked: false, index: 0 },
   ];
 
   const featureData = [
-    { key: "3", value: "🔕 조용한", checked: false, index: 0 },
-    { key: "4", value: "🌞 햇살좋은", checked: false, index: 0 },
-    { key: "5", value: "📢 붐비는", checked: false, index: 0 },
-    { key: "6", value: "🧹 깔끔한", checked: false, index: 0 },
-    { key: "7", value: "👖 빈티지", checked: false, index: 0 },
-    { key: "8", value: "📷 인스타감성", checked: false, index: 0 },
-    { key: "9", value: "💪 건강한", checked: false, index: 0 },
-    { key: "10", value: "🚗 주차편한", checked: false, index: 0 },
-    { key: "11", value: "🥅 넓은", checked: false, index: 0 },
-    { key: "12", value: "🤵 친절한", checked: false, index: 0 },
-    { key: "13", value: "🌉 경치좋은", checked: false, index: 0 },
-    { key: "14", value: "🍲 푸짐한", checked: false, index: 0 },
-    { key: "15", value: "😋 맛있는", checked: false, index: 0 },
-    { key: "16", value: "💰 가성비", checked: false, index: 0 },
-    { key: "17", value: "🌟 밝은", checked: false, index: 0 },
-    { key: "18", value: "🔦 어두운", checked: false, index: 0 },
+    { key: 3, value: "🔕 조용한", checked: false, index: 0 },
+    { key: 4, value: "🌞 햇살좋은", checked: false, index: 0 },
+    { key: 5, value: "📢 붐비는", checked: false, index: 0 },
+    { key: 6, value: "🧹 깔끔한", checked: false, index: 0 },
+    { key: 7, value: "👖 빈티지", checked: false, index: 0 },
+    { key: 8, value: "📷 인스타감성", checked: false, index: 0 },
+    { key: 9, value: "💪 건강한", checked: false, index: 0 },
+    { key: 10, value: "🚗 주차편한", checked: false, index: 0 },
+    { key: 11, value: "🥅 넓은", checked: false, index: 0 },
+    { key: 12, value: "🤵 친절한", checked: false, index: 0 },
+    { key: 13, value: "🌉 경치좋은", checked: false, index: 0 },
+    { key: 14, value: "🍲 푸짐한", checked: false, index: 0 },
+    { key: 15, value: "😋 맛있는", checked: false, index: 0 },
+    { key: 16, value: "💰 가성비", checked: false, index: 0 },
+    { key: 17, value: "🌟 밝은", checked: false, index: 0 },
+    { key: 18, value: "🔦 어두운", checked: false, index: 0 },
   ];
 
   const goalData = [
-    { key: "19", value: "💬 대화", checked: false, index: 0 },
-    { key: "20", value: "📖 공부", checked: false, index: 0 },
-    { key: "21", value: "🎧 음악감상", checked: false, index: 0 },
-    { key: "22", value: "🍻 회식", checked: false, index: 0 },
-    { key: "23", value: "🚶 산책", checked: false, index: 0 },
-    { key: "24", value: "👩‍💻 코딩", checked: false, index: 0 },
+    { key: 19, value: "💬 대화", checked: false, index: 0 },
+    { key: 20, value: "📖 공부", checked: false, index: 0 },
+    { key: 21, value: "🎧 음악감상", checked: false, index: 0 },
+    { key: 22, value: "🍻 회식", checked: false, index: 0 },
+    { key: 23, value: "🚶 산책", checked: false, index: 0 },
+    { key: 24, value: "👩‍💻 코딩", checked: false, index: 0 },
   ];
 
   const timeData = [
-    { key: "25", value: "⛺ 24시간", checked: false, index: 0 },
-    { key: "26", value: "🌅 아침일찍", checked: false, index: 0 },
-    { key: "27", value: "🌃 밤늦게", checked: false, index: 0 },
+    { key: 25, value: "⛺ 24시간", checked: false, index: 0 },
+    { key: 26, value: "🌅 아침일찍", checked: false, index: 0 },
+    { key: 27, value: "🌃 밤늦게", checked: false, index: 0 },
   ];
-
-  const onChangeTag = (checked: any, item: any) => {
-    if (checked) {
-      setHashTag([...hashTag, item]);
-    } else if (!checked) {
-      setHashTag(hashTag.filter((el: any) => el !== item));
-    }
-  };
 
   return (
     <TiedBoxes>
@@ -126,7 +138,7 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, el.key);
+                func(e.target.checked, el.key);
               }}
               checked={hashTag.includes(el.key)}
             />
@@ -143,7 +155,7 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, el.key);
+                func(e.target.checked, el.key);
               }}
               checked={hashTag.includes(el.key)}
             />
@@ -160,7 +172,7 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, el.key);
+                func(e.target.checked, el.key);
               }}
               checked={hashTag.includes(el.key)}
             />
@@ -177,7 +189,7 @@ export default function FilterChoiceButton({ type }: Filterprops) {
               type="checkbox"
               value={el.value}
               onChange={(e) => {
-                onChangeTag(e.target.checked, el.key);
+                func(e.target.checked, el.key);
               }}
               checked={hashTag.includes(el.key)}
             />
