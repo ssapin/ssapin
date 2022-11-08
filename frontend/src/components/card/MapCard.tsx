@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 import { userInformationState } from "../../store/atom";
 import { IMap } from "../../utils/types/map.interface";
@@ -53,6 +53,13 @@ const Container = styled.div`
       font-family: ${(props) => props.theme.fontFamily.h5bold};
       font-size: ${(props) => props.theme.fontSizes.h5};
     }
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .user {
@@ -95,7 +102,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
     alert(`${prop.mapId}번 장소~ 지우고 싶대`);
   };
 
-  const user = useRecoilState(userInformationState);
+  const user = useRecoilValue(userInformationState);
   return (
     <Container onClick={onClickMap}>
       <p className="icon">{prop.mapEmoji}</p>
@@ -104,7 +111,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
       <p className="summary">
         📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
       </p>
-      {isAdmin && prop.userId === user[0].userId && (
+      {isAdmin && prop.userId === user.userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>

@@ -26,7 +26,6 @@ const Container = styled.div`
   }
 
   .place {
-    text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
@@ -35,9 +34,16 @@ const Container = styled.div`
       font-family: ${(props) => props.theme.fontFamily.h5bold};
       font-size: ${(props) => props.theme.fontSizes.h5};
     }
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .address {
+    width: 100%;
     margin-top: 0.4rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.s2};
@@ -47,6 +53,11 @@ const Container = styled.div`
     ${(props) => props.theme.mq.mobile} {
       margin-top: 0.2rem;
     }
+
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .message {
