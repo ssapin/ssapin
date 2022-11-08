@@ -1,38 +1,26 @@
 import styled from "@emotion/styled";
-
 import { SetStateAction, useState } from "react";
 import { useRecoilState } from "recoil";
-
-// 컴포넌트
 import ModalContainer from "../../components/containers/ModalContainer";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
-
-// 유저정보 불러올 때
 import { userInformationState } from "../../store/atom";
-
-// 캠퍼스 버튼을 위한 리스트
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
-
-// API연결
 import axiosInstance from "../../utils/apis/api";
 import USER_APIS from "../../utils/apis/userApis";
 
-// 모달 타입 인터페이스
 interface ChangeModalProps {
   // eslint-disable-next-line react/require-default-props
   onClose: () => void;
 }
 
-// 전체 묶은 div
 const Container = styled.div`
   max-width: 600px;
   height: 100%;
   line-height: 29px;
 `;
 
-// 연관된 것만 묶은 div - 닉네임 문구 + 닉넴인풋 / 캠퍼스 문구 + 캠퍼스 버튼
 const RelativeContainer = styled.div`
   width: 100%;
   display: flex;
@@ -47,7 +35,6 @@ const RelativeContainer = styled.div`
   color: ${(props) => props.theme.colors.gray600};
 `;
 
-// 버튼 묶여있음
 const ButtonContainer = styled.div`
   text-align: center;
   margin-top: 1rem;
@@ -56,7 +43,7 @@ const ButtonContainer = styled.div`
     margin: 1rem;
   }
 `;
-// 캠퍼스 변경 버튼 구현
+
 const TiedBoxes = styled.div`
   display: flex;
   justify-content: center;
@@ -88,7 +75,6 @@ const StyledCampus = styled.div`
   }
 `;
 
-// 이모지 변경을 위한 input 창 (둥근것)
 const EmojiInput = styled.input`
   width: 150px;
   height: 150px;
@@ -101,7 +87,6 @@ const EmojiInput = styled.input`
   text-align: center;
 `;
 
-// 닉네임 변경용 input 창
 const NicknameInput = styled.input`
   width: 276px;
   height: 43px;
@@ -115,16 +100,10 @@ const NicknameInput = styled.input`
   text-align: center;
 `;
 
-// 본격 함수
 export function ChangeInfoModal({ onClose }: ChangeModalProps) {
-  // 캠퍼스 정보 받아오기
   const camlist = CAMPUS_LIST;
-
-  // 유저 이모지 이미지 받아오기 위해 정보 받기
   const [userInformation, setUserInformation] =
     useRecoilState(userInformationState);
-
-  // 유저 닉네임과 변경 이모지 저장
   const [nickname, setNickname] = useState(userInformation.nickname);
   const [emoji, setEmoji] = useState(userInformation.emoji);
   const [campus, setCampus] = useState(userInformation.campusId);
@@ -143,10 +122,6 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     setCampus(e);
   };
 
-  //   const campusClick = (e: { preventDefault: () => void }) => {
-  //     console.log(e.target.value);
-  //   };
-  // function > 확인 눌렀을 때 유저 정보 변경되도록 만들기
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -196,7 +171,7 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     try {
       if (response.status === 200) {
         // eslint-disable-next-line no-alert
-        alert(`성공적으로 정보가 변경되었습니다.`);
+        alert(`정보가 변경되었습니다.`);
         try {
           const userResponse = await axiosInstance.get(
             USER_APIS.USER_INFORMATION,
