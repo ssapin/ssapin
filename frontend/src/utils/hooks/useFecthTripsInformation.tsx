@@ -16,15 +16,13 @@ const useFetchTripsInformation = ({
   getTargetComponentList,
 }: UseFetchTripsInformationProps) =>
   useInfiniteQuery(queryKey, getTargetComponentList, {
+    // eslint-disable-next-line consistent-return
     getNextPageParam: (lastPage: any) => {
-      if (lastPage?.result.last) {
-        const {
-          result: { last },
-        } = lastPage;
-        if (last) return lastPage.page + 1;
-        return false;
+      if (!lastPage?.result?.last) {
+        if (!lastPage?.result?.last) return lastPage.page + 1;
+        // return false;
       }
-      return false;
+      // return false;
     },
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
