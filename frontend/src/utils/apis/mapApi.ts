@@ -1,6 +1,10 @@
+import { AxiosResponse } from "axios";
+import { IMap } from "../types/map.interface";
+import axiosInstance from "./api";
+
 export const MAP_APIS = {
-  MAP: "/map",
-  BOOKMARK: "/map/bookmark",
+  MAP: "/map/login",
+  BOOKMARK: "/map/login/bookmark",
   getMap: (mapId: number) => `/map/${mapId}/detail`,
   getMapList: (
     campusId: number,
@@ -9,13 +13,13 @@ export const MAP_APIS = {
     keyword?: string,
   ) => {
     let api: string = `/map?campusId=${campusId}`;
-    let str: string = "";
     if (page) {
       api += `&page=${page}`;
     }
     if (keyword && keyword != null && keyword !== "") {
       api += `&keyword=${keyword}`;
     }
+    let str: string = "&hashtagList=";
     if (hashtagList) {
       const { length } = hashtagList;
       if (length !== 0) {
@@ -30,4 +34,15 @@ export const MAP_APIS = {
     return api;
   },
   GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
+};
+
+export const getMap = async (mapId: number) => {
+  try {
+    const response: AxiosResponse<IMap> = await axiosInstance.get(
+      MAP_APIS.getMap(mapId),
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };

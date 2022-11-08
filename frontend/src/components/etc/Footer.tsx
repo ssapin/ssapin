@@ -27,6 +27,11 @@ const SNSContainer = styled.div`
     color: ${(props) => props.theme.colors.gray400};
     font-family: ${(props) => props.theme.fontFamily.h5};
     letter-spacing: 0.5px;
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5};
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
 `;
 
@@ -49,6 +54,11 @@ const CopyRight = styled.div`
     font-family: ${(props) => props.theme.fontFamily.h5};
     padding: 5px;
     letter-spacing: 0.7px;
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5};
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
 `;
 
@@ -63,7 +73,7 @@ function Footer() {
         <IconContainer>
           <Icon>
             <a
-              href="https://www.instagram.com/zzuap_archive/?igshid=YmMyMTA2M2Y%3D"
+              href="https://www.instagram.com/ssapin307/?igshid=YmMyMTA2M2Y%3D"
               target="_blank"
               rel="noreferrer"
             >

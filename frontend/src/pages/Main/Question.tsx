@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import { BigYellowButton } from "../../components/Buttons/YellowButton";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
@@ -21,19 +22,28 @@ const QuestionContainer = styled.div`
     font-family: ${(props) => props.theme.fontFamily.h1bold};
 
     ${(props) => props.theme.mq.mobile} {
-      font-size: ${(props) => props.theme.fontSizes.h3};
+      font-size: ${(props) => props.theme.fontSizes.h4};
     }
   }
 `;
 
 function Question({ item }: QuestionProps) {
   const placeText = `${item.userCnt}개의 장소들!`;
+  const navigate = useNavigate();
+  const moveToTogetherMap = () => {
+    navigate(`/togethermaps/${item.togethermapId}/detail`);
+  };
 
   return (
     <QuestionContainer>
       <p>{item.emoji}</p>
       <p>{item.question}</p>
-      <BigYellowButton type="button" text1={placeText} text2="참여하러 가기" />
+      <BigYellowButton
+        type="button"
+        text1={placeText}
+        text2="참여하러 가기"
+        func={moveToTogetherMap}
+      />
     </QuestionContainer>
   );
 }

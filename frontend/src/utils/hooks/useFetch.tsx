@@ -20,9 +20,9 @@ function useFetch() {
       const requestOptions = {
         headers: authHeader(url),
       };
-      if (body) {
-        requestOptions.headers["Content-Type"] = "application/json";
-      }
+      // if (body) {
+      //   requestOptions.headers["Content-Type"] = "application/json";
+      // }
       return axios[method](url, requestOptions).then(handleResponse);
     };
   }

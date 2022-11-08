@@ -12,23 +12,13 @@ const MyMapsContainer = styled.div`
 `;
 
 const WriteMapContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 90%;
+  margin: auto;
 `;
 
 const JoinedMapContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 90%;
+  margin: auto;
 `;
 
 const ToggleGroup = styled.div`
@@ -89,9 +79,8 @@ const ToggleGroup = styled.div`
 
 export default function MyMaps() {
   const [type, setType] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const changeType = (type: number) => {
-    setType(type);
+  const changeType = (e: number) => {
+    setType(e);
   };
 
   return (
@@ -117,7 +106,7 @@ export default function MyMaps() {
           <MemoInfiniteList
             url={USER_APIS.MY_MAP}
             queryKey={["MyMapList"]}
-            zeroDataText="없어시붕"
+            zeroDataText="만들어진 지도가 없습니다."
             CardComponent={MapCard}
           />
         </WriteMapContainer>
@@ -127,7 +116,7 @@ export default function MyMaps() {
           <MemoInfiniteList
             url={USER_APIS.JOIN_MAP}
             queryKey={["JoinMapList"]}
-            zeroDataText="없어시붕"
+            zeroDataText="참여한 지도가 없습니다."
             CardComponent={MapCard}
           />
         </JoinedMapContainer>

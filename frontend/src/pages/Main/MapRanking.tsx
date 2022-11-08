@@ -13,8 +13,8 @@ const Container = styled.div`
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
-    padding-left: 5vw;
-    padding-right: 5vw;
+    padding-left: 4vw;
+    padding-right: 4vw;
   }
 `;
 
@@ -23,10 +23,18 @@ const RankingContainer = styled.div`
   display: grid;
   margin: auto;
   margin-top: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   grid-gap: 2rem;
   margin-bottom: 1rem;
   justify-items: center;
+
+  ${(props) => props.theme.mq.tablet} {
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(80%, 1fr));
+  }
 `;
 
 const Title = styled.div`
@@ -44,6 +52,11 @@ const Title = styled.div`
   ${(props) => props.theme.mq.tablet} {
     text-align: center;
     padding-left: 0;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
   }
 `;
 
@@ -69,6 +82,11 @@ const Description = styled.div`
     ${(props) => props.theme.mq.tablet} {
       padding-right: 0;
     }
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.s1};
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
 
   ${(props) => props.theme.mq.tablet} {
@@ -76,6 +94,11 @@ const Description = styled.div`
     padding-left: 1rem;
     padding-right: 1rem;
     flex-direction: column;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
   }
 `;
 
@@ -102,7 +125,7 @@ function MapRanking({ maps }: MapProps) {
         🎉 <span>인기있는 추천지도</span>
       </Title>
       <Description>
-        <p>장소가 제일 많이 등록된 추천지도들을 소개합니다 👍</p>
+        <p>장소가 제일 많이 등록된 추천지도를 소개합니다 👍</p>
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       <RankingContainer>

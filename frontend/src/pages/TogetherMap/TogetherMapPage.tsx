@@ -1,21 +1,21 @@
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import BackButton from "../../components/Buttons/BackButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
-import { campusState } from "../../store/atom";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import { authState, campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import NewPlace from "../NewPlace/NewPlacePage";
-import SearchPlace from "./SearchPlace";
+import LoginModal from "../Login/LoginModal";
 
 declare global {
   interface Window {
@@ -61,13 +61,16 @@ function TogetherMap() {
     ["together-map", togethermapId],
     () => getTogetherMap(Number(togethermapId)),
   );
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+  const auth = useRecoilValue(authState);
 
-  console.log(togetherMapData);
   useEffect(() => {
     const [lat, lan]: Coordinate = togetherMapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togethermapId)]].lan,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .lat,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .lan,
         ]
       : [
           CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
@@ -83,7 +86,8 @@ function TogetherMap() {
   }, []);
 
   const addNewPlace = () => {
-    navigate(`/togethermaps/${togethermapId}/new`);
+    if (auth.accessToken) navigate(`/togethermaps/${togethermapId}/new`);
+    else setLoginModalOpen(true);
   };
 
   return (
@@ -98,6 +102,11 @@ function TogetherMap() {
       <ButtonContainer>
         <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
       </ButtonContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
     </Container>
   );
 }

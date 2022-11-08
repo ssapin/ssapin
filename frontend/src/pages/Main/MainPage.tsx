@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { SetStateAction, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
@@ -19,7 +19,7 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
-import { campusState } from "../../store/atom";
+import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
@@ -31,10 +31,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
-import { PLACE_APIS } from "../../utils/apis/placeApi";
+import PLACE_APIS from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
+import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -111,6 +112,11 @@ const FixContainer = styled.div`
     margin-bottom: 1rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
+
+  ${(props) => props.theme.mq.mobile} {
+    right: 1rem;
+    bottom: 1rem;
+  }
 `;
 
 function MainPage() {
@@ -121,6 +127,9 @@ function MainPage() {
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
+  const auth = useRecoilValue(authState);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -137,11 +146,12 @@ function MainPage() {
 
   const navigate = useNavigate();
   const moveToCreate = () => {
-    navigate("/mobileCreate");
+    if (auth.accessToken) navigate("/mobilecreate");
+    else setLoginModalOpen(true);
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
-    AxiosResponse<ITogetherMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - togetherMapList`],
@@ -154,7 +164,7 @@ function MainPage() {
   );
 
   const { data: mapData, refetch: mapRefetch } = useQuery<
-    AxiosResponse<IMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - mapList`],
@@ -167,7 +177,7 @@ function MainPage() {
   );
 
   const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
-    AxiosResponse<IMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - mapRankingList`],
@@ -180,7 +190,7 @@ function MainPage() {
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
-    AxiosResponse<IUserRanking[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - userRankingList`],
@@ -193,7 +203,7 @@ function MainPage() {
   );
 
   const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
-    AxiosResponse<IPlaceRanking>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - placeRankingList`],
@@ -224,7 +234,7 @@ function MainPage() {
       setRankingmaps(mapRankingData.data);
     }
     if (userRankingData?.data) {
-      setRankingusers(userRankingData.data);
+      setRankingusers(userRankingData.data?.userRankingList);
     }
     if (placeRankingData?.data) {
       setRankingplaces(placeRankingData.data);
@@ -238,10 +248,22 @@ function MainPage() {
     placeRankingData,
   ]);
 
-  const [modalOpen, setModalOpen] = useState(false);
   const handleModal = () => {
-    setModalOpen(true);
+    if (auth.accessToken) setModalOpen(true);
+    else setLoginModalOpen(true);
   };
+
+  const [keyword, setKeyword] = useState("");
+  const onChangeKeyword = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setKeyword(e.target.value);
+  };
+
+  const moveToSearch = () => {
+    navigate(`/search?keyword=${keyword}`);
+  };
+
   return (
     <>
       <HeadContainer>
@@ -273,7 +295,12 @@ function MainPage() {
           </Swiper>
         </QuestionContainer>
         <Searchbar>
-          <MapSearch width="50%" height="30%" />
+          <MapSearch
+            width="50%"
+            height="30%"
+            changeFunc={onChangeKeyword}
+            clickFunc={moveToSearch}
+          />
         </Searchbar>
       </HeadContainer>
       <MainContainer>
@@ -296,6 +323,11 @@ function MainPage() {
           </ModalPortal>
         )}
       </FixContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
       <Footer />
     </>
   );

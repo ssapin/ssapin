@@ -12,7 +12,7 @@ type UserInfoProps = {
 
 const Container = styled.div<{ type: string }>`
   width: ${(props) => (props.type === "pc" ? `40vw` : `90vw`)};
-  height: ${(props) => (props.type === "pc" ? `40vh` : `20vh`)};
+  height: ${(props) => (props.type === "pc" ? `27vh` : `17vh`)};
   display: flex;
   flex-direction: row;
   background-color: ${(props) => props.theme.colors.gray0};

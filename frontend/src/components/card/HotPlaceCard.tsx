@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { RankingPlace } from "../../utils/types/place.interface";
+import { IPlaceMin } from "../../utils/types/place.interface";
 
 type HotPlaceProps = {
-  place: RankingPlace;
+  place: IPlaceMin;
   message: string;
 };
 
@@ -20,19 +20,44 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin: 0;
+  }
+
   .place {
-    text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .address {
+    width: 100%;
     margin-top: 0.4rem;
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.2rem;
+    }
+
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .message {
@@ -40,6 +65,12 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainBlue};
     font-family: ${(props) => props.theme.fontFamily.s1bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 1rem;
+      font-family: ${(props) => props.theme.fontFamily.s2bold};
+      font-size: ${(props) => props.theme.fontSizes.s2};
+    }
   }
 
   :hover {

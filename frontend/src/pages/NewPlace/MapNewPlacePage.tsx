@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/destructuring-assignment */
 import styled from "@emotion/styled";
+import { AxiosError } from "axios";
 import {
   ChangeEvent,
   FormEvent,
@@ -11,9 +12,30 @@ import {
   useState,
   forwardRef,
   LegacyRef,
+  MouseEventHandler,
 } from "react";
+import { useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
+import { campusState } from "../../store/atom";
+import { getMap } from "../../utils/apis/mapApi";
+import {
+  CAMPUS_COORDINATE_LIST,
+  CAMPUS_LIST,
+} from "../../utils/constants/contant";
 import { KakaoPlaceObj } from "../../utils/types/common";
+import {
+  IAddPlace,
+  IKakaoPlace,
+  IPlaceMin,
+} from "../../utils/types/place.interface";
+import { IMap } from "../../utils/types/map.interface";
+import {
+  addPlaceToMap,
+  getKakaoPlace,
+  getRequestPlace,
+} from "../../utils/functions/place";
 
 const Conatiner = styled.section`
   position: relative;
@@ -90,8 +112,24 @@ const PaginationButton = styled.button`
 `;
 
 const { kakao } = window;
+type Coordinate = [number, number];
 
-function NewPlace() {
+export interface Pagination {
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  first: number;
+  current: number;
+  last: number;
+  perPage: number;
+  gotoFirst: () => void;
+  gotoLast: () => void;
+  gotoPage: (idx: number) => void;
+  nextPage: () => void;
+  prevPage: () => void;
+}
+
+function MapNewPlace() {
   const [keyword, setKeyword] = useState("");
   const [mapObj, setMapObj] = useState({
     map: null,
@@ -105,6 +143,12 @@ function NewPlace() {
   const menuWrapRef = useRef<HTMLDivElement>();
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
+  const { mapId } = useParams();
+  const navigate = useNavigate();
+  const userCampusId = useRecoilValue(campusState);
+  const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
+    getMap(Number(mapId)),
+  );
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -129,8 +173,6 @@ function NewPlace() {
       image: markerImage,
     });
     marker.setMap(mapObj.map);
-    // markers.push(marker);
-    // setMarkerList((prev) => [...prev, marker]);
     return marker;
   };
 
@@ -141,21 +183,7 @@ function NewPlace() {
     mapObj.infowindow?.open(mapObj.map, marker);
   };
 
-  const removeMarker = () => {
-    // for (let i = 0; i < markers.length; i++) {
-    //   console.log(markers[i]);
-    //   markers[i].setMap(null);
-    // }
-    // markers = [];
-    // for (let i = 0; i < markerList.length; i++) {
-    //   console.log(markerList[i]);
-    //   markerList[i].setMap(null);
-    // }
-    // setMarkerList([]);
-  };
-
-  const displayPagination = (pagination: number) => {
-    // console.log(pagination);
+  const displayPagination = (pagination: Pagination) => {
     const pageList = Array(Number(pagination.last))
       .fill(0)
       .map((_, i) => {
@@ -166,19 +194,19 @@ function NewPlace() {
       });
     setPaginationList(pageList);
   };
-  // console.log(placeList);
-  const displayPlaces = (places: any) => {
+  const displayPlaces = (places: IKakaoPlace[]) => {
+    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
     // removeMarker();
     const newPlaceList = [];
-    const newMarkerList = [];
+    const newMarkerList: any[] = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-
+      console.log(marker);
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -201,7 +229,7 @@ function NewPlace() {
   const placesSearchCB = (
     data: KakaoPlaceObj[],
     status: string,
-    pagination: number,
+    pagination: Pagination,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data);
@@ -212,13 +240,25 @@ function NewPlace() {
   const searchKeyword = (e: FormEvent) => {
     e.preventDefault();
     if (!keyword) return;
-    mapObj.ps?.keywordSearch(`서울 ${keyword}`, placesSearchCB);
+    mapObj.ps?.keywordSearch(
+      `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
+      placesSearchCB,
+    );
   };
 
   useEffect(() => {
+    const [lat, lan]: Coordinate = mapData
+      ? [
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lat,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lan,
+        ]
+      : [
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
+          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+        ];
     const container = mapRefs.current;
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      center: new kakao.maps.LatLng(lat, lan),
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
@@ -234,6 +274,8 @@ function NewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
+
+  console.log(placeList);
 
   return (
     <Conatiner>
@@ -257,6 +299,7 @@ function NewPlace() {
                 ref={(el) => (itemRefs.current[idx] = el)}
                 mouseOver={() => mouseOver(idx, place.place.place_name)}
                 mouseLeave={mouseLeave}
+                mapId={mapId}
               />
             ))}
           </ul>
@@ -280,7 +323,7 @@ function NewPlace() {
   );
 }
 
-export default NewPlace;
+export default MapNewPlace;
 
 const List = styled.li`
   position: relative;
@@ -350,8 +393,25 @@ const Jibun = styled.span`
   color: ${(props) => props.theme.colors.gray400};
 `;
 
+interface PlaceCardProps {
+  index: number;
+  mouseOver: () => void;
+  mouseLeave: () => void;
+  place: IKakaoPlace;
+  mapId: number;
+}
+
+function addPlace(kakakoplace: IKakaoPlace, id: number) {
+  const place: IPlaceMin = getKakaoPlace(kakakoplace);
+  const data: IAddPlace = getRequestPlace(place, id);
+  addPlaceToMap(data);
+}
+
 const PlaceCard = forwardRef(
-  ({ index, place, mouseOver, mouseLeave }, ref: LegacyRef<HTMLLIElement>) => {
+  (
+    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
+    ref: LegacyRef<HTMLLIElement>,
+  ) => {
     return (
       <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         <MarkerBg index={index} />

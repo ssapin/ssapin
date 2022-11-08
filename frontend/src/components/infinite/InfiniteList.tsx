@@ -20,10 +20,30 @@ interface InifinteListProps {
 const GridContainer = styled.div`
   display: grid;
   margin-top: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   grid-gap: 2rem;
   margin-bottom: 1rem;
   justify-items: center;
+
+  ${(props) => props.theme.mq.tablet} {
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(80%, 1fr));
+  }
+`;
+
+const NoContainer = styled.div`
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: ${(props) => props.theme.fontSizes.h5};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.h5};
 `;
 
 function InfiniteList({
@@ -119,12 +139,17 @@ function InfiniteList({
 
   return (
     <div>
-      {isSuccess && targetList?.length < 1 && <div>{zeroDataText}</div>}
-      {isError && isQueryError(error) && <p>{error?.message}</p>}
+      {isSuccess && targetList?.length < 1 && (
+        <NoContainer>{zeroDataText}</NoContainer>
+      )}
+      {isError && isQueryError(error) && (
+        <NoContainer>{error?.message}</NoContainer>
+      )}
       {targetList && (
         <GridContainer>
           {targetList?.map((target, idx) => (
             <CardComponent
+              // eslint-disable-next-line react/jsx-props-no-spreading
               {...target}
               index={idx}
               // eslint-disable-next-line react/no-array-index-key
@@ -132,7 +157,7 @@ function InfiniteList({
               isEditMode={isEditMode}
               refetch={refetchData}
               prop={target}
-              isAdmin={false}
+              isAdmin
             />
           ))}
         </GridContainer>
@@ -141,7 +166,7 @@ function InfiniteList({
       {isFetchingNextPage && (
         <GridContainer>
           {Array.from({ length: 1 }, (_, idx) => idx).map((i) => (
-            <CardComponent key={i} prop={noMap} isAdmin={false} />
+            <CardComponent key={i} prop={noMap} isAdmin />
           ))}
         </GridContainer>
       )}
