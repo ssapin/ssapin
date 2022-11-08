@@ -9,6 +9,17 @@ export interface IPlace {
   userId: number;
   userEmoji: string;
   nickname: string;
+  isBookMark: boolean;
+}
+
+export interface IPlaceDetail {
+  placeId: number;
+  itemId: number;
+  title: string;
+  lat: number;
+  lng: number;
+  address: string;
+  isBookMark: boolean;
 }
 
 export interface IPlaceMin {
@@ -57,5 +68,5 @@ export interface IRemovePlaceTogethermap {
 }
 
 export interface IPlaceBookmark {
-  itemId: number;
+  placeId: number;
 }
