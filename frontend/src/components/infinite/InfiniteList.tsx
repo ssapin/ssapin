@@ -125,6 +125,7 @@ function InfiniteList({
         <GridContainer>
           {targetList?.map((target, idx) => (
             <CardComponent
+              // eslint-disable-next-line react/jsx-props-no-spreading
               {...target}
               index={idx}
               // eslint-disable-next-line react/no-array-index-key

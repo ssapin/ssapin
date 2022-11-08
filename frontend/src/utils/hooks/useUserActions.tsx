@@ -43,7 +43,15 @@ function useUserActions() {
 
   function logout() {
     cookie.remove("accessToken", { path: "/" });
-    setUser({ campusId: null, nickname: "", emoji: "", userId: null });
+    setUser({
+      campusId: 0,
+      nickname: "",
+      emoji: "",
+      userId: 0,
+      mapCnt: 0,
+      placeCnt: 0,
+      participateCnt: 0,
+    });
     setAuth({ accessToken: "" });
     navigate("/");
   }
