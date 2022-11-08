@@ -11,18 +11,19 @@ export interface IPlace {
   nickname: string;
 }
 
-export interface RankingPlace {
+export interface IPlaceMin {
   placeId: number;
   itemId: number;
   title: string;
   lat: number;
+  lng: number;
   address: string;
 }
 
 export interface IPlaceRanking {
-  review: RankingPlace;
-  bookmark: RankingPlace;
-  pin: RankingPlace;
+  review: IPlaceMin;
+  bookmark: IPlaceMin;
+  pin: IPlaceMin;
 }
 
 export interface IKakaoPlace {
@@ -38,4 +39,9 @@ export interface IKakaoPlace {
   road_address_name: string;
   x: string;
   y: string;
+}
+
+export interface IPlaceRequestBody {
+  mapId: number;
+  place: IPlaceMin;
 }
