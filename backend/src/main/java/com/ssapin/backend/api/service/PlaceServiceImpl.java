@@ -221,7 +221,7 @@ public class PlaceServiceImpl implements PlaceService {
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place = placeRepository.findById(removePlaceInTogethermapRequest.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, 0);
+        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, place.getId());
 
         TogethermapPlace result = togethermapPlaceRepository.findById(togethermapPlace.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
