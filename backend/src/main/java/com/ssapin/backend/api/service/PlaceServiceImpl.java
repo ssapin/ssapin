@@ -100,7 +100,7 @@ public class PlaceServiceImpl implements PlaceService {
     public Long addPlaceInTogetherMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
 
 
-        Togethermap map = togethermapRepository.findById(placeRequest.getPlace().getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Togethermap map = togethermapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         Place place = Place.builder()
                 .itemId(placeRequest.getPlace().getItemId())
@@ -115,8 +115,8 @@ public class PlaceServiceImpl implements PlaceService {
         if (placeResponse.isEmpty()) {
             id = placeRepository.save(place).getId();
         } else {
-            place.update(placeRequest.getPlace().getPlaceId(), placeRequest.getPlace().getTitle(), placeRequest.getPlace().getLat(), placeRequest.getPlace().getLng(), placeRequest.getPlace().getAddress());
-            id = placeRequest.getPlace().getPlaceId();
+            place.update(place.getItemId(),placeRequest.getPlace().getTitle(), placeRequest.getPlace().getLat(), placeRequest.getPlace().getLng(), placeRequest.getPlace().getAddress());
+            id = map.getId();
 
         }
 
