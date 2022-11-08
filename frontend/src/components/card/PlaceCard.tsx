@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { userInformationState } from "../../store/atom";
 import { IPlace } from "../../utils/types/place.interface";
 
 type PlaceCardProps = {
@@ -96,6 +98,7 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
     alert(`${prop.placeId}번 장소~ 지우고 싶대`);
   };
 
+  const user = useRecoilValue(userInformationState);
   return (
     <Container onClick={onClickPlace}>
       <p className="place">
@@ -107,7 +110,7 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
       <p className="review">
         {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
       </p>
-      {isAdmin && (
+      {isAdmin && prop.userId === user.userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>

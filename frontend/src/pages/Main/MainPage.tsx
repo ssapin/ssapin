@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
@@ -19,7 +19,7 @@ import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
 import Navbar from "../Navbar/Navbar";
-import { campusState } from "../../store/atom";
+import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
@@ -35,6 +35,7 @@ import { PLACE_APIS } from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
+import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -126,6 +127,9 @@ function MainPage() {
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
+  const auth = useRecoilValue(authState);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -142,7 +146,8 @@ function MainPage() {
 
   const navigate = useNavigate();
   const moveToCreate = () => {
-    navigate("/mobilecreate");
+    if (auth.accessToken) navigate("/mobilecreate");
+    else setLoginModalOpen(true);
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
@@ -243,9 +248,9 @@ function MainPage() {
     placeRankingData,
   ]);
 
-  const [modalOpen, setModalOpen] = useState(false);
   const handleModal = () => {
-    setModalOpen(true);
+    if (auth.accessToken) setModalOpen(true);
+    else setLoginModalOpen(true);
   };
 
   const [keyword, setKeyword] = useState("");
@@ -318,6 +323,11 @@ function MainPage() {
           </ModalPortal>
         )}
       </FixContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
       <Footer />
     </>
   );
