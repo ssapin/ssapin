@@ -15,22 +15,23 @@ import java.util.Optional;
 public interface PlaceService {
 
 
-    Long addPlaceInMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) ;
+    Long addPlaceInMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest);
 
-    Long addPlaceInTogetherMap(User user,PlaceMapRequest.RegisterPlaceToMapRequest placeRequest);
+    Long addPlaceInTogetherMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest);
 
-    PlaceMapResponse.RankingResponse getListPlaceRanking(long campus) ;
+    PlaceMapResponse.RankingResponse getListPlaceRanking(long campus);
 
-    Long removePlaceInMap(User user,PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest);
+    Long removePlaceInMap(User user, PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest);
 
-    Long removePlaceInTogetherMap(User user,PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest);
+    Long removePlaceInTogetherMap(User user, PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest);
 
     PlaceResponse getPlaceInfo(long itemId);
 
-    PlaceMapResponse.MapListResponse getMapListInPlace (long itemId);
+    PlaceMapResponse.MapListResponse getMapListInPlace(long itemId);
 
     Long registerBookmark(User user, BookmarkRequest bookmarkRequest);
 
     Long removeBookmark(User user, BookmarkRequest bookmarkRequest);
 
+    long countPlaceByUserId(long userId);
 }

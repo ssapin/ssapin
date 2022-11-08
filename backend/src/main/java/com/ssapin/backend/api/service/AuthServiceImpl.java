@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AuthResponse.Reissue reissueAccessToken(String refreshToken) {
 
 

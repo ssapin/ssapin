@@ -1,9 +1,11 @@
 package com.ssapin.backend.api.domain.dto.response;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class UserResponse {
+public class    UserResponse {
     @Getter
     public static class Nickname {
 
@@ -21,13 +23,20 @@ public class UserResponse {
         private String nickname;
         private long campusId;
         private String emoji;
+        private long mapCnt;
+        private long placeCnt;
+        private long participateCnt;
 
         @Builder
-        Detail (long userId, String nickname, long campusId, String emoji){
+        Detail (long userId, String nickname, long campusId, String emoji,
+                long mapCnt, long placeCnt, long participateCnt){
             this.userId = userId;
             this.nickname = nickname;
             this.campusId = campusId;
             this.emoji = emoji;
+            this.mapCnt = mapCnt;
+            this.placeCnt = placeCnt;
+            this.participateCnt = participateCnt;
         }
     }
 
@@ -46,6 +55,51 @@ public class UserResponse {
             this.title = title;
             this.address = address;
             this.content = content;
+        }
+    }
+
+    @Getter
+    public static class Map {
+        private long mapId;
+        private long userId;
+        private String title;
+        private String mapEmoji;
+        private String userEmoji;
+        private String nickname;
+        private long placeCnt;
+        private long userCnt;
+
+        @Builder
+        Map(long mapId, long userId, String title, String mapEmoji
+            , String userEmoji, String nickname, long placeCnt, long userCnt){
+            this.mapId = mapId;
+            this.userId = userId;
+            this.title = title;
+            this.mapEmoji = mapEmoji;
+            this.userEmoji = userEmoji;
+            this.nickname = nickname;
+            this.placeCnt = placeCnt;
+            this.userCnt = userCnt;
+        }
+    }
+
+
+
+    @Data
+    @NoArgsConstructor
+    public static class UserRanking {
+        private long userId;
+        private String nickname;
+        private String emoji;
+        private long mapCount;
+
+        @Builder
+        UserRanking (long userId, String nickname, String emoji,
+                long mapCount){
+            this.userId = userId;
+            this.nickname = nickname;
+            this.emoji = emoji;
+            this.mapCount = mapCount;
         }
     }
 }

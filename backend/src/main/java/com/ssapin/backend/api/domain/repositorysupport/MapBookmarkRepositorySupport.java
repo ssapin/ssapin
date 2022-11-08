@@ -24,5 +24,15 @@ public class MapBookmarkRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-
+    public List<MapBookmark> findByUserId(long userId) {
+        return queryFactory
+                .selectFrom(QMapBookmark.mapBookmark)
+                .leftJoin(QMapBookmark.mapBookmark.map, QMap.map)
+                .fetchJoin()
+                .leftJoin(QMap.map.user, QUser.user)
+                .fetchJoin()
+                .where(QMapBookmark.mapBookmark.user.id.eq(userId))
+                .orderBy(QMapBookmark.mapBookmark.id.desc())
+                .fetch();
+    }
 }

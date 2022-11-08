@@ -45,5 +45,25 @@ public class MapRepositorySupport extends QuerydslRepositorySupport {
         return result;
     }
 
+    public long countMapByUserId(long userId) {
+
+        return queryFactory
+                .select(QMap.map.count())
+                .from(QMap.map)
+                .where(QMap.map.user.id.eq(userId))
+                .fetchOne();
+    }
+
+    public List<Map> findAllByUserId(long userId) {
+
+        return queryFactory
+                .select(QMap.map)
+                .from(QMap.map)
+                .leftJoin(QMap.map.user, QUser.user)
+                .fetchJoin()
+                .where(QMap.map.user.id.eq(userId))
+                .orderBy(QMap.map.id.desc())
+                .fetch();
+    }
 
 }

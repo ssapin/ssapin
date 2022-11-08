@@ -22,6 +22,24 @@ public class TogethermapPlaceRepositorySupport extends QuerydslRepositorySupport
                 .fetch();
     }
 
+    public long countTogethermapPlaceByUserId(long userId) {
+
+        return queryFactory
+                .select(QTogethermapPlace.togethermapPlace.count())
+                .from(QTogethermapPlace.togethermapPlace)
+                .where(QTogethermapPlace.togethermapPlace.user.id.eq(userId))
+                .fetchOne();
+    }
+
+    public long countParticipationByUserId(long userId) {
+
+        return queryFactory
+                .select(QTogethermapPlace.togethermapPlace.togethermap.id.countDistinct())
+                .from(QTogethermapPlace.togethermapPlace)
+                .where(QTogethermapPlace.togethermapPlace.user.id.eq(userId))
+                .fetchOne();
+    }
+
     public TogethermapPlace findByPlace(Togethermap togethermap, User user, Place place)
     {
         return queryFactory.selectFrom(QTogethermapPlace.togethermapPlace)

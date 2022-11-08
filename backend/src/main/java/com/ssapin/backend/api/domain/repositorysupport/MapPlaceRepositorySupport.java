@@ -25,6 +25,57 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
     }
 
+    public long countMapPlaceByUserId(long userId) {
+
+        return queryFactory
+                .select(QMapPlace.mapPlace.count())
+                .from(QMapPlace.mapPlace)
+                .where(QMapPlace.mapPlace.user.id.eq(userId))
+                .fetchOne();
+    }
+
+    public long countMapPlaceByMapId(long mapId) {
+
+        return queryFactory
+                .select(QMapPlace.mapPlace.count())
+                .from(QMapPlace.mapPlace)
+                .where(QMapPlace.mapPlace.map.id.eq(mapId))
+                .fetchOne();
+    }
+
+    public long countParticipantByMapId(long mapId) {
+
+        return queryFactory
+                .select(QMapPlace.mapPlace.user.countDistinct())
+                .from(QMapPlace.mapPlace)
+                .where(QMapPlace.mapPlace.map.id.eq(mapId))
+                .fetchOne();
+    }
+    public long countParticipationByUserId(long userId) {
+
+        return queryFactory
+                .select(QMapPlace.mapPlace.map.id.countDistinct())
+                .from(QMapPlace.mapPlace)
+                .where(QMapPlace.mapPlace.user.id.eq(userId)
+                        .and(QMap.map.user.id.ne(userId)))
+                .fetchOne();
+    }
+
+    public List<MapPlace> findParticipateMapsByUserId(long userId) {
+
+        return queryFactory
+                .select(QMapPlace.mapPlace)
+                .from(QMapPlace.mapPlace)
+                .leftJoin(QMapPlace.mapPlace.map, QMap.map)
+                .fetchJoin()
+                .leftJoin(QMap.map.user, QUser.user)
+                .fetchJoin()
+                .where(QMapPlace.mapPlace.user.id.eq(userId)
+                        .and(QMapPlace.mapPlace.map.user.id.ne(userId)))
+                .orderBy(QMapPlace.mapPlace.id.desc())
+                .fetch();
+    }
+
     public MapPlace findByMapPlace(Map map, User user, Place place) {
         return queryFactory.selectFrom(QMapPlace.mapPlace)
                 .where(QMapPlace.mapPlace.map.eq(map)

@@ -1,8 +1,6 @@
 package com.ssapin.backend.interceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssapin.backend.api.domain.dto.response.InterceptorResponse;
-import com.ssapin.backend.api.service.AuthService;
-import com.ssapin.backend.api.service.UserService;
 import com.ssapin.backend.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
@@ -12,7 +10,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Objects;
 
 @Component
@@ -20,8 +17,8 @@ import java.util.Objects;
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final static String TOKEN_EXPIRED = "Token Expired";
-    private final static String AUTHENTICATION_FAILED = "Authentication Failed";
+    private static final String TOKEN_EXPIRED = "Token Expired";
+    private static final String AUTHENTICATION_FAILED = "Authentication Failed";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {

@@ -49,7 +49,7 @@ public class PlaceServiceImplTest {
                 .build();
 
         User testUser = User.builder()
-                .token("test token")
+                .kakaoId(1)
                 .nickname("test nickname")
                 .emoji("test emoji")
                 .campus(testCampus)
