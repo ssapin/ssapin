@@ -17,14 +17,14 @@ import LoginModal from "../Login/LoginModal";
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.mainBlue};
-  width: 100%;
+  width: 100vw;
   height: 15vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 1rem 0.5rem 0.5rem 1.5rem;
   ${(props) => props.theme.mq.tablet} {
-    padding: 1rem 1rem 0rem 1rem;
+    padding: 0rem 1rem 0rem 1rem;
   }
 `;
 
@@ -52,7 +52,7 @@ const LogoContainer = styled.h1`
   margin-bottom: 0.7rem;
 
   ${(props) => props.theme.mq.tablet} {
-    height: 70%;
+    height: 80%;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 0;
@@ -64,13 +64,17 @@ const LogoContainer = styled.h1`
     height: 100%;
     margin: 0;
 
-    ${(props) => props.theme.mq.tablet} {
-      height: 40%;
-    }
-
     img {
       width: auto;
       height: 100%;
+    }
+
+    ${(props) => props.theme.mq.tablet} {
+      margin-top: 0.5rem;
+      img {
+        width: 40%;
+        height: auto;
+      }
     }
   }
 
@@ -118,6 +122,7 @@ const MyInfo = styled.div`
     color: ${(props) => props.theme.colors.mainNavy};
   }
 `;
+
 const NavContentFirst = styled.div`
   button {
     font-family: ${(props) => props.theme.fontFamily.h3bold};
@@ -178,6 +183,7 @@ const Side = styled.div`
     padding: 2rem;
     height: 70%;
   }
+
   .buttons {
     display: flex;
     flex-direction: row;
@@ -198,7 +204,14 @@ const Side = styled.div`
     padding: 8px 0 8px 16px;
     list-style: none;
     height: 60px;
+
+    ${(props) => props.theme.mq.mobile} {
+      padding: 8px 0 8px 0;
+      font-family: ${(props) => props.theme.fontFamily.h4bold};
+      font-size: ${(props) => props.theme.fontSizes.h4};
+    }
   }
+
   .nav-text:hover {
     scale: 1.05;
     cursor: pointer;

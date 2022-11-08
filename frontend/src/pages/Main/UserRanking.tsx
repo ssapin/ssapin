@@ -49,6 +49,11 @@ const Title = styled.div`
     text-align: center;
     padding-left: 0;
   }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+  }
 `;
 
 const Description = styled.div`
@@ -73,6 +78,11 @@ const Description = styled.div`
     ${(props) => props.theme.mq.tablet} {
       padding-right: 0;
     }
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.s1};
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
 
   ${(props) => props.theme.mq.tablet} {
@@ -80,6 +90,11 @@ const Description = styled.div`
     padding-left: 1rem;
     padding-right: 1rem;
     flex-direction: column;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
   }
 `;
 
