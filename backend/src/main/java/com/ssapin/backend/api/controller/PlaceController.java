@@ -140,16 +140,16 @@ public class PlaceController {
         }
     }
 
-    @GetMapping("/{itemId}/detail")
+    @GetMapping("/{placeId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
-    public ResponseEntity<?> getPlaceInfo(@PathVariable long itemId) {
+    public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId) {
 
         try {
 
 //            User user = new User("test", 1L, new Campus("test"), "test");
 
 
-            PlaceResponse result = placeService.getPlaceInfo(itemId);
+            PlaceResponse result = placeService.getPlaceInfo(placeId);
             return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -158,14 +158,14 @@ public class PlaceController {
         }
     }
 
-    @GetMapping("/map/{itemId}")
+    @GetMapping("/map/{placeId}")
     @ApiOperation(value = "해당 장소가 추가된 추천지도 리스트 조회", notes = "해당 장소가 추가된 추천지도 리스트 조회")
-    public ResponseEntity<?> getMapListInPlace(@PathVariable long itemId) {
+    public ResponseEntity<?> getMapListInPlace(@PathVariable long placeId) {
 
         try {
 
 
-            PlaceMapResponse.MapListResponse result = placeService.getMapListInPlace(itemId);
+            PlaceMapResponse.MapListResponse result = placeService.getMapListInPlace(placeId);
 
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
