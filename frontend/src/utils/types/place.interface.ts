@@ -41,7 +41,21 @@ export interface IKakaoPlace {
   y: string;
 }
 
-export interface IPlaceRequestBody {
+export interface IAddPlace {
   mapId: number;
   place: IPlaceMin;
+}
+
+export interface IRemovePlaceMap {
+  mapId: number;
+  placeId: number;
+}
+
+export interface IRemovePlaceTogethermap {
+  togethermapId: number;
+  placeId: number;
+}
+
+export interface IPlaceBookmark {
+  itemId: number;
 }
