@@ -16,6 +16,7 @@ import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
 import AddPlaceModal from "./AddPlaceModal";
 import SearchList from "./SearchList";
+import PlaceInfoModal from "../Main/PlaceInfoModal";
 import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
@@ -121,6 +122,7 @@ function SearchPage() {
   const [campusId, setCampusId] = useRecoilState(campusState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [placemodalOpen, setPlaceModalOpen] = useState(false);
+  const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
@@ -188,6 +190,10 @@ function SearchPage() {
     else setLoginModalOpen(true);
   };
 
+  const handlePlaceInfoModal = () => {
+    setPlaceInfoModalOpen(true);
+  };
+
   return (
     <>
       <HeadContainer>
@@ -219,6 +225,17 @@ function SearchPage() {
         {placemodalOpen && (
           <ModalPortal>
             <AddPlaceModal onClose={() => setPlaceModalOpen(false)} />
+          </ModalPortal>
+        )}
+
+        <YellowButton
+          type="button"
+          text="장소정보모달테스트용"
+          func={handlePlaceInfoModal}
+        />
+        {placeInfomodalOpen && (
+          <ModalPortal>
+            <PlaceInfoModal onClose={() => setPlaceInfoModalOpen(false)} />
           </ModalPortal>
         )}
       </HeadContainer>

@@ -25,7 +25,7 @@ const ModalWrapper = styled.div`
   //height: fit-content;
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 20px;
-  padding: ${pixelToRem(60)};
+  padding: ${pixelToRem(40)};
   ${(props) => props.theme.mq.mobile} {
     padding: 2rem;
   }
