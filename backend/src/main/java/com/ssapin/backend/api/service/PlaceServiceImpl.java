@@ -82,22 +82,32 @@ public class PlaceServiceImpl implements PlaceService {
                     .lng(placeRequest.getPlace().getLng())
                     .address(placeRequest.getPlace().getAddress())
                     .build();
-            placeId = placeRepository.save(place).getId();
+            placeRepository.saveAndFlush(place);
+
+            MapPlace mapPlace = MapPlace.builder()
+                    .map(map)
+                    .user(user)
+                    .place(place)
+                    .build();
+
+            return mapPlaceRepository.save(mapPlace).getId();
+
         }else {
+
             place = placeResponse.get();
             placeId = place.getId();
+            System.out.println(placeId);
+
+            MapPlace mapPlace = MapPlace.builder()
+                    .map(map)
+                    .user(user)
+                    .place(place)
+                    .build();
+
+            return mapPlaceRepository.save(mapPlace).getId();
         }
 
-        Place place1 = placeRepositorySupport.findPlace(placeId);
-        MapPlace mapPlace = MapPlace.builder()
-                .map(map)
-                .user(user)
-                .place(place1)
-                .build();
 
-        long id = mapPlaceRepository.save(mapPlace).getId();
-
-        return id;
 
     }
 
