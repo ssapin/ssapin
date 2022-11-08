@@ -10,6 +10,7 @@ import { ReactComponent as LocationIcon } from "../../assets/svgs/nowlocation.sv
 interface ChooseFeature extends IButtonProps {
   shape: string | number | undefined;
 }
+
 const WhiteCircle = styled.button`
   width: 7vh;
   height: 7vh;
@@ -38,7 +39,7 @@ export default function MapCircleButton({
   shape,
 }: ChooseFeature) {
   return (
-    <WhiteCircle type={type} onClick={func} disabled={disabled} shape={shape}>
+    <WhiteCircle type={type} onClick={func} disabled={disabled}>
       {shape === "0" && <KakaotalkIcon className="not-location" />}
       {shape === "1" && <LinkShareIcon width={25} fill="none" />}
       {shape === "2" && <EHeartIcon className="not-location" />}

@@ -135,6 +135,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
           {targetList?.length &&
             targetList?.map((target, idx) => (
               <MapCard
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...target}
                 index={idx}
                 // eslint-disable-next-line react/no-array-index-key
