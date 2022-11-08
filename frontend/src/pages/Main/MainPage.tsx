@@ -141,7 +141,7 @@ function MainPage() {
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
-    AxiosResponse<ITogetherMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - togetherMapList`],
@@ -154,7 +154,7 @@ function MainPage() {
   );
 
   const { data: mapData, refetch: mapRefetch } = useQuery<
-    AxiosResponse<IMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - mapList`],
@@ -167,7 +167,7 @@ function MainPage() {
   );
 
   const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
-    AxiosResponse<IMap[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - mapRankingList`],
@@ -180,7 +180,7 @@ function MainPage() {
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
-    AxiosResponse<IUserRanking[]>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - userRankingList`],
@@ -193,7 +193,7 @@ function MainPage() {
   );
 
   const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
-    AxiosResponse<IPlaceRanking>,
+    AxiosResponse<any>,
     AxiosError
   >(
     [`${campusId} - placeRankingList`],

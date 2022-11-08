@@ -5,7 +5,6 @@ import { pixelToRem } from "../../utils/functions/util";
 import Navbar from "../Navbar/Navbar";
 import UserInfoCard from "../../components/card/UserInfoCard";
 import UserInfoDetailCard from "../../components/card/UserInfoDetailCard";
-import MyPageTab from "./MyPageTab";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
@@ -98,12 +97,7 @@ function MyPage() {
           )}
           {modalOpen && (
             <ModalPortal>
-              <ChangeInfoModal
-                emoji={userInformation.emoji}
-                nickname={userInformation.nickname}
-                mycampus={campus[userInformation.campusId]}
-                onClose={() => setModalOpen(false)}
-              />
+              <ChangeInfoModal onClose={() => setModalOpen(false)} />
             </ModalPortal>
           )}
           {innerWidth > 950 ? (
