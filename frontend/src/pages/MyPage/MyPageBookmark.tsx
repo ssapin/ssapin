@@ -121,7 +121,7 @@ export default function MyBookmark() {
             <MemoInfiniteList
               url={USER_APIS.BOOKMARK_MAP}
               queryKey={["BOOKMARK - MapList"]}
-              zeroDataText="없어시붕"
+              zeroDataText="찜한 지도가 없습니다."
               CardComponent={MapCard}
             />
           </BookmarkMapContainer>
@@ -131,7 +131,7 @@ export default function MyBookmark() {
             <MemoInfiniteList
               url={USER_APIS.BOOKMARK_PLACE}
               queryKey={["BOOKMARK - PlaceList"]}
-              zeroDataText="없어시붕"
+              zeroDataText="찜한 장소가 없습니다."
               CardComponent={PlaceCard}
             />
           </BookmarkPlaceContainer>

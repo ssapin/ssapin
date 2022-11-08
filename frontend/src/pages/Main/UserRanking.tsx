@@ -20,16 +20,21 @@ const Container = styled.div`
 `;
 
 const RankingContainer = styled.div<{ size?: number }>`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-  justify-content: space-between;
+  width: 95%;
+  display: grid;
+  margin: auto;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(15%, 1fr));
+  grid-gap: 2rem;
+  margin-bottom: 1rem;
+  justify-items: center;
 
   ${(props) => props.theme.mq.tablet} {
-    flex-direction: column;
-    justify-content: ${(props) => props.size < 5 && `space-evenly`};
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
   }
 `;
 
@@ -143,26 +148,25 @@ function UserRanking({ users }: UserProps) {
           {users?.length === 0 && <NoContainer>없어요</NoContainer>}
         </RankingContainer>
       ) : (
-        <RankingContainer>
+        <>
           {users.length !== 0 && (
             <>
-              <RankingUserCard user={users[0]} />
+              <RankingUserCard user={users[0]} type="full" />
               {users.length >= 2 && (
                 <RankingContainer>
-                  {users.length >= 2 && <RankingUserCard user={users[1]} />}
-                  {users.length >= 3 && <RankingUserCard user={users[2]} />}
-                </RankingContainer>
-              )}
-              {users.length >= 4 && (
-                <RankingContainer>
-                  {users.length >= 4 && <RankingUserCard user={users[3]} />}
-                  {users.length >= 5 && <RankingUserCard user={users[4]} />}
+                  {users.map(
+                    (user, id) =>
+                      id >= 1 && (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <RankingUserCard key={id} user={user} />
+                      ),
+                  )}
                 </RankingContainer>
               )}
             </>
           )}
           {users?.length === 0 && <NoContainer>없어요</NoContainer>}
-        </RankingContainer>
+        </>
       )}
     </Container>
   );

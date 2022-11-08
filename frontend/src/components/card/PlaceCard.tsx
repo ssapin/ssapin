@@ -33,12 +33,26 @@ const Container = styled.div`
       font-family: ${(props) => props.theme.fontFamily.h5bold};
       font-size: ${(props) => props.theme.fontSizes.h5};
     }
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .address {
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .review {
@@ -46,6 +60,13 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
+
+    width: 100%;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   .delete {
