@@ -80,9 +80,8 @@ const ToggleGroup = styled.div`
 
 export default function MyBookmark() {
   const [type, setType] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const changeType = (type: number) => {
-    setType(type);
+  const changeType = (e: number) => {
+    setType(e);
   };
 
   return (
