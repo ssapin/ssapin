@@ -1,6 +1,8 @@
 package com.ssapin.backend.api.domain.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class PlaceMapRequest {
@@ -18,6 +20,7 @@ public class PlaceMapRequest {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class RemovePlaceInMapRequest
     {
         private long mapId;
@@ -30,6 +33,7 @@ public class PlaceMapRequest {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class RemovePlaceInTogethermapRequest
     {
         private long togethermapId;
