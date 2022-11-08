@@ -263,9 +263,16 @@ function NavigationBar({ func }: NavBarProps) {
             <button type="button" onClick={moveToHome} className="logo">
               <img alt="ssapin_logo.png" src={Logo} />
             </button>
-            <button type="button" onClick={toggleSide}>
-              {campus[campusId]} ▼
-            </button>
+            {!isOpen && (
+              <button type="button" onClick={toggleSide}>
+                {campus[campusId]} ▼
+              </button>
+            )}
+            {isOpen && (
+              <button type="button" onClick={toggleSide}>
+                {campus[campusId]} ▲
+              </button>
+            )}
           </LogoContainer>
           {isOpen && (
             <CampusButton open={toggleSide} select={func} campusId={campusId} />

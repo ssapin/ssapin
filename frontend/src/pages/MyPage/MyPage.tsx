@@ -12,6 +12,10 @@ import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import { campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 
+// 모달
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import { ChangeInfoModal } from "./ChangeMyInfo";
+
 const PageTopBg = styled.div`
   width: 100%;
   height: 65vh;
@@ -49,10 +53,19 @@ function MyPage() {
   const userInformation = useRecoilValue(userInformationState);
   const campus = CAMPUS_LIST;
   const [campusId, setCampusId] = useRecoilState(campusState);
+
+  // 닉네임 및 캠퍼스 수정 창
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleModal = () => {
+    setModalOpen(true);
+  };
+
   const toggleActive = (key: number) => {
     setCampusId(key);
   };
 
+  // 사이즈 조절
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -66,12 +79,13 @@ function MyPage() {
       <PageTopBg>
         <Navbar func={toggleActive} />
         <UserInfos>
-          {innerWidth > 1000 ? (
+          {innerWidth > 950 ? (
             <UserInfoCard
               type="pc"
               emoji={userInformation.emoji}
               nickname={userInformation.nickname}
               campus={campus[userInformation.campusId]}
+              func={handleModal}
             />
           ) : (
             <UserInfoCard
@@ -79,9 +93,20 @@ function MyPage() {
               emoji={userInformation.emoji}
               nickname={userInformation.nickname}
               campus={campus[userInformation.campusId]}
+              func={handleModal}
             />
           )}
-          {innerWidth > 1000 ? (
+          {modalOpen && (
+            <ModalPortal>
+              <ChangeInfoModal
+                emoji={userInformation.emoji}
+                nickname={userInformation.nickname}
+                mycampus={campus[userInformation.campusId]}
+                onClose={() => setModalOpen(false)}
+              />
+            </ModalPortal>
+          )}
+          {innerWidth > 950 ? (
             <UserInfoDetailCard
               type="pc"
               nickname={userInformation.nickname}
@@ -100,10 +125,10 @@ function MyPage() {
           )}
         </UserInfos>
       </PageTopBg>
-      <MyPageTab />
+      {/* <MyPageTab /> */}
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 900 ? (
+        {innerWidth > 950 ? (
           <CreateButton type="button" text="지도 만들기" />
         ) : (
           <CreateButtonMobile type="button" />
