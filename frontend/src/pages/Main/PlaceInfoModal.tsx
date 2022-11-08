@@ -18,7 +18,7 @@ interface PlaceInfoModalProps {
 const Container = styled.div`
   width: 50vw;
   max-width: 925px;
-  height: 70vh;
+  height: 80vh;
 `;
 
 const HeadContainer = styled.div`
@@ -27,9 +27,12 @@ const HeadContainer = styled.div`
   justify-content: space-between;
   height: 15%;
   width: 100%;
+
+  .xbutton {
+    height: fit-content;
+  }
 `;
 const PlaceInfoContainer = styled.div`
-  margin-top: 2rem;
   text-align: center;
   p {
     margin-top: 0.5rem;
@@ -53,6 +56,7 @@ const PlaceContent = styled.div`
   }
   height: 85%;
   width: 100%;
+  overflow: hidden;
 `;
 
 const LeftContainer = styled.div`
@@ -74,21 +78,35 @@ const RightContainer = styled.div`
 const ImageContainer = styled.div`
   text-align: center;
   width: 100%;
-  height: 45%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   img {
     width: auto;
-    height: 40%;
+    height: 70%;
   }
 `;
 
-const ReviewContainer = styled.div`
+const ReviewWriteContainer = styled.div`
   width: 100%;
-  height: 50%;
+  height: 45%;
   font-family: ${(props) => props.theme.fontFamily.h3};
   font-size: ${(props) => props.theme.fontSizes.h3};
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
+`;
+
+const ReviewContainer = styled.div`
+  width: 100%;
+  height: 45%;
+  font-family: ${(props) => props.theme.fontFamily.h3};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
 `;
 
 const PlaceContainer = styled.div`
@@ -98,24 +116,23 @@ const PlaceContainer = styled.div`
   font-size: ${(props) => props.theme.fontSizes.h3};
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 `;
 
 const Comment = styled.input`
   width: 100%;
-  height: 109px;
+  height: 50%;
   border-radius: 10px;
-  margin-top: 1rem;
   border: 2px solid ${(props) => props.theme.colors.DeepBlue};
   font-family: ${(props) => props.theme.fontFamily.h5};
   font-size: ${(props) => props.theme.fontSizes.h5};
 `;
 
 const ButtonContainer = styled.div`
+  height: 30%;
   button {
     width: 100%;
-    margin-top: 1rem;
-    height: 60px;
+    height: 100%;
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
   }
@@ -123,7 +140,7 @@ const ButtonContainer = styled.div`
 
 const KakaoMapButton = styled.button`
   width: 100%;
-  height: 60px;
+  height: 16%;
   background-color: ${(props) => props.theme.colors.lightBlue};
   border-radius: 10px;
   color: white;
@@ -131,17 +148,28 @@ const KakaoMapButton = styled.button`
   font-size: ${(props) => props.theme.fontSizes.h3};
 `;
 
-const ShareContainer = styled.div`
+const WriteContainer = styled.div`
+  width: 100%;
+  height: 60%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 20%;
+`;
+
+const ShareContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 15%;
 `;
 
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  button {
+    margin-right: 1rem;
+  }
 `;
 
 const Subtitle = styled.h4`
@@ -162,6 +190,9 @@ function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
     setIsOpen(!isOpen);
   };
 
+  const addBookmark = () => {
+    setBookmark(!bookmark);
+  };
   useEffect(() => {
     if (isOpen === false) setRatePlace(0);
   }, [isOpen]);
@@ -170,12 +201,16 @@ function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
     <ModalContainer onClose={onClose}>
       <Container>
         <HeadContainer>
-          <MapCircleButton type="button" shape={`${bookmark ? 2 : 3}`} />
+          <MapCircleButton
+            type="button"
+            shape={`${bookmark ? 2 : 3}`}
+            func={addBookmark}
+          />
           <PlaceInfoContainer>
             <PlaceTitle>설이 마음속</PlaceTitle>
             <p>사랑시 고백구 행복동</p>
           </PlaceInfoContainer>
-          <button type="button" aria-label="close button">
+          <button type="button" className="xbutton">
             <Xbutton />
           </button>
         </HeadContainer>
@@ -184,8 +219,8 @@ function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
           <LeftContainer>
             <PlaceContainer>
               <Subtitle>어떤 곳인가요?</Subtitle>
-              <MapTitleCard user="dd" title="efaf" />
-              <MapTitleCard user="dafd" title="efwf" />
+              <MapTitleCard user="dd" used="modal" title="efaf" />
+              <MapTitleCard user="dafd" used="modal" title="efwf" />
             </PlaceContainer>
             <ShareContainer>
               <Subtitle>이 장소 공유하기</Subtitle>
@@ -205,7 +240,7 @@ function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
               <UserOpinionCard emoji={1} content="dasdf" isAdmin />
               <UserOpinionCard emoji={2} content="쿠쿠루삥뽕" isAdmin={false} />
             </ReviewContainer>
-            <ReviewContainer>
+            <ReviewWriteContainer>
               {auth.accessToken ? (
                 <Subtitle>
                   {userInformation.nickname}님의 의견 남겨주세요!
@@ -214,11 +249,17 @@ function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
                 <Subtitle>로그인을 하여 리뷰를 남겨보세요!</Subtitle>
               )}
               <PlaceRatingButton ratePlace={ratePlace} func={toggleActive} />
-              {isOpen && <Comment placeholder="의견을 입력해봐라" />}
-              <ButtonContainer>
-                <ConfirmButton type="submit" text="작성" />
-              </ButtonContainer>
-            </ReviewContainer>
+              <WriteContainer>
+                {isOpen && (
+                  <>
+                    <Comment placeholder="의견을 입력해봐라" />
+                    <ButtonContainer>
+                      <ConfirmButton type="submit" text="작성" />
+                    </ButtonContainer>
+                  </>
+                )}
+              </WriteContainer>
+            </ReviewWriteContainer>
           </RightContainer>
         </PlaceContent>
       </Container>

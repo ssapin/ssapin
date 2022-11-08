@@ -19,7 +19,7 @@ const Container = styled.div`
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   padding: 1rem;
 
   .content {
@@ -28,6 +28,10 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray800};
     font-family: ${(props) => props.theme.fontFamily.s1};
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 
@@ -36,25 +40,17 @@ const EmojiContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  height: 10%;
+  height: fit-content;
+  margin-top: -2rem;
   .icon {
-    width: 20rem;
-    text-align: left;
-    margin-top: -2rem;
     font-size: ${(props) => props.theme.fontSizes.h1};
     font-family: ${(props) => props.theme.fontFamily.h1bold};
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
   }
 
   .delete {
-    text-align: right;
+    margin-top: 1.5rem;
     font-size: ${(props) => props.theme.fontSizes.h4};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
   }
 `;
 
