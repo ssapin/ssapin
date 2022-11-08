@@ -13,10 +13,9 @@ const TiedBoxes = styled.div`
 
 const StyledCampus = styled.button`
   width: ${pixelToRem(60)};
-  height: ${pixelToRem(28)};
+  height: ${pixelToRem(25)};
   flex-grow: 0;
   border-radius: ${pixelToRem(20)};
-  flex-grow: 0;
   font-family: ${(props) => props.theme.fontFamily.s1};
   font-size: ${(props) => props.theme.fontSizes.s1};
   font-weight: normal;

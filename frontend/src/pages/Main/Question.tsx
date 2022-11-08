@@ -22,7 +22,7 @@ const QuestionContainer = styled.div`
     font-family: ${(props) => props.theme.fontFamily.h1bold};
 
     ${(props) => props.theme.mq.mobile} {
-      font-size: ${(props) => props.theme.fontSizes.h3};
+      font-size: ${(props) => props.theme.fontSizes.h4};
     }
   }
 `;

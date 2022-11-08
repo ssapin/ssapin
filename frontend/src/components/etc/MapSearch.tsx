@@ -25,6 +25,10 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
   align-items: center;
   min-width: 350px;
 
+  ${(props) => props.theme.mq.mobile} {
+    border-radius: 20px;
+  }
+
   :focus-within {
     background-color: ${(props) => props.theme.colors.gray50};
 
@@ -44,6 +48,12 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     color: ${(props) => props.theme.colors.gray50};
     outline: none;
     margin-left: 3rem;
+
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.h5};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+      margin-left: 1.5rem;
+    }
   }
 
   input::placeholder {
@@ -51,11 +61,21 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     font-family: ${(props) => props.theme.fontFamily.h4};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.h5};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+    }
   }
 
   input:focus {
     background-color: ${(props) => props.theme.colors.gray50};
     color: ${(props) => props.theme.colors.mainBlue};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.h5};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+    }
   }
 
   .searchButton {

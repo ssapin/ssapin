@@ -31,7 +31,7 @@ function Router() {
         <Route path="maps/:mapId/detail" element={<Maps />} />
         <Route path="mypage" element={<User />} />
         <Route path="search" element={<Search />} />
-        <Route path="mobileCreate" element={<CreateMapMobilePage />} />
+        <Route path="mobilecreate" element={<CreateMapMobilePage />} />
       </Routes>
     </BrowserRouter>
   );

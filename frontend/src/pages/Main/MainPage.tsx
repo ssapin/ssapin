@@ -111,6 +111,11 @@ const FixContainer = styled.div`
     margin-bottom: 1rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
+
+  ${(props) => props.theme.mq.mobile} {
+    right: 1rem;
+    bottom: 1rem;
+  }
 `;
 
 function MainPage() {
@@ -137,7 +142,7 @@ function MainPage() {
 
   const navigate = useNavigate();
   const moveToCreate = () => {
-    navigate("/mobileCreate");
+    navigate("/mobilecreate");
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<

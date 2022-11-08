@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import axiosInstance from "./api";
 
 const USER_APIS = {
-  REDIRECT_URI: `${import.meta.env.VITE_BASE_URL}/auth/kakao/login`,
+  REDIRECT_URI: `${import.meta.env.VITE_BASE_SERVER_URL}/auth/kakao/login`,
   LOGIN: "/auth/login",
   REISSUE: "/auth/reissue",
   USER_INFORMATION: "/user/login/info",

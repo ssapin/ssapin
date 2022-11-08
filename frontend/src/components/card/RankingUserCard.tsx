@@ -18,22 +18,42 @@ const Container = styled.div`
   align-items: center;
   padding: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin-bottom: 0;
+  }
+
   .emoji {
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h3};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
   }
 
   .nickname {
     font-size: ${(props) => props.theme.fontSizes.h3};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h3bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
   }
 
   .mapcnt {
-    font-size: ${(props) => props.theme.fontSizes.s2};
+    font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray500};
-    font-family: ${(props) => props.theme.fontFamily.s2};
+    font-family: ${(props) => props.theme.fontFamily.s1};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.s2};
+      font-size: ${(props) => props.theme.fontSizes.s2};
+    }
   }
 `;
 

@@ -24,11 +24,21 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
+  ${(props) => props.theme.mq.mobile} {
+    height: 7.5rem;
+    margin: 0;
+  }
+
   .icon {
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
   }
 
   .title {
@@ -37,6 +47,12 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
   }
 
   .user {
@@ -45,6 +61,10 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+    }
   }
 
   .summary {
@@ -53,6 +73,10 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
+
+    ${(props) => props.theme.mq.mobile} {
+      margin-top: 0.3rem;
+    }
   }
 
   :hover {
