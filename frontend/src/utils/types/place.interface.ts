@@ -12,7 +12,7 @@ export interface IPlace {
 }
 
 export interface IPlaceMin {
-  placeId: number;
+  placeId?: number;
   itemId: number;
   title: string;
   lat: number;

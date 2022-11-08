@@ -2,10 +2,33 @@ import axiosInstance from "../apis/api";
 import PLACE_APIS from "../apis/placeApi";
 import {
   IAddPlace,
+  IKakaoPlace,
   IPlaceBookmark,
+  IPlaceMin,
   IRemovePlaceMap,
   IRemovePlaceTogethermap,
 } from "../types/place.interface";
+
+export function getKakaoPlace(place: IKakaoPlace): IPlaceMin {
+  const result: IPlaceMin = {
+    itemId: Number(place.id),
+    title: place.place_name,
+    lat: Number(place.x),
+    lng: Number(place.y),
+    address: place.address_name,
+  };
+
+  return result;
+}
+
+export function getRequestPlace(data: IPlaceMin, id: number): IAddPlace {
+  const result: IAddPlace = {
+    mapId: id,
+    place: data,
+  };
+
+  return result;
+}
 
 // 추천지도 장소추가
 export function addPlaceToMap(data: IAddPlace) {

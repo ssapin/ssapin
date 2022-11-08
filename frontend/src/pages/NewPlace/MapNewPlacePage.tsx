@@ -12,6 +12,7 @@ import {
   useState,
   forwardRef,
   LegacyRef,
+  MouseEventHandler,
 } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,8 +25,17 @@ import {
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { KakaoPlaceObj } from "../../utils/types/common";
-import { IKakaoPlace } from "../../utils/types/place.interface";
+import {
+  IAddPlace,
+  IKakaoPlace,
+  IPlaceMin,
+} from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
+import {
+  addPlaceToMap,
+  getKakaoPlace,
+  getRequestPlace,
+} from "../../utils/functions/place";
 
 const Conatiner = styled.section`
   position: relative;
@@ -265,6 +275,8 @@ function MapNewPlace() {
     mapObj.infowindow.close();
   };
 
+  console.log(placeList);
+
   return (
     <Conatiner>
       <SearchContainer>
@@ -287,6 +299,7 @@ function MapNewPlace() {
                 ref={(el) => (itemRefs.current[idx] = el)}
                 mouseOver={() => mouseOver(idx, place.place.place_name)}
                 mouseLeave={mouseLeave}
+                mapId={mapId}
               />
             ))}
           </ul>
@@ -385,11 +398,18 @@ interface PlaceCardProps {
   mouseOver: () => void;
   mouseLeave: () => void;
   place: IKakaoPlace;
+  mapId: number;
+}
+
+function addPlace(kakakoplace: IKakaoPlace, id: number) {
+  const place: IPlaceMin = getKakaoPlace(kakakoplace);
+  const data: IAddPlace = getRequestPlace(place, id);
+  addPlaceToMap(data);
 }
 
 const PlaceCard = forwardRef(
   (
-    { index, place, mouseOver, mouseLeave }: PlaceCardProps,
+    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
     return (
