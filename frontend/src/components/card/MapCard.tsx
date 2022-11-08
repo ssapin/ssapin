@@ -98,7 +98,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
     navigate(`/maps/${prop.mapId}/detail`);
   };
 
-  const onDeletePlace = async (e: { stopPropagation: () => void }) => {
+  const onDeleteMap = async (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     if (isAdmin && prop.userId !== user.userId) {
       // eslint-disable-next-line no-alert
@@ -132,7 +132,7 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
       <Bottom>
         <div className="delete">
           {isAdmin && prop.userId === user.userId && (
-            <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+            <TrashIcon className="trashIcon" onClick={onDeleteMap} />
           )}
         </div>
         <p className="summary">
