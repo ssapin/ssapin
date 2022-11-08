@@ -24,10 +24,18 @@ const RankingContainer = styled.div`
   display: grid;
   margin: auto;
   margin-top: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   grid-gap: 2rem;
   margin-bottom: 2rem;
   justify-items: center;
+
+  ${(props) => props.theme.mq.tablet} {
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(80%, 1fr));
+  }
 `;
 
 const Title = styled.div`
@@ -46,6 +54,11 @@ const Title = styled.div`
     text-align: center;
     padding-left: 0;
   }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
+  }
 `;
 
 const Description = styled.div`
@@ -61,6 +74,11 @@ const Description = styled.div`
     text-align: center;
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
   }
 `;
 

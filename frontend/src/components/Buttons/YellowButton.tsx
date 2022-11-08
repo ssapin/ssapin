@@ -34,6 +34,12 @@ const StyledBigYellow = styled.button`
   display: block;
   justify-content: center;
   text-align: center;
+
+  ${(props) => props.theme.mq.mobile} {
+    padding: 6.9px 70px 7.9px 70px;
+    margin-bottom: 1rem;
+  }
+
   &:hover {
     background-color: #ffdf1d;
     scale: 1.06;
@@ -45,6 +51,10 @@ const StyledBigYellow = styled.button`
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
     line-height: 1.13;
     letter-spacing: ${pixelToRem(-0.8)};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.s1};
+    }
   }
   .main-textbox {
     font-size: ${(props) => props.theme.fontSizes.h3};
@@ -54,6 +64,10 @@ const StyledBigYellow = styled.button`
     font-style: normal;
     line-height: 1.21;
     letter-spacing: ${pixelToRem(-1.2)};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.h4};
+    }
   }
 `;
 

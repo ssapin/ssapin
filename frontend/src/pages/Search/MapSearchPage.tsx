@@ -45,6 +45,11 @@ const Searchbar = styled.div`
     color: ${(props) => props.theme.colors.gray50};
     font-family: ${(props) => props.theme.fontFamily.h1};
     font-size: ${(props) => props.theme.fontSizes.h1};
+
+    ${(props) => props.theme.mq.mobile} {
+      font-family: ${(props) => props.theme.fontFamily.h2};
+      font-size: ${(props) => props.theme.fontSizes.h2};
+    }
   }
 `;
 
@@ -118,10 +123,10 @@ function SearchPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
-    new URLSearchParams(window.location.search).get("keyword"),
+    new URLSearchParams(window.location.search).get("keyword") || "",
   );
   const [fakeKeyword, setFakeKeyword] = useState(
-    new URLSearchParams(window.location.search).get("keyword"),
+    new URLSearchParams(window.location.search).get("keyword") || "",
   );
   const [sidebar, setSidebar] = useState(false);
 
@@ -187,7 +192,7 @@ function SearchPage() {
           <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
             width="50%"
-            height="15%"
+            height="12%"
             changeFunc={onChangeKeyword}
             clickFunc={onClickKeyword}
             value={fakeKeyword}
