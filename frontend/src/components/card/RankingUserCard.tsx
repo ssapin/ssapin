@@ -73,7 +73,6 @@ const Container = styled.div<{ type: string; nickname: string }>`
 `;
 
 function RankingUserCard({ user, type }: UserRankingProps) {
-  console.log(user.nickname.length);
   return (
     <Container type={type} nickname={user.nickname}>
       <p className="emoji">{user.emoji}</p>
