@@ -63,18 +63,20 @@ public class    UserResponse {
         private long mapId;
         private long userId;
         private String title;
-        private String emoji;
+        private String mapEmoji;
+        private String userEmoji;
         private String nickname;
         private long placeCnt;
         private long userCnt;
 
         @Builder
-        Map(long mapId, long userId, String title, String emoji, String nickname,
-                      long placeCnt, long userCnt){
+        Map(long mapId, long userId, String title, String mapEmoji
+            , String userEmoji, String nickname, long placeCnt, long userCnt){
             this.mapId = mapId;
             this.userId = userId;
             this.title = title;
-            this.emoji = emoji;
+            this.mapEmoji = mapEmoji;
+            this.userEmoji = userEmoji;
             this.nickname = nickname;
             this.placeCnt = placeCnt;
             this.userCnt = userCnt;
