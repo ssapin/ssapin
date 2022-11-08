@@ -21,8 +21,8 @@ const TabMenu = styled.div`
     border-radius: ${pixelToRem(20)} ${pixelToRem(20)} 0 0;
     padding: 20px;
     cursor: pointer;
-    font-family: ${(props) => props.theme.fontFamily.h1};
-    font-size: ${(props) => props.theme.fontSizes.h1};
+    font-family: ${(props) => props.theme.fontFamily.h2};
+    font-size: ${(props) => props.theme.fontSizes.h2};
     ${(props) => props.theme.mq.mobile} {
       font-family: ${(props) => props.theme.fontFamily.paragraph};
       font-size: ${(props) => props.theme.fontSizes.paragraph};
@@ -43,8 +43,8 @@ const TabMenu = styled.div`
     cursor: pointer;
     background-color: ${(props) => props.theme.colors.gray0};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h1bold};
-    font-size: ${(props) => props.theme.fontSizes.h1};
+    font-family: ${(props) => props.theme.fontFamily.h2bold};
+    font-size: ${(props) => props.theme.fontSizes.h2};
     ${(props) => props.theme.mq.mobile} {
       font-family: ${(props) => props.theme.fontFamily.paragraphbold};
       font-size: ${(props) => props.theme.fontSizes.paragraph};

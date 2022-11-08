@@ -19,7 +19,7 @@ import SearchList from "./SearchList";
 
 const HeadContainer = styled.div`
   width: 100%;
-  height: 70vh;
+  height: 50vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
   display: flex;
   flex-direction: column;
@@ -192,7 +192,7 @@ function SearchPage() {
           <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
             width="50%"
-            height="12%"
+            height="15%"
             changeFunc={onChangeKeyword}
             clickFunc={onClickKeyword}
             value={fakeKeyword}

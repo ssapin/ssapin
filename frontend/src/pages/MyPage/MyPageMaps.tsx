@@ -12,13 +12,7 @@ const MyMapsContainer = styled.div`
 `;
 
 const WriteMapContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 100%;
 `;
 
 const JoinedMapContainer = styled.div`
@@ -117,7 +111,7 @@ export default function MyMaps() {
           <MemoInfiniteList
             url={USER_APIS.MY_MAP}
             queryKey={["MyMapList"]}
-            zeroDataText="없어시붕"
+            zeroDataText="만들어진 지도가 없습니다."
             CardComponent={MapCard}
           />
         </WriteMapContainer>
@@ -127,7 +121,7 @@ export default function MyMaps() {
           <MemoInfiniteList
             url={USER_APIS.JOIN_MAP}
             queryKey={["JoinMapList"]}
-            zeroDataText="없어시붕"
+            zeroDataText="참여한 지도가 없습니다."
             CardComponent={MapCard}
           />
         </JoinedMapContainer>

@@ -14,15 +14,21 @@ import { CAMPUS_LIST } from "../../utils/constants/contant";
 // 모달
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { ChangeInfoModal } from "./ChangeMyInfo";
+import MyPageTab from "./MyPageTab";
+import Footer from "../../components/etc/Footer";
 
 const PageTopBg = styled.div`
   width: 100%;
-  height: 65vh;
+  height: 50vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   color: ${(props) => props.theme.colors.gray0};
+
+  ${(props) => props.theme.mq.mobile} {
+    height: 60vh;
+  }
 `;
 
 const UserInfos = styled.div`
@@ -119,7 +125,7 @@ function MyPage() {
           )}
         </UserInfos>
       </PageTopBg>
-      {/* <MyPageTab /> */}
+      <MyPageTab />
       <FixContainer>
         <MoveToTopButton />
         {innerWidth > 950 ? (
@@ -128,6 +134,7 @@ function MyPage() {
           <CreateButtonMobile type="button" />
         )}
       </FixContainer>
+      <Footer />
     </>
   );
 }
