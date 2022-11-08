@@ -74,22 +74,19 @@ const Container = styled.div`
     }
   }
 
-  .summary {
-    text-align: right;
-    margin-top: 0.7rem;
-    font-size: ${(props) => props.theme.fontSizes.s2};
-    color: ${(props) => props.theme.colors.gray500};
-    font-family: ${(props) => props.theme.fontFamily.s2bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      margin-top: 0.3rem;
-    }
-  }
-
   :hover {
     scale: 1.06;
     cursor: pointer;
   }
+`;
+
+const Bottom = styled.div`
+  font-size: ${(props) => props.theme.fontSizes.s2};
+  color: ${(props) => props.theme.colors.gray500};
+  font-family: ${(props) => props.theme.fontFamily.s2bold};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 function MapCard({ prop, isAdmin }: MapCardProps) {
@@ -108,14 +105,16 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
       <p className="icon">{prop.mapEmoji}</p>
       <p className="title">{prop.title}</p>
       <p className="user">{`${prop.userEmoji} ${prop.nickname}`}</p>
-      <p className="summary">
-        📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
-      </p>
-      {isAdmin && prop.userId === user.userId && (
-        <div className="delete">
-          <TrashIcon className="trashIcon" onClick={onDeletePlace} />
-        </div>
-      )}
+      <Bottom>
+        {isAdmin && prop.userId === user.userId && (
+          <div className="delete">
+            <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+          </div>
+        )}
+        <p className="summary">
+          📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
+        </p>
+      </Bottom>
     </Container>
   );
 }

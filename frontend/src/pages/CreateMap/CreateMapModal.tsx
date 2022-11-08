@@ -21,7 +21,8 @@ const Container = styled.div`
   max-width: 814px;
   width: 50vw;
   max-width: 925px;
-  height: 100%;
+  height: 83vh;
+  overflow-y: scroll;
   background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
