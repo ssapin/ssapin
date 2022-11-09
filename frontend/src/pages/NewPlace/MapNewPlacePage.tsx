@@ -470,7 +470,7 @@ const PlaceCard = forwardRef(
                 onClose={() => setModalOpen(false)}
                 place={place}
                 mapId={mapId}
-                type={2}
+                type={1}
               />
             </ModalPortal>
           )}

@@ -103,29 +103,70 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
     setText("");
   };
 
-  const addPlace = () => {
+  const addPlace = async () => {
     console.log(place);
     console.log(mapId);
+    console.log(`타입: ${type}`);
 
     const dplace: IPlaceMin = getKakaoPlace(place);
     const data: IAddPlace = getRequestPlace(dplace, mapId);
-    const id: number = 0;
+    let id: number = 0;
 
-    if (type === 1) axiosInstance.post(PLACE_APIS.MAP, data);
-    else {
+    if (type === 1) {
+      const response = await axiosInstance.post(PLACE_APIS.MAP, data);
+      try {
+        console.log(response);
+
+        if (response.status === 200) {
+          id = response.data;
+
+          if (ratePlace !== 0) {
+            const reviewData: IReviewPlace = {
+              placeId: id,
+              emojiType: ratePlace,
+              content: text,
+            };
+
+            registerReview(reviewData);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
       //모여지도 ~
-      axiosInstance.post(PLACE_APIS.TOGETHERMAP, data);
+      const response = await axiosInstance.post(PLACE_APIS.TOGETHERMAP, data);
+
+      try {
+        console.log(response);
+
+        if (response.status === 200) {
+          id = response.data;
+
+          if (ratePlace !== 0) {
+            const reviewData: IReviewPlace = {
+              placeId: id,
+              emojiType: ratePlace,
+              content: text,
+            };
+
+            registerReview(reviewData);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
-    if (ratePlace !== 0) {
-      const reviewData: IReviewPlace = {
-        placeId: id,
-        emojiType: ratePlace,
-        content: text,
-      };
+    // if (ratePlace !== 0) {
+    //   const reviewData: IReviewPlace = {
+    //     placeId: id,
+    //     emojiType: ratePlace,
+    //     content: text,
+    //   };
 
-      registerReview(reviewData);
-    }
+    //   registerReview(reviewData);
+    // }
 
     onClose();
   };
