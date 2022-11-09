@@ -9,7 +9,7 @@ type PlaceCardProps = {
   isAdmin: boolean;
 };
 
-const Container = styled.div`
+const Container = styled.li`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;

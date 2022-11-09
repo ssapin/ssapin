@@ -9,7 +9,6 @@ type TogetherMapTitleProps = {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
   border-radius: 10px;
-  margin: 1rem;
   width: 22rem;
   height: 4rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray50};

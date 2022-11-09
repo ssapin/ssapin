@@ -20,6 +20,9 @@ import LoginModal from "../Login/LoginModal";
 import "./style.css";
 import { IPlace } from "../../utils/types/place.interface";
 import PlaceDetailModal from "./PlaceDetailModal";
+import PlaceCard from "../../components/card/PlaceCard";
+import { getCurrentLocation } from "../../utils/functions/getCurrentLocation";
+import MenuButton from "../../components/Buttons/MenuButton";
 
 declare global {
   interface Window {
@@ -31,6 +34,7 @@ const { kakao } = window;
 
 const Container = styled.section`
   position: relative;
+  overflow: hidden;
 `;
 
 const MapContainer = styled.div`
@@ -54,11 +58,26 @@ const BackContainer = styled.div`
   left: 10px;
 `;
 
+const SubjectContainer = styled(BackContainer)`
+  left: 50%;
+  margin-left: -11rem;
+`;
+
 const PlaceListContainer = styled.div`
   position: fixed;
+  top: 80px;
+  right: 30px;
+  z-index: 2;
+  > ul {
+    right: 10px;
+  }
+`;
+
+const NavContainer = styled.div`
+  position: fixed;
+  z-index: 2;
   top: 10px;
   right: 10px;
-  z-index: 2;
 `;
 
 type Coordinate = [number, number];
@@ -67,7 +86,7 @@ function TogetherMap() {
   const mapRef = useRef<HTMLDivElement>();
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
-  const [placeId, setPlaceId] = useState();
+  const [placeId, setPlaceId] = useState<number>();
   const { togethermapId } = useParams();
   const navigate = useNavigate();
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
@@ -105,22 +124,6 @@ function TogetherMap() {
     setPlaceId(id);
   };
 
-  const placePlaceListMarker = (placeList: IPlace[]) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (let i = 0; i < placeList.length; i++) {
-      const pos = new kakao.maps.LatLng(placeList[i].lng, placeList[i].lat);
-      addMarker(pos, i, mapObj.map);
-      const content = makePin(placeList[i]);
-      const customOverlay = new kakao.maps.CustomOverlay({
-        map: mapObj?.map,
-        position: pos,
-        content,
-        yAnchor: 2,
-      });
-    }
-  };
-
-  // <img src=${avatar} width='30' alt="avatar image" />
   const makePin = (place: IPlace, avatar: string) => {
     const container = document.createElement("div");
     container.setAttribute("class", "marker_overlay shadow");
@@ -132,7 +135,7 @@ function TogetherMap() {
     emoji.append(avatar);
     container.append(placeName, emoji);
     container.onclick = () => {
-      openModal(place.title);
+      openModal(place.placeId);
     };
     return container;
   };
@@ -205,12 +208,26 @@ function TogetherMap() {
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />
-        <TogetherMapTitleCard title={togetherMapData?.title} />
       </BackContainer>
+      <SubjectContainer>
+        <TogetherMapTitleCard title={togetherMapData?.title} />
+      </SubjectContainer>
+      <NavContainer>
+        <MenuButton />
+      </NavContainer>
+      <button
+        type="button"
+        style={{ backgroundColor: "red", zIndex: 2, position: "fixed" }}
+        onClick={getCurrentLocation}
+      >
+        네브바
+      </button>
       <PlaceListContainer>
         <ul>
           {togetherMapData?.placeList &&
-            togetherMapData.placeList.map((place) => <li>{place.title}</li>)}
+            togetherMapData.placeList.map((place) => (
+              <PlaceCard prop={place} key={place.placeId} isAdmin />
+            ))}
         </ul>
       </PlaceListContainer>
       <ButtonContainer>
