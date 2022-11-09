@@ -28,6 +28,13 @@ public class PlaceRepositorySupport extends QuerydslRepositorySupport {
 //
 //    }
 
+    public Place findPlace(long itemId)
+    {
+        return queryFactory.selectFrom(QPlace.place)
+                .where(QPlace.place.itemId.eq(itemId))
+                .fetchOne();
+    }
+
 
 
 }
