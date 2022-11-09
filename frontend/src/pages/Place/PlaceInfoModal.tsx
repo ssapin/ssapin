@@ -65,6 +65,9 @@ const LeftContainer = styled.div`
   height: 100%;
   justify-content: space-between;
   width: 45%;
+  ${(props) => props.theme.mq.tablet} {
+    width: 100%;
+  }
 `;
 
 const RightContainer = styled.div`
@@ -73,6 +76,9 @@ const RightContainer = styled.div`
   height: 100%;
   justify-content: space-between;
   width: 45%;
+  ${(props) => props.theme.mq.tablet} {
+    width: 100%;
+  }
 `;
 
 const ImageContainer = styled.div`

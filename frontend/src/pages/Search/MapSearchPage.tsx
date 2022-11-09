@@ -16,7 +16,7 @@ import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
 import AddPlaceModal from "./AddPlaceModal";
 import SearchList from "./SearchList";
-import PlaceInfoModal from "../Main/PlaceInfoModal";
+import PlaceInfoModal from "../Place/PlaceInfoModal";
 import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`

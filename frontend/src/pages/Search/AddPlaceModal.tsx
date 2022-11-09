@@ -8,6 +8,8 @@ import testMap from "../../assets/image/testmapPic.png";
 
 interface PlaceModalProps {
   onClose: () => void;
+  title: string;
+  address: string;
 }
 
 const Container = styled.div`
@@ -78,7 +80,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-function AddPlaceModal({ onClose }: PlaceModalProps) {
+function AddPlaceModal({ onClose, title, address }: PlaceModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
   const toggleActive = (key: number) => {
@@ -94,8 +96,8 @@ function AddPlaceModal({ onClose }: PlaceModalProps) {
     <ModalContainer onClose={onClose}>
       <Container>
         <PlaceContainer>
-          <PlaceTitle>설이 마음속</PlaceTitle>
-          <p>사랑시 고백구 행복동</p>
+          <PlaceTitle>{title}</PlaceTitle>
+          {address}
         </PlaceContainer>
         <PlaceContent>
           <ImageContainer>

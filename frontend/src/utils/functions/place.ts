@@ -13,8 +13,8 @@ export function getKakaoPlace(place: IKakaoPlace): IPlaceMin {
   const result: IPlaceMin = {
     itemId: Number(place.id),
     title: place.place_name,
-    lat: Number(place.x),
-    lng: Number(place.y),
+    lat: Number(place.y),
+    lng: Number(place.x),
     address: place.address_name,
   };
 
@@ -23,7 +23,7 @@ export function getKakaoPlace(place: IKakaoPlace): IPlaceMin {
 
 export function getRequestPlace(data: IPlaceMin, id: number): IAddPlace {
   const result: IAddPlace = {
-    mapId: id,
+    mapId: Number(id),
     place: data,
   };
 
@@ -85,3 +85,9 @@ export function removeBookmarkInPlace(d_data: IPlaceBookmark) {
     data: { itemId: d_data.itemId },
   });
 }
+
+export const addPlace = (kakakoplace: IKakaoPlace, id: number) => () => {
+  const place: IPlaceMin = getKakaoPlace(kakakoplace);
+  const data: IAddPlace = getRequestPlace(place, id);
+  addPlaceToMap(data);
+};
