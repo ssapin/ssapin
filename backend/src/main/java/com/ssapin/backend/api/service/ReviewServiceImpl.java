@@ -76,15 +76,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewQueryResponse> findReviewByBookmarkedPlace(List<PlaceBookmark> placeBookmarkList) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+        if (placeBookmarkList.size() == 0) return new ArrayList<>();
 
+        BooleanBuilder builder = new BooleanBuilder();
         for (PlaceBookmark placeBookmark : placeBookmarkList)
             builder.or(QReview.review.place.id.eq(placeBookmark.getPlace().getId()));
 
         List<ReviewQueryResponse> ret = reviewRepositorySupport.findByBookmarkedPlace(builder);
-        for (ReviewQueryResponse review : ret) {
-            System.out.println("==============" + review.getContent() + ", " + review.getPlaceId());
-        }
         return reviewRepositorySupport.findByBookmarkedPlace(builder);
     }
 
