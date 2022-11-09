@@ -58,6 +58,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final TogethermapRepository togethermapRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
 
+
     private final TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
 
 
@@ -92,7 +93,7 @@ public class PlaceServiceImpl implements PlaceService {
 
             return mapPlaceRepository.save(mapPlace).getId();
 
-        }else {
+        } else {
 
             place = placeResponse.get();
             placeId = place.getId();
@@ -106,7 +107,6 @@ public class PlaceServiceImpl implements PlaceService {
 
             return mapPlaceRepository.save(mapPlace).getId();
         }
-
 
 
     }
@@ -221,7 +221,7 @@ public class PlaceServiceImpl implements PlaceService {
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place = placeRepository.findById(removePlaceInTogethermapRequest.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, 0);
+        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, place.getId());
 
         TogethermapPlace result = togethermapPlaceRepository.findById(togethermapPlace.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
@@ -234,9 +234,11 @@ public class PlaceServiceImpl implements PlaceService {
      * (6) 장소 정보조회
      */
     @Override
-    public PlaceResponse getPlaceInfo(long itemId) {
+    public PlaceInfoResponse getPlaceInfo(User user, long placeId) {
 
-        Optional<Place> placeResponse = placeRepository.findByItemId(itemId);
+        Optional<Place> placeResponse = placeRepository.findById(placeId);
+
+        boolean isBookmark = false;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
@@ -249,8 +251,15 @@ public class PlaceServiceImpl implements PlaceService {
                 .address(placeResponse.get().getAddress())
                 .build();
 
-        PlaceResponse result = new PlaceResponse(place, null, null);
+        if (user != null) {
+            PlaceBookmark bookmark = placeBookmarkRepositorySupport.findByUserAndPlace(user.getId(), placeId);
 
+            if (bookmark != null) {
+                isBookmark = true;
+            }
+        }
+
+        PlaceInfoResponse result = new PlaceInfoResponse(placeResponse.get().getId(), place, isBookmark);
 
         return result;
     }
@@ -259,14 +268,14 @@ public class PlaceServiceImpl implements PlaceService {
      * (7)해당장소가 추가된 추천지도 리스트 조회
      */
     @Override
-    public PlaceMapResponse.MapListResponse getMapListInPlace(long itemId) {
-        Optional<Place> place = placeRepository.findByItemId(itemId);
+    public PlaceMapResponse.MapListResponse getMapListInPlace(long placeId) {
+        Optional<Place> place = placeRepository.findById(placeId);
 
 
         if (place.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         } else if (place.isPresent()) {
-            List<MapPlace> list = mapPlaceRepository.findByPlace(place.get().getId());
+            List<MapPlace> list = mapPlaceRepositorySupport.findbyPlace(placeId);
 
             List<PlaceMapResponse.MapResponse> result = new ArrayList<PlaceMapResponse.MapResponse>();
 
