@@ -87,6 +87,8 @@ export function removeBookmarkInPlace(d_data: IPlaceBookmark) {
 }
 
 export const addPlace = (kakakoplace: IKakaoPlace, id: number) => () => {
+  console.log("실행");
+
   const place: IPlaceMin = getKakaoPlace(kakakoplace);
   const data: IAddPlace = getRequestPlace(place, id);
   addPlaceToMap(data);

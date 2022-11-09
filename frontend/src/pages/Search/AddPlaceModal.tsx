@@ -5,11 +5,21 @@ import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
 import testMap from "../../assets/image/testmapPic.png";
+import {
+  IAddPlace,
+  IKakaoPlace,
+  IPlaceMin,
+} from "../../utils/types/place.interface";
+import { getKakaoPlace, getRequestPlace } from "../../utils/functions/place";
+import axiosInstance from "../../utils/apis/api";
+import PLACE_APIS from "../../utils/apis/placeApi";
+import { IReviewPlace, registerReview } from "../../utils/apis/reviewApi";
 
 interface PlaceModalProps {
   onClose: () => void;
-  title: string;
-  address: string;
+  mapId: number;
+  place: IKakaoPlace;
+  type: number;
 }
 
 const Container = styled.div`
@@ -80,24 +90,58 @@ const ButtonContainer = styled.div`
   }
 `;
 
-function AddPlaceModal({ onClose, title, address }: PlaceModalProps) {
+function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
+  const [text, setText] = useState("");
+  const onChange = (e: any) => {
+    setText(e.target.value);
+  };
   const toggleActive = (key: number) => {
     setRatePlace(key);
     setIsOpen(!isOpen);
+    setText("");
+  };
+
+  const addPlace = () => {
+    console.log(place);
+    console.log(mapId);
+
+    const dplace: IPlaceMin = getKakaoPlace(place);
+    const data: IAddPlace = getRequestPlace(dplace, mapId);
+    const id: number = 0;
+
+    if (type === 1) axiosInstance.post(PLACE_APIS.MAP, data);
+    else {
+      //모여지도 ~
+      axiosInstance.post(PLACE_APIS.TOGETHERMAP, data);
+    }
+
+    if (ratePlace !== 0) {
+      const reviewData: IReviewPlace = {
+        placeId: id,
+        emojiType: ratePlace,
+        content: text,
+      };
+
+      registerReview(reviewData);
+    }
+
+    onClose();
   };
 
   useEffect(() => {
     if (isOpen === false) setRatePlace(0);
   }, [isOpen]);
 
+  console.log(ratePlace);
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
         <PlaceContainer>
-          <PlaceTitle>{title}</PlaceTitle>
-          {address}
+          <PlaceTitle>{place.place_name}</PlaceTitle>
+          {place.address_name}
         </PlaceContainer>
         <PlaceContent>
           <ImageContainer>
@@ -107,11 +151,22 @@ function AddPlaceModal({ onClose, title, address }: PlaceModalProps) {
           <ReviewContainer>
             <div>장소평가</div>
             <PlaceRatingButton ratePlace={ratePlace} func={toggleActive} />
-            {isOpen && <Comment placeholder="의견을 입력해봐라" />}
+            {isOpen && (
+              <Comment
+                onChange={onChange}
+                placeholder="장소에 대한 솔직한 의견 적어주세요"
+                value={text}
+              />
+            )}
           </ReviewContainer>
         </PlaceContent>
         <ButtonContainer>
-          <ConfirmButton used="modal" type="submit" text="추가" />
+          <ConfirmButton
+            used="modal"
+            type="submit"
+            text="추가"
+            func={addPlace}
+          />
           <CancelButton used="modal" type="button" text="취소" func={onClose} />
         </ButtonContainer>
       </Container>
