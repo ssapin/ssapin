@@ -6,6 +6,8 @@ type InputProps = {
   placeholder: string;
   // eslint-disable-next-line react/require-default-props
   changeFunc?: (e: any) => void;
+  // eslint-disable-next-line react/require-default-props
+  value?: string;
 };
 
 const Container = styled.div<{ width?: string; height?: string }>`
@@ -31,10 +33,15 @@ const Container = styled.div<{ width?: string; height?: string }>`
   }
 `;
 
-function Input({ width, height, placeholder, changeFunc }: InputProps) {
+function Input({ value, width, height, placeholder, changeFunc }: InputProps) {
   return (
     <Container width={width} height={height}>
-      <input type="text" onChange={changeFunc} placeholder={placeholder} />
+      <input
+        type="text"
+        value={value}
+        onChange={changeFunc}
+        placeholder={placeholder}
+      />
     </Container>
   );
 }

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import CancelButton from "../../components/Buttons/CancelButton";
@@ -10,11 +11,26 @@ import ModalContainer from "../../components/containers/ModalContainer";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { MAP_APIS } from "../../utils/apis/mapApi";
+import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 
 interface ModalProps {
+  // eslint-disable-next-line react/require-default-props
+  mapId?: number;
   onClose: () => void;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 }
 
 const Container = styled.div`
@@ -91,7 +107,7 @@ const Flex = styled.div`
   }
 `;
 
-function CreateMapModal({ onClose }: ModalProps) {
+function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
   const [defaultCampusId] = useRecoilState(campusState);
@@ -99,6 +115,21 @@ function CreateMapModal({ onClose }: ModalProps) {
   const [title, setTitle] = useState("");
   const [emoji, setEmoji] = useState("");
   const [access, setAccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    const promiseData = getMap(mapId).then((data) => {
+      setCampusId(data.campusId);
+      setEmoji(data.mapEmoji);
+      setAccess(data.access);
+      setTitle(data.title);
+      // eslint-disable-next-line array-callback-return
+      data.hashtagList.map((hashtag: any) => {
+        hashTag.push(hashtag.hashtagId);
+      });
+      setIsEdit(true);
+    });
+  }, [mapId]);
 
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
@@ -161,24 +192,46 @@ function CreateMapModal({ onClose }: ModalProps) {
       return;
     }
 
-    const body = JSON.stringify({
-      campusId,
-      title,
-      emoji,
-      access,
-      hashtagList: hashTag,
-    });
+    if (isEdit) {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        mapId,
+        hashtagList: hashTag,
+      });
 
-    const response = await axiosInstance.post(MAP_APIS.MAP, body);
+      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
 
-    try {
-      if (response.status === 200) {
-        // eslint-disable-next-line no-alert
-        alert(`등록되었습니다.${response?.data}번 지도`);
-        navigate("/search");
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`수정되었습니다.`);
+          refetch();
+          onClose();
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        hashtagList: hashTag,
+      });
+
+      const response = await axiosInstance.post(MAP_APIS.MAP, body);
+
+      try {
+        if (response.status === 200) {
+          navigate(`/maps/${response?.data}/detail`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -195,14 +248,12 @@ function CreateMapModal({ onClose }: ModalProps) {
                 height="41px"
                 placeholder="ex) 역삼 멀캠 근처 조용한 카페"
                 changeFunc={onChangeTitle}
+                value={title}
               />
             </Content>
             <Content>
               <SubTitle>캠퍼스</SubTitle>
-              <select
-                onChange={onChangeCampusId}
-                defaultValue={defaultCampusId}
-              >
+              <select onChange={onChangeCampusId} value={campusId}>
                 {campus.map(
                   (option, idx) =>
                     idx >= 1 && (
@@ -235,6 +286,7 @@ function CreateMapModal({ onClose }: ModalProps) {
                 height="41px"
                 placeholder="ex) 🎈🎆🎇"
                 changeFunc={onChangeEmoji}
+                value={emoji}
               />
             </Content>
           </DivBox>
@@ -246,7 +298,11 @@ function CreateMapModal({ onClose }: ModalProps) {
             />
           </FilterBox>
           <Flex>
-            <ConfirmButton type="submit" text="만들기" />
+            {isEdit ? (
+              <ConfirmButton type="submit" text="수정하기" />
+            ) : (
+              <ConfirmButton type="submit" text="만들기" />
+            )}
             <CancelButton type="button" text="취소" func={onClose} />
           </Flex>
         </Form>

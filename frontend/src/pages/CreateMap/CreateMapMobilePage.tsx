@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import CancelButton from "../../components/Buttons/CancelButton";
@@ -9,7 +9,7 @@ import SwitchButton from "../../components/Buttons/SwitchButton";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { MAP_APIS } from "../../utils/apis/mapApi";
+import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import NavBar from "../Navbar/Navbar";
 
@@ -107,6 +107,26 @@ function CreateMapMobilePage() {
   const [title, setTitle] = useState("");
   const [emoji, setEmoji] = useState("");
   const [access, setAccess] = useState(false);
+  const [mapId] = useState(
+    new URLSearchParams(window.location.search).get("mapId") || "",
+  );
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (mapId !== "") {
+      const promiseData = getMap(Number(mapId)).then((data) => {
+        setCampusId(data.campusId);
+        setEmoji(data.mapEmoji);
+        setAccess(data.access);
+        setTitle(data.title);
+        // eslint-disable-next-line array-callback-return
+        data.hashtagList.map((hashtag: any) => {
+          hashTag.push(hashtag.hashtagId);
+        });
+        setIsEdit(true);
+      });
+    }
+  }, [mapId]);
 
   const toggleActive = (key: number) => {
     setCampusdefaultId(key);
@@ -176,24 +196,45 @@ function CreateMapMobilePage() {
       return;
     }
 
-    const body = JSON.stringify({
-      campusId,
-      title,
-      emoji,
-      access,
-      hashtagList: hashTag,
-    });
+    if (isEdit) {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        mapId,
+        hashtagList: hashTag,
+      });
 
-    const response = await axiosInstance.post(MAP_APIS.MAP, body);
+      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
 
-    try {
-      if (response.status === 200) {
-        // eslint-disable-next-line no-alert
-        alert(`등록되었습니다.${response?.data}번 지도`);
-        navigate("/search");
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`수정되었습니다.`);
+          navigate(`/mypage`);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        hashtagList: hashTag,
+      });
+
+      const response = await axiosInstance.post(MAP_APIS.MAP, body);
+
+      try {
+        if (response.status === 200) {
+          navigate(`/maps/${response?.data}/detail`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -213,16 +254,14 @@ function CreateMapMobilePage() {
                 height="41px"
                 placeholder="ex) 역삼 멀캠 근처 조용한 카페"
                 changeFunc={onChangeTitle}
+                value={title}
               />
             </Content>
           </DivBox>
           <DivBox>
             <Content>
               <SubTitle>캠퍼스</SubTitle>
-              <select
-                onChange={onChangeCampusId}
-                defaultValue={defaultCampusId}
-              >
+              <select onChange={onChangeCampusId} value={campusId}>
                 {campus.map(
                   (option, idx) =>
                     idx >= 1 && (
@@ -257,6 +296,7 @@ function CreateMapMobilePage() {
                 height="41px"
                 placeholder="ex) 🎈🎆🎇"
                 changeFunc={onChangeEmoji}
+                value={emoji}
               />
             </Content>
           </DivBox>
@@ -268,7 +308,11 @@ function CreateMapMobilePage() {
             />
           </FilterBox>
           <Flex>
-            <ConfirmButton type="submit" text="만들기" />
+            {isEdit ? (
+              <ConfirmButton type="submit" text="수정하기" />
+            ) : (
+              <ConfirmButton type="submit" text="만들기" />
+            )}
             <CancelButton type="button" text="취소" func={moveToPrev} />
           </Flex>
         </Form>

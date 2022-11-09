@@ -10,7 +10,7 @@ export interface IPlace {
   userId: number;
   userEmoji: string;
   nickname: string;
-  isBookMark: boolean;
+  bookmark: boolean;
 }
 
 export interface IPlaceDetail {
