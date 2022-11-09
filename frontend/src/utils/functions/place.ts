@@ -61,17 +61,13 @@ export function removePlaceInTogethermap(d_data: IRemovePlaceTogethermap) {
 }
 
 // 장소 정보 조회
-export function getDetailPlaceInfo(itemId: String) {
-  const id: number = Number(itemId);
-
-  axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(id));
+export function getDetailPlaceInfo(placeId: number) {
+  axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId));
 }
 
 // 장소가 추가된 추천지도 리스트 조회
-export function getMapListInPlace(itemId: String) {
-  const id: number = Number(itemId);
-
-  axiosInstance.get(PLACE_APIS.getMapListInPlace(id));
+export function getMapListInPlace(placeId: number) {
+  axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId));
 }
 
 // 장소 북마크 등록
@@ -82,7 +78,7 @@ export function addBookmarkInPlace(data: IPlaceBookmark) {
 // 장소 북마크 해제
 export function removeBookmarkInPlace(d_data: IPlaceBookmark) {
   axiosInstance.delete(PLACE_APIS.BOOKMARK, {
-    data: { itemId: d_data.itemId },
+    data: { placeId: d_data.placeId },
   });
 }
 
