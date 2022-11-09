@@ -14,7 +14,7 @@ import {
   LegacyRef,
 } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 
@@ -135,7 +135,6 @@ function TogetherNewPlace() {
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
   const { togethermapId } = useParams();
-  const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
