@@ -268,14 +268,14 @@ public class PlaceServiceImpl implements PlaceService {
      * (7)해당장소가 추가된 추천지도 리스트 조회
      */
     @Override
-    public PlaceMapResponse.MapListResponse getMapListInPlace(long itemId) {
-        Optional<Place> place = placeRepository.findByItemId(itemId);
+    public PlaceMapResponse.MapListResponse getMapListInPlace(long placeId) {
+        Optional<Place> place = placeRepository.findById(placeId);
 
 
         if (place.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         } else if (place.isPresent()) {
-            List<MapPlace> list = mapPlaceRepository.findByPlace(place.get().getId());
+            List<MapPlace> list = mapPlaceRepositorySupport.findbyPlace(placeId);
 
             List<PlaceMapResponse.MapResponse> result = new ArrayList<PlaceMapResponse.MapResponse>();
 

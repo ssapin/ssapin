@@ -106,4 +106,10 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
 
     }
 
+    public List<MapPlace> findbyPlace(long placeId)
+    {
+        return queryFactory.select(QMapPlace.mapPlace)
+            .from(QMapPlace.mapPlace).where(QMapPlace.mapPlace.place.id.eq(placeId)).fetch();
+    }
+
 }

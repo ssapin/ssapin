@@ -10,7 +10,6 @@ import java.util.List;
 public interface MapPlaceRepository extends JpaRepository<MapPlace, Long> {
 
 
-    List<MapPlace> findByPlace(long placeId);
 
 
 
