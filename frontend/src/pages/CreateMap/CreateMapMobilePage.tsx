@@ -271,20 +271,37 @@ function CreateMapMobilePage() {
           <DivBox>
             <Content>
               <SubTitle>캠퍼스</SubTitle>
-              <select onChange={onChangeCampusId} value={campusId}>
-                {campus.map(
-                  (option, idx) =>
-                    idx >= 1 && (
-                      <option
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={idx}
-                        value={idx}
-                      >
-                        {option}
-                      </option>
-                    ),
-                )}
-              </select>
+              {isEdit ? (
+                <select onChange={onChangeCampusId} value={campusId}>
+                  {campus.map(
+                    (option, idx) =>
+                      idx == campusId && (
+                        <option
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={idx}
+                          value={idx}
+                        >
+                          {option}
+                        </option>
+                      ),
+                  )}
+                </select>
+              ) : (
+                <select onChange={onChangeCampusId} value={campusId}>
+                  {campus.map(
+                    (option, idx) =>
+                      idx >= 1 && (
+                        <option
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={idx}
+                          value={idx}
+                        >
+                          {option}
+                        </option>
+                      ),
+                  )}
+                </select>
+              )}
             </Content>
           </DivBox>
           <DivBox>
