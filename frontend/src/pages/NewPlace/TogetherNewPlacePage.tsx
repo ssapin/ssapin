@@ -17,6 +17,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
+
 import { campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
@@ -24,6 +25,7 @@ import {
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { addPlace } from "../../utils/functions/place";
+import { pixelToRem } from "../../utils/functions/util";
 import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
@@ -416,6 +418,7 @@ const PlaceCard = forwardRef(
               <span>{place.address_name}</span>
             )}
             <span>{place.phone}</span>
+
             <CreateButton type="button" onClick={addPlace(place, mapId)}>
               장소
               <PlusIcon className="plus" />

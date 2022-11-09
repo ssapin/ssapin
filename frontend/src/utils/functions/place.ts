@@ -86,9 +86,8 @@ export function removeBookmarkInPlace(d_data: IPlaceBookmark) {
   });
 }
 
-export const addPlace =
-  (kakakoplace: IKakaoPlace, id: number) => (event: any) => {
-    const place: IPlaceMin = getKakaoPlace(kakakoplace);
-    const data: IAddPlace = getRequestPlace(place, id);
-    addPlaceToMap(data);
-  };
+export const addPlace = (kakakoplace: IKakaoPlace, id: number) => () => {
+  const place: IPlaceMin = getKakaoPlace(kakakoplace);
+  const data: IAddPlace = getRequestPlace(place, id);
+  addPlaceToMap(data);
+};
