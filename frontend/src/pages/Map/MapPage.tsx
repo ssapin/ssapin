@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import BackButton from "../../components/Buttons/BackButton";
 import CreateButton from "../../components/Buttons/CreateButton";
+import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { authState, campusState } from "../../store/atom";
@@ -94,6 +95,7 @@ function MapPage() {
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />
+        <MapCircleButton shape="2" />
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
