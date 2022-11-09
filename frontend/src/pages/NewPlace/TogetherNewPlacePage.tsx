@@ -23,7 +23,6 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
@@ -186,7 +185,6 @@ function TogetherNewPlace() {
     setPaginationList(pageList);
   };
   const displayPlaces = (places: IKakaoPlace[]) => {
-    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
     // removeMarker();
@@ -197,7 +195,6 @@ function TogetherNewPlace() {
       const marker = addMarker(placePosition, i);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-      console.log(marker);
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -218,7 +215,7 @@ function TogetherNewPlace() {
   };
 
   const placesSearchCB = (
-    data: KakaoPlaceObj[],
+    data: IKakaoPlace[],
     status: string,
     pagination: Pagination,
   ) => {
@@ -240,14 +237,14 @@ function TogetherNewPlace() {
   useEffect(() => {
     const [lat, lan]: Coordinate = togetherMapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .x,
         ]
       : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].x,
         ];
     const container = mapRefs.current;
     const options = {

@@ -12,7 +12,6 @@ import {
   useState,
   forwardRef,
   LegacyRef,
-  MouseEventHandler,
 } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,7 +23,6 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { KakaoPlaceObj } from "../../utils/types/common";
 import {
   IAddPlace,
   IKakaoPlace,
@@ -227,7 +225,7 @@ function MapNewPlace() {
   };
 
   const placesSearchCB = (
-    data: KakaoPlaceObj[],
+    data: IKakaoPlace[],
     status: string,
     pagination: Pagination,
   ) => {

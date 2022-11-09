@@ -16,6 +16,11 @@ import {
 } from "../../utils/constants/contant";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import LoginModal from "../Login/LoginModal";
+import building from "../../assets/svgs/building.svg";
+
+import "./style.css";
+import { IKakaoPlace, IPlace } from "../../utils/types/place.interface";
+import PlaceDetailModal from "./PlaceDetailModal";
 
 declare global {
   interface Window {
@@ -55,9 +60,13 @@ type Coordinate = [number, number];
 function TogetherMap() {
   const mapRef = useRef<HTMLDivElement>();
   const [mapObj, setMapObj] = useState({ map: null });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [placeId, setPlaceId] = useState();
   const { togethermapId } = useParams();
   const navigate = useNavigate();
+
   const userCampusId = useRecoilValue(campusState);
+
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
     () => getTogetherMap(Number(togethermapId)),
@@ -65,14 +74,13 @@ function TogetherMap() {
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
 
-  const addMarker = (position: number, idx: number) => {
+  const addMarker = (position: number, idx: number, map: any) => {
     const imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
-    const imageSize = new kakao.maps.Size(36, 37);
+      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
+    const imageSize = new kakao.maps.Size(50, 50);
     const imgOptions = {
-      spriteSize: new kakao.maps.Size(36, 691),
       spriteOrigin: new kakao.maps.Point(0, idx * 46 + 10),
-      offset: new kakao.maps.Point(13, 37),
+      offset: new kakao.maps.Point(20, 37),
     };
     const markerImage = new kakao.maps.MarkerImage(
       imageSrc,
@@ -81,37 +89,81 @@ function TogetherMap() {
     );
     const marker = new kakao.maps.Marker({
       position,
-      image: markerImage,
+      // image: markerImage,
     });
-    marker.setMap(mapObj.map);
+    marker.setMap(map);
     return marker;
   };
 
+  const openModal = (id) => {
+    setModalOpen(true);
+    setPlaceId(id);
+  };
+
+  const placePlaceListMarker = (placeList: IPlace[]) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (let i = 0; i < placeList.length; i++) {
+      console.log(placeList);
+      const pos = new kakao.maps.LatLng(placeList[i].lng, placeList[i].lat);
+      addMarker(pos, i, mapObj.map);
+      const content = makePin(placeList[i]);
+      const customOverlay = new kakao.maps.CustomOverlay({
+        map: mapObj?.map,
+        position: pos,
+        content,
+        yAnchor: 2,
+      });
+    }
+  };
+
+  // <img src=${avatar} width='30' alt="avatar image" />
+  const makePin = (place: IPlace, avatar: SVGAElement | string) => {
+    const container = document.createElement("div");
+    container.setAttribute("class", "marker_overlay shadow");
+    container.innerHTML = `
+              <div class="place_name text_primary">${place.title}</div>
+              <div class="avatar">
+                <div>${place.userEmoji}</div>
+                
+              </div>
+    `;
+    container.onclick = () => {
+      openModal(place.title);
+    };
+    return container;
+  };
+
   useEffect(() => {
-    const [lat, lan]: Coordinate = togetherMapData
-      ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lan,
-        ]
-      : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
-        ];
+    const campusLocation = togetherMapData
+      ? CAMPUS_LIST[Number(togetherMapData.campusId)]
+      : CAMPUS_LIST[userCampusId];
+    const [lat, lan]: Coordinate = [
+      +CAMPUS_COORDINATE_LIST[campusLocation].y,
+      +CAMPUS_COORDINATE_LIST[campusLocation].x,
+    ];
+
     const mapContainer = mapRef.current;
     const position = new kakao.maps.LatLng(lat, lan);
     const options = {
       center: position,
       level: 3,
     };
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const campusName = CAMPUS_COORDINATE_LIST[campusLocation];
     const map = new kakao.maps.Map(mapContainer, options);
-    const custumOverlay = new kakao.maps.CustomOverlay({
+    const marker = addMarker(position, 0, map);
+    const img = "https://www.ssafy.com/swp_m/images/common/logo3.png";
+    const content = makePin(campusName, img);
+    const customOverlay = new kakao.maps.CustomOverlay({
       map,
       position,
-      content: 
+      content,
+      yAnchor: 2,
     });
+    setMapObj({ map });
+
+    console.log(togetherMapData);
   }, []);
 
   const addNewPlace = () => {
@@ -121,8 +173,6 @@ function TogetherMap() {
 
   return (
     <Container>
-      {/* <SearchPlace /> */}
-      {/* <NewPlace /> */}
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />
@@ -134,6 +184,14 @@ function TogetherMap() {
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
+      {modalOpen && (
+        <ModalPortal>
+          <PlaceDetailModal
+            placeId={placeId}
+            onClose={() => setModalOpen(false)}
+          />
         </ModalPortal>
       )}
     </Container>
