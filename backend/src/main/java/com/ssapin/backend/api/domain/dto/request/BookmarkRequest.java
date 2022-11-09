@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookmarkRequest {
 
-    private long itemId;
+    private long placeId;
 
-    public BookmarkRequest(long itemId) {
-        this.itemId = itemId;
+    public BookmarkRequest(long placeId) {
+        this.placeId = placeId;
     }
 }
