@@ -171,6 +171,8 @@ public class MapServiceImpl implements MapService {
         return mapResponseList;
     }
 
+
+
     @Override
     public void addBookmark(User user, long mapId) {
         Map map = mapRepository.findById(mapId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));

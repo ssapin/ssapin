@@ -26,7 +26,6 @@ public class JwtTokenUtil {
     private String REFRESH_KEY;
     private final static String DATA_KEY = "userId";
     private final static String EXP_KEY = "exp";
-    private final UserService userService;
 
     //AccessToken 발급
     public String generateJwtToken(User user) {
@@ -134,18 +133,15 @@ public class JwtTokenUtil {
 
         Claims claims = getClaimsFormToken(token, SECRET_KEY);
         long userId = claims.get(DATA_KEY, Long.class);
-        User user = userService.getUserById(userId);
-
-        return user.getId();
+        return userId;
     }
 
     public long getUserIdFromRefreshToken(String token) {
 
         Claims claims = getClaimsFormToken(token, REFRESH_KEY);
         long userId = claims.get(DATA_KEY, Long.class);
-        User user = userService.getUserById(userId);
 
-        return user.getId();
+        return userId;
     }
 
     public long getExpFromToken(String token) {
