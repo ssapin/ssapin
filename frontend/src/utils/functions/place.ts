@@ -13,8 +13,8 @@ export function getKakaoPlace(place: IKakaoPlace): IPlaceMin {
   const result: IPlaceMin = {
     itemId: Number(place.id),
     title: place.place_name,
-    lat: Number(place.x),
-    lng: Number(place.y),
+    lat: Number(place.y),
+    lng: Number(place.x),
     address: place.address_name,
   };
 
