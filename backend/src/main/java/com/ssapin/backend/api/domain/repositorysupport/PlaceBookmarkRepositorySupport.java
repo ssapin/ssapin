@@ -30,7 +30,7 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression campusEq(Campus campus) {
-        if (campus==null) {
+        if (campus == null) {
             return null;
         }
         return QMap.map.campus.eq(campus);
@@ -38,9 +38,9 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
 
     }
 
-    public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus){
+    public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByBookmark(Campus campus) {
 
-        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QMapPlace.mapPlace.place.id.as("placeId"),QMapPlace.mapPlace.place.id.count().as("cnt")))
+        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class, QMapPlace.mapPlace.place.id.as("placeId"), QMapPlace.mapPlace.place.id.count().as("cnt")))
                 .from(QMapPlace.mapPlace)
                 .join(QMap.map)
                 .on(campusEq(campus))
@@ -50,10 +50,8 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
                 .on(QMapPlace.mapPlace.place.id.eq(QPlaceBookmark.placeBookmark.place.id))
                 .groupBy(QMapPlace.mapPlace.place.id)
                 .orderBy(QMapPlace.mapPlace.place.id.count().desc())
-                . limit(1).fetchOne();
+                .limit(1).fetchOne();
     }
-
-
 
 
     public List<PlaceBookmark> findByUserId(long userId) {
@@ -63,5 +61,14 @@ public class PlaceBookmarkRepositorySupport extends QuerydslRepositorySupport {
                 .where(QPlaceBookmark.placeBookmark.user.id.eq(userId))
                 .orderBy(QPlaceBookmark.placeBookmark.id.desc())
                 .fetch();
+    }
+
+    public PlaceBookmark findByUserAndPlace(long userId, long placeId) {
+
+        return queryFactory
+                .selectFrom(QPlaceBookmark.placeBookmark)
+                .where(QPlaceBookmark.placeBookmark.place.id.eq(placeId)
+                        .and(QPlaceBookmark.placeBookmark.user.id.eq(userId)))
+                .fetchOne();
     }
 }

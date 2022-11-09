@@ -2,8 +2,8 @@ package com.ssapin.backend.api.controller;
 
 import com.ssapin.backend.api.domain.dto.request.BookmarkRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceMapRequest;
+import com.ssapin.backend.api.domain.dto.response.PlaceInfoResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
-import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.service.PlaceServiceImpl;
 import com.ssapin.backend.api.service.UserServiceImpl;
@@ -81,19 +81,21 @@ public class PlaceController {
 
     @GetMapping("/{itemId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
-    public ResponseEntity<?> getPlaceInfo(@PathVariable long itemId) {
+    public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId, @RequestHeader(required = false, name = "accessToken") final String accessToken) {
 
-        PlaceResponse result = placeService.getPlaceInfo(itemId);
+        long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+        User user = userService.getUserById(userId);
 
+
+        PlaceInfoResponse result = placeService.getPlaceInfo(user,placeId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/map/{itemId}")
+    @GetMapping("/map/{placeId}")
     @ApiOperation(value = "해당 장소가 추가된 추천지도 리스트 조회", notes = "해당 장소가 추가된 추천지도 리스트 조회")
-    public ResponseEntity<?> getMapListInPlace(@PathVariable long itemId) {
+    public ResponseEntity<?> getMapListInPlace(@PathVariable long placeId) {
 
-        PlaceMapResponse.MapListResponse result = placeService.getMapListInPlace(itemId);
-
+        PlaceMapResponse.MapListResponse result = placeService.getMapListInPlace(placeId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

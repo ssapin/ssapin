@@ -4,6 +4,7 @@ import com.ssapin.backend.api.domain.dto.request.BookmarkRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceMapRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceRequest;
 import com.ssapin.backend.api.domain.dto.response.MapResponse;
+import com.ssapin.backend.api.domain.dto.response.PlaceInfoResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.entity.Place;
@@ -25,9 +26,9 @@ public interface PlaceService {
 
     Long removePlaceInTogetherMap(User user, PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest);
 
-    PlaceResponse getPlaceInfo(long itemId);
+    PlaceInfoResponse getPlaceInfo(User user, long placeId);
 
-    PlaceMapResponse.MapListResponse getMapListInPlace(long itemId);
+    PlaceMapResponse.MapListResponse getMapListInPlace(long placeId);
 
     Long registerBookmark(User user, BookmarkRequest bookmarkRequest);
 

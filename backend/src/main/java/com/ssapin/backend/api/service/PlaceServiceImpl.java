@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.awt.desktop.SystemSleepEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,10 +52,12 @@ public class PlaceServiceImpl implements PlaceService {
 
 
     private final PlaceRepository placeRepository;
+    private final PlaceRepositorySupport placeRepositorySupport;
     private final MapPlaceRepository mapPlaceRepository;
     private final TogethermapPlaceRepository togethermapPlaceRepository;
     private final TogethermapRepository togethermapRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
+
 
     private final TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
 
@@ -67,29 +71,43 @@ public class PlaceServiceImpl implements PlaceService {
 
         Map map = mapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        Place place = Place.builder()
-                .itemId(placeRequest.getPlace().getItemId())
-                .title(placeRequest.getPlace().getTitle())
-                .lat(placeRequest.getPlace().getLat())
-                .lng(placeRequest.getPlace().getLng())
-                .address(placeRequest.getPlace().getAddress())
-                .build();
+        Place place = null;
 
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
-
+        long placeId;
         if (placeResponse.isEmpty()) {
-            placeRepository.save(place);
+            place = Place.builder()
+                    .itemId(placeRequest.getPlace().getItemId())
+                    .title(placeRequest.getPlace().getTitle())
+                    .lat(placeRequest.getPlace().getLat())
+                    .lng(placeRequest.getPlace().getLng())
+                    .address(placeRequest.getPlace().getAddress())
+                    .build();
+            placeRepository.saveAndFlush(place);
+
+            MapPlace mapPlace = MapPlace.builder()
+                    .map(map)
+                    .user(user)
+                    .place(place)
+                    .build();
+
+            return mapPlaceRepository.save(mapPlace).getId();
+
+        } else {
+
+            place = placeResponse.get();
+            placeId = place.getId();
+            System.out.println(placeId);
+
+            MapPlace mapPlace = MapPlace.builder()
+                    .map(map)
+                    .user(user)
+                    .place(place)
+                    .build();
+
+            return mapPlaceRepository.save(mapPlace).getId();
         }
 
-        MapPlace mapPlace = MapPlace.builder()
-                .map(map)
-                .user(user)
-                .place(place)
-                .build();
-
-        long id = mapPlaceRepository.save(mapPlace).getId();
-
-        return id;
 
     }
 
@@ -97,27 +115,48 @@ public class PlaceServiceImpl implements PlaceService {
      * (2) 모여지도에 장소추가/업데이트
      */
     @Override
+    @Transactional
     public Long addPlaceInTogetherMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
 
 
-        Togethermap map = togethermapRepository.findById(placeRequest.getPlace().getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Togethermap map = togethermapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        Place place = Place.builder()
-                .itemId(placeRequest.getPlace().getItemId())
-                .title(placeRequest.getPlace().getTitle())
-                .lat(placeRequest.getPlace().getLat())
-                .lng(placeRequest.getPlace().getLng())
-                .address(placeRequest.getPlace().getAddress())
-                .build();
+        Place place = null;
 
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
+
+        long placeId = 0;
+
         long id;
         if (placeResponse.isEmpty()) {
-            id = placeRepository.save(place).getId();
-        } else {
-            place.update(placeRequest.getPlace().getPlaceId(), placeRequest.getPlace().getTitle(), placeRequest.getPlace().getLat(), placeRequest.getPlace().getLng(), placeRequest.getPlace().getAddress());
-            id = placeRequest.getPlace().getPlaceId();
 
+            place = Place.builder()
+                    .itemId(placeRequest.getPlace().getItemId())
+                    .title(placeRequest.getPlace().getTitle())
+                    .lat(placeRequest.getPlace().getLat())
+                    .lng(placeRequest.getPlace().getLng())
+                    .address(placeRequest.getPlace().getAddress())
+                    .build();
+            placeId = placeRepository.save(place).getId();
+        } else {
+            place = placeResponse.get();
+            placeId = place.getId();
+        }
+
+
+        TogethermapPlace result = togethermapPlaceRepositorySupport.findByPlace(map, user, placeId);
+        if (result == null) {
+            Place place1 = placeRepositorySupport.findPlace(place.getItemId());
+
+            TogethermapPlace mapPlace = TogethermapPlace.builder()
+                    .togethermap(map)
+                    .user(user)
+                    .place(place1)
+                    .build();
+            id = togethermapPlaceRepository.save(mapPlace).getId();
+        } else {
+            result.update(place, map);
+            id = result.getId();
         }
 
 
@@ -182,7 +221,7 @@ public class PlaceServiceImpl implements PlaceService {
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place = placeRepository.findById(removePlaceInTogethermapRequest.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, place);
+        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, place.getId());
 
         TogethermapPlace result = togethermapPlaceRepository.findById(togethermapPlace.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
@@ -195,9 +234,11 @@ public class PlaceServiceImpl implements PlaceService {
      * (6) 장소 정보조회
      */
     @Override
-    public PlaceResponse getPlaceInfo(long itemId) {
+    public PlaceInfoResponse getPlaceInfo(User user, long placeId) {
 
-        Optional<Place> placeResponse = placeRepository.findByItemId(itemId);
+        Optional<Place> placeResponse = placeRepository.findById(placeId);
+
+        boolean isBookmark = false;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
@@ -210,8 +251,15 @@ public class PlaceServiceImpl implements PlaceService {
                 .address(placeResponse.get().getAddress())
                 .build();
 
-        PlaceResponse result = new PlaceResponse(place, null, null);
+        if (user != null) {
+            PlaceBookmark bookmark = placeBookmarkRepositorySupport.findByUserAndPlace(user.getId(), placeId);
 
+            if (bookmark != null) {
+                isBookmark = true;
+            }
+        }
+
+        PlaceInfoResponse result = new PlaceInfoResponse(placeResponse.get().getId(), place, isBookmark);
 
         return result;
     }
@@ -220,14 +268,14 @@ public class PlaceServiceImpl implements PlaceService {
      * (7)해당장소가 추가된 추천지도 리스트 조회
      */
     @Override
-    public PlaceMapResponse.MapListResponse getMapListInPlace(long itemId) {
-        Optional<Place> place = placeRepository.findByItemId(itemId);
+    public PlaceMapResponse.MapListResponse getMapListInPlace(long placeId) {
+        Optional<Place> place = placeRepository.findById(placeId);
 
 
         if (place.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         } else if (place.isPresent()) {
-            List<MapPlace> list = mapPlaceRepository.findByPlace(place.get().getId());
+            List<MapPlace> list = mapPlaceRepositorySupport.findbyPlace(placeId);
 
             List<PlaceMapResponse.MapResponse> result = new ArrayList<PlaceMapResponse.MapResponse>();
 
@@ -251,19 +299,14 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     public Long registerBookmark(User user, BookmarkRequest bookmarkRequest) {
-        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+        Optional<Place> placeResponse = placeRepository.findById(bookmarkRequest.getPlaceId());
+        Place place =null;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        Place place = Place.builder()
-                .itemId(placeResponse.get().getItemId())
-                .title(placeResponse.get().getTitle())
-                .lat(placeResponse.get().getLat())
-                .lng(placeResponse.get().getLng())
-                .address(placeResponse.get().getAddress())
-                .build();
+        place =placeResponse.get();
 
         PlaceBookmark placeBookmark = PlaceBookmark.builder()
                 .user(user)
@@ -280,32 +323,25 @@ public class PlaceServiceImpl implements PlaceService {
      * (9) 장소 북마크 해제
      */
     @Override
+    @Transactional
     public Long removeBookmark(User user, BookmarkRequest bookmarkRequest) {
 
-        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+        Optional<Place> placeResponse = placeRepository.findById(bookmarkRequest.getPlaceId());
+        Place place =null;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        Place place = Place.builder()
-                .itemId(placeResponse.get().getItemId())
-                .title(placeResponse.get().getTitle())
-                .lat(placeResponse.get().getLat())
-                .lng(placeResponse.get().getLng())
-                .address(placeResponse.get().getAddress())
-                .build();
+        place =placeResponse.get();
 
-
-        PlaceBookmark placeBookmark = PlaceBookmark.builder()
-                .user(user)
-                .place(place)
-                .build();
-
-        PlaceBookmark result = placeBookmarkRepository.findById(placeBookmark.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        placeBookmarkRepository.delete(placeBookmark);
-
+        PlaceBookmark result =placeBookmarkRepositorySupport.findByUserAndPlace(user.getId(),place.getId());
         long id = result.getId();
+
+
+        placeBookmarkRepository.delete(result);
+
+
 
         return id;
     }

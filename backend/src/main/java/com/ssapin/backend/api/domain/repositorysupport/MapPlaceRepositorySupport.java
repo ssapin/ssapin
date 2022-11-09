@@ -78,9 +78,9 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
 
     public MapPlace findByMapPlace(Map map, User user, Place place) {
         return queryFactory.selectFrom(QMapPlace.mapPlace)
-                .where(QMapPlace.mapPlace.map.eq(map)
-                        .and(QMapPlace.mapPlace.place.eq(place))
-                        .and(QMapPlace.mapPlace.user.eq(user)))
+                .where(QMapPlace.mapPlace.map.id.eq(map.getId())
+                        .and(QMapPlace.mapPlace.place.id.eq(place.getId()))
+                        .and(QMapPlace.mapPlace.user.id.eq(user.getId())))
                 .fetchOne();
     }
 
@@ -104,6 +104,12 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(QMapPlace.mapPlace.place.id.count().desc())
                 . limit(1).fetchOne();
 
+    }
+
+    public List<MapPlace> findbyPlace(long placeId)
+    {
+        return queryFactory.select(QMapPlace.mapPlace)
+            .from(QMapPlace.mapPlace).where(QMapPlace.mapPlace.place.id.eq(placeId)).fetch();
     }
 
 }

@@ -1,30 +1,27 @@
-package com.ssapin.backend.api.domain.dto.request;
+package com.ssapin.backend.api.domain.dto.response;
 
-import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
+
 import com.ssapin.backend.api.domain.entity.Place;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class PlaceRequest {
+public class PlaceInfoResponse {
 
+    private long placeId;
     private long itemId;
     private String title;
     private float lat;
     private float lng;
     private String address;
+    private boolean isBookmark;
 
-    public PlaceRequest(Place place) {
+    public PlaceInfoResponse(long placeId, Place place, boolean isBookmark) {
+        this.placeId = placeId;
         this.itemId = place.getItemId();
         this.title = place.getTitle();
         this.lat = place.getLat();
         this.lng = place.getLng();
         this.address = place.getAddress();
+        this.isBookmark = isBookmark;
     }
-
 }
