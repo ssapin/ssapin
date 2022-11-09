@@ -323,9 +323,10 @@ public class PlaceServiceImpl implements PlaceService {
      * (9) 장소 북마크 해제
      */
     @Override
+    @Transactional
     public Long removeBookmark(User user, BookmarkRequest bookmarkRequest) {
 
-        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getPlaceId());
+        Optional<Place> placeResponse = placeRepository.findById(bookmarkRequest.getPlaceId());
         Place place =null;
 
         if (placeResponse.isEmpty()) {
@@ -334,16 +335,13 @@ public class PlaceServiceImpl implements PlaceService {
 
         place =placeResponse.get();
 
-
-        PlaceBookmark placeBookmark = PlaceBookmark.builder()
-                .user(user)
-                .place(place)
-                .build();
-
-        PlaceBookmark result = placeBookmarkRepository.findById(placeBookmark.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        placeBookmarkRepository.delete(placeBookmark);
-
+        PlaceBookmark result =placeBookmarkRepositorySupport.findByUserAndPlace(user.getId(),place.getId());
         long id = result.getId();
+
+
+        placeBookmarkRepository.delete(result);
+
+
 
         return id;
     }
