@@ -3,13 +3,15 @@ import styled from "@emotion/styled";
 type MapTitleProps = {
   user: string;
   title: string;
+  // eslint-disable-next-line react/require-default-props
+  used?: string;
 };
 
-const Container = styled.div`
+const Container = styled.div<{ used?: string }>`
   background-color: ${(props) => props.theme.colors.gray50};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
+  width: ${(props) => (props.used === "modal" ? `90%` : `22rem`)};
   height: 4rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -32,9 +34,9 @@ const Container = styled.div`
   }
 `;
 
-function MapTitleCard({ user, title }: MapTitleProps) {
+function MapTitleCard({ user, title, used }: MapTitleProps) {
   return (
-    <Container>
+    <Container used={used}>
       <p className="user">{user}</p>
       <p className="title">{title}</p>
     </Container>

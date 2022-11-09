@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { RATING_LIST } from "../../utils/constants/contant";
 
 interface UserOpinionProps {
   emoji: number;
@@ -13,69 +14,61 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   margin: 1rem;
-  width: 22rem;
-  height: 6rem;
+  width: 90%;
+  height: 5rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   padding: 1rem;
 
-  .icon {
-    position: absolute;
-    width: 20rem;
-    text-align: left;
-    margin-bottom: 6rem;
-    font-size: ${(props) => props.theme.fontSizes.h1};
-    font-family: ${(props) => props.theme.fontFamily.h1bold};
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .delete {
-    position: absolute;
-    text-align: right;
-    margin-bottom: 3.5rem;
-    margin-left: 19rem;
-    font-size: ${(props) => props.theme.fontSizes.h4};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
   .content {
-    margin-top: 0.8rem;
+    margin-left: 1rem;
     text-align: left;
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray800};
     font-family: ${(props) => props.theme.fontFamily.s1};
-    z-index: 2;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 
-function TogetherMapTitleCard({
-  emoji,
-  content,
-  isAdmin,
-  func,
-}: UserOpinionProps) {
+const EmojiContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: fit-content;
+  margin-top: -2rem;
+  .icon {
+    font-size: ${(props) => props.theme.fontSizes.h1};
+    font-family: ${(props) => props.theme.fontFamily.h1bold};
+  }
+
+  .delete {
+    margin-top: 1.5rem;
+    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-family: ${(props) => props.theme.fontFamily.h4bold};
+  }
+`;
+
+function UserOpinionCard({ emoji, content, isAdmin, func }: UserOpinionProps) {
+  const emogiList = RATING_LIST;
   return (
     <Container>
-      {emoji === 1 && <p className="icon">웃음이모지</p>}
-      {emoji === 2 && <p className="icon">무표정이모지</p>}
-      {emoji === 3 && <p className="icon">화남이모지</p>}
-      {isAdmin && (
-        <div className="delete">
-          <TrashIcon onClick={func} />
-        </div>
-      )}
+      <EmojiContainer>
+        <p className="icon">{emogiList[emoji]}</p>
+        {isAdmin && (
+          <div className="delete">
+            <TrashIcon onClick={func} />
+          </div>
+        )}
+      </EmojiContainer>
       <p className="content">{content}</p>
     </Container>
   );
 }
 
-export default TogetherMapTitleCard;
+export default UserOpinionCard;
