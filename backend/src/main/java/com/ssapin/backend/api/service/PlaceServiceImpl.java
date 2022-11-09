@@ -299,19 +299,14 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     public Long registerBookmark(User user, BookmarkRequest bookmarkRequest) {
-        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+        Optional<Place> placeResponse = placeRepository.findById(bookmarkRequest.getPlaceId());
+        Place place =null;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        Place place = Place.builder()
-                .itemId(placeResponse.get().getItemId())
-                .title(placeResponse.get().getTitle())
-                .lat(placeResponse.get().getLat())
-                .lng(placeResponse.get().getLng())
-                .address(placeResponse.get().getAddress())
-                .build();
+        place =placeResponse.get();
 
         PlaceBookmark placeBookmark = PlaceBookmark.builder()
                 .user(user)
@@ -330,19 +325,14 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public Long removeBookmark(User user, BookmarkRequest bookmarkRequest) {
 
-        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getItemId());
+        Optional<Place> placeResponse = placeRepository.findByItemId(bookmarkRequest.getPlaceId());
+        Place place =null;
 
         if (placeResponse.isEmpty()) {
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        Place place = Place.builder()
-                .itemId(placeResponse.get().getItemId())
-                .title(placeResponse.get().getTitle())
-                .lat(placeResponse.get().getLat())
-                .lng(placeResponse.get().getLng())
-                .address(placeResponse.get().getAddress())
-                .build();
+        place =placeResponse.get();
 
 
         PlaceBookmark placeBookmark = PlaceBookmark.builder()
