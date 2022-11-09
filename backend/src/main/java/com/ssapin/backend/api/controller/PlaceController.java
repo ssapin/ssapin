@@ -29,20 +29,16 @@ public class PlaceController {
     @PostMapping("/login/map")
     @ApiOperation(value = "추천지도에 장소 추가 ", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> addPlaceInMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
-
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
-
         return new ResponseEntity<Long>(placeService.addPlaceInMap(user, placeRequest), HttpStatus.OK);
     }
 
     @PostMapping("/login/togethermap")
     @ApiOperation(value = "모여지도에 장소 추가/업데이트", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> addPlaceInTogetherMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
-
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
-
         return new ResponseEntity<Long>(placeService.addPlaceInTogetherMap(user, placeRequest), HttpStatus.OK);
     }
 
@@ -50,43 +46,37 @@ public class PlaceController {
     @GetMapping(path = {"/ranking/{campusId}", "/ranking"})
     @ApiOperation(value = "장소 랭킹 리스트", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> getListPlaceRanking(@PathVariable(required = false) Long campusId) {
-
         PlaceMapResponse.RankingResponse result = placeService.getListPlaceRanking(campusId);
-
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/login/map")
     @ApiOperation(value = "추천 지도에 장소 삭제", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> removePlaceInMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RemovePlaceInMapRequest removePlaceInMapRequest) {
-
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
         Long result = placeService.removePlaceInMap(user, removePlaceInMapRequest);
-
         return new ResponseEntity<Long>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/login/togethermap")
     @ApiOperation(value = "모아지도에 장소 삭제", notes = "미리 생성된 모아지도에 장소 추가")
     public ResponseEntity<?> removePlaceInTogetherMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
-
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
         Long result = placeService.removePlaceInTogetherMap(user, removePlaceInTogethermapRequest);
-
         return new ResponseEntity<Long>(result, HttpStatus.OK);
 
     }
 
-    @GetMapping("/{itemId}/detail")
+    @GetMapping("/{placeId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
     public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId, @RequestHeader(required = false, name = "accessToken") final String accessToken) {
-
-        long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-        User user = userService.getUserById(userId);
-
-
+        User user = null;
+        if(accessToken!=null && accessToken!="") {
+           long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+            user = userService.getUserById(userId);
+        }
         PlaceInfoResponse result = placeService.getPlaceInfo(user,placeId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
