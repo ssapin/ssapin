@@ -72,7 +72,7 @@ public class PlaceServiceImpl implements PlaceService {
         Map map = mapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
         Place place = null;
-
+        long id =0;
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
         long placeId;
         if (placeResponse.isEmpty()) {
@@ -83,7 +83,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .lng(placeRequest.getPlace().getLng())
                     .address(placeRequest.getPlace().getAddress())
                     .build();
-            placeRepository.saveAndFlush(place);
+           id= placeRepository.saveAndFlush(place).getId();
 
             MapPlace mapPlace = MapPlace.builder()
                     .map(map)
@@ -91,13 +91,12 @@ public class PlaceServiceImpl implements PlaceService {
                     .place(place)
                     .build();
 
-            return mapPlaceRepository.save(mapPlace).getId();
+            return id;
 
         } else {
 
             place = placeResponse.get();
-            placeId = place.getId();
-            System.out.println(placeId);
+            id = place.getId();
 
             MapPlace mapPlace = MapPlace.builder()
                     .map(map)
@@ -105,7 +104,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .place(place)
                     .build();
 
-            return mapPlaceRepository.save(mapPlace).getId();
+            return id;
         }
 
 
@@ -160,7 +159,7 @@ public class PlaceServiceImpl implements PlaceService {
         }
 
 
-        return id;
+        return placeId;
     }
 
 
@@ -216,6 +215,7 @@ public class PlaceServiceImpl implements PlaceService {
      * (5) 모여지도에 장소 삭제
      */
     @Override
+    @Transactional
     public Long removePlaceInTogetherMap(User user, PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
 
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
