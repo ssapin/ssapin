@@ -23,6 +23,7 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
+import { addPlace } from "../../utils/functions/place";
 import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
@@ -267,6 +268,7 @@ function TogetherNewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
+  console.log(togethermapId);
 
   return (
     <Conatiner>
@@ -290,6 +292,7 @@ function TogetherNewPlace() {
                 ref={(el) => (itemRefs.current[idx] = el)}
                 mouseOver={() => mouseOver(idx, place.place.place_name)}
                 mouseLeave={mouseLeave}
+                mapId={togethermapId}
               />
             ))}
           </ul>
@@ -388,13 +391,16 @@ interface PlaceCardProps {
   mouseOver: () => void;
   mouseLeave: () => void;
   place: IKakaoPlace;
+  mapId: number;
 }
 
 const PlaceCard = forwardRef(
   (
-    { index, place, mouseOver, mouseLeave }: PlaceCardProps,
+    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
+    console.log(mapId);
+
     return (
       <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         <MarkerBg index={index} />
@@ -410,7 +416,7 @@ const PlaceCard = forwardRef(
               <span>{place.address_name}</span>
             )}
             <span>{place.phone}</span>
-            <CreateButton type="button">
+            <CreateButton type="button" onClick={addPlace(place, mapId)}>
               장소
               <PlusIcon className="plus" />
             </CreateButton>
