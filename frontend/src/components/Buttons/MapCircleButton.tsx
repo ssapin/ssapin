@@ -28,8 +28,8 @@ const WhiteCircle = styled.button<{ height?: string }>`
     fill: ${(props) => props.theme.colors.mainRed};
   }
   .not-location {
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 80%;
+    height: 80%;
     fill: ${(props) => props.theme.colors.lightBlue};
   }
 `;
