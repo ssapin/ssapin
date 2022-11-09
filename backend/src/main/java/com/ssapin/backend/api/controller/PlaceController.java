@@ -2,6 +2,7 @@ package com.ssapin.backend.api.controller;
 
 import com.ssapin.backend.api.domain.dto.request.BookmarkRequest;
 import com.ssapin.backend.api.domain.dto.request.PlaceMapRequest;
+import com.ssapin.backend.api.domain.dto.response.PlaceInfoResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceMapResponse;
 import com.ssapin.backend.api.domain.dto.response.PlaceResponse;
 import com.ssapin.backend.api.domain.entity.Campus;
@@ -142,14 +143,20 @@ public class PlaceController {
 
     @GetMapping("/{placeId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
-    public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId) {
+    public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId, @RequestHeader(required = false, name = "accessToken") final String accessToken) {
 
         try {
+            long userId = 0;
+            User user = null;
+            if (accessToken==null) {
+                user = null;
+            } else {
+                userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+                user = userService.getUserById(userId);
+            }
 
-//            User user = new User("test", 1L, new Campus("test"), "test");
 
-
-            PlaceResponse result = placeService.getPlaceInfo(placeId);
+            PlaceInfoResponse result = placeService.getPlaceInfo(user,placeId);
             return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {
