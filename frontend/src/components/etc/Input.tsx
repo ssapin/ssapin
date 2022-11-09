@@ -8,6 +8,8 @@ type InputProps = {
   changeFunc?: (e: any) => void;
   // eslint-disable-next-line react/require-default-props
   value?: string;
+  // eslint-disable-next-line react/require-default-props
+  readonly?: boolean;
 };
 
 const Container = styled.div<{ width?: string; height?: string }>`
@@ -33,15 +35,32 @@ const Container = styled.div<{ width?: string; height?: string }>`
   }
 `;
 
-function Input({ value, width, height, placeholder, changeFunc }: InputProps) {
+function Input({
+  value,
+  width,
+  height,
+  placeholder,
+  readonly,
+  changeFunc,
+}: InputProps) {
   return (
     <Container width={width} height={height}>
-      <input
-        type="text"
-        value={value}
-        onChange={changeFunc}
-        placeholder={placeholder}
-      />
+      {readonly ? (
+        <input
+          type="text"
+          value={value}
+          onChange={changeFunc}
+          placeholder={placeholder}
+          readOnly
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={changeFunc}
+          placeholder={placeholder}
+        />
+      )}
     </Container>
   );
 }

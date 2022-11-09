@@ -249,13 +249,23 @@ function CreateMapMobilePage() {
           <DivBox>
             <Content>
               <SubTitle>제목</SubTitle>
-              <Input
-                width="100%"
-                height="41px"
-                placeholder="ex) 역삼 멀캠 근처 조용한 카페"
-                changeFunc={onChangeTitle}
-                value={title}
-              />
+              {isEdit ? (
+                <Input
+                  width="100%"
+                  height="41px"
+                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
+                  value={title}
+                  readonly
+                />
+              ) : (
+                <Input
+                  width="100%"
+                  height="41px"
+                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
+                  changeFunc={onChangeTitle}
+                  value={title}
+                />
+              )}
             </Content>
           </DivBox>
           <DivBox>
@@ -291,13 +301,23 @@ function CreateMapMobilePage() {
           <DivBox>
             <Content>
               <SubTitle>아이콘(3개까지)</SubTitle>
-              <Input
-                width="100%"
-                height="41px"
-                placeholder="ex) 🎈🎆🎇"
-                changeFunc={onChangeEmoji}
-                value={emoji}
-              />
+              {isEdit ? (
+                <Input
+                  width="100%"
+                  height="41px"
+                  placeholder="ex) 🎈🎆🎇"
+                  value={emoji}
+                  readonly
+                />
+              ) : (
+                <Input
+                  width="100%"
+                  height="41px"
+                  placeholder="ex) 🎈🎆🎇"
+                  changeFunc={onChangeEmoji}
+                  value={emoji}
+                />
+              )}
             </Content>
           </DivBox>
           <FilterBox>
