@@ -32,6 +32,7 @@ import {
 } from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
 import {
+  addPlace,
   addPlaceToMap,
   getKakaoPlace,
   getRequestPlace,
@@ -401,17 +402,13 @@ interface PlaceCardProps {
   mapId: number;
 }
 
-function addPlace(kakakoplace: IKakaoPlace, id: number) {
-  const place: IPlaceMin = getKakaoPlace(kakakoplace);
-  const data: IAddPlace = getRequestPlace(place, id);
-  addPlaceToMap(data);
-}
-
 const PlaceCard = forwardRef(
   (
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
+    console.log(mapId);
+
     return (
       <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         <MarkerBg index={index} />
@@ -427,7 +424,7 @@ const PlaceCard = forwardRef(
               <span>{place.address_name}</span>
             )}
             <span>{place.phone}</span>
-            <CreateButton type="button">
+            <CreateButton type="button" onClick={addPlace(place, mapId)}>
               장소
               <PlusIcon className="plus" />
             </CreateButton>
