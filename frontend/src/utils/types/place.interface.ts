@@ -1,11 +1,12 @@
 export interface IPlace {
+  content?: string;
   placeId: number;
   itemId: number;
   title: string;
   lat: number;
   lng: number;
   address: string;
-  reviewContent: string;
+  reviewContent?: string;
   userId: number;
   userEmoji: string;
   nickname: string;

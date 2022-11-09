@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 import PlaceInfoModal from "../../pages/Place/PlaceInfoModal";
@@ -10,6 +11,19 @@ import ModalPortal from "../containers/ModalPortalContainer";
 type PlaceCardProps = {
   prop: IPlace;
   isAdmin: boolean;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 };
 
 const Container = styled.div`
@@ -92,7 +106,7 @@ const Container = styled.div`
   }
 `;
 
-function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
+function PlaceCard({ prop, isAdmin, refetch }: PlaceCardProps) {
   const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
   const user = useRecoilValue(userInformationState);
 
@@ -113,7 +127,9 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
         {prop !== undefined ? prop.address : "장소가 없습니다"}
       </p>
       <p className="review">
-        {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
+        {prop !== undefined && !prop.reviewContent && !prop.content
+          ? "아직 등록된 리뷰가 없습니다."
+          : prop?.reviewContent || prop?.content}
       </p>
       {isAdmin && prop.userId === user.userId && (
         <div className="delete">
@@ -124,7 +140,10 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
         <ModalPortal>
           <PlaceInfoModal
             placeId={prop.placeId}
-            onClose={() => setPlaceInfoModalOpen(false)}
+            onClose={() => {
+              setPlaceInfoModalOpen(false);
+              refetch();
+            }}
           />
         </ModalPortal>
       )}
