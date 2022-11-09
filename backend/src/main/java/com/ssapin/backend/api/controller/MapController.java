@@ -41,10 +41,8 @@ public class MapController {
         try {
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);
-            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-            else {
-                return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
-            }
+            return new ResponseEntity<Long>(mapService.createMap(user, mapRegister), HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 생성 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,10 +55,8 @@ public class MapController {
         try {
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);
-            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-            else {
-                return new ResponseEntity<Long>(mapService.updateMap(mapEdit), HttpStatus.OK);
-            }
+            return new ResponseEntity<Long>(mapService.updateMap(mapEdit), HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,11 +70,9 @@ public class MapController {
             long mapId = requestMap.get("mapId");
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);
-            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-            else {
-                mapService.deleteMap(mapId);
-                return new ResponseEntity<String>("추천지도 삭제 성공", HttpStatus.OK);
-            }
+            mapService.deleteMap(mapId);
+            return new ResponseEntity<String>("추천지도 삭제 성공", HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,15 +83,14 @@ public class MapController {
     @ApiOperation(value = "추천지도 상세 조회", notes = "사용자가 추천지도를 상세 조회한다.")
     public ResponseEntity<?> detailMap(@RequestHeader(value = "accessToken", required = false) final String accessToken, @PathVariable long mapId) {
         try {
-            User user = null;
-            if(accessToken!=null && accessToken!="") {
-                long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-                user = userService.getUserById(userId);
-            }
+
+            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+            User user = userService.getUserById(userId);
             return new ResponseEntity<MapResponse>(mapService.detailMap(mapId, user, false), HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("추천지도 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("추천지도 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -106,11 +99,9 @@ public class MapController {
     public ResponseEntity<?> getMapList(@RequestHeader(value = "accessToken", required = false) final String accessToken,
                                         @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
         try {
-            User user = null;
-            if(accessToken!=null && accessToken!="") {
-                long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-                user = userService.getUserById(userId);
-            }
+
+            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+            User user = userService.getUserById(userId);
             return new ResponseEntity<Page<MapResponse>>(mapService.getMapList(campusId, hashtagList, keyword, user, pageable), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,11 +113,7 @@ public class MapController {
     @ApiOperation(value = "추천지도 랭킹 리스트", notes = "추천지도 랭킹 리스트를 조회한다.")
     public ResponseEntity<?> getRankingList(@RequestHeader(value = "accessToken", required = false) final String accessToken, @PathVariable long campusId) {
         try {
-            User user = null;
-            if(accessToken!=null && accessToken!="") {
-                long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-                user = userService.getUserById(userId);
-            }
+            long userId = jwtTokenUtil.getUserIdFromToken(accessToken);User user = userService.getUserById(userId);
             return new ResponseEntity<List<MapResponse>>(mapService.getRankingList(campusId, user), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,14 +125,13 @@ public class MapController {
     @ApiOperation(value = "추천지도 북마크", notes = "사용자가 추천지도를 북마크한다.")
     public ResponseEntity<?> addBookmark(@RequestHeader("accessToken") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
+
             long mapId = request.get("mapId");
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);
-            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-            else {
-                mapService.addBookmark(user, mapId);
-                return new ResponseEntity<String>("추전지도 북마크 성공", HttpStatus.OK);
-            }
+            mapService.addBookmark(user, mapId);
+            return new ResponseEntity<String>("추전지도 북마크 성공", HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -156,14 +142,13 @@ public class MapController {
     @ApiOperation(value = "추천지도 북마크 해제", notes = "사용자가 추천지도 북마크를 해제한다.")
     public ResponseEntity<?> deleteBookmark(@RequestHeader("accessToken") final String accessToken, @RequestBody Map<String, Long> request) {
         try {
+
             long mapId = request.get("mapId");
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);
-            if (user == null) return new ResponseEntity<String>("로그인된 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-            else {
-                mapService.deleteBookmark(user, mapId);
-                return new ResponseEntity<String>("추전지도 북마크 해제 성공", HttpStatus.OK);
-            }
+            mapService.deleteBookmark(user, mapId);
+            return new ResponseEntity<String>("추전지도 북마크 해제 성공", HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
