@@ -28,7 +28,7 @@ const StyledCreate = styled.button`
   }
   .plus {
     width: 2.25rem;
-    height: 1rem;
+    height: 2.25rem;
   }
 `;
 
