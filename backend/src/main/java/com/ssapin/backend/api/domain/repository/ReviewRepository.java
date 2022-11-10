@@ -13,7 +13,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                     "(select distinct(map_place.place_id) as id from map_place right join map on map.id=map_place.map_id and map.campus_id=:campusId order by id) as B " +
                     "on review.place_id = B.id " +
                     "group by B.id " +
-                    "order by count(*) desc " +
+                    "order by count(B.id) desc " +
                     "limit 1 ")
     Long makeReviewRanking(long campusId);
 }
