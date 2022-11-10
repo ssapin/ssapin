@@ -6,7 +6,6 @@ import { AxiosError, AxiosResponse } from "axios";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
-// import testMap from "../../assets/image/testmapPic.png";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import UserOpinionCard from "../../components/card/UserOpinionCard";
@@ -28,12 +27,6 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 const { kakao } = window;
 
 interface PlaceInfoModalProps {
@@ -42,8 +35,8 @@ interface PlaceInfoModalProps {
 }
 
 const Container = styled.div`
-  width: 50vw;
-  max-width: 925px;
+  width: 800px;
+  /* max-width: 925px; */
   height: 80vh;
 
   ${(props) => props.theme.mq.tablet} {
@@ -347,34 +340,18 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
   const { data: reviewData, refetch: reviewRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${placeId} - reviewList`],
-    () => axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${placeId} - reviewList`], () =>
+    axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
   );
 
   const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - placeDetail`],
     () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - MapList`],
     () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {

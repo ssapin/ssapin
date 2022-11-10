@@ -63,7 +63,10 @@ const BackContainer = styled.div`
 `;
 
 const SubjectContainer = styled(BackContainer)`
-  left: 50%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: fit-content;
 `;
 
 const PlaceListContainer = styled.div`
@@ -112,11 +115,11 @@ function TogetherMap() {
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
-  const { togethermapId } = useParams();
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
+  const { togethermapId } = useParams();
   const navigate = useNavigate();
 
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(

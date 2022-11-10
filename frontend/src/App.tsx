@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -8,7 +8,18 @@ import { authState } from "./store/atom";
 import { useGetUserInformation } from "./utils/hooks/useUserActions";
 
 function App(): JSX.Element {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchOnMount: true,
+          },
+        },
+      }),
+  );
   const [loading, setLoading] = useState(true);
   const auth = useRecoilValue(authState);
   const useGetUser = useGetUserInformation();
