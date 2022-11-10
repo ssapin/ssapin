@@ -10,7 +10,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
   border-radius: 10px;
   width: 100%;
-  height: 4rem;
+  height: 50px;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray50};
   display: flex;
   flex-direction: column;
@@ -23,28 +23,26 @@ const Container = styled.div`
     width: 100%;
     height: 10%;
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h4};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
     ${(props) => props.theme.mq.mobile} {
       width: 100%;
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
     }
   }
 
   .quotes {
     fill: ${(props) => props.theme.colors.subYellow};
+    width: 20px;
+    height: 20px;
   }
 
   .title {
     width: 100%;
     margin-top: 1rem;
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.gray50};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
     z-index: 2;

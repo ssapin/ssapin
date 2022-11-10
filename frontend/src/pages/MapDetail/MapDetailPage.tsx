@@ -2,7 +2,12 @@ import styled from "@emotion/styled";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
 import BackButton from "../../components/Buttons/BackButton";
@@ -128,7 +133,7 @@ interface ICenter {
   placeId: number;
 }
 
-function TogetherMap() {
+function MapDetail() {
   const mapRef = useRef<HTMLDivElement>();
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
@@ -137,6 +142,10 @@ function TogetherMap() {
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
+  const { pathname } = useLocation();
+  const a = useMatch("/togethermaps/:togethermapId/detail");
+  console.log(a);
+  console.log(useMatch("/maps/:mapId/detail"));
   const { togethermapId } = useParams();
   const navigate = useNavigate();
 
@@ -366,4 +375,4 @@ function TogetherMap() {
   );
 }
 
-export default TogetherMap;
+export default MapDetail;

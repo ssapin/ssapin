@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import { forwardRef, LegacyRef } from "react";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
@@ -70,22 +71,25 @@ const Container = styled.div`
   }
 `;
 
-function TogetherMapCard({ prop }: TogetherMapProps) {
-  const navigate = useNavigate();
-  return (
-    <Container
-      onClick={() => {
-        navigate(`/togethermaps/${prop.togethermapId}/detail`);
-      }}
-    >
-      <p className="icon">
-        <Quotesstart className="quotes" />
-        <Quotesend className="quotes" />
-      </p>
-      <p className="title">{prop.title}</p>
-      <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
-    </Container>
-  );
-}
+const TogetherMapCard = forwardRef(
+  ({ prop }: TogetherMapProps, ref: LegacyRef<HTMLDivElement>) => {
+    const navigate = useNavigate();
+    return (
+      <Container
+        ref={ref}
+        onClick={() => {
+          navigate(`/togethermaps/${prop.togethermapId}/detail`);
+        }}
+      >
+        <p className="icon">
+          <Quotesstart className="quotes" />
+          <Quotesend className="quotes" />
+        </p>
+        <p className="title">{prop.title}</p>
+        <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
+      </Container>
+    );
+  },
+);
 
 export default TogetherMapCard;

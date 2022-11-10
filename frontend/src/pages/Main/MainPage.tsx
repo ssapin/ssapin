@@ -264,7 +264,7 @@ function MainPage() {
   };
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <HeadContainer>
         <Navbar func={toggleActive} />
         <QuestionContainer>
@@ -328,7 +328,7 @@ function MainPage() {
         </ModalPortal>
       )}
       <Footer />
-    </>
+    </div>
   );
 }
 
