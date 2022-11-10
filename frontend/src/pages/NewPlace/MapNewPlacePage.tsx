@@ -16,9 +16,9 @@ import {
 } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
-import { authState, campusState } from "../../store/atom";
+import { authState, campusState, mapPlaceListState } from "../../store/atom";
 import { getMap } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
@@ -178,12 +178,16 @@ function MapNewPlace() {
   const { mapId } = useParams();
   const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
-
+  const [mapPlaceList, setMapPlaceList] = useRecoilState(mapPlaceListState);
   const [modalOpen, setModalOpen] = useState(false);
 
   const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
     getMap(Number(mapId)),
   );
+
+  useEffect(() => {
+    console.log(mapData.placeList);
+  });
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -454,6 +458,7 @@ const PlaceCard = forwardRef(
 
     const [modalOpen, setModalOpen] = useState(false);
     const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
     const auth = useRecoilValue(authState);
 
     const handleModal = () => {
@@ -494,14 +499,13 @@ const PlaceCard = forwardRef(
                 <span>{place.address_name}</span>
               )}
               <span>{place.phone}</span>
-              {/* <CreateButton type="button" onClick={addPlace(place, mapId)}>
-                장소
-                <PlusIcon className="plus" />
-              </CreateButton> */}
-              <CreateButton type="button" onClick={handleModal}>
-                장소
-                <PlusIcon className="plus" />
-              </CreateButton>
+              {isRegister && <span>이미 추가된 장소입니다.</span>}
+              {!isRegister && (
+                <CreateButton type="button" onClick={handleModal}>
+                  장소
+                  <PlusIcon className="plus" />
+                </CreateButton>
+              )}
             </InfoInnerContainer>
           </PlaceInfoContainer>
         </List>
