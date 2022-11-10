@@ -1,15 +1,33 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { ReactComponent as EditIcon } from "../../assets/svgs/pencil.svg";
 import { userInformationState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { MAP_APIS } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
+import CreateMapModal from "../../pages/CreateMap/CreateMapModal";
+import ModalPortal from "../containers/ModalPortalContainer";
 
 type MapCardProps = {
   prop: IMap;
   isAdmin: boolean;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 };
 
 const Container = styled.div`
@@ -89,14 +107,40 @@ const Bottom = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  .editIcon {
+    margin-right: 0.1rem;
+    margin-bottom: -0.05rem;
+
+    :hover {
+      scale: 1.06;
+      cursor: pointer;
+    }
+  }
+
+  .trashIcon {
+    :hover {
+      scale: 1.06;
+      cursor: pointer;
+    }
+  }
 `;
 
-function MapCard({ prop, isAdmin }: MapCardProps) {
+function MapCard({ prop, isAdmin, refetch }: MapCardProps) {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const resizeListener = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
+  }, []);
   const user = useRecoilValue(userInformationState);
   const navigate = useNavigate();
   const onClickMap = () => {
     navigate(`/maps/${prop.mapId}/detail`);
   };
+  const [modalOpen, setModalOpen] = useState(false);
 
   const onDeleteMap = async (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
@@ -124,22 +168,42 @@ function MapCard({ prop, isAdmin }: MapCardProps) {
     }
   };
 
+  const onEditModal = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    if (innerWidth > 950) setModalOpen(true);
+    else navigate(`/mobilecreate?mapId=${prop.mapId}`);
+  };
+
   return (
-    <Container onClick={onClickMap}>
-      <p className="icon">{prop.mapEmoji}</p>
-      <p className="title">{prop.title}</p>
-      <p className="user">{`${prop.userEmoji} ${prop.nickname}`}</p>
-      <Bottom>
-        <div className="delete">
-          {isAdmin && prop.userId === user.userId && (
-            <TrashIcon className="trashIcon" onClick={onDeleteMap} />
-          )}
-        </div>
-        <p className="summary">
-          📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
-        </p>
-      </Bottom>
-    </Container>
+    <>
+      <Container onClick={onClickMap}>
+        <p className="icon">{prop.mapEmoji}</p>
+        <p className="title">{prop.title}</p>
+        <p className="user">{`${prop.userEmoji} ${prop.nickname}`}</p>
+        <Bottom>
+          <div className="delete">
+            {isAdmin && prop.userId === user.userId && (
+              <>
+                <EditIcon className="editIcon" onClick={onEditModal} />
+                <TrashIcon className="trashIcon" onClick={onDeleteMap} />
+              </>
+            )}
+          </div>
+          <p className="summary">
+            📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
+          </p>
+        </Bottom>
+      </Container>
+      {modalOpen && (
+        <ModalPortal>
+          <CreateMapModal
+            onClose={() => setModalOpen(false)}
+            mapId={prop.mapId}
+            refetch={refetch}
+          />
+        </ModalPortal>
+      )}
+    </>
   );
 }
 

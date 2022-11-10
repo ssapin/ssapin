@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import { userInformationState } from "../../store/atom";
 import { RATING_LIST } from "../../utils/constants/contant";
+import { IReview } from "../../utils/types/review.interface";
 
 interface UserOpinionProps {
-  emoji: number;
-  content: string;
-  isAdmin: boolean;
+  review: IReview;
   // eslint-disable-next-line react/require-default-props
-  func?: () => void;
+  func?: (e: any) => void;
 }
 
 const Container = styled.div`
@@ -51,22 +52,32 @@ const EmojiContainer = styled.div`
     margin-top: 1.5rem;
     font-size: ${(props) => props.theme.fontSizes.h4};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+    :hover {
+      scale: 1.06;
+      cursor: pointer;
+    }
   }
 `;
 
-function UserOpinionCard({ emoji, content, isAdmin, func }: UserOpinionProps) {
+function UserOpinionCard({ review, func }: UserOpinionProps) {
+  const user = useRecoilValue(userInformationState);
   const emogiList = RATING_LIST;
   return (
     <Container>
       <EmojiContainer>
-        <p className="icon">{emogiList[emoji]}</p>
-        {isAdmin && (
+        <p className="icon">
+          {review === null ? "" : emogiList[review.emojiType]}
+        </p>
+        {review !== null && user.userId === review.userId && (
           <div className="delete">
-            <TrashIcon onClick={func} />
+            <TrashIcon onClick={() => func(review.reviewId)} />
           </div>
         )}
       </EmojiContainer>
-      <p className="content">{content}</p>
+      <p className="content">
+        {review === null ? "등록된 리뷰가 없습니다." : review.content}
+      </p>
     </Container>
   );
 }
