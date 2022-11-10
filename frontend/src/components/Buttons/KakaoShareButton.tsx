@@ -31,53 +31,53 @@ interface IKakaoShareProps {
   description?: string;
 }
 
+const { Kakao } = window;
+
 function KakaoShareButton({ title, url, description }: IKakaoShareProps) {
   const createKakaoButton = () => {
-    if (window.Kakao) {
-      const kakao = window.Kakao;
-
-      if (!kakao.isInitialized()) {
-        kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
+    if (Kakao) {
+      if (!Kakao.isInitialized()) {
+        Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
       }
-
-      kakao.Link.createDefaultButton({
-        container: "#kakao-link-btn",
-        objectType: "feed",
-        content: {
-          title: title || "SSAPIN",
-          description: description || "#SSAPIN #SSAFY #장소 #큐레이팅",
-          imageUrl:
-            "https://trippiece607.s3.ap-northeast-2.amazonaws.com/SSAPIN_SHARE.png",
-          link: {
-            mobileWebUrl: "https://www.ssapin.com",
-            webUrl: "https://www.ssapin.com",
-          },
-        },
-        social: {
-          likeCount: 69,
-          commentCount: 69,
-          sharedCount: 69,
-        },
-        buttons: [
-          {
-            title: "웹으로 보기",
-            link: {
-              mobileWebUrl: url || window.location.href,
-              webUrl: url || window.location.href,
-            },
-          },
-        ],
-      });
     }
   };
 
+  const share = () => {
+    Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: title || "SSAPIN",
+        description: description || "#SSAPIN #SSAFY #장소 #큐레이팅",
+        imageUrl:
+          "https://trippiece607.s3.ap-northeast-2.amazonaws.com/SSAPIN_SHARE.png",
+        link: {
+          mobileWebUrl: "https://www.ssapin.com",
+          webUrl: "https://www.ssapin.com",
+        },
+      },
+      social: {
+        likeCount: 69,
+        commentCount: 69,
+        sharedCount: 69,
+      },
+      buttons: [
+        {
+          title: "웹으로 보기",
+          link: {
+            mobileWebUrl: url || window.location.href,
+            webUrl: url || window.location.href,
+          },
+        },
+      ],
+    });
+  };
   useEffect(() => {
     createKakaoButton();
   }, []);
 
   return (
-    <WhiteButton id="kakao-link-btn" type="button">
-      <KakaotalkIcon height="60%" />
+    <WhiteButton id="kakao-link-btn" type="button" onClick={share}>
+      <KakaotalkIcon width="40px" height="40px" />
     </WhiteButton>
   );
 }

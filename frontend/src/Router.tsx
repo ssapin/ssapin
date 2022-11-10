@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
-import SharedPlaceDetail from "./pages/Place/SharedPlaceDetail";
+import SharedPlaceDetail from "./pages/Place/SharedPlaceDetailPage";
 
 const Main = lazy(() => import("./pages/Main/MainPage"));
 const Login = lazy(() => import("./pages/Login/LoginPage"));

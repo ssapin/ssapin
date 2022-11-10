@@ -64,16 +64,18 @@ const BackContainer = styled.div`
 
 const SubjectContainer = styled(BackContainer)`
   left: 50%;
-  margin-left: -11rem;
 `;
 
 const PlaceListContainer = styled.div`
   position: fixed;
   top: 80px;
-  right: 30px;
+  right: 10px;
+  width: 300px;
   z-index: 2;
   > ul {
-    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 `;
 
@@ -111,11 +113,11 @@ function TogetherMap() {
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
   const { togethermapId } = useParams();
-  const navigate = useNavigate();
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
 
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],

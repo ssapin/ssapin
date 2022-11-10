@@ -6,9 +6,9 @@ import ModalBackgroud from "./ModalBackgroud";
 const Wrapper = styled.div`
   width: fit-content;
   height: fit-content;
-  background-color: black;
   color: ${(props) => props.theme.colors.gray0};
   padding: 0.25rem 0.5rem;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
 `;
 
 function CopyModalContainer({ onClose, children }: ModalProps) {

@@ -24,6 +24,9 @@ import {
   addBookmarkInPlace,
   removeBookmarkInPlace,
 } from "../../utils/functions/place";
+import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
+import { copyURL } from "../../utils/functions/copyURL";
+import CopyModalContainer from "../../components/containers/CopyModalContainer";
 
 declare global {
   interface Window {
@@ -337,7 +340,9 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
   const [reviewList, setReviewList] = useState<IReview[]>([]);
   const [mapList, setMapList] = useState<IMap[]>([]);
   const [reviewContent, setReviewContent] = useState("");
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const mapRef = useRef<HTMLDivElement>();
+  const [copied, setCopied] = useState(false);
 
   const { data: reviewData, refetch: reviewRefetch } = useQuery<
     AxiosResponse<any>,
@@ -499,7 +504,6 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
     }
   }, [isOpen]);
 
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -525,6 +529,16 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
       const map = new kakao.maps.StaticMap(mapContainer, mapOption);
     }
   }, [innerWidth]);
+
+  const copy = () => {
+    const url = `${import.meta.env.VITE_BASE_URL}/places/${place.placeId}`;
+    console.log(url);
+    setCopied(true);
+    copyURL(url);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <ModalContainer onClose={onClose}>
@@ -574,8 +588,18 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
               <ShareContainer>
                 <Subtitle>이 장소 공유하기</Subtitle>
                 <Buttons>
-                  <MapCircleButton type="button" height="50px" shape="1" />
-                  <MapCircleButton type="button" height="50px" shape="0" />
+                  <MapCircleButton
+                    type="button"
+                    height="50px"
+                    shape="1"
+                    func={copy}
+                  />
+                  <KakaoShareButton
+                    title={place?.title}
+                    url={`${import.meta.env.VITE_BASE_URL}/places/${
+                      place?.placeId
+                    }`}
+                  />
                 </Buttons>
               </ShareContainer>
               <ImageContainer>
@@ -710,8 +734,18 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
             <Subtitle>장소 공유하기</Subtitle>
             <ShareContainer>
               <Buttons>
-                <MapCircleButton type="button" height="50px" shape="1" />
-                <MapCircleButton type="button" height="50px" shape="0" />
+                <MapCircleButton
+                  type="button"
+                  height="50px"
+                  shape="1"
+                  func={copy}
+                />
+                <KakaoShareButton
+                  title={place?.title}
+                  url={`${import.meta.env.VITE_BASE_URL}/places/${
+                    place?.placeId
+                  }`}
+                />
               </Buttons>
             </ShareContainer>
             {auth.accessToken ? (
@@ -744,6 +778,13 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
+      {copied && (
+        <ModalPortal>
+          <CopyModalContainer onClose={() => setCopied(false)}>
+            URL을 복사했어요
+          </CopyModalContainer>
         </ModalPortal>
       )}
     </ModalContainer>
