@@ -11,5 +11,10 @@ public class BackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
+	    @PostConstruct
+    public void started(){
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+
+    }
 
 }
