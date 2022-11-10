@@ -73,7 +73,7 @@ function Footer() {
         <IconContainer>
           <Icon>
             <a
-              href="https://www.instagram.com/ssapin307/?igshid=YmMyMTA2M2Y%3D"
+              href="https://www.instagram.com/ssapin_official/"
               target="_blank"
               rel="noreferrer"
             >
