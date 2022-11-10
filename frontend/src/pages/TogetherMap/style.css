@@ -11,6 +11,12 @@
   max-width: 80vw;
 }
 
+.marker_overlay:hover {
+  transition: all 0.2s;
+  -webkit-box-shadow: 3px 3px 8px rgb(0 0 0 / 80%);
+  box-shadow: 3px 3px 8px rgb(0 0 0 / 80%);
+}
+
 .marker_overlay:after {
   border-bottom: 0px solid transparent;
   border-left: 10px solid transparent;

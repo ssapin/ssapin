@@ -109,3 +109,6 @@ export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
     y: "35.09362371920619",
   },
 };
+
+export const SSAFY_BUILDING_URL =
+  "https://trippiece607.s3.ap-northeast-2.amazonaws.com/building.png";

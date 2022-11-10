@@ -18,12 +18,6 @@ import {
 import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 const { kakao } = window;
 
 const Container = styled.section`
@@ -90,8 +84,6 @@ function MapPage() {
 
   return (
     <Container>
-      {/* <SearchPlace /> */}
-      {/* <NewPlace /> */}
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />

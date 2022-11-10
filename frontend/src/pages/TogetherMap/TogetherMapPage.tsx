@@ -24,6 +24,7 @@ import { getCurrentLocation } from "../../utils/functions/getCurrentLocation";
 import MenuButton from "../../components/Buttons/MenuButton";
 import PlaceInfoModal from "../Place/PlaceInfoModal";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
+import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 
 declare global {
   interface Window {
@@ -97,6 +98,11 @@ const ButtonListContainer = styled.div`
 
 type Coordinate = [number, number];
 
+interface ICenter {
+  title: string;
+  placeId: number;
+}
+
 function TogetherMap() {
   const mapRef = useRef<HTMLDivElement>();
   const [mapObj, setMapObj] = useState({ map: null });
@@ -111,26 +117,36 @@ function TogetherMap() {
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
     async () => getTogetherMap(Number(togethermapId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
   );
 
-  const addMarker = (position: any, idx: number, map: any) => {
-    // const imageSrc =
-    //   "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
-    // const imageSize = new kakao.maps.Size(50, 50);
-    // const imgOptions = {
-    //   spriteOrigin: new kakao.maps.Point(0, idx * 46 + 10),
-    //   offset: new kakao.maps.Point(20, 37),
-    // };
-    // const markerImage = new kakao.maps.MarkerImage(
-    //   imageSrc,
-    //   imageSize,
-    //   imgOptions,
-    // );
+  const locateSSAFY = (position: any, map: any) => {
+    const imageSrc =
+      "https://trippiece607.s3.ap-northeast-2.amazonaws.com/building.png";
+    const imageSize = new kakao.maps.Size(30, 40);
+    const imgOptions = {};
+    const markerImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imgOptions,
+    );
     const marker = new kakao.maps.Marker({
       position,
-      // image: markerImage,
+      image: markerImage,
     });
     marker.setMap(map);
+    return marker;
+  };
+
+  const addMarker = (position: any) => {
+    const marker = new kakao.maps.Marker({
+      position,
+    });
+    marker.setMap(mapObj.map);
     return marker;
   };
 
@@ -139,7 +155,7 @@ function TogetherMap() {
     setPlaceId(id);
   };
 
-  const makePin = (place: IPlace, avatar: string) => {
+  const makePin = (place: IPlace | ICenter, avatar?: string) => {
     const container = document.createElement("div");
     container.setAttribute("class", "marker_overlay shadow");
     const placeName = document.createElement("div");
@@ -149,22 +165,30 @@ function TogetherMap() {
     emoji.setAttribute("class", "avatar");
     emoji.append(avatar);
     container.append(placeName, emoji);
-    container.onclick = () => {
-      openModal(place.placeId);
-    };
+    if (place.placeId) {
+      container.onclick = () => {
+        openModal(place.placeId);
+      };
+    }
+
     return container;
   };
 
   const panTo = async () => {
     try {
-      const response = await getCurrentLocation();
+      const response: GeolocationPosition =
+        (await getCurrentLocation()) as GeolocationPosition;
       const [lat, lng] = [response.coords.latitude, response.coords.longitude];
-      console.log(lat, lng);
       const myPosition = new kakao.maps.LatLng(lat, lng);
-      console.log(myPosition);
-      mapObj.map?.panTo(myPosition);
-      console.log(lat, lng, "로슝");
-    } catch {}
+      await mapObj.map?.setLevel(2, {
+        animate: {
+          duration: 500,
+        },
+      });
+      await mapObj.map?.panTo(myPosition);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -187,15 +211,21 @@ function TogetherMap() {
 
         // const campusName = CAMPUS_COORDINATE_LIST[campusLocation];
         const map = await new kakao.maps.Map(mapContainer, options);
-        addMarker(position, 0, map);
+        locateSSAFY(position, map);
         // const img = "";
-        // const content = makePin(campusName, img);
-        // const customOverlay = new kakao.maps.CustomOverlay({
-        //   map,
-        //   position,
-        //   content,
-        //   yAnchor: 2,
-        // });
+        const content = makePin(
+          {
+            title: CAMPUS_COORDINATE_LIST[campusLocation].place_name,
+            placeId: 0,
+          },
+          "🗼",
+        );
+        const customOverlay = new kakao.maps.CustomOverlay({
+          map,
+          position,
+          content,
+          yAnchor: 2,
+        });
         setMapObj({ map });
       }))();
   }, []);
@@ -210,7 +240,7 @@ function TogetherMap() {
       togetherMapData.placeList.forEach(async (place) => {
         const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
         bounds.extend(placePosition);
-        addMarker(placePosition, 0, mapObj.map);
+        addMarker(placePosition);
         const cont = makePin(place, place.userEmoji);
         await new kakao.maps.CustomOverlay({
           map: mapObj.map,
@@ -244,7 +274,7 @@ function TogetherMap() {
         <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
         <div>
           <MapCircleButton type="button" shape="1" height="50px" />
-          <MapCircleButton type="button" shape="0" height="50px" />
+          <KakaoShareButton />
         </div>
       </ButtonListContainer>
       <PlaceListContainer>
@@ -265,7 +295,10 @@ function TogetherMap() {
       )}
       {modalOpen && (
         <ModalPortal>
-          <PlaceInfoModal onClose={() => setModalOpen(false)} />
+          <PlaceInfoModal
+            placeId={placeId}
+            onClose={() => setModalOpen(false)}
+          />
         </ModalPortal>
       )}
     </Container>

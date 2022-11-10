@@ -265,7 +265,6 @@ function TogetherNewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
-  console.log(togethermapId);
 
   return (
     <Conatiner>
@@ -396,8 +395,6 @@ const PlaceCard = forwardRef(
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
-    console.log(mapId);
-
     return (
       <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         <MarkerBg index={index} />
