@@ -27,7 +27,7 @@ function App(): JSX.Element {
       if (!kakao.isInitialized()) {
         // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
         kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
-        Kakao.isInitialized();
+        kakao.isInitialized();
       }
     }
   }, []);
@@ -40,7 +40,7 @@ function App(): JSX.Element {
             {loading && <Router />}
           </Suspense>
         </HelmetProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </div>
   );

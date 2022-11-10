@@ -25,6 +25,8 @@ import MenuButton from "../../components/Buttons/MenuButton";
 import PlaceInfoModal from "../Place/PlaceInfoModal";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
+import CopyModalContainer from "../../components/containers/CopyModalContainer";
+import { copyURL } from "../../utils/functions/copyURL";
 
 declare global {
   interface Window {
@@ -113,6 +115,7 @@ function TogetherMap() {
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
+  const [copied, setCopied] = useState(false);
 
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
@@ -180,12 +183,16 @@ function TogetherMap() {
         (await getCurrentLocation()) as GeolocationPosition;
       const [lat, lng] = [response.coords.latitude, response.coords.longitude];
       const myPosition = new kakao.maps.LatLng(lat, lng);
-      await mapObj.map?.setLevel(2, {
-        animate: {
-          duration: 500,
-        },
-      });
-      await mapObj.map?.panTo(myPosition);
+
+      mapObj.map?.panTo(myPosition);
+
+      setTimeout(() => {
+        mapObj.map?.setLevel(2, {
+          animate: {
+            duration: 500,
+          },
+        });
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
@@ -220,6 +227,7 @@ function TogetherMap() {
           },
           "🗼",
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const customOverlay = new kakao.maps.CustomOverlay({
           map,
           position,
@@ -258,6 +266,14 @@ function TogetherMap() {
     else setLoginModalOpen(true);
   };
 
+  const copy = () => {
+    setCopied(true);
+    copyURL();
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
   return (
     <Container>
       <MapContainer ref={mapRef} />
@@ -273,7 +289,7 @@ function TogetherMap() {
       <ButtonListContainer>
         <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
         <div>
-          <MapCircleButton type="button" shape="1" height="50px" />
+          <MapCircleButton type="button" shape="1" height="50px" func={copy} />
           <KakaoShareButton />
         </div>
       </ButtonListContainer>
@@ -299,6 +315,13 @@ function TogetherMap() {
             placeId={placeId}
             onClose={() => setModalOpen(false)}
           />
+        </ModalPortal>
+      )}
+      {copied && (
+        <ModalPortal>
+          <CopyModalContainer onClose={() => setCopied(false)}>
+            URL을 복사했어요
+          </CopyModalContainer>
         </ModalPortal>
       )}
     </Container>

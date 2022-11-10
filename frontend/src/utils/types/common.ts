@@ -7,3 +7,7 @@ export type Props = {};
 export interface Children {
   children: ReactNode;
 }
+
+export interface ModalProps extends Children {
+  onClose: () => void;
+}

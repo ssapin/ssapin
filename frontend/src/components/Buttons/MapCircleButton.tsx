@@ -14,8 +14,8 @@ interface ChooseFeature extends IButtonProps {
 }
 
 const WhiteCircle = styled.button<{ height?: string }>`
-  width: ${(props) => (props.height ? props.height : `50px`)};
-  height: ${(props) => (props.height ? props.height : `50px`)};
+  width: ${(props) => (props.height ? props.height : `3.15rem`)};
+  height: ${(props) => (props.height ? props.height : `3.15rem`)};
   border-radius: 50%;
   box-shadow: 0 ${pixelToRem(2)} ${pixelToRem(7)} 0
     ${(props) => props.theme.colors.gray300};
@@ -24,8 +24,8 @@ const WhiteCircle = styled.button<{ height?: string }>`
   justify-content: center;
   align-items: center;
   .my-location {
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 70%;
+    height: 70%;
     fill: ${(props) => props.theme.colors.mainRed};
   }
   .not-location {

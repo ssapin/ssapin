@@ -65,7 +65,7 @@ const Description = styled.div`
   padding-top: 1rem;
   padding-left: 2rem;
   padding-right: 0;
-  font-size: ${(props) => props.theme.fontSizes.h5};
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
   text-align: left;
@@ -77,7 +77,7 @@ const Description = styled.div`
     padding-top: 0.5rem;
     padding-right: 1rem;
     color: ${(props) => props.theme.colors.gray400};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.s1};
     font-family: ${(props) => props.theme.fontFamily.paragraph};
 
     ${(props) => props.theme.mq.tablet} {

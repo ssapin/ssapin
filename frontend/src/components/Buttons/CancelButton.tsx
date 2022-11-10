@@ -3,9 +3,9 @@ import { IButtonProps } from "../../utils/types/buttons.interface";
 import { pixelToRem } from "../../utils/functions/util";
 
 const StyledCancel = styled.button<{ used: string | undefined }>`
-  height: ${(props) => (props.used === "modal" ? `35px` : `45px`)};
+  height: ${(props) => (props.used === "modal" ? `35px` : `35px`)};
   flex-grow: 0;
-  padding: 0 ${pixelToRem(30)};
+  padding: 0 ${pixelToRem(20)};
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.gray300};
   font-family: ${(props) => props.theme.fontFamily.paragraphbold};

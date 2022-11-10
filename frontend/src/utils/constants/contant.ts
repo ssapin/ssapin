@@ -35,7 +35,7 @@ export const HASHTAG_LIST = [
   "🌃 밤늦게",
 ];
 
-export const RATING_LIST = ["0", "😄", "🙄", "😡"];
+export const RATING_LIST = ["0", "😄", "🙂", "😡"];
 
 export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
   서울: {

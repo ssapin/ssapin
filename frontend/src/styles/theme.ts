@@ -29,9 +29,9 @@ const colors = {
 };
 
 const fontSizes = {
-  h1: pixelToRem(36),
-  h2: pixelToRem(30),
-  h3: pixelToRem(24),
+  h1: pixelToRem(30),
+  h2: pixelToRem(26),
+  h3: pixelToRem(23),
   h4: pixelToRem(20),
   h5: pixelToRem(18),
   paragraph: pixelToRem(16),
