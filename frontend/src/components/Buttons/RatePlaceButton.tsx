@@ -4,7 +4,10 @@ import { RATING_LIST } from "../../utils/constants/contant";
 
 const TiedBoxes = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  width: 80%;
+  align-items: center;
+  margin: auto;
   .active {
     background-color: ${(props) => props.theme.colors.lightBlue};
   }
@@ -15,7 +18,6 @@ const StyledEmotion = styled.button`
   height: 70px;
   padding: 10px 0;
   flex-grow: 0;
-  margin: 0 ${pixelToRem(20)} 0 0;
   border-radius: ${pixelToRem(15)};
   box-shadow: 4px 4px 13px 0 rgba(177, 177, 177, 0.6);
   background-color: ${(props) => props.theme.colors.gray0};

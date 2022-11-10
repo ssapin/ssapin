@@ -23,14 +23,14 @@ const Container = styled.div<{ width?: string; height?: string }>`
     outline: none;
     color: ${(props) => props.theme.colors.gray700};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 
   input::placeholder {
     color: ${(props) => props.theme.colors.gray400};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 `;

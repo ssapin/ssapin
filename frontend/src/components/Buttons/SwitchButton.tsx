@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 const ToggleGroup = styled.div`
   width: 100%;
-  height: 41px;
+  height: 35px;
   background-color: ${(props) => props.theme.colors.lightLightBlue};
   text-align: center;
   border-radius: 10px;

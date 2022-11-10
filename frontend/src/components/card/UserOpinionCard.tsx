@@ -42,14 +42,14 @@ const EmojiContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   height: fit-content;
-  margin-top: -2rem;
+  margin-top: -1.7rem;
   .icon {
-    font-size: ${(props) => props.theme.fontSizes.h1};
-    font-family: ${(props) => props.theme.fontFamily.h1bold};
+    font-size: ${(props) => props.theme.fontSizes.h2};
+    font-family: ${(props) => props.theme.fontFamily.h2bold};
   }
 
   .delete {
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
     font-size: ${(props) => props.theme.fontSizes.h4};
     font-family: ${(props) => props.theme.fontFamily.h4bold};
 

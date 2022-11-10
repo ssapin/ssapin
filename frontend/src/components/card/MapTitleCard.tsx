@@ -11,7 +11,7 @@ const Container = styled.div<{ used?: string }>`
   background-color: ${(props) => props.theme.colors.gray50};
   border-radius: 10px;
   margin: 1rem;
-  width: ${(props) => (props.used === "modal" ? `90%` : `22rem`)};
+  width: 90%;
   height: 4rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
@@ -28,9 +28,9 @@ const Container = styled.div<{ used?: string }>`
   }
 
   .title {
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
   }
 `;
 
