@@ -446,9 +446,9 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const addBookmark = async () => {
     if (auth.accessToken) {
-      if (bookmark) {
+      if (!bookmark) {
         addBookmarkInPlace({ placeId });
-      } else if (!bookmark) {
+      } else if (bookmark) {
         removeBookmarkInPlace({ placeId });
       }
       setBookmark(!bookmark);

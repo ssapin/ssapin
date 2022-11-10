@@ -45,7 +45,7 @@ const OpenTag = styled.div<{ type?: string }>`
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray500};
     padding: ${(props) => (props.type !== "create" ? `3px 10px` : `5px 10px`)};
-    border-radius: ${pixelToRem(15)};
+    border-radius: 15px;
     cursor: pointer;
     &:hover {
       background-color: ${(props) => props.theme.colors.lightBlue};
@@ -56,7 +56,8 @@ const OpenTag = styled.div<{ type?: string }>`
       justify-content: center;
       margin-left: 0;
       margin-top: 0;
-      padding: ${(props) => props.type !== "create" && `7px 10px`};
+      padding: ${(props) =>
+        props.type !== "create" ? `3px 10px` : `5px 10px`};
     }
   }
   .checkbox input:checked + .checkbox_text {
