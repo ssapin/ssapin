@@ -62,6 +62,7 @@ function MapPage() {
     getMap(Number(mapId)),
   );
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+  const [isBookmark, setIsBookmar] = useState(false);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {

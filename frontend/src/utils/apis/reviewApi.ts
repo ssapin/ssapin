@@ -14,5 +14,9 @@ export interface IReviewPlace {
 export function registerReview(data: IReviewPlace) {
   axiosInstance.post(REVIEW_API.REVIEW, data);
 }
+const REVIEW_APIS = {
+  getReviewList: (placeId: number) => `/review/${placeId}`,
+  REVIEW: `/review/login`,
+};
 
-export default REVIEW_API;
+export default REVIEW_APIS;

@@ -1,12 +1,29 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import PlaceInfoModal from "../../pages/Place/PlaceInfoModal";
 import { userInformationState } from "../../store/atom";
 import { IPlace } from "../../utils/types/place.interface";
+import ModalPortal from "../containers/ModalPortalContainer";
 
 type PlaceCardProps = {
   prop: IPlace;
   isAdmin: boolean;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 };
 
 const Container = styled.div`
@@ -89,18 +106,20 @@ const Container = styled.div`
   }
 `;
 
-function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
-  const onClickPlace = () => {
-    alert(`${prop.placeId}번 장소~`);
-  };
+function PlaceCard({ prop, isAdmin, refetch }: PlaceCardProps) {
+  const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
+  const user = useRecoilValue(userInformationState);
 
   const onDeletePlace = () => {
     alert(`${prop.placeId}번 장소~ 지우고 싶대`);
   };
 
-  const user = useRecoilValue(userInformationState);
+  const handlePlaceInfoModal = () => {
+    setPlaceInfoModalOpen(true);
+  };
+
   return (
-    <Container onClick={onClickPlace}>
+    <Container onClick={handlePlaceInfoModal}>
       <p className="place">
         {prop !== undefined ? prop.title : "장소가 없습니다"}
       </p>
@@ -108,12 +127,25 @@ function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
         {prop !== undefined ? prop.address : "장소가 없습니다"}
       </p>
       <p className="review">
-        {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
+        {prop !== undefined && !prop.reviewContent && !prop.content
+          ? "아직 등록된 리뷰가 없습니다."
+          : prop?.reviewContent || prop?.content}
       </p>
       {isAdmin && prop.userId === user.userId && (
         <div className="delete">
           <TrashIcon className="trashIcon" onClick={onDeletePlace} />
         </div>
+      )}
+      {placeInfomodalOpen && (
+        <ModalPortal>
+          <PlaceInfoModal
+            placeId={prop.placeId}
+            onClose={() => {
+              setPlaceInfoModalOpen(false);
+              refetch();
+            }}
+          />
+        </ModalPortal>
       )}
     </Container>
   );

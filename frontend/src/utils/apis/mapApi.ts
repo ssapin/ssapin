@@ -46,3 +46,4 @@ export const getMap = async (mapId: number) => {
     return Promise.reject(error);
   }
 };
+

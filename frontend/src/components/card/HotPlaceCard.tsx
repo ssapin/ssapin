@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
+import PlaceInfoModal from "../../pages/Place/PlaceInfoModal";
 import { IPlaceMin } from "../../utils/types/place.interface";
+import ModalPortal from "../containers/ModalPortalContainer";
 
 type HotPlaceProps = {
   place: IPlaceMin;
@@ -80,13 +83,13 @@ const Container = styled.div`
 `;
 
 function HotPlaceCard({ place, message }: HotPlaceProps) {
-  const onClickPlace = () => {
-    if (place !== undefined) alert(`${place.placeId}번 장소~`);
-    else alert("힝~ 장소없어~");
+  const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
+  const handlePlaceInfoModal = () => {
+    setPlaceInfoModalOpen(true);
   };
 
   return (
-    <Container onClick={onClickPlace}>
+    <Container onClick={handlePlaceInfoModal}>
       <p className="place">
         {place !== undefined ? place.title : "장소가 없습니다"}
       </p>
@@ -94,6 +97,16 @@ function HotPlaceCard({ place, message }: HotPlaceProps) {
         {place !== undefined ? place.address : "장소가 없습니다"}
       </p>
       <p className="message">{message}</p>
+      {placeInfomodalOpen && (
+        <ModalPortal>
+          <PlaceInfoModal
+            placeId={place.placeId}
+            onClose={() => {
+              setPlaceInfoModalOpen(false);
+            }}
+          />
+        </ModalPortal>
+      )}
     </Container>
   );
 }

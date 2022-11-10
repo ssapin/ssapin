@@ -1,17 +1,40 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { useQuery } from "react-query";
+import { AxiosError, AxiosResponse } from "axios";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
-import testMap from "../../assets/image/testmapPic.png";
+// import testMap from "../../assets/image/testmapPic.png";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import UserOpinionCard from "../../components/card/UserOpinionCard";
 import { authState, userInformationState } from "../../store/atom";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
+import { IPlaceDetail } from "../../utils/types/place.interface";
+import PLACE_APIS from "../../utils/apis/placeApi";
+import axiosInstance from "../../utils/apis/api";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import LoginModal from "../Login/LoginModal";
+import { IReview } from "../../utils/types/review.interface";
+import REVIEW_APIS from "../../utils/apis/reviewApi";
+import { IMap } from "../../utils/types/map.interface";
+import {
+  addBookmarkInPlace,
+  removeBookmarkInPlace,
+} from "../../utils/functions/place";
+
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
+const { kakao } = window;
 
 interface PlaceInfoModalProps {
+  placeId: number;
   onClose: () => void;
 }
 
@@ -19,6 +42,14 @@ const Container = styled.div`
   width: 50vw;
   max-width: 925px;
   height: 80vh;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 80vw;
+    height: 80vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const HeadContainer = styled.div`
@@ -31,8 +62,15 @@ const HeadContainer = styled.div`
   .xbutton {
     height: fit-content;
   }
+
+  ${(props) => props.theme.mq.tablet} {
+    margin-bottom: 0.5rem;
+    padding: 0.3rem;
+    height: fit-content;
+  }
 `;
 const PlaceInfoContainer = styled.div`
+  width: 65%;
   text-align: center;
   p {
     margin-top: 0.5rem;
@@ -41,9 +79,19 @@ const PlaceInfoContainer = styled.div`
     color: ${(props) => props.theme.colors.gray500};
   }
 `;
+
 const PlaceTitle = styled.h1`
   font-family: ${(props) => props.theme.fontFamily.h1bold};
   font-size: ${(props) => props.theme.fontSizes.h1};
+
+  ${(props) => props.theme.mq.tablet} {
+    font-family: ${(props) => props.theme.fontFamily.h2bold};
+    font-size: ${(props) => props.theme.fontSizes.h2};
+    display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const PlaceContent = styled.div`
@@ -57,6 +105,14 @@ const PlaceContent = styled.div`
   height: 85%;
   width: 100%;
   overflow: hidden;
+
+  ${(props) => props.theme.mq.tablet} {
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: scroll;
+    height: fit-content;
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -65,9 +121,6 @@ const LeftContainer = styled.div`
   height: 100%;
   justify-content: space-between;
   width: 45%;
-  ${(props) => props.theme.mq.tablet} {
-    width: 100%;
-  }
 `;
 
 const RightContainer = styled.div`
@@ -76,32 +129,36 @@ const RightContainer = styled.div`
   height: 100%;
   justify-content: space-between;
   width: 45%;
-  ${(props) => props.theme.mq.tablet} {
-    width: 100%;
-  }
 `;
 
 const ImageContainer = styled.div`
   text-align: center;
   width: 100%;
-  height: 50%;
+  height: 45%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  img {
-    width: auto;
-    height: 70%;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
   }
 `;
 
 const ReviewWriteContainer = styled.div`
   width: 100%;
-  height: 45%;
+  height: 50%;
   font-family: ${(props) => props.theme.fontFamily.h3};
   font-size: ${(props) => props.theme.fontSizes.h3};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
+    button {
+      margin-bottom: 1rem;
+    }
+  }
 `;
 
 const ReviewContainer = styled.div`
@@ -112,7 +169,10 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: hidden;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
+  }
 `;
 
 const PlaceContainer = styled.div`
@@ -123,6 +183,10 @@ const PlaceContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
+  }
 `;
 
 const Comment = styled.input`
@@ -132,26 +196,55 @@ const Comment = styled.input`
   border: 2px solid ${(props) => props.theme.colors.DeepBlue};
   font-family: ${(props) => props.theme.fontFamily.h5};
   font-size: ${(props) => props.theme.fontSizes.h5};
+  padding: 0.5rem;
+
+  ${(props) => props.theme.mq.tablet} {
+    padding: 1rem;
+    width: 85%;
+    height: 60px;
+    margin: auto;
+  }
 `;
 
 const ButtonContainer = styled.div`
-  height: 30%;
+  height: 27%;
   button {
     width: 100%;
     height: 100%;
     font-family: ${(props) => props.theme.fontFamily.h3bold};
     font-size: ${(props) => props.theme.fontSizes.h3};
   }
+
+  ${(props) => props.theme.mq.tablet} {
+    height: 40%;
+    text-align: center;
+    margin-top: 0.3rem;
+    button {
+      width: 40%;
+      padding: 1rem;
+      font-family: ${(props) => props.theme.fontFamily.h4bold};
+      font-size: ${(props) => props.theme.fontSizes.h4};
+    }
+  }
 `;
 
 const KakaoMapButton = styled.button`
   width: 100%;
-  height: 16%;
+  height: 18%;
   background-color: ${(props) => props.theme.colors.lightBlue};
   border-radius: 10px;
   color: white;
   font-family: ${(props) => props.theme.fontFamily.h3bold};
   font-size: ${(props) => props.theme.fontSizes.h3};
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    margin-top: 0.3rem;
+    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-size: ${(props) => props.theme.fontSizes.h4};
+  }
 `;
 
 const WriteContainer = styled.div`
@@ -160,6 +253,10 @@ const WriteContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
+  }
 `;
 
 const ShareContainer = styled.div`
@@ -167,6 +264,10 @@ const ShareContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   height: 15%;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
+  }
 `;
 
 const Buttons = styled.div`
@@ -183,92 +284,442 @@ const Subtitle = styled.h4`
   font-size: ${(props) => props.theme.fontSizes.h4};
   color: ${(props) => props.theme.colors.gray600};
   width: 100%;
+
+  ${(props) => props.theme.mq.tablet} {
+    margin: 1rem;
+    text-align: center;
+  }
 `;
 
-function PlaceInfoModal({ onClose }: PlaceInfoModalProps) {
+const ReviewList = styled.div`
+  overflow: scroll;
+`;
+
+const MapContainer = styled.div`
+  width: auto;
+  height: 70%;
+  border-radius: 15px;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: auto;
+    height: 150px;
+  }
+`;
+
+function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
+  const [place, setPlace] = useState<IPlaceDetail>();
   const [isOpen, setIsOpen] = useState(false);
   const [bookmark, setBookmark] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
   const userInformation = useRecoilValue(userInformationState);
   const auth = useRecoilValue(authState);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+  const [reviewList, setReviewList] = useState<IReview[]>([]);
+  const [mapList, setMapList] = useState<IMap[]>([]);
+  const [reviewContent, setReviewContent] = useState("");
+  const mapRef = useRef<HTMLDivElement>();
+
+  const { data: reviewData, refetch: reviewRefetch } = useQuery<
+    AxiosResponse<any>,
+    AxiosError
+  >(
+    [`${placeId} - reviewList`],
+    () => axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${placeId} - placeDetail`],
+    () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${placeId} - MapList`],
+    () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+    },
+  );
+
+  const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {
+    setReviewContent(e.target.value);
+  };
+
   const toggleActive = (key: number) => {
     setRatePlace(key);
     setIsOpen(!isOpen);
   };
 
-  const addBookmark = () => {
-    setBookmark(!bookmark);
+  const onWriteReview = async () => {
+    if (!auth.accessToken) {
+      setLoginModalOpen(true);
+      setRatePlace(0);
+      setReviewContent("");
+      setIsOpen(false);
+      return;
+    }
+
+    if (reviewContent.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert("리뷰를 작성해주세요!");
+      return;
+    }
+
+    if (ratePlace === 0) {
+      // eslint-disable-next-line no-alert
+      alert("리뷰 이모지를 클릭해주세요!");
+      return;
+    }
+
+    if (reviewContent.length > 50) {
+      // eslint-disable-next-line no-alert
+      alert("리뷰는 20자 이내로 작성해주세요!");
+      return;
+    }
+
+    const body = JSON.stringify({
+      content: reviewContent,
+      emojiType: ratePlace,
+      placeId,
+    });
+
+    const response = await axiosInstance.post(REVIEW_APIS.REVIEW, body);
+
+    try {
+      if (response.status === 200) {
+        reviewRefetch();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const onDeleteReview = async (reviewId: number) => {
+    if (!auth.accessToken) {
+      setLoginModalOpen(true);
+      return;
+    }
+
+    const response = await axiosInstance.delete(REVIEW_APIS.REVIEW, {
+      data: { reviewId },
+    });
+
+    try {
+      if (response.status === 204) {
+        reviewRefetch();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addBookmark = async () => {
+    if (auth.accessToken) {
+      if (bookmark) {
+        addBookmarkInPlace({ placeId });
+      } else if (!bookmark) {
+        removeBookmarkInPlace({ placeId });
+      }
+      setBookmark(!bookmark);
+    } else {
+      setLoginModalOpen(true);
+    }
+  };
+
   useEffect(() => {
-    if (isOpen === false) setRatePlace(0);
+    if (placeDetailData?.data) {
+      console.log(placeDetailData);
+      setPlace(placeDetailData.data);
+      setBookmark(placeDetailData.data.bookmark);
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(
+        placeDetailData.data.lat,
+        placeDetailData.data.lng,
+      );
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(
+          placeDetailData.data.lat,
+          placeDetailData.data.lng,
+        ),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+
+    if (reviewData?.data) {
+      setReviewList(reviewData.data);
+    }
+
+    if (mapData?.data) {
+      setMapList(mapData.data.mapList);
+    }
+  }, [placeDetailData, reviewData, mapData]);
+
+  useEffect(() => {
+    if (isOpen === false) {
+      setRatePlace(0);
+      setReviewContent("");
+    }
   }, [isOpen]);
+
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const resizeListener = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
+  }, []);
+
+  useEffect(() => {
+    if (place) {
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(place.lat, place.lng);
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(place.lat, place.lng),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+  }, [innerWidth]);
 
   return (
     <ModalContainer onClose={onClose}>
-      <Container>
-        <HeadContainer>
-          <MapCircleButton
-            type="button"
-            shape={`${bookmark ? 2 : 3}`}
-            func={addBookmark}
-          />
-          <PlaceInfoContainer>
-            <PlaceTitle>설이 마음속</PlaceTitle>
-            <p>사랑시 고백구 행복동</p>
-          </PlaceInfoContainer>
-          <button type="button" className="xbutton">
-            <Xbutton />
-          </button>
-        </HeadContainer>
+      {innerWidth > 950 ? (
+        <Container>
+          <HeadContainer>
+            <MapCircleButton
+              type="button"
+              shape={`${!bookmark ? 2 : 3}`}
+              func={addBookmark}
+            />
+            <PlaceInfoContainer>
+              <PlaceTitle>{place?.title}</PlaceTitle>
+              <p>{place?.address}</p>
+            </PlaceInfoContainer>
+            <button type="button" className="xbutton" onClick={onClose}>
+              <Xbutton />
+            </button>
+          </HeadContainer>
 
-        <PlaceContent>
-          <LeftContainer>
+          <PlaceContent>
+            <LeftContainer>
+              <PlaceContainer>
+                <Subtitle>어떤 곳인가요?</Subtitle>
+                <ReviewList>
+                  {mapList?.length !== 0 &&
+                    mapList.map((map, id) => (
+                      <MapTitleCard
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={id}
+                        user={`${map.userEmoji} ${map.nickname}`}
+                        used="modal"
+                        title={map.title}
+                      />
+                    ))}
+
+                  {!mapList ||
+                    (mapList.length === 0 && (
+                      <MapTitleCard
+                        user=""
+                        used="modal"
+                        title="등록된 map이 없습니다."
+                      />
+                    ))}
+                </ReviewList>
+              </PlaceContainer>
+              <ShareContainer>
+                <Subtitle>이 장소 공유하기</Subtitle>
+                <Buttons>
+                  <MapCircleButton type="button" height="50px" shape="1" />
+                  <MapCircleButton type="button" height="50px" shape="0" />
+                </Buttons>
+              </ShareContainer>
+              <ImageContainer>
+                <MapContainer ref={mapRef} />
+                <KakaoMapButton
+                  onClick={() => {
+                    window.open(`https://place.map.kakao.com/${place.itemId}`);
+                  }}
+                >
+                  카카오맵리뷰보기
+                </KakaoMapButton>
+              </ImageContainer>
+            </LeftContainer>
+            <RightContainer>
+              <ReviewContainer>
+                <Subtitle>싸핀러들의 생각은 어떤가요?</Subtitle>
+                <ReviewList>
+                  {reviewList.map((review, id) => (
+                    <UserOpinionCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={id}
+                      review={review}
+                      func={onDeleteReview}
+                    />
+                  ))}
+                  {!reviewList ||
+                    (reviewList.length === 0 && (
+                      <UserOpinionCard review={null} />
+                    ))}
+                </ReviewList>
+              </ReviewContainer>
+              <ReviewWriteContainer>
+                {auth.accessToken ? (
+                  <Subtitle>
+                    {userInformation.nickname}님의 의견 남겨주세요!
+                  </Subtitle>
+                ) : (
+                  <Subtitle>로그인을 하여 리뷰를 남겨보세요!</Subtitle>
+                )}
+                <PlaceRatingButton ratePlace={ratePlace} func={toggleActive} />
+                <WriteContainer>
+                  {isOpen && (
+                    <>
+                      <Comment
+                        placeholder="장소에 대한 의견을 작성해주세요."
+                        onChange={onChangeReview}
+                        value={reviewContent}
+                      />
+                      <ButtonContainer>
+                        <ConfirmButton
+                          type="button"
+                          text="작성"
+                          func={onWriteReview}
+                        />
+                      </ButtonContainer>
+                    </>
+                  )}
+                </WriteContainer>
+              </ReviewWriteContainer>
+            </RightContainer>
+          </PlaceContent>
+        </Container>
+      ) : (
+        <Container>
+          <HeadContainer>
+            <MapCircleButton
+              type="button"
+              shape={`${!bookmark ? 2 : 3}`}
+              func={addBookmark}
+              height="50px"
+            />
+            <PlaceInfoContainer>
+              <PlaceTitle>{place?.title}</PlaceTitle>
+              <p>{place?.address}</p>
+            </PlaceInfoContainer>
+            <button type="button" className="xbutton" onClick={onClose}>
+              <Xbutton />
+            </button>
+          </HeadContainer>
+          <PlaceContent>
+            <ImageContainer>
+              <MapContainer ref={mapRef} />
+              <KakaoMapButton
+                onClick={() => {
+                  window.open(`https://place.map.kakao.com/${place.itemId}`);
+                }}
+              >
+                카카오맵리뷰보기
+              </KakaoMapButton>
+            </ImageContainer>
+            <Subtitle>어떤 곳인가요?</Subtitle>
             <PlaceContainer>
-              <Subtitle>어떤 곳인가요?</Subtitle>
-              <MapTitleCard user="dd" used="modal" title="efaf" />
-              <MapTitleCard user="dafd" used="modal" title="efwf" />
+              {mapList?.length !== 0 &&
+                mapList.map((map, id) => (
+                  <MapTitleCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    user={`${map.userEmoji} ${map.nickname}`}
+                    used="modal"
+                    title={map.title}
+                  />
+                ))}
+
+              {!mapList ||
+                (mapList.length === 0 && (
+                  <MapTitleCard
+                    user=""
+                    used="modal"
+                    title="등록된 map이 없습니다."
+                  />
+                ))}
             </PlaceContainer>
+            <Subtitle>싸핀러들의 생각</Subtitle>
+            <ReviewContainer>
+              {reviewList.map((review, id) => (
+                <UserOpinionCard
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={id}
+                  review={review}
+                  func={onDeleteReview}
+                />
+              ))}
+              {!reviewList ||
+                (reviewList.length === 0 && <UserOpinionCard review={null} />)}
+            </ReviewContainer>
+            <Subtitle>장소 공유하기</Subtitle>
             <ShareContainer>
-              <Subtitle>이 장소 공유하기</Subtitle>
               <Buttons>
                 <MapCircleButton type="button" height="50px" shape="1" />
                 <MapCircleButton type="button" height="50px" shape="0" />
               </Buttons>
             </ShareContainer>
-            <ImageContainer>
-              <img alt="testmap.png" src={testMap} />
-              <KakaoMapButton>카카오맵리뷰보기</KakaoMapButton>
-            </ImageContainer>
-          </LeftContainer>
-          <RightContainer>
-            <ReviewContainer>
-              <Subtitle>싸핀러들의 생각은 어떤가요?</Subtitle>
-              <UserOpinionCard emoji={1} content="dasdf" isAdmin />
-              <UserOpinionCard emoji={2} content="쿠쿠루삥뽕" isAdmin={false} />
-            </ReviewContainer>
+            {auth.accessToken ? (
+              <Subtitle>
+                {userInformation.nickname}님의 의견 남겨주세요!
+              </Subtitle>
+            ) : (
+              <Subtitle>로그인을 하여 리뷰를 남겨보세요!</Subtitle>
+            )}
             <ReviewWriteContainer>
-              {auth.accessToken ? (
-                <Subtitle>
-                  {userInformation.nickname}님의 의견 남겨주세요!
-                </Subtitle>
-              ) : (
-                <Subtitle>로그인을 하여 리뷰를 남겨보세요!</Subtitle>
-              )}
               <PlaceRatingButton ratePlace={ratePlace} func={toggleActive} />
               <WriteContainer>
-                {isOpen && (
-                  <>
-                    <Comment placeholder="의견을 입력해봐라" />
-                    <ButtonContainer>
-                      <ConfirmButton type="submit" text="작성" />
-                    </ButtonContainer>
-                  </>
-                )}
+                <Comment
+                  placeholder="장소에 대한 의견을 작성해주세요."
+                  onChange={onChangeReview}
+                  value={reviewContent}
+                />
+                <ButtonContainer>
+                  <ConfirmButton
+                    type="button"
+                    text="작성"
+                    func={onWriteReview}
+                  />
+                </ButtonContainer>
               </WriteContainer>
             </ReviewWriteContainer>
-          </RightContainer>
-        </PlaceContent>
-      </Container>
+          </PlaceContent>
+        </Container>
+      )}
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
     </ModalContainer>
   );
 }

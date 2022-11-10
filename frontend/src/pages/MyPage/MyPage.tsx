@@ -27,7 +27,7 @@ const PageTopBg = styled.div`
   justify-content: flex-start;
   color: ${(props) => props.theme.colors.gray0};
 
-  ${(props) => props.theme.mq.mobile} {
+  ${(props) => props.theme.mq.tablet} {
     height: 60vh;
   }
 `;
