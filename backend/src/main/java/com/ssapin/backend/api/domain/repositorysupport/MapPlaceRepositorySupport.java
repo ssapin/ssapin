@@ -91,21 +91,6 @@ public class MapPlaceRepositorySupport extends QuerydslRepositorySupport {
         return QMap.map.campus.id.eq(campus.getId());
     }
 
-
-    public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByMap(Campus campus) {
-
-        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class, QMapPlace.mapPlace.place.id.as("placeId"), QMapPlace.mapPlace.place.id.count().as("cnt")))
-                .from(QMapPlace.mapPlace)
-                .join(QMap.map)
-                .on(campusEq(campus))
-                .join(QPlace.place)
-                .on(QMapPlace.mapPlace.place.id.eq(QPlace.place.id))
-                .groupBy(QMapPlace.mapPlace.place.id)
-                .orderBy(QMapPlace.mapPlace.place.id.count().desc())
-                . limit(1).fetchOne();
-
-    }
-
     public List<MapPlace> findbyPlace(long placeId)
     {
         return queryFactory.select(QMapPlace.mapPlace)

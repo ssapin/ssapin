@@ -53,22 +53,4 @@ public class ReviewRepositorySupport extends QuerydslRepositorySupport {
                                 .having(builder)))
                 .fetch();
     }
-
-    public PlaceMapResponse.PopularPlaceRankingResponse findPopularPlaceByReview(Campus campus)
-    {
-        return queryFactory.select(Projections.bean(PlaceMapResponse.PopularPlaceRankingResponse.class,QMapPlace.mapPlace.place.id.as("placeId"),QMapPlace.mapPlace.place.id.count().as("cnt")))
-                .from(QMapPlace.mapPlace)
-                .join(QMap.map)
-                .on(campusEq(campus))
-                .join(QPlace.place)
-                .on(QMapPlace.mapPlace.place.id.eq(QPlace.place.id))
-                .join(QReview.review)
-                .on(QMapPlace.mapPlace.place.id.eq(QReview.review.place.id))
-                .groupBy(QMapPlace.mapPlace.place.id)
-                .orderBy(QMapPlace.mapPlace.place.id.count().desc())
-                . limit(1).fetchOne();
-    }
-
-
-
 }

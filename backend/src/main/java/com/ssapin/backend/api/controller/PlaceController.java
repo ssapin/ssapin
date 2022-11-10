@@ -43,7 +43,7 @@ public class PlaceController {
     }
 
 
-    @GetMapping(path = {"/ranking/{campusId}", "/ranking"})
+    @GetMapping(path = {"/ranking/{campusId}"})
     @ApiOperation(value = "장소 랭킹 리스트", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> getListPlaceRanking(@PathVariable(required = false) Long campusId) {
         PlaceMapResponse.RankingResponse result = placeService.getListPlaceRanking(campusId);
