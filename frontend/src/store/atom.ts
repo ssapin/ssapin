@@ -37,3 +37,8 @@ export const campusState = atom({
   key: "campusRecoilState",
   default: 1,
 });
+
+export const addedPlaceState = atom({
+  key: "addedPlace",
+  default: [],
+});
