@@ -119,7 +119,9 @@ function MapList({ maps }: MapProps) {
             />
           ))}
       </RankingContainer>
-      {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
+      {maps?.length === 0 && (
+        <NoContainer>아직 추천지도가 없어요 😥</NoContainer>
+      )}
       <ShowMoreButton />
     </Container>
   );

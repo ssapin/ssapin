@@ -3,6 +3,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { useRecoilValue } from "recoil";
+import Loading from "./components/etc/Loading";
 import Router from "./Router";
 import { authState } from "./store/atom";
 import { useGetUserInformation } from "./utils/hooks/useUserActions";
@@ -42,16 +43,12 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <div>
+    <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <HelmetProvider>
-          <Suspense fallback={<div>로딩중 ...</div>}>
-            {loading && <Router />}
-          </Suspense>
-        </HelmetProvider>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <Suspense fallback={<Loading />}>{loading && <Router />}</Suspense>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-    </div>
+    </HelmetProvider>
   );
 }
 

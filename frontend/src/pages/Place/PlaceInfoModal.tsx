@@ -360,7 +360,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const toggleActive = (key: number) => {
     setRatePlace(key);
-    setIsOpen(!isOpen);
+    setIsOpen(true);
   };
 
   const onWriteReview = async () => {

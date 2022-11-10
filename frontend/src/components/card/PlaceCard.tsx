@@ -113,23 +113,25 @@ function PlaceCard({ prop, isAdmin, refetch }: PlaceCardProps) {
   };
 
   return (
-    <Container onClick={handlePlaceInfoModal}>
-      <p className="place">
-        {prop !== undefined ? prop.title : "장소가 없습니다"}
-      </p>
-      <p className="address">
-        {prop !== undefined ? prop.address : "장소가 없습니다"}
-      </p>
-      <p className="review">
-        {prop !== undefined && !prop.reviewContent && !prop.content
-          ? "아직 등록된 리뷰가 없습니다."
-          : prop?.reviewContent || prop?.content}
-      </p>
-      {isAdmin && prop.userId === user.userId && (
-        <div className="delete">
-          <TrashIcon className="trashIcon" onClick={onDeletePlace} />
-        </div>
-      )}
+    <>
+      <Container onClick={handlePlaceInfoModal}>
+        <p className="place">
+          {prop !== undefined ? prop.title : "장소가 없습니다"}
+        </p>
+        <p className="address">
+          {prop !== undefined ? prop.address : "장소가 없습니다"}
+        </p>
+        <p className="review">
+          {prop !== undefined && !prop.reviewContent && !prop.content
+            ? "아직 등록된 리뷰가 없습니다."
+            : prop?.reviewContent || prop?.content}
+        </p>
+        {isAdmin && prop.userId === user.userId && (
+          <div className="delete">
+            <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+          </div>
+        )}
+      </Container>
       {placeInfomodalOpen && (
         <ModalPortal>
           <PlaceInfoModal
@@ -141,7 +143,7 @@ function PlaceCard({ prop, isAdmin, refetch }: PlaceCardProps) {
           />
         </ModalPortal>
       )}
-    </Container>
+    </>
   );
 }
 
