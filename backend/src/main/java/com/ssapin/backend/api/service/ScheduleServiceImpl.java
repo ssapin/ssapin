@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final UserRankingRepository userRankingRepository;
 
-    @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 40 3 * * *", zone = "Asia/Seoul")
     public void everyDay_0_08_RankingJob() {
         System.out.println("유저랭킹시작 두구두구");
         userRankingRepository.deleteAll();
