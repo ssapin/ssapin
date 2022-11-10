@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -51,8 +51,8 @@ const MapContainer = styled.div`
 const ButtonContainer = styled.div`
   position: fixed;
   z-index: 2;
-  bottom: 25px;
-  right: 25px;
+  bottom: 10px;
+  right: 10px;
 `;
 
 const BackContainer = styled.div`
@@ -74,11 +74,15 @@ const PlaceListContainer = styled.div`
   top: 80px;
   right: 10px;
   width: 300px;
+  height: 80vh;
+  overflow-y: scroll;
   z-index: 2;
   > ul {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: 90%;
+    margin-left: auto;
   }
 `;
 

@@ -34,9 +34,7 @@ function App(): JSX.Element {
     if (window.Kakao) {
       const kakao = window.Kakao;
 
-      // 중복 initialization 방지
       if (!kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
         kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
         kakao.isInitialized();
       }

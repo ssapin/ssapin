@@ -36,6 +36,7 @@ const Container = styled.li`
   flex-direction: column;
   justify-content: space-around;
   padding: 1rem;
+  transition: all 0.2s ease-in-out;
 
   ${(props) => props.theme.mq.mobile} {
     height: 5rem;
@@ -94,7 +95,7 @@ const Container = styled.li`
   }
 
   :hover {
-    scale: 1.06;
+    scale: 1.03;
     cursor: pointer;
   }
 `;
