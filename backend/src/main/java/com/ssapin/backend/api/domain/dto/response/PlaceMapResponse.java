@@ -12,8 +12,7 @@ public class PlaceMapResponse {
 
 
     @Getter
-    static public class RankingResponse
-    {
+    static public class RankingResponse {
         private PlaceResponse review;
         private PlaceResponse bookmark;
         private PlaceResponse pin;
@@ -22,19 +21,6 @@ public class PlaceMapResponse {
             this.review = review;
             this.bookmark = bookmark;
             this.pin = pin;
-        }
-    }
-
-    @Data
-    @NoArgsConstructor
-   static public class PopularPlaceRankingResponse{
-
-        private long placeId;
-        private long cnt;
-
-        public PopularPlaceRankingResponse(long placeId, long cnt) {
-            this.placeId = placeId;
-            this.cnt = cnt;
         }
     }
 

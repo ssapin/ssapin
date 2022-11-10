@@ -39,26 +39,20 @@ public class PlaceServiceImpl implements PlaceService {
      */
 
     private final MapRepository mapRepository;
-
     private final MapRepositorySupport mapRepositorySupport;
     private final CampusRepository campusRepository;
-
     private final MapBookmarkRepository mapBookmarkRepository;
     private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
-
     private final MapPlaceRepositorySupport mapPlaceRepositorySupport;
     private final PlaceBookmarkRepositorySupport placeBookmarkRepositorySupport;
     private final ReviewRepositorySupport reviewRepositorySupport;
-
-
+    private final ReviewRepository reviewRepository;
     private final PlaceRepository placeRepository;
     private final PlaceRepositorySupport placeRepositorySupport;
     private final MapPlaceRepository mapPlaceRepository;
     private final TogethermapPlaceRepository togethermapPlaceRepository;
     private final TogethermapRepository togethermapRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
-
-
     private final TogethermapPlaceRepositorySupport togethermapPlaceRepositorySupport;
 
 
@@ -174,15 +168,17 @@ public class PlaceServiceImpl implements PlaceService {
 
         Campus campus = campusRepository.findById(campusId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
+        long reviewPlaceId = reviewRepository.makeReviewRanking(campus.getId());
+        PlaceMapResponse.PlaceResponse reviewPlace = null;
+        if(reviewPlaceId!=0) reviewPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(reviewPlaceId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
-        PlaceMapResponse.PopularPlaceRankingResponse review = reviewRepositorySupport.findPopularPlaceByReview(campus);
-        PlaceMapResponse.PlaceResponse reviewPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(review.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        long bookmarkPlaceId = placeBookmarkRepository.makeBookmarkRanking(campus.getId());
+        PlaceMapResponse.PlaceResponse bookmarkPlace = null;
+        if(bookmarkPlaceId!=0) bookmarkPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmarkPlaceId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
-        PlaceMapResponse.PopularPlaceRankingResponse bookmark = placeBookmarkRepositorySupport.findPopularPlaceByBookmark(campus);
-        PlaceMapResponse.PlaceResponse bookmarkPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(bookmark.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
-
-        PlaceMapResponse.PopularPlaceRankingResponse map = mapPlaceRepositorySupport.findPopularPlaceByMap(campus);
-        PlaceMapResponse.PlaceResponse mapPlace = new PlaceMapResponse.PlaceResponse(placeRepository.findById(map.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
+        long mapPlaceId = mapPlaceRepository.makeMapPlaceRanking(campus.getId());
+        PlaceMapResponse.PlaceResponse mapPlace = null;
+        if(mapPlaceId!=0) mapPlace=new PlaceMapResponse.PlaceResponse(placeRepository.findById(mapPlaceId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)));
 
         PlaceMapResponse.RankingResponse result = new PlaceMapResponse.RankingResponse(reviewPlace, bookmarkPlace, mapPlace);
 
