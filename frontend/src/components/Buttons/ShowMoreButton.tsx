@@ -8,7 +8,7 @@ const StyledShowMore = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 6vh;
+  height: 2.706rem;
   padding: ${pixelToRem(15)};
   flex-grow: 0;
   border-radius: ${pixelToRem(10)};
