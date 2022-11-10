@@ -27,8 +27,8 @@ const StyledCreate = styled.button`
     letter-spacing: ${pixelToRem(-1.2)};
   }
   .plus {
-    width: 5vh;
-    height: 5vh;
+    width: 2.25rem;
+    height: 1rem;
   }
 `;
 
