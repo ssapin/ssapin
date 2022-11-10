@@ -135,7 +135,7 @@ function PlaceCard({ prop, isAdmin, refetch }: PlaceCardProps) {
             placeId={prop.placeId}
             onClose={() => {
               setPlaceInfoModalOpen(false);
-              refetch();
+              if (refetch) refetch();
             }}
           />
         </ModalPortal>
