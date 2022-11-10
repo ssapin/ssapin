@@ -23,7 +23,7 @@ const SNSContainer = styled.div`
   justify-content: space-between;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.gray400};
     font-family: ${(props) => props.theme.fontFamily.h5};
     letter-spacing: 0.5px;
@@ -49,7 +49,7 @@ const CopyRight = styled.div`
   padding: 10px;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.gray400};
     font-family: ${(props) => props.theme.fontFamily.h5};
     padding: 5px;

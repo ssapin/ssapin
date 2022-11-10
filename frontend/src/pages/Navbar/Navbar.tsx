@@ -111,8 +111,8 @@ const Page = styled.div`
 const MyInfo = styled.div`
   margin-bottom: 1rem;
   div {
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.mainNavy};
   }
 
@@ -155,7 +155,7 @@ const Side = styled.div`
 
   .nav-menu {
     background-color: white;
-    width: 27vw;
+    width: 30vw;
     height: 100vh;
 
     ${(props) => props.theme.mq.tablet} {
@@ -204,11 +204,28 @@ const Side = styled.div`
     padding: 8px 0 8px 16px;
     list-style: none;
     height: 60px;
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.h5};
 
     ${(props) => props.theme.mq.mobile} {
       padding: 8px 0 8px 0;
-      font-family: ${(props) => props.theme.fontFamily.h4bold};
-      font-size: ${(props) => props.theme.fontSizes.h4};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+      font-size: ${(props) => props.theme.fontSizes.h5};
+    }
+  }
+
+  .nav-user {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 8px 0 8px 16px;
+    list-style: none;
+    height: 60px;
+
+    ${(props) => props.theme.mq.mobile} {
+      padding: 8px 0 8px 0;
+      font-family: ${(props) => props.theme.fontFamily.h5bold};
+      font-size: ${(props) => props.theme.fontSizes.h5};
     }
   }
 
@@ -318,7 +335,7 @@ function NavigationBar({ func }: NavBarProps) {
             </div>
             <MyInfo>
               {auth.accessToken ? (
-                <div className="nav-text">
+                <div className="nav-user">
                   {userInformation.emoji} {userInformation.nickname}
                 </div>
               ) : (

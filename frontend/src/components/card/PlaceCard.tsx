@@ -29,9 +29,8 @@ type PlaceCardProps = {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   width: 100%;
-  height: 9rem;
+  height: 7rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
@@ -39,22 +38,17 @@ const Container = styled.div`
   padding: 1rem;
 
   ${(props) => props.theme.mq.mobile} {
-    height: 7.5rem;
+    height: 5rem;
     margin: 0;
   }
 
   .place {
-    font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
 
     width: 100%;
-    text-align: center;
+    text-align: left;
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
@@ -67,7 +61,7 @@ const Container = styled.div`
     font-family: ${(props) => props.theme.fontFamily.s2};
 
     width: 100%;
-    text-align: center;
+    text-align: left;
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
@@ -75,13 +69,12 @@ const Container = styled.div`
   }
 
   .review {
-    height: 30%;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
 
     width: 100%;
-    text-align: center;
+    text-align: left;
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
