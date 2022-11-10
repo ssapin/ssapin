@@ -17,7 +17,7 @@ public interface PlaceBookmarkRepository extends JpaRepository<PlaceBookmark, Lo
                     "(select distinct(map_place.place_id) as id from map_place right join map on map.id=map_place.map_id and map.campus_id=:campusId order by id) as B " +
                     "on B.id = place_bookmark.place_id " +
                     "group by B.id " +
-                    "order by count(*) desc " +
+                    "order by count(B.id) desc " +
                     "limit 1")
     Long makeBookmarkRanking(long campusId);
 }
