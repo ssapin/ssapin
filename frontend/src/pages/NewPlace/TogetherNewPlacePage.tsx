@@ -15,7 +15,7 @@ import {
 } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 
 import { campusState } from "../../store/atom";
@@ -135,6 +135,7 @@ function TogetherNewPlace() {
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
   const { togethermapId } = useParams();
+
   const userCampusId = useRecoilValue(campusState);
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
@@ -188,7 +189,6 @@ function TogetherNewPlace() {
   const displayPlaces = (places: IKakaoPlace[]) => {
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    // removeMarker();
     const newPlaceList = [];
     const newMarkerList: any[] = [];
     for (let i = 0; i < places.length; i++) {

@@ -3,7 +3,8 @@ import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { Helmet } from "react-helmet-async";
 import BackButton from "../../components/Buttons/BackButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
@@ -27,6 +28,7 @@ import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
+import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 
 declare global {
   interface Window {
@@ -84,6 +86,15 @@ const PlaceListContainer = styled.div`
     width: 90%;
     margin-left: auto;
   }
+  ${(props) => props.theme.mq.tablet} {
+    top: 60vh;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    > ul {
+      width: 100%;
+    }
+  }
 `;
 
 const NavContainer = styled.div`
@@ -95,7 +106,7 @@ const NavContainer = styled.div`
 
 const ButtonListContainer = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   bottom: 10px;
   left: 10px;
   display: flex;
@@ -104,6 +115,9 @@ const ButtonListContainer = styled.div`
   > div {
     display: flex;
     gap: 0.5rem;
+    ${(props) => props.theme.mq.mobile} {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -129,11 +143,6 @@ function TogetherMap() {
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
     async () => getTogetherMap(Number(togethermapId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const locateSSAFY = (position: any, map: any) => {
@@ -284,56 +293,75 @@ function TogetherMap() {
   };
 
   return (
-    <Container>
-      <MapContainer ref={mapRef} />
-      <BackContainer>
-        <BackButton />
-      </BackContainer>
-      <SubjectContainer>
-        <TogetherMapTitleCard title={togetherMapData?.title} />
-      </SubjectContainer>
-      <NavContainer>
-        <MenuButton />
-      </NavContainer>
-      <ButtonListContainer>
-        <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
-        <div>
-          <MapCircleButton type="button" shape="1" height="50px" func={copy} />
-          <KakaoShareButton />
-        </div>
-      </ButtonListContainer>
-      <PlaceListContainer>
-        <ul>
-          {togetherMapData?.placeList &&
-            togetherMapData.placeList.map((place) => (
-              <PlaceCard prop={place} key={place.placeId} isAdmin />
-            ))}
-        </ul>
-      </PlaceListContainer>
-      <ButtonContainer>
-        <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
-      </ButtonContainer>
-      {LoginmodalOpen && (
-        <ModalPortal>
-          <LoginModal onClose={() => setLoginModalOpen(false)} />
-        </ModalPortal>
-      )}
-      {modalOpen && (
-        <ModalPortal>
-          <PlaceInfoModal
-            placeId={placeId}
-            onClose={() => setModalOpen(false)}
+    <>
+      <Helmet>
+        <title>
+          {togetherMapData?.title
+            ? `${togetherMapData?.title} - SSAPIN`
+            : "SSAPIN"}
+        </title>
+      </Helmet>
+      <Container>
+        <MapContainer ref={mapRef} />
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <TogetherMapTitleCard title={togetherMapData?.title} />
+        </SubjectContainer>
+        <NavContainer>
+          <MenuButton />
+        </NavContainer>
+        <ButtonListContainer>
+          <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
+          <div>
+            <MapCircleButton
+              type="button"
+              shape="1"
+              height="50px"
+              func={copy}
+            />
+            <KakaoShareButton />
+          </div>
+        </ButtonListContainer>
+        <PlaceListContainer>
+          <ul>
+            {togetherMapData?.placeList &&
+              togetherMapData.placeList.map((place) => (
+                <PlaceCard prop={place} key={place.placeId} isAdmin />
+              ))}
+          </ul>
+        </PlaceListContainer>
+        <ButtonContainer>
+          <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
+          <CreateButtonMobile
+            text="장소 추가하기"
+            type="button"
+            func={addNewPlace}
           />
-        </ModalPortal>
-      )}
-      {copied && (
-        <ModalPortal>
-          <CopyModalContainer onClose={() => setCopied(false)}>
-            URL을 복사했어요
-          </CopyModalContainer>
-        </ModalPortal>
-      )}
-    </Container>
+        </ButtonContainer>
+        {LoginmodalOpen && (
+          <ModalPortal>
+            <LoginModal onClose={() => setLoginModalOpen(false)} />
+          </ModalPortal>
+        )}
+        {modalOpen && (
+          <ModalPortal>
+            <PlaceInfoModal
+              placeId={placeId}
+              onClose={() => setModalOpen(false)}
+            />
+          </ModalPortal>
+        )}
+        {copied && (
+          <ModalPortal>
+            <CopyModalContainer onClose={() => setCopied(false)}>
+              💻URL을 클립보드에 복사했어요.
+            </CopyModalContainer>
+          </ModalPortal>
+        )}
+      </Container>
+    </>
   );
 }
 

@@ -127,10 +127,10 @@ function MainPage() {
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
-  const auth = useRecoilValue(authState);
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-
+  const [campusId, setCampusId] = useRecoilState(campusState);
+  const auth = useRecoilValue(authState);
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -138,7 +138,6 @@ function MainPage() {
     window.addEventListener("resize", resizeListener);
     return () => window.removeEventListener("resize", resizeListener);
   }, []);
-  const [campusId, setCampusId] = useRecoilState(campusState);
 
   const toggleActive = (key: number) => {
     setCampusId(key);

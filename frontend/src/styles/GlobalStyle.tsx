@@ -147,6 +147,7 @@ export default function GlobalStyle() {
             line-height: 1.2;
             color: ${themes.colors.gray900};
             background-color: ${themes.colors.gray0};
+            min-width: 320px;
             -ms-overflow-style: none; /* IE and Edge */
             scrollbar-width: none; /* Firefox */
           }
