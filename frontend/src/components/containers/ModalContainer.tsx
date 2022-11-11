@@ -1,17 +1,18 @@
 import styled from "@emotion/styled";
+import { fadeIn } from "../../styles/animations";
 import { pixelToRem } from "../../utils/functions/util";
-import { Children, ModalProps } from "../../utils/types/common";
+import { ModalProps } from "../../utils/types/common";
 import ModalBackground from "./ModalBackgroud";
 
 const ModalWrapper = styled.div`
   width: fit-content;
-  //height: fit-content;
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 20px;
   padding: ${pixelToRem(40)};
   ${(props) => props.theme.mq.mobile} {
     padding: 2rem;
   }
+  animation: ${fadeIn} 0.3s ease-in-out;
 `;
 
 function ModalContainer({ onClose, children }: ModalProps) {

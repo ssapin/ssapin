@@ -80,12 +80,12 @@ const SubjectContainer = styled(BackContainer)`
   gap: 0.5rem;
   align-items: center;
   > div {
-    &:nth-child(1) {
+    &:nth-of-child(1) {
       ${(props) => props.theme.mq.mobile} {
         max-width: 200px;
       }
     }
-    &:nth-child(2) {
+    &:nth-of-child(2) {
       ${(props) => props.theme.mq.mobile} {
         display: none;
       }
