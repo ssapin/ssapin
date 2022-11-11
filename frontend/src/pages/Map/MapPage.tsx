@@ -9,7 +9,7 @@ import CreateButton from "../../components/Buttons/CreateButton";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
-import { authState, campusState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import {
   getMap,
@@ -22,6 +22,7 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
+import { isUserAccess } from "../../utils/functions/place";
 import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 
@@ -69,6 +70,7 @@ function MapPage() {
     ["map", mapId],
     () => getMap(Number(mapId)),
   );
+  const userInformation = useRecoilValue(userInformationState);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
 
@@ -128,6 +130,8 @@ function MapPage() {
     }
   };
 
+  isUserAccess(userInformation.userId, mapData?.userId);
+
   return (
     <Container>
       {/* <SearchPlace /> */}
@@ -147,7 +151,7 @@ function MapPage() {
         />
       </BackContainer>
       <ButtonContainer>
-        {mapData?.access && (
+        {(mapData?.access || isUserAccess) && (
           <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
         )}
       </ButtonContainer>

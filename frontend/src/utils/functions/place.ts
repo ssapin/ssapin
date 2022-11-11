@@ -89,3 +89,8 @@ export const addPlace = (kakakoplace: IKakaoPlace, id: number) => () => {
   const data: IAddPlace = getRequestPlace(place, id);
   addPlaceToMap(data);
 };
+
+export const isUserAccess = (userId: number, mapUserId: number): boolean => {
+  if (userId === mapUserId) return true;
+  return false;
+};
