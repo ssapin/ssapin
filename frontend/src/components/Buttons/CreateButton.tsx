@@ -27,6 +27,9 @@ const StyledCreate = styled.button`
     width: 1.5rem;
     height: 1.5rem;
   }
+  ${(props) => props.theme.mq.tablet} {
+    display: none;
+  }
 `;
 
 export default function CreateButton({

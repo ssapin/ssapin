@@ -34,6 +34,7 @@ const Container = styled.div`
     top: 0;
     right: -100%;
     transition: 850ms;
+    z-index: 4;
   }
 
   .nav-menu.active {
@@ -41,6 +42,7 @@ const Container = styled.div`
     transition: 350ms;
     display: flex;
     flex-direction: column;
+    z-index: 4;
   }
 
   .nav-content {

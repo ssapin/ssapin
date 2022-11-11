@@ -14,21 +14,24 @@ import {
   LegacyRef,
 } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
+import BackButton from "../../components/Buttons/BackButton";
+import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
 
-import { campusState } from "../../store/atom";
+import { authState, campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { addPlace } from "../../utils/functions/place";
 import { pixelToRem } from "../../utils/functions/util";
-import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import LoginModal from "../Login/LoginModal";
+import AddPlaceModal from "../Search/AddPlaceModal";
 
 const Conatiner = styled.section`
   position: relative;
@@ -103,7 +106,12 @@ const SearchInformationContainer = styled.div`
 const PaginationButton = styled.button`
   margin: 0 1rem;
 `;
-
+const BackContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+`;
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -137,7 +145,6 @@ function TogetherNewPlace() {
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
   const { togethermapId } = useParams();
-  const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
@@ -221,7 +228,7 @@ function TogetherNewPlace() {
   };
 
   const placesSearchCB = (
-    data: KakaoPlaceObj[],
+    data: IKakaoPlace[],
     status: string,
     pagination: Pagination,
   ) => {
@@ -243,14 +250,14 @@ function TogetherNewPlace() {
   useEffect(() => {
     const [lat, lan]: Coordinate = togetherMapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .x,
         ]
       : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].x,
         ];
     const container = mapRefs.current;
     const options = {
@@ -274,6 +281,10 @@ function TogetherNewPlace() {
 
   return (
     <Conatiner>
+      <BackContainer>
+        <BackButton />
+        <TogetherMapTitleCard title={togetherMapData?.title} />
+      </BackContainer>
       <SearchContainer>
         <Form onSubmit={searchKeyword}>
           <div>
@@ -381,6 +392,23 @@ const CreateButton = styled.button`
   }
 `;
 
+const FixContainer = styled.div`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 2;
+
+  button {
+    margin-bottom: 1rem;
+    box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    right: 1rem;
+    bottom: 1rem;
+  }
+`;
+
 const Jibun = styled.span`
   padding-left: 26px;
   background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
@@ -403,29 +431,57 @@ const PlaceCard = forwardRef(
   ) => {
     console.log(mapId);
 
-    return (
-      <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
-        <MarkerBg index={index} />
-        <PlaceInfoContainer>
-          <InfoInnerContainer>
-            <h4>{place.place_name}</h4>
-            {place.road_address_name ? (
-              <>
-                <span>{place.road_address_name}</span>
-                <Jibun>{place.address_name}</Jibun>
-              </>
-            ) : (
-              <span>{place.address_name}</span>
-            )}
-            <span>{place.phone}</span>
+    const [modalOpen, setModalOpen] = useState(false);
+    const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+    const auth = useRecoilValue(authState);
 
-            <CreateButton type="button" onClick={addPlace(place, mapId)}>
-              장소
-              <PlusIcon className="plus" />
-            </CreateButton>
-          </InfoInnerContainer>
-        </PlaceInfoContainer>
-      </List>
+    const handleModal = () => {
+      if (auth.accessToken) setModalOpen(true);
+      else setLoginModalOpen(true);
+    };
+
+    return (
+      <>
+        <FixContainer>
+          {modalOpen && (
+            <ModalPortal>
+              <AddPlaceModal
+                onClose={() => setModalOpen(false)}
+                place={place}
+                mapId={mapId}
+                type={2}
+              />
+            </ModalPortal>
+          )}
+          {LoginmodalOpen && (
+            <ModalPortal>
+              <LoginModal onClose={() => setLoginModalOpen(false)} />
+            </ModalPortal>
+          )}
+        </FixContainer>
+        <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
+          <MarkerBg index={index} />
+          <PlaceInfoContainer>
+            <InfoInnerContainer>
+              <h4>{place.place_name}</h4>
+              {place.road_address_name ? (
+                <>
+                  <span>{place.road_address_name}</span>
+                  <Jibun>{place.address_name}</Jibun>
+                </>
+              ) : (
+                <span>{place.address_name}</span>
+              )}
+              <span>{place.phone}</span>
+
+              <CreateButton type="button" onClick={handleModal}>
+                장소
+                <PlusIcon className="plus" />
+              </CreateButton>
+            </InfoInnerContainer>
+          </PlaceInfoContainer>
+        </List>
+      </>
     );
   },
 );

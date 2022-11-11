@@ -1,4 +1,4 @@
-import { IPlace } from "./place.interface";
+import { IKakaoPlace, IPlace } from "./place.interface";
 
 export interface ITogetherMap {
   togethermapId: number;
@@ -10,11 +10,6 @@ export interface ITogetherMap {
   placeList: IPlace[];
 }
 
-interface Coordinate {
-  lat: number;
-  lan: number;
-}
-
 export interface CampusCoordinate {
-  [key: string]: Coordinate;
+  [key: string]: IKakaoPlace;
 }

@@ -1,15 +1,25 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
 import testMap from "../../assets/image/testmapPic.png";
+import {
+  IAddPlace,
+  IKakaoPlace,
+  IPlaceMin,
+} from "../../utils/types/place.interface";
+import { getKakaoPlace, getRequestPlace } from "../../utils/functions/place";
+import axiosInstance from "../../utils/apis/api";
+import PLACE_APIS from "../../utils/apis/placeApi";
+import { IReviewPlace, registerReview } from "../../utils/apis/reviewApi";
 
 interface PlaceModalProps {
   onClose: () => void;
-  title: string;
-  address: string;
+  mapId: number;
+  place: IKakaoPlace;
+  type: number;
 }
 
 const Container = styled.div`
@@ -48,10 +58,10 @@ const PlaceContent = styled.div`
 `;
 const ImageContainer = styled.div`
   text-align: center;
-  width: 50%;
-  img {
-    width: 90%;
-    height: auto;
+  width: auto;
+  height: 100%;
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
   }
 `;
 const ReviewContainer = styled.div`
@@ -80,38 +90,197 @@ const ButtonContainer = styled.div`
   }
 `;
 
-function AddPlaceModal({ onClose, title, address }: PlaceModalProps) {
+const MapContainer = styled.div`
+  width: auto;
+  height: auto%;
+  border-radius: 15px;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: auto;
+    height: 150px;
+  }
+`;
+
+const KakaoMapButton = styled.button`
+  width: 100%;
+  height: 18%;
+  background-color: ${(props) => props.theme.colors.lightBlue};
+  border-radius: 10px;
+  color: white;
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    margin-top: 0.3rem;
+    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-size: ${(props) => props.theme.fontSizes.h4};
+  }
+`;
+
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
+const { kakao } = window;
+
+function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [isOpen, setIsOpen] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
+  const [text, setText] = useState("");
+  const mapRef = useRef<HTMLDivElement>();
+  const onChange = (e: any) => {
+    setText(e.target.value);
+  };
   const toggleActive = (key: number) => {
     setRatePlace(key);
     setIsOpen(!isOpen);
+    setText("");
+  };
+
+  useEffect(() => {
+    if (place) {
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(place.y, place.x);
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(place.y, place.x),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+  }, [innerWidth]);
+  useEffect(() => {
+    if (place) {
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(place.y, place.x);
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(place.y, place.x),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+  }, []);
+
+  const addPlace = async () => {
+    console.log(place);
+    console.log(mapId);
+    console.log(`타입: ${type}`);
+
+    const dplace: IPlaceMin = getKakaoPlace(place);
+    const data: IAddPlace = getRequestPlace(dplace, mapId);
+    let id: number = 0;
+    console.log(type);
+    if (type === 1) {
+      const response = await axiosInstance.post(PLACE_APIS.MAP, data);
+      console.log(response);
+      try {
+        console.log(response);
+
+        if (response.status === 200) {
+          id = response.data;
+
+          if (ratePlace !== 0) {
+            const reviewData: IReviewPlace = {
+              placeId: id,
+              emojiType: ratePlace,
+              content: text,
+            };
+
+            registerReview(reviewData);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      //모여지도 ~
+      const response = await axiosInstance.post(PLACE_APIS.TOGETHERMAP, data);
+
+      try {
+        console.log(response);
+
+        if (response.status === 200) {
+          id = response.data;
+
+          if (ratePlace !== 0) {
+            const reviewData: IReviewPlace = {
+              placeId: id,
+              emojiType: ratePlace,
+              content: text,
+            };
+
+            registerReview(reviewData);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    onClose();
   };
 
   useEffect(() => {
     if (isOpen === false) setRatePlace(0);
   }, [isOpen]);
 
+  console.log(ratePlace);
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
         <PlaceContainer>
-          <PlaceTitle>{title}</PlaceTitle>
-          {address}
+          <PlaceTitle>{place.place_name}</PlaceTitle>
+          {place.address_name}
         </PlaceContainer>
         <PlaceContent>
           <ImageContainer>
-            <img alt="testmap.png" src={testMap} />
+            <MapContainer ref={mapRef} />
+            <KakaoMapButton
+              onClick={() => {
+                window.open(`https://place.map.kakao.com/${place.id}`);
+              }}
+            >
+              카카오맵리뷰보기
+            </KakaoMapButton>
           </ImageContainer>
 
           <ReviewContainer>
             <div>장소평가</div>
             <PlaceRatingButton ratePlace={ratePlace} func={toggleActive} />
-            {isOpen && <Comment placeholder="의견을 입력해봐라" />}
+            {isOpen && (
+              <Comment
+                onChange={onChange}
+                placeholder="장소에 대한 솔직한 의견 적어주세요"
+                value={text}
+              />
+            )}
           </ReviewContainer>
         </PlaceContent>
         <ButtonContainer>
-          <ConfirmButton used="modal" type="submit" text="추가" />
+          <ConfirmButton
+            used="modal"
+            type="button"
+            text="추가"
+            func={addPlace}
+          />
           <CancelButton used="modal" type="button" text="취소" func={onClose} />
         </ButtonContainer>
       </Container>
