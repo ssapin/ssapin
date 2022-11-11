@@ -97,6 +97,7 @@ function MapPage() {
       <BackContainer>
         <BackButton />
         <MapCircleButton shape="2" />
+        <MapCircleButton shape="3" />
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
