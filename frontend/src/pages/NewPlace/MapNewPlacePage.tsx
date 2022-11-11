@@ -32,7 +32,6 @@ import { IKakaoPlace } from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
 import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
-import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import { pixelToRem } from "../../utils/functions/util";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import AddPlaceModal from "../Search/AddPlaceModal";

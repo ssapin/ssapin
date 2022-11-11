@@ -6,6 +6,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -226,68 +227,73 @@ function MainPage() {
   };
 
   return (
-    <div style={{ position: "relative" }}>
-      <HeadContainer>
-        <Header func={toggleActive} />
-        <QuestionContainer>
-          <Swiper
-            slidesPerView={1}
-            loop
-            pagination={{
-              clickable: true,
-            }}
-            effect="fade"
-            navigation
-            autoplay={{
-              delay: 3500,
-              disableOnInteraction: false,
-            }}
-            speed={800}
-            modules={[Pagination, Navigation, Autoplay, EffectFade]}
-            className="mySwiper"
-          >
-            {!loading &&
-              togethermaps.map((item, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <SwiperSlide key={i}>
-                  <Question item={item} />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-        </QuestionContainer>
-        <Searchbar>
-          <MapSearch
-            width="50%"
-            height="30%"
-            changeFunc={onChangeKeyword}
-            clickFunc={moveToSearch}
-          />
-        </Searchbar>
-      </HeadContainer>
-      <MainContainer>
-        <UserRanking users={rankingusers} />
-        <PlaceRanking places={rankingplaces} />
-        <MapRanking maps={rankingmaps} />
-        <MapList maps={maps} />
-        <TogetherMapList maps={togethermaps} />
-      </MainContainer>
-      <FixContainer>
-        <MoveToTopButton />
-        <CreateButton type="button" text="지도 만들기" func={handleModal} />
-        <CreateButtonMobile type="button" func={moveToCreate} />
-        {modalOpen && (
+    <>
+      <Helmet>
+        <title>SSAPIN</title>
+      </Helmet>
+      <div style={{ position: "relative" }}>
+        <HeadContainer>
+          <Header func={toggleActive} />
+          <QuestionContainer>
+            <Swiper
+              slidesPerView={1}
+              loop
+              pagination={{
+                clickable: true,
+              }}
+              effect="fade"
+              navigation
+              autoplay={{
+                delay: 3500,
+                disableOnInteraction: false,
+              }}
+              speed={800}
+              modules={[Pagination, Navigation, Autoplay, EffectFade]}
+              className="mySwiper"
+            >
+              {!loading &&
+                togethermaps.map((item, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <SwiperSlide key={i}>
+                    <Question item={item} />
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </QuestionContainer>
+          <Searchbar>
+            <MapSearch
+              width="50%"
+              height="30%"
+              changeFunc={onChangeKeyword}
+              clickFunc={moveToSearch}
+            />
+          </Searchbar>
+        </HeadContainer>
+        <MainContainer>
+          <UserRanking users={rankingusers} />
+          <PlaceRanking places={rankingplaces} />
+          <MapRanking maps={rankingmaps} />
+          <MapList maps={maps} />
+          <TogetherMapList maps={togethermaps} />
+        </MainContainer>
+        <FixContainer>
+          <MoveToTopButton />
+          <CreateButton type="button" text="지도 만들기" func={handleModal} />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+          {modalOpen && (
+            <ModalPortal>
+              <CreateMapModal onClose={() => setModalOpen(false)} />
+            </ModalPortal>
+          )}
+        </FixContainer>
+        {LoginmodalOpen && (
           <ModalPortal>
-            <CreateMapModal onClose={() => setModalOpen(false)} />
+            <LoginModal onClose={() => setLoginModalOpen(false)} />
           </ModalPortal>
         )}
-      </FixContainer>
-      {LoginmodalOpen && (
-        <ModalPortal>
-          <LoginModal onClose={() => setLoginModalOpen(false)} />
-        </ModalPortal>
-      )}
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 }
 
