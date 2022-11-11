@@ -85,6 +85,8 @@ const SearchBar = styled.div<{ width?: string; height?: string }>`
     margin-right: 1rem;
     fill: ${(props) => props.theme.colors.gray50};
     cursor: pointer;
+    transition: all 0.2s ease-out;
+
     :hover {
       scale: 1.05;
     }

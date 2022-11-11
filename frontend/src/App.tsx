@@ -46,7 +46,7 @@ function App(): JSX.Element {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <Suspense fallback={<Loading />}>{loading && <Router />}</Suspense>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </HelmetProvider>
   );

@@ -1,15 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { Children } from "../../utils/types/common";
 
-interface RouteProps extends Children {
+interface RouteProps {
   isLoggedIn: boolean;
 }
 
-function ProtectedRoute({ children, isLoggedIn }: RouteProps) {
+function ProtectedRoute({ isLoggedIn }: RouteProps) {
   if (!isLoggedIn) {
     return <Navigate to="/" replace />;
   }
-  return children || <Outlet />;
+  return <Outlet />;
 }
 
 export default ProtectedRoute;
