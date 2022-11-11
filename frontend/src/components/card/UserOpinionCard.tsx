@@ -42,6 +42,8 @@ const EmojiContainer = styled.div`
   width: 100%;
   height: fit-content;
   margin-top: -1.7rem;
+  transition: all 0.2s ease-out;
+
   .icon {
     font-size: ${(props) => props.theme.fontSizes.h2};
     font-family: ${(props) => props.theme.fontFamily.h2bold};

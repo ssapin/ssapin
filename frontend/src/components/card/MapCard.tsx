@@ -39,9 +39,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem 1rem 1rem 0;
+  transition: all 0.2s ease-out;
 
   .icon {
     text-align: center;

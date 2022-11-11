@@ -13,6 +13,7 @@ const StyledCreate = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   color: ${(props) => props.theme.colors.gray0};
   text-align: center;
+  transition: all 0.2s ease-out;
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
     scale: 1.06;

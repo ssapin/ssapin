@@ -72,6 +72,7 @@ const LogoContainer = styled.h1`
     font-family: ${(props) => props.theme.fontFamily.paragraphbold};
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.subYellow};
+    transition: all 0.2s ease-out;
 
     ${(props) => props.theme.mq.mobile} {
       margin-top: 0;

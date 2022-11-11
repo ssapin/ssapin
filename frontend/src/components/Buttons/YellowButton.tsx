@@ -17,6 +17,7 @@ const StyledYellow = styled.button`
   letter-spacing: ${pixelToRem(-1.2)};
   text-align: center;
   color: ${(props) => props.theme.colors.gray900};
+  transition: all 0.2s ease-out;
 
   &:hover {
     background-color: #ffdf1d;

@@ -20,6 +20,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  transition: all 0.2s ease-out;
 
   .icon {
     width: 100%;

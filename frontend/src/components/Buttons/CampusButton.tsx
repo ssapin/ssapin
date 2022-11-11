@@ -26,6 +26,7 @@ const StyledCampus = styled.button`
   letter-spacing: ${pixelToRem(-0.7)};
   text-align: center;
   background-color: ${(props) => props.theme.colors.gray0};
+  transition: all 0.2s ease-out;
   &:hover {
     background-color: ${(props) => props.theme.colors.subYellow};
     scale: 1.05;
