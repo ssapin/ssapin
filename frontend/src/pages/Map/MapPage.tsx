@@ -151,6 +151,7 @@ function Map() {
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
   const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
@@ -211,6 +212,9 @@ function Map() {
   };
 
   useEffect(() => {
+    if (isUserAccess(userInformation.userId, mapData?.userId)) {
+      setIsCreator(true);
+    }
     (async () =>
       kakao.maps.load(async () => {
         const campusLocation = mapData
@@ -306,8 +310,6 @@ function Map() {
     }
   };
 
-  isUserAccess(userInformation.userId, mapData?.userId);
-
   const copy = () => {
     setCopied(true);
     copyURL();
@@ -324,6 +326,14 @@ function Map() {
         </title>
       </Helmet>
       <Container>
+        <PlaceListContainer>
+          <ul>
+            {mapData?.placeList &&
+              mapData.placeList.map((place) => (
+                <PlaceCard prop={place} key={place.placeId} isAdmin />
+              ))}
+          </ul>
+        </PlaceListContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
           <div>
@@ -336,14 +346,7 @@ function Map() {
             <KakaoShareButton />
           </div>
         </ButtonListContainer>
-        <PlaceListContainer>
-          <ul>
-            {mapData?.placeList &&
-              mapData.placeList.map((place) => (
-                <PlaceCard prop={place} key={place.placeId} isAdmin />
-              ))}
-          </ul>
-        </PlaceListContainer>
+
         <ButtonContainer>
           <Mobile>
             {mapData?.bookMark ? (
@@ -352,12 +355,20 @@ function Map() {
               <MapCircleButton shape="2" func={registerBookmark} />
             )}
           </Mobile>
-          <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
-          <CreateButtonMobile
-            text="장소 추가하기"
-            type="button"
-            func={addNewPlace}
-          />
+          {(mapData?.access || isCreator) && (
+            <>
+              <CreateButton
+                text="장소 추가하기"
+                type="button"
+                func={addNewPlace}
+              />
+              <CreateButtonMobile
+                text="장소 추가하기"
+                type="button"
+                func={addNewPlace}
+              />
+            </>
+          )}
         </ButtonContainer>
         <BackContainer>
           <BackButton />
