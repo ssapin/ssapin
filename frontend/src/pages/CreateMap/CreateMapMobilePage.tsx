@@ -11,7 +11,7 @@ import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
-import NavBar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 
 const Container = styled.div`
   width: 90%;
@@ -241,7 +241,7 @@ function CreateMapMobilePage() {
   return (
     <>
       <HeadContainer>
-        <NavBar func={toggleActive} />
+        <Header func={toggleActive} />
       </HeadContainer>
       <Container>
         <Form onSubmit={handleSubmit}>

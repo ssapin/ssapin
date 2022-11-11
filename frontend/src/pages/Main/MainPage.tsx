@@ -18,7 +18,7 @@ import PlaceRanking from "./PlaceRanking";
 import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
-import Navbar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
@@ -267,7 +267,7 @@ function MainPage() {
   return (
     <>
       <HeadContainer>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <QuestionContainer>
           <Swiper
             slidesPerView={1}
