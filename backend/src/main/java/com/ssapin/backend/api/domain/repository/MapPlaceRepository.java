@@ -1,11 +1,11 @@
 package com.ssapin.backend.api.domain.repository;
 
+import com.ssapin.backend.api.domain.entity.Map;
 import com.ssapin.backend.api.domain.entity.MapPlace;
+import com.ssapin.backend.api.domain.entity.Place;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface MapPlaceRepository extends JpaRepository<MapPlace, Long> {
@@ -17,4 +17,5 @@ public interface MapPlaceRepository extends JpaRepository<MapPlace, Long> {
                     "order by count(map_place.place_id) desc " +
                     "limit 1")
     long makeMapPlaceRanking(long campusId);
+    boolean existsByMapAndPlace(Map map, Place place);
 }

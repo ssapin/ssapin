@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssapin.backend.api.domain.entity.QUser.user;
 
@@ -34,16 +35,22 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public long addReview(ReviewRequest.ReviewAdd request,User user) {
+    public long addReview(ReviewRequest.ReviewAdd request, User user) {
         Place place = placeRepository.findById(request.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Optional<Review> reviews = reviewRepository.findByUserAndPlace(user, place);
+        System.out.println(reviews.get().getId());
+        if(!reviews.isEmpty()) {
+            Review review = reviews.get();
+            reviewRepository.delete(review);
+        }
 
-        Review review = Review.builder()
+        Review newReview = Review.builder()
                 .place(place)
                 .user(user)
                 .emojiType(request.getEmojiType())
                 .content(request.getContent())
                 .build();
-        return reviewRepository.save(review).getId();
+        return reviewRepository.save(newReview).getId();
     }
 
     @Override
