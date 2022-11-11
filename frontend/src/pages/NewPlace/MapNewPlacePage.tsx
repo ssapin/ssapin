@@ -19,7 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import { authState, campusState, mapPlaceListState } from "../../store/atom";
-import { getMap } from "../../utils/apis/mapApi";
+import { getMap, IBookMark, registerMapBookmark, removeMapBookmark } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
@@ -313,12 +313,31 @@ function MapNewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
+  const registerBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
 
+    registerMapBookmark(req);
+  };
+
+  const removeBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    removeMapBookmark(req);
+  };
   console.log(placeList);
 
   return (
     <Conatiner>
       <BackContainer>
+        {mapData?.bookMark ? (
+          <MapCircleButton shape="3" func={removeBookmark} />
+        ) : (
+          <MapCircleButton shape="2" func={registerBookmark} />
+        )}
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}

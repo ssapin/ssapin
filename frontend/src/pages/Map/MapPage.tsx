@@ -100,7 +100,6 @@ function MapPage() {
     };
 
     registerMapBookmark(req);
-    setIsBookmark(true);
   };
 
   const removeBookmark = () => {
@@ -109,7 +108,6 @@ function MapPage() {
     };
 
     removeMapBookmark(req);
-    setIsBookmark(false);
   };
 
   return (
@@ -131,7 +129,9 @@ function MapPage() {
         />
       </BackContainer>
       <ButtonContainer>
-        <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
+        {mapData?.access && (
+          <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
+        )}
       </ButtonContainer>
       {LoginmodalOpen && (
         <ModalPortal>
