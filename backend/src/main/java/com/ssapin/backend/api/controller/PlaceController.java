@@ -8,12 +8,16 @@ import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.service.PlaceServiceImpl;
 import com.ssapin.backend.api.service.UserServiceImpl;
 import com.ssapin.backend.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(value = "장소 API", tags = {"Place"})
 @RestController
@@ -29,6 +33,7 @@ public class PlaceController {
     @PostMapping("/login/map")
     @ApiOperation(value = "추천지도에 장소 추가 ", notes = "미리 생성된 추천지도에 장소 추가")
     public ResponseEntity<?> addPlaceInMap(@RequestHeader("accessToken") final String accessToken, @RequestBody PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
+
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
         return new ResponseEntity<Long>(placeService.addPlaceInMap(user, placeRequest), HttpStatus.OK);
@@ -72,13 +77,20 @@ public class PlaceController {
     @GetMapping("/{placeId}/detail")
     @ApiOperation(value = "장소 정보 조회", notes = "장소 정보 조회")
     public ResponseEntity<?> getPlaceInfo(@PathVariable long placeId, @RequestHeader(required = false, name = "accessToken") final String accessToken) {
-        User user = null;
-        if(accessToken!=null && accessToken!="") {
-           long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
-            user = userService.getUserById(userId);
+        try {
+            User user = null;
+            if(accessToken!=null && accessToken!="") {
+                long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
+                user = userService.getUserById(userId);
+            }
+            PlaceInfoResponse result = placeService.getPlaceInfo(user,placeId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ExpiredJwtException ej) {
+            ej.printStackTrace();
+            Map<String, String> exceptionResponse = new HashMap<>();
+            exceptionResponse.put("message", "Token Expired");
+            return new ResponseEntity<Map>(exceptionResponse, HttpStatus.UNAUTHORIZED);
         }
-        PlaceInfoResponse result = placeService.getPlaceInfo(user,placeId);
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/map/{placeId}")

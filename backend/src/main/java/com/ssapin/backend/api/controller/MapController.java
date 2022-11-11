@@ -10,6 +10,7 @@ import com.ssapin.backend.api.service.MapServiceImpl;
 import com.ssapin.backend.api.service.TogethermapServiceImpl;
 import com.ssapin.backend.api.service.UserServiceImpl;
 import com.ssapin.backend.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,6 +89,11 @@ public class MapController {
             }
             return new ResponseEntity<MapResponse>(mapService.detailMap(mapId, user, false), HttpStatus.OK);
 
+        } catch (ExpiredJwtException ej) {
+            ej.printStackTrace();
+            Map<String, String> exceptionResponse = new HashMap<>();
+            exceptionResponse.put("message", "Token Expired");
+            return new ResponseEntity<Map>(exceptionResponse, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,6 +111,11 @@ public class MapController {
                 user = userService.getUserById(userId);
             }
             return new ResponseEntity<Page<MapResponse>>(mapService.getMapList(campusId, hashtagList, keyword, user, pageable), HttpStatus.OK);
+        } catch (ExpiredJwtException ej) {
+            ej.printStackTrace();
+            Map<String, String> exceptionResponse = new HashMap<>();
+            exceptionResponse.put("message", "Token Expired");
+            return new ResponseEntity<Map>(exceptionResponse, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,6 +132,11 @@ public class MapController {
                 user = userService.getUserById(userId);
             }
             return new ResponseEntity<List<MapResponse>>(mapService.getRankingList(campusId, user), HttpStatus.OK);
+        } catch (ExpiredJwtException ej) {
+            ej.printStackTrace();
+            Map<String, String> exceptionResponse = new HashMap<>();
+            exceptionResponse.put("message", "Token Expired");
+            return new ResponseEntity<Map>(exceptionResponse, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -151,7 +168,6 @@ public class MapController {
             User user = userService.getUserById(userId);
             mapService.deleteBookmark(user, mapId);
             return new ResponseEntity<String>("추전지도 북마크 해제 성공", HttpStatus.OK);
-
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
