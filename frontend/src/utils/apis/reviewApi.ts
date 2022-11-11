@@ -1,4 +1,3 @@
-import { I } from "msw/lib/glossary-dc3fd077";
 import axiosInstance from "./api";
 
 const REVIEW_API = {
