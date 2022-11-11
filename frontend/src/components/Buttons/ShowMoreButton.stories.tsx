@@ -15,9 +15,9 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 
 // eslint-disable-next-line react/function-component-definition
-const Template: ComponentStory<typeof UpperIconPlaceDetailButton> = (args) => (
+const Template: ComponentStory<typeof UpperIconPlaceDetailButton> = () => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <UpperIconPlaceDetailButton {...args} />
+  <UpperIconPlaceDetailButton />
 );
 
 export const ShowMoreButton = Template.bind({});
