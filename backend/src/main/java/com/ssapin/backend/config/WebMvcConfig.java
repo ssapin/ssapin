@@ -29,6 +29,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .exposedHeaders("message")
                 .allowedHeaders("message")
                 .allowedMethods("OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
-                allowCredentials(true);
+                .allowCredentials(true);
     }
 }
