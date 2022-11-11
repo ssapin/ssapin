@@ -1,12 +1,16 @@
-import React, { lazy } from "react";
+/* eslint-disable import/extensions */
+import { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
+import SharedPlaceDetail from "./pages/Place/SharedPlaceDetailPage";
 
 const Main = lazy(() => import("./pages/Main/MainPage"));
 const Login = lazy(() => import("./pages/Login/LoginPage"));
 const User = lazy(() => import("./pages/MyPage/MyPage"));
-const TogetherMap = lazy(() => import("./pages/TogetherMap/TogetherMapPage"));
-const Maps = lazy(() => import("./pages/Map/MapPage"));
+const TogetherMap = lazy(
+  () => import("./pages/TogetherMap/TogetherMapPage.js"),
+);
+const Maps = lazy(() => import("./pages/Map/MapPage.js"));
 const TogetherNewPlace = lazy(
   () => import("./pages/NewPlace/TogetherNewPlacePage"),
 );
@@ -32,6 +36,7 @@ function Router() {
         <Route path="mypage" element={<User />} />
         <Route path="search" element={<Search />} />
         <Route path="mobilecreate" element={<CreateMapMobilePage />} />
+        <Route path="place/:placeId" element={<SharedPlaceDetail />} />
       </Routes>
     </BrowserRouter>
   );

@@ -26,7 +26,7 @@ type PlaceCardProps = {
   >;
 };
 
-const Container = styled.div`
+const Container = styled.li`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   width: 100%;
@@ -36,6 +36,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-around;
   padding: 1rem;
+  transition: all 0.3s ease-in-out;
 
   ${(props) => props.theme.mq.mobile} {
     height: 5rem;
@@ -94,8 +95,11 @@ const Container = styled.div`
   }
 
   :hover {
-    scale: 1.06;
     cursor: pointer;
+    background-color: ${(props) => props.theme.colors.lightBlue};
+    > p {
+      color: ${(props) => props.theme.colors.gray0};
+    }
   }
 `;
 

@@ -14,8 +14,8 @@ import {
   LegacyRef,
 } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
@@ -29,8 +29,6 @@ import {
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
 import { addPlace } from "../../utils/functions/place";
-import { pixelToRem } from "../../utils/functions/util";
-import { KakaoPlaceObj } from "../../utils/types/common";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import LoginModal from "../Login/LoginModal";
@@ -148,7 +146,7 @@ function TogetherNewPlace() {
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
   const { togethermapId } = useParams();
-  const navigate = useNavigate();
+
   const userCampusId = useRecoilValue(campusState);
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
@@ -200,10 +198,8 @@ function TogetherNewPlace() {
     setPaginationList(pageList);
   };
   const displayPlaces = (places: IKakaoPlace[]) => {
-    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    // removeMarker();
     const newPlaceList = [];
     const newMarkerList: any[] = [];
     for (let i = 0; i < places.length; i++) {
@@ -211,7 +207,6 @@ function TogetherNewPlace() {
       const marker = addMarker(placePosition, i);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-      console.log(marker);
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -232,7 +227,7 @@ function TogetherNewPlace() {
   };
 
   const placesSearchCB = (
-    data: KakaoPlaceObj[],
+    data: IKakaoPlace[],
     status: string,
     pagination: Pagination,
   ) => {
@@ -254,14 +249,14 @@ function TogetherNewPlace() {
   useEffect(() => {
     const [lat, lan]: Coordinate = togetherMapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
-            .lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(togetherMapData.campusId)]]
+            .x,
         ]
       : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].x,
         ];
     const container = mapRefs.current;
     const options = {
@@ -281,7 +276,6 @@ function TogetherNewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
-  console.log(togethermapId);
 
   return (
     <Conatiner>
@@ -433,11 +427,29 @@ const PlaceCard = forwardRef(
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
+<<<<<<< HEAD
+    return (
+      <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
+        <MarkerBg index={index} />
+        <PlaceInfoContainer>
+          <InfoInnerContainer>
+            <h4>{place.place_name}</h4>
+            {place.road_address_name ? (
+              <>
+                <span>{place.road_address_name}</span>
+                <Jibun>{place.address_name}</Jibun>
+              </>
+            ) : (
+              <span>{place.address_name}</span>
+            )}
+            <span>{place.phone}</span>
+=======
     console.log(mapId);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [LoginmodalOpen, setLoginModalOpen] = useState(false);
     const auth = useRecoilValue(authState);
+>>>>>>> upstream/FE-develop
 
     const handleModal = () => {
       if (auth.accessToken) setModalOpen(true);

@@ -49,11 +49,11 @@ export default function MapCircleButton({
 }: ChooseFeature) {
   return (
     <WhiteCircle type={type} onClick={func} disabled={disabled} height={height}>
-      {shape === "0" && <KakaotalkIcon className="not-location" />}
-      {shape === "1" && <LinkShareIcon width={25} fill="none" />}
-      {shape === "2" && <EHeartIcon className="heart" />}
-      {shape === "3" && <FHeartIcon className="heart" />}
-      {shape === "4" && <LocationIcon className="my-location" />}
+      {shape === "0" && <KakaotalkIcon className="not-location" height="60%" />}
+      {shape === "1" && <LinkShareIcon width={25} fill="none" height="60%" />}
+      {shape === "2" && <EHeartIcon className="heart" height="60%" />}
+      {shape === "3" && <FHeartIcon className="heart" height="60%" />}
+      {shape === "4" && <LocationIcon className="my-location" height="60%" />}
     </WhiteCircle>
   );
 }

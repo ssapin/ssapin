@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "@emotion/styled";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -6,7 +7,6 @@ import { AxiosError, AxiosResponse } from "axios";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
-// import testMap from "../../assets/image/testmapPic.png";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import UserOpinionCard from "../../components/card/UserOpinionCard";
@@ -24,12 +24,9 @@ import {
   addBookmarkInPlace,
   removeBookmarkInPlace,
 } from "../../utils/functions/place";
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
+import { copyURL } from "../../utils/functions/copyURL";
+import CopyModalContainer from "../../components/containers/CopyModalContainer";
 
 const { kakao } = window;
 
@@ -39,8 +36,8 @@ interface PlaceInfoModalProps {
 }
 
 const Container = styled.div`
-  width: 50vw;
-  max-width: 925px;
+  width: 800px;
+  /* max-width: 925px; */
   height: 80vh;
 
   ${(props) => props.theme.mq.tablet} {
@@ -307,9 +304,14 @@ const Subtitle = styled.h4`
 
 const ReviewList = styled.div`
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1rem;
 
   ${(props) => props.theme.mq.tablet} {
-    height: 105px;
+    max-height: 300px;
   }
 `;
 
@@ -337,39 +339,25 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
   const [reviewList, setReviewList] = useState<IReview[]>([]);
   const [mapList, setMapList] = useState<IMap[]>([]);
   const [reviewContent, setReviewContent] = useState("");
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const mapRef = useRef<HTMLDivElement>();
+  const [copied, setCopied] = useState(false);
 
   const { data: reviewData, refetch: reviewRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${placeId} - reviewList`],
-    () => axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${placeId} - reviewList`], () =>
+    axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
   );
 
   const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - placeDetail`],
     () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - MapList`],
     () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {
@@ -499,7 +487,6 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
     }
   }, [isOpen]);
 
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   useEffect(() => {
     const resizeListener = () => {
       setInnerWidth(window.innerWidth);
@@ -525,6 +512,16 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
       const map = new kakao.maps.StaticMap(mapContainer, mapOption);
     }
   }, [innerWidth]);
+
+  const copy = () => {
+    const url = `${import.meta.env.VITE_BASE_URL}/places/${place.placeId}`;
+    console.log(url);
+    setCopied(true);
+    copyURL(url);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <ModalContainer onClose={onClose}>
@@ -574,8 +571,18 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
               <ShareContainer>
                 <Subtitle>이 장소 공유하기</Subtitle>
                 <Buttons>
-                  <MapCircleButton type="button" height="50px" shape="1" />
-                  <MapCircleButton type="button" height="50px" shape="0" />
+                  <MapCircleButton
+                    type="button"
+                    height="50px"
+                    shape="1"
+                    func={copy}
+                  />
+                  <KakaoShareButton
+                    title={place?.title}
+                    url={`${import.meta.env.VITE_BASE_URL}/places/${
+                      place?.placeId
+                    }`}
+                  />
                 </Buttons>
               </ShareContainer>
               <ImageContainer>
@@ -710,8 +717,18 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
             <Subtitle>장소 공유하기</Subtitle>
             <ShareContainer>
               <Buttons>
-                <MapCircleButton type="button" height="50px" shape="1" />
-                <MapCircleButton type="button" height="50px" shape="0" />
+                <MapCircleButton
+                  type="button"
+                  height="50px"
+                  shape="1"
+                  func={copy}
+                />
+                <KakaoShareButton
+                  title={place?.title}
+                  url={`${import.meta.env.VITE_BASE_URL}/places/${
+                    place?.placeId
+                  }`}
+                />
               </Buttons>
             </ShareContainer>
             {auth.accessToken ? (
@@ -744,6 +761,13 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
+      {copied && (
+        <ModalPortal>
+          <CopyModalContainer onClose={() => setCopied(false)}>
+            <p>💻URL을 클립보드에 복사했어요.</p>
+          </CopyModalContainer>
         </ModalPortal>
       )}
     </ModalContainer>
