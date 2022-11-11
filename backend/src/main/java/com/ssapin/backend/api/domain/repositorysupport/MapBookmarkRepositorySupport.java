@@ -17,11 +17,11 @@ public class MapBookmarkRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public MapBookmark findByMapBookmark(Map map, User user) {
-        return (MapBookmark) queryFactory.selectOne().from(QMapBookmark.mapBookmark)
+        return queryFactory.selectFrom(QMapBookmark.mapBookmark)
                 .where(QMapBookmark.mapBookmark.map.eq(map).and(
                         QMapBookmark.mapBookmark.user.eq(user)
                 ))
-                .fetch();
+                .fetchOne();
     }
 
     public List<MapBookmark> findByUserId(long userId) {
