@@ -296,7 +296,12 @@ function TogetherMap() {
           <ul>
             {togetherMapData?.placeList &&
               togetherMapData.placeList.map((place) => (
-                <PlaceCard prop={place} key={place.placeId} isAdmin />
+                <PlaceCard
+                  prop={place}
+                  key={place.placeId}
+                  isAdmin
+                  togethermapId={togetherMapData.togethermapId}
+                />
               ))}
           </ul>
         </PlaceListContainer>
@@ -312,6 +317,7 @@ function TogetherMap() {
             <KakaoShareButton />
           </div>
         </ButtonListContainer>
+
         <ButtonContainer>
           <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
           <CreateButtonMobile

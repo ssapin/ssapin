@@ -343,7 +343,12 @@ function Map() {
           <ul>
             {mapData?.placeList &&
               mapData.placeList.map((place) => (
-                <PlaceCard prop={place} key={place.placeId} isAdmin />
+                <PlaceCard
+                  prop={place}
+                  key={place.placeId}
+                  isAdmin
+                  mapId={mapData.mapId}
+                />
               ))}
           </ul>
         </PlaceListContainer>
