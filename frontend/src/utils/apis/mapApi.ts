@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { r } from "msw/lib/glossary-dc3fd077";
 import { IMap } from "../types/map.interface";
 import axiosInstance from "./api";
 
@@ -46,4 +47,30 @@ export const getMap = async (mapId: number) => {
     return Promise.reject(error);
   }
 };
+export interface IBookMark {
+  mapId: number;
+}
 
+export const registerMapBookmark = async (data: IBookMark) => {
+  try {
+    const response: AxiosResponse<IMap> = await axiosInstance.post(
+      MAP_APIS.BOOKMARK,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const removeMapBookmark = async (rData: IBookMark) => {
+  try {
+    const response: AxiosResponse<IMap> = await axiosInstance.delete(
+      MAP_APIS.BOOKMARK,
+      { data: rData },
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

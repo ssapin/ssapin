@@ -10,7 +10,12 @@ import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { authState, campusState } from "../../store/atom";
-import { getMap } from "../../utils/apis/mapApi";
+import {
+  getMap,
+  IBookMark,
+  registerMapBookmark,
+  removeMapBookmark,
+} from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
@@ -89,6 +94,22 @@ function MapPage() {
     else setLoginModalOpen(true);
   };
 
+  const registerBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    registerMapBookmark(req);
+  };
+
+  const removeBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    removeMapBookmark(req);
+  };
+
   return (
     <Container>
       {/* <SearchPlace /> */}
@@ -96,8 +117,8 @@ function MapPage() {
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />
-        <MapCircleButton shape="2" />
-        <MapCircleButton shape="3" />
+        <MapCircleButton shape="2" func={registerBookmark} />
+        <MapCircleButton shape="3" func={removeBookmark} />
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
