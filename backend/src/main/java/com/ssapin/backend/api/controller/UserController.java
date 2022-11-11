@@ -22,7 +22,6 @@ import java.util.List;
 
 @Api(value = "유저 API", tags={"User"})
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {

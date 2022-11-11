@@ -13,7 +13,6 @@ import java.util.List;
 
 @Api(value = "모여지도 관련 API", tags={"Togethermap"})
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/togethermap")
 @RequiredArgsConstructor
 public class TogethermapController {

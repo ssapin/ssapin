@@ -21,7 +21,6 @@ import java.util.Map;
 
 @Api(value = "장소 API", tags = {"Place"})
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/place")
 @RequiredArgsConstructor
 public class PlaceController {

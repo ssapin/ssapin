@@ -28,7 +28,6 @@ import java.util.Map;
 
 @Api(value = "추천지도 관련 API", tags={"Map"})
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/map")
 @RequiredArgsConstructor
 public class MapController {

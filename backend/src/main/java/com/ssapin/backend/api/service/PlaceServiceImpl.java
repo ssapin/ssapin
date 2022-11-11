@@ -85,6 +85,8 @@ public class PlaceServiceImpl implements PlaceService {
                     .place(place)
                     .build();
 
+            mapPlaceRepository.save(mapPlace);
+
             return id;
 
         } else {
@@ -97,6 +99,8 @@ public class PlaceServiceImpl implements PlaceService {
                     .user(user)
                     .place(place)
                     .build();
+
+            mapPlaceRepository.save(mapPlace);
 
             return id;
         }
@@ -130,7 +134,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .lng(placeRequest.getPlace().getLng())
                     .address(placeRequest.getPlace().getAddress())
                     .build();
-            placeId = placeRepository.save(place).getId();
+            placeRepository.save(place);
         } else {
             place = placeResponse.get();
             placeId = place.getId();
@@ -146,7 +150,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .user(user)
                     .place(place1)
                     .build();
-            id = togethermapPlaceRepository.save(mapPlace).getId();
+            togethermapPlaceRepository.save(mapPlace);
         } else {
             result.update(place, map);
             id = result.getId();
