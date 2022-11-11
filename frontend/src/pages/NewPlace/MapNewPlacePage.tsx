@@ -18,8 +18,13 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
-import { authState, campusState, mapPlaceListState } from "../../store/atom";
-import { getMap, IBookMark, registerMapBookmark, removeMapBookmark } from "../../utils/apis/mapApi";
+import { authState, campusState } from "../../store/atom";
+import {
+  getMap,
+  IBookMark,
+  registerMapBookmark,
+  removeMapBookmark,
+} from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
@@ -178,16 +183,12 @@ function MapNewPlace() {
   const { mapId } = useParams();
   const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
-  const [mapPlaceList, setMapPlaceList] = useRecoilState(mapPlaceListState);
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
     getMap(Number(mapId)),
   );
-
-  useEffect(() => {
-    console.log(mapData.placeList);
-  });
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -328,7 +329,6 @@ function MapNewPlace() {
 
     removeMapBookmark(req);
   };
-  console.log(placeList);
 
   return (
     <Conatiner>

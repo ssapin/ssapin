@@ -17,6 +17,9 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
+import BackButton from "../../components/Buttons/BackButton";
+import MapTitleCard from "../../components/card/MapTitleCard";
+import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 
 import { authState, campusState } from "../../store/atom";
@@ -106,7 +109,12 @@ const SearchInformationContainer = styled.div`
 const PaginationButton = styled.button`
   margin: 0 1rem;
 `;
-
+const BackContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+`;
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -277,6 +285,10 @@ function TogetherNewPlace() {
 
   return (
     <Conatiner>
+      <BackContainer>
+        <BackButton />
+        <TogetherMapTitleCard title={togetherMapData?.title} />
+      </BackContainer>
       <SearchContainer>
         <Form onSubmit={searchKeyword}>
           <div>

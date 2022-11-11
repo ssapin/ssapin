@@ -58,10 +58,10 @@ const PlaceContent = styled.div`
 `;
 const ImageContainer = styled.div`
   text-align: center;
-  width: 50%;
-  img {
-    width: 90%;
-    height: auto;
+  width: auto;
+  height: 100%;
+  ${(props) => props.theme.mq.tablet} {
+    height: fit-content;
   }
 `;
 const ReviewContainer = styled.div`
@@ -92,7 +92,7 @@ const ButtonContainer = styled.div`
 
 const MapContainer = styled.div`
   width: auto;
-  height: 70%;
+  height: auto%;
   border-radius: 15px;
 
   ${(props) => props.theme.mq.tablet} {
@@ -129,6 +129,7 @@ declare global {
 const { kakao } = window;
 
 function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [isOpen, setIsOpen] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
   const [text, setText] = useState("");
@@ -145,13 +146,13 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
   useEffect(() => {
     if (place) {
       const mapContainer = mapRef.current;
-      const markerPosition = new kakao.maps.LatLng(place.x, place.y);
+      const markerPosition = new kakao.maps.LatLng(place.y, place.x);
 
       const marker = new kakao.maps.Marker({
         position: markerPosition,
       });
       const mapOption = {
-        center: new kakao.maps.LatLng(place.x, place.y),
+        center: new kakao.maps.LatLng(place.y, place.x),
         level: 3,
         marker,
       };
@@ -159,6 +160,23 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
       const map = new kakao.maps.StaticMap(mapContainer, mapOption);
     }
   }, [innerWidth]);
+  useEffect(() => {
+    if (place) {
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(place.y, place.x);
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(place.y, place.x),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+  }, []);
 
   const addPlace = async () => {
     console.log(place);
@@ -215,16 +233,6 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
       }
     }
 
-    // if (ratePlace !== 0) {
-    //   const reviewData: IReviewPlace = {
-    //     placeId: id,
-    //     emojiType: ratePlace,
-    //     content: text,
-    //   };
-
-    //   registerReview(reviewData);
-    // }
-
     onClose();
   };
 
@@ -246,7 +254,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
             <MapContainer ref={mapRef} />
             <KakaoMapButton
               onClick={() => {
-                window.open(`https://place.map.kakao.com/${place.itemId}`);
+                window.open(`https://place.map.kakao.com/${place.id}`);
               }}
             >
               카카오맵리뷰보기

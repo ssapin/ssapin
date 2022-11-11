@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,9 +10,11 @@ import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { authState, campusState } from "../../store/atom";
+import axiosInstance from "../../utils/apis/api";
 import {
   getMap,
   IBookMark,
+  MAP_APIS,
   registerMapBookmark,
   removeMapBookmark,
 } from "../../utils/apis/mapApi";
@@ -63,11 +65,11 @@ function MapPage() {
   const { mapId } = useParams();
   const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
-  const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
-    getMap(Number(mapId)),
+  const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
+    ["map", mapId],
+    () => getMap(Number(mapId)),
   );
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-  const [isBookmark, setIsBookmark] = useState(false);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
@@ -94,20 +96,36 @@ function MapPage() {
     else setLoginModalOpen(true);
   };
 
-  const registerBookmark = () => {
-    const req: IBookMark = {
+  const registerBookmark = async () => {
+    const body: IBookMark = {
       mapId: Number(mapId),
     };
 
-    registerMapBookmark(req);
+    try {
+      const response: AxiosResponse<IMap> = await axiosInstance
+        .post(MAP_APIS.BOOKMARK, body)
+        .then(() => {
+          mapRefetch();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const removeBookmark = () => {
-    const req: IBookMark = {
+  const removeBookmark = async () => {
+    const body: IBookMark = {
       mapId: Number(mapId),
     };
 
-    removeMapBookmark(req);
+    try {
+      const response: AxiosResponse<IMap> = await axiosInstance
+        .delete(MAP_APIS.BOOKMARK, { data: body })
+        .then(() => {
+          mapRefetch();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
