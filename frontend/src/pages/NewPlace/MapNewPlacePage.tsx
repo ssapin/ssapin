@@ -14,8 +14,8 @@ import {
   LegacyRef,
 } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import { authState, campusState } from "../../store/atom";
 import {
@@ -28,18 +28,8 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import {
-  IAddPlace,
-  IKakaoPlace,
-  IPlaceMin,
-} from "../../utils/types/place.interface";
+import { IKakaoPlace } from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
-import {
-  addPlace,
-  addPlaceToMap,
-  getKakaoPlace,
-  getRequestPlace,
-} from "../../utils/functions/place";
 import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
@@ -179,10 +169,7 @@ function MapNewPlace() {
   const pagenationRef = useRef<HTMLDivElement>();
   const itemRefs = useRef([]);
   const { mapId } = useParams();
-  const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
     getMap(Number(mapId)),
@@ -287,12 +274,12 @@ function MapNewPlace() {
   useEffect(() => {
     const [lat, lan]: Coordinate = mapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].x,
         ]
       : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].x,
         ];
     const container = mapRefs.current;
     const options = {
