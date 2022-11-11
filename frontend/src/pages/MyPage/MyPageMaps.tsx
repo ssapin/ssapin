@@ -12,17 +12,13 @@ const MyMapsContainer = styled.div`
 `;
 
 const WriteMapContainer = styled.div`
-  width: 100%;
+  width: 90%;
+  margin: auto;
 `;
 
 const JoinedMapContainer = styled.div`
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  width: 90%;
+  margin: auto;
 `;
 
 const ToggleGroup = styled.div`
@@ -83,9 +79,8 @@ const ToggleGroup = styled.div`
 
 export default function MyMaps() {
   const [type, setType] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const changeType = (type: number) => {
-    setType(type);
+  const changeType = (e: number) => {
+    setType(e);
   };
 
   return (

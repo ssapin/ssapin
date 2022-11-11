@@ -3,10 +3,10 @@ import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as MenuIcon } from "../../assets/svgs/hamburgerbar.svg";
 
 const StyledMenu = styled.button`
-  width: ${pixelToRem(66)};
-  height: ${pixelToRem(66)};
+  width: ${pixelToRem(50)};
+  height: ${pixelToRem(50)};
   padding: 5px;
-  border-radius: ${pixelToRem(20)};
+  border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.mainBlue};
 `;
 type MenuProps = {

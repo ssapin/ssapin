@@ -57,8 +57,8 @@ const InfoContainer = styled.div<{ type: string }>`
     color: ${(props) => props.theme.colors.mainNavy};
     font-family: ${(props) =>
       props.type === "pc"
-        ? props.theme.fontFamily.h3bold
-        : props.theme.fontFamily.h5bold};
+        ? props.theme.fontFamily.h3
+        : props.theme.fontFamily.h5};
   }
 
   .campus {
@@ -70,8 +70,8 @@ const InfoContainer = styled.div<{ type: string }>`
     color: ${(props) => props.theme.colors.mainNavy};
     font-family: ${(props) =>
       props.type === "pc"
-        ? props.theme.fontFamily.h3bold
-        : props.theme.fontFamily.h5bold};
+        ? props.theme.fontFamily.h3
+        : props.theme.fontFamily.h5};
   }
 `;
 

@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 import { pixelToRem } from "../../utils/functions/util";
-import Navbar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 import UserInfoCard from "../../components/card/UserInfoCard";
 import UserInfoDetailCard from "../../components/card/UserInfoDetailCard";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import { campusState, userInformationState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
-
-// 모달
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { ChangeInfoModal } from "./ChangeMyInfo";
 import MyPageTab from "./MyPageTab";
 import Footer from "../../components/etc/Footer";
+import CreateMapModal from "../CreateMap/CreateMapModal";
+import LoginModal from "../Login/LoginModal";
 
 const PageTopBg = styled.div`
   width: 100%;
@@ -26,7 +27,7 @@ const PageTopBg = styled.div`
   justify-content: flex-start;
   color: ${(props) => props.theme.colors.gray0};
 
-  ${(props) => props.theme.mq.mobile} {
+  ${(props) => props.theme.mq.tablet} {
     height: 60vh;
   }
 `;
@@ -58,8 +59,9 @@ function MyPage() {
   const userInformation = useRecoilValue(userInformationState);
   const campus = CAMPUS_LIST;
   const [campusId, setCampusId] = useRecoilState(campusState);
-
-  // 닉네임 및 캠퍼스 수정 창
+  const auth = useRecoilValue(authState);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModal = () => {
@@ -79,10 +81,20 @@ function MyPage() {
     return () => window.removeEventListener("resize", resizeListener);
   }, []);
 
+  const navigate = useNavigate();
+  const moveToCreate = () => {
+    if (auth.accessToken) navigate("/mobilecreate");
+    else setLoginModalOpen(true);
+  };
+  const handleCreateModal = () => {
+    if (auth.accessToken) setCreateModalOpen(true);
+    else setLoginModalOpen(true);
+  };
+
   return (
     <>
       <PageTopBg>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <UserInfos>
           {innerWidth > 950 ? (
             <UserInfoCard
@@ -129,11 +141,25 @@ function MyPage() {
       <FixContainer>
         <MoveToTopButton />
         {innerWidth > 950 ? (
-          <CreateButton type="button" text="지도 만들기" />
+          <CreateButton
+            type="button"
+            text="지도 만들기"
+            func={handleCreateModal}
+          />
         ) : (
-          <CreateButtonMobile type="button" />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+        )}
+        {createModalOpen && (
+          <ModalPortal>
+            <CreateMapModal onClose={() => setCreateModalOpen(false)} />
+          </ModalPortal>
         )}
       </FixContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
       <Footer />
     </>
   );

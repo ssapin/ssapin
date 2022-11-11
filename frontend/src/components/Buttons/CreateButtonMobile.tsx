@@ -3,13 +3,16 @@ import { IButtonProps } from "../../utils/types/buttons.interface";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 
 const StyledCreate = styled.button`
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  width: 7vh;
-  height: 7vh;
+  width: 3.15rem;
+  height: 3.15rem;
   background-color: ${(props) => props.theme.colors.lightBlue};
+  ${(props) => props.theme.mq.tablet} {
+    display: flex;
+  }
 `;
 
 export default function CreateButtonMobile({

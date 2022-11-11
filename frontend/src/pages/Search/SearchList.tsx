@@ -68,6 +68,7 @@ const NoContainer = styled.div`
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
+  text-align: center;
 `;
 
 type SearchProps = {
@@ -136,7 +137,12 @@ function SearchList({ keyword, hashtag }: SearchProps) {
         <span>🗺 추천지도 🗺</span>
       </Title>
       {targetList?.length && targetList[0] === 0 && (
-        <NoContainer>지도가 없습니다.</NoContainer>
+        <NoContainer>
+          아직 추천지도가 없어요 😥
+          <br />
+          <br />
+          지도를 만들어보시는건 어때요?
+        </NoContainer>
       )}
       {targetList && targetList[0] !== 0 && (
         <GridContainer>

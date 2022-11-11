@@ -11,12 +11,13 @@ const StyledUp = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 7vh;
-  height: 7vh;
+  width: 3.15rem;
+  height: 3.15rem;
   border-radius: 50%;
   box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   background-color: ${(props) => props.theme.colors.gray0};
   padding: ${pixelToRem(2)};
+  transition: all 0.2s ease-out;
 
   :hover {
     scale: 1.06;

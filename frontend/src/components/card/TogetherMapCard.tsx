@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import { forwardRef, LegacyRef } from "react";
 import { ReactComponent as Quotesstart } from "../../assets/svgs/quotesstart.svg";
 import { ReactComponent as Quotesend } from "../../assets/svgs/quotesend.svg";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
@@ -11,37 +12,26 @@ type TogetherMapProps = {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   width: 100%;
-  height: 9rem;
+  height: 7.5rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1rem;
-
-  ${(props) => props.theme.mq.mobile} {
-    height: 7.5rem;
-    margin: 0;
-  }
+  transition: all 0.2s ease-out;
 
   .icon {
-    width: 90%;
+    width: 100%;
     height: 15%;
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray400};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    ${(props) => props.theme.mq.mobile} {
-      width: 100%;
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
 
     .quotes {
       fill: ${(props) => props.theme.colors.gray300};
@@ -51,14 +41,9 @@ const Container = styled.div`
   .title {
     text-align: center;
     height: 30%;
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
 
     width: 100%;
     text-align: center;
@@ -87,22 +72,25 @@ const Container = styled.div`
   }
 `;
 
-function TogetherMapCard({ prop }: TogetherMapProps) {
-  const navigate = useNavigate();
-  return (
-    <Container
-      onClick={() => {
-        navigate(`/togethermaps/${prop.togethermapId}/detail`);
-      }}
-    >
-      <p className="icon">
-        <Quotesstart className="quotes" />
-        <Quotesend className="quotes" />
-      </p>
-      <p className="title">{prop.title}</p>
-      <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
-    </Container>
-  );
-}
+const TogetherMapCard = forwardRef(
+  ({ prop }: TogetherMapProps, ref: LegacyRef<HTMLDivElement>) => {
+    const navigate = useNavigate();
+    return (
+      <Container
+        ref={ref}
+        onClick={() => {
+          navigate(`/togethermaps/${prop.togethermapId}/detail`);
+        }}
+      >
+        <p className="icon">
+          <Quotesstart className="quotes" />
+          <Quotesend className="quotes" />
+        </p>
+        <p className="title">{prop.title}</p>
+        <p className="participate">🙋‍♂️ {prop.userCnt}명이 참여</p>
+      </Container>
+    );
+  },
+);
 
 export default TogetherMapCard;

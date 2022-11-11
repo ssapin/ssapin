@@ -15,17 +15,38 @@ import {
 } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
-import { campusState } from "../../store/atom";
-import { getMap } from "../../utils/apis/mapApi";
+import { authState, campusState } from "../../store/atom";
+import {
+  getMap,
+  IBookMark,
+  registerMapBookmark,
+  removeMapBookmark,
+} from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { KakaoPlaceObj } from "../../utils/types/common";
-import { IKakaoPlace } from "../../utils/types/place.interface";
+import {
+  IAddPlace,
+  IKakaoPlace,
+  IPlaceMin,
+} from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
+import {
+  addPlace,
+  addPlaceToMap,
+  getKakaoPlace,
+  getRequestPlace,
+} from "../../utils/functions/place";
+import BackButton from "../../components/Buttons/BackButton";
+import MapTitleCard from "../../components/card/MapTitleCard";
+import MapCircleButton from "../../components/Buttons/MapCircleButton";
+import { pixelToRem } from "../../utils/functions/util";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import AddPlaceModal from "../Search/AddPlaceModal";
+import LoginModal from "../Login/LoginModal";
 
 const Conatiner = styled.section`
   position: relative;
@@ -101,6 +122,30 @@ const PaginationButton = styled.button`
   margin: 0 1rem;
 `;
 
+const BackContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+`;
+
+const FixContainer = styled.div`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 2;
+
+  button {
+    margin-bottom: 1rem;
+    box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    right: 1rem;
+    bottom: 1rem;
+  }
+`;
+
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -136,6 +181,9 @@ function MapNewPlace() {
   const { mapId } = useParams();
   const navigate = useNavigate();
   const userCampusId = useRecoilValue(campusState);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
   const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
     getMap(Number(mapId)),
   );
@@ -217,7 +265,7 @@ function MapNewPlace() {
   };
 
   const placesSearchCB = (
-    data: KakaoPlaceObj[],
+    data: IKakaoPlace[],
     status: string,
     pagination: Pagination,
   ) => {
@@ -264,9 +312,38 @@ function MapNewPlace() {
   const mouseLeave = () => {
     mapObj.infowindow.close();
   };
+  const registerBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    registerMapBookmark(req);
+  };
+
+  const removeBookmark = () => {
+    const req: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    removeMapBookmark(req);
+  };
 
   return (
     <Conatiner>
+      <BackContainer>
+        {mapData?.bookMark ? (
+          <MapCircleButton shape="3" func={removeBookmark} />
+        ) : (
+          <MapCircleButton shape="2" func={registerBookmark} />
+        )}
+        <MapTitleCard
+          title={mapData?.title}
+          user={`${mapData?.userEmoji} ${mapData?.nickname}`}
+        />
+        <BackButton />
+        <MapCircleButton shape="2" />
+      </BackContainer>
+
       <SearchContainer>
         <Form onSubmit={searchKeyword}>
           <div>
@@ -287,6 +364,7 @@ function MapNewPlace() {
                 ref={(el) => (itemRefs.current[idx] = el)}
                 mouseOver={() => mouseOver(idx, place.place.place_name)}
                 mouseLeave={mouseLeave}
+                mapId={mapId}
               />
             ))}
           </ul>
@@ -385,35 +463,70 @@ interface PlaceCardProps {
   mouseOver: () => void;
   mouseLeave: () => void;
   place: IKakaoPlace;
+  mapId: number;
 }
 
 const PlaceCard = forwardRef(
   (
-    { index, place, mouseOver, mouseLeave }: PlaceCardProps,
+    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
+    console.log(mapId);
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
+    const auth = useRecoilValue(authState);
+
+    const handleModal = () => {
+      if (auth.accessToken) setModalOpen(true);
+      else setLoginModalOpen(true);
+    };
+
     return (
-      <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
-        <MarkerBg index={index} />
-        <PlaceInfoContainer>
-          <InfoInnerContainer>
-            <h4>{place.place_name}</h4>
-            {place.road_address_name ? (
-              <>
-                <span>{place.road_address_name}</span>
-                <Jibun>{place.address_name}</Jibun>
-              </>
-            ) : (
-              <span>{place.address_name}</span>
-            )}
-            <span>{place.phone}</span>
-            <CreateButton type="button">
-              장소
-              <PlusIcon className="plus" />
-            </CreateButton>
-          </InfoInnerContainer>
-        </PlaceInfoContainer>
-      </List>
+      <>
+        <FixContainer>
+          {modalOpen && (
+            <ModalPortal>
+              <AddPlaceModal
+                onClose={() => setModalOpen(false)}
+                place={place}
+                mapId={mapId}
+                type={1}
+              />
+            </ModalPortal>
+          )}
+          {LoginmodalOpen && (
+            <ModalPortal>
+              <LoginModal onClose={() => setLoginModalOpen(false)} />
+            </ModalPortal>
+          )}
+        </FixContainer>
+        <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
+          <MarkerBg index={index} />
+          <PlaceInfoContainer>
+            <InfoInnerContainer>
+              <h4>{place.place_name}</h4>
+              {place.road_address_name ? (
+                <>
+                  <span>{place.road_address_name}</span>
+                  <Jibun>{place.address_name}</Jibun>
+                </>
+              ) : (
+                <span>{place.address_name}</span>
+              )}
+              <span>{place.phone}</span>
+              {isRegister && <span>이미 추가된 장소입니다.</span>}
+              {!isRegister && (
+                <CreateButton type="button" onClick={handleModal}>
+                  장소
+                  <PlusIcon className="plus" />
+                </CreateButton>
+              )}
+            </InfoInnerContainer>
+          </PlaceInfoContainer>
+        </List>
+      </>
     );
   },
 );

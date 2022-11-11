@@ -9,25 +9,33 @@ import { ReactComponent as LocationIcon } from "../../assets/svgs/nowlocation.sv
 
 interface ChooseFeature extends IButtonProps {
   shape: string | number | undefined;
+  // eslint-disable-next-line react/require-default-props
+  height?: string;
 }
 
-const WhiteCircle = styled.button`
-  width: 7vh;
-  height: 7vh;
+const WhiteCircle = styled.button<{ height?: string }>`
+  width: ${(props) => (props.height ? props.height : `3.15rem`)};
+  height: ${(props) => (props.height ? props.height : `3.15rem`)};
   border-radius: 50%;
-  box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 ${pixelToRem(2)} ${pixelToRem(7)} 0
+    ${(props) => props.theme.colors.gray300};
   background-color: ${(props) => props.theme.colors.gray0};
   display: flex;
   justify-content: center;
   align-items: center;
   .my-location {
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 70%;
+    height: 70%;
     fill: ${(props) => props.theme.colors.mainRed};
   }
   .not-location {
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 80%;
+    height: 80%;
+    fill: ${(props) => props.theme.colors.lightBlue};
+  }
+  .heart {
+    width: 60%;
+    height: 60%;
     fill: ${(props) => props.theme.colors.lightBlue};
   }
 `;
@@ -37,14 +45,15 @@ export default function MapCircleButton({
   func,
   disabled,
   shape,
+  height,
 }: ChooseFeature) {
   return (
-    <WhiteCircle type={type} onClick={func} disabled={disabled}>
-      {shape === "0" && <KakaotalkIcon className="not-location" />}
-      {shape === "1" && <LinkShareIcon width={25} fill="none" />}
-      {shape === "2" && <EHeartIcon className="not-location" />}
-      {shape === "3" && <FHeartIcon className="not-location" />}
-      {shape === "4" && <LocationIcon className="my-location" />}
+    <WhiteCircle type={type} onClick={func} disabled={disabled} height={height}>
+      {shape === "0" && <KakaotalkIcon className="not-location" height="60%" />}
+      {shape === "1" && <LinkShareIcon width={25} fill="none" height="60%" />}
+      {shape === "2" && <EHeartIcon className="heart" height="60%" />}
+      {shape === "3" && <FHeartIcon className="heart" height="60%" />}
+      {shape === "4" && <LocationIcon className="my-location" height="60%" />}
     </WhiteCircle>
   );
 }

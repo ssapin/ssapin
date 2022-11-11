@@ -157,7 +157,7 @@ function InfiniteList({
               isEditMode={isEditMode}
               refetch={refetchData}
               prop={target}
-              isAdmin={false}
+              isAdmin
             />
           ))}
         </GridContainer>
@@ -166,7 +166,7 @@ function InfiniteList({
       {isFetchingNextPage && (
         <GridContainer>
           {Array.from({ length: 1 }, (_, idx) => idx).map((i) => (
-            <CardComponent key={i} prop={noMap} isAdmin={false} />
+            <CardComponent key={i} prop={noMap} isAdmin />
           ))}
         </GridContainer>
       )}

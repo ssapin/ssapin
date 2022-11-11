@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import CancelButton from "../../components/Buttons/CancelButton";
@@ -10,11 +11,26 @@ import ModalContainer from "../../components/containers/ModalContainer";
 import Input from "../../components/etc/Input";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
-import { MAP_APIS } from "../../utils/apis/mapApi";
+import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 
 interface ModalProps {
+  // eslint-disable-next-line react/require-default-props
+  mapId?: number;
   onClose: () => void;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 }
 
 const Container = styled.div`
@@ -22,6 +38,8 @@ const Container = styled.div`
   width: 50vw;
   max-width: 925px;
   height: 100%;
+  max-height: 83vh;
+  overflow-y: scroll;
   background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray900};
@@ -32,13 +50,13 @@ const Form = styled.form`
   flex-direction: column;
 
   .title {
-    font-size: ${(props) => props.theme.fontSizes.h1};
+    font-size: ${(props) => props.theme.fontSizes.h2};
     text-align: center;
-    font-family: ${(props) => props.theme.fontFamily.h1bold};
+    font-family: ${(props) => props.theme.fontFamily.h2bold};
     margin-bottom: 2rem;
   }
   .s1 {
-    font-size: ${(props) => props.theme.fontSizes.s1};
+    font-size: ${(props) => props.theme.fontSizes.s2};
     text-align: right;
   }
 `;
@@ -54,12 +72,12 @@ const FilterBox = styled.div`
 
 const Content = styled.div`
   width: 45%;
-  height: 80px;
+  height: 75px;
   margin: auto;
 
   select {
     width: 100%;
-    height: 41px;
+    height: 35px;
     background-color: ${(props) => props.theme.colors.lightLightBlue};
     border: 0;
     border-radius: 10px;
@@ -67,13 +85,13 @@ const Content = styled.div`
     outline: none;
     color: ${(props) => props.theme.colors.gray700};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 `;
 
 const SubTitle = styled.h5`
-  font-size: ${(props) => props.theme.fontSizes.h5};
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray900};
   font-family: ${(props) => props.theme.fontFamily.h5};
   margin-left: 10px;
@@ -83,14 +101,13 @@ const Flex = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 2rem;
 
   button {
-    margin: 0.5rem;
+    margin: 0.2rem;
   }
 `;
 
-function CreateMapModal({ onClose }: ModalProps) {
+function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
   const [defaultCampusId] = useRecoilState(campusState);
@@ -98,6 +115,21 @@ function CreateMapModal({ onClose }: ModalProps) {
   const [title, setTitle] = useState("");
   const [emoji, setEmoji] = useState("");
   const [access, setAccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    const promiseData = getMap(mapId).then((data) => {
+      setCampusId(data.campusId);
+      setEmoji(data.mapEmoji);
+      setAccess(data.access);
+      setTitle(data.title);
+      // eslint-disable-next-line array-callback-return
+      data.hashtagList.map((hashtag: any) => {
+        hashTag.push(hashtag.hashtagId);
+      });
+      setIsEdit(true);
+    });
+  }, [mapId]);
 
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
@@ -160,24 +192,46 @@ function CreateMapModal({ onClose }: ModalProps) {
       return;
     }
 
-    const body = JSON.stringify({
-      campusId,
-      title,
-      emoji,
-      access,
-      hashtagList: hashTag,
-    });
+    if (isEdit) {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        mapId,
+        hashtagList: hashTag,
+      });
 
-    const response = await axiosInstance.post(MAP_APIS.MAP, body);
+      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
 
-    try {
-      if (response.status === 200) {
-        // eslint-disable-next-line no-alert
-        alert(`등록되었습니다.${response?.data}번 지도`);
-        navigate("/search");
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`수정되었습니다.`);
+          refetch();
+          onClose();
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      const body = JSON.stringify({
+        campusId,
+        title,
+        emoji,
+        access,
+        hashtagList: hashTag,
+      });
+
+      const response = await axiosInstance.post(MAP_APIS.MAP, body);
+
+      try {
+        if (response.status === 200) {
+          navigate(`/maps/${response?.data}/detail`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -189,32 +243,57 @@ function CreateMapModal({ onClose }: ModalProps) {
           <DivBox>
             <Content>
               <SubTitle>제목</SubTitle>
-              <Input
-                width="100%"
-                height="41px"
-                placeholder="ex) 역삼 멀캠 근처 조용한 카페"
-                changeFunc={onChangeTitle}
-              />
+              {isEdit ? (
+                <Input
+                  width="100%"
+                  height="35px"
+                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
+                  value={title}
+                  readonly
+                />
+              ) : (
+                <Input
+                  width="100%"
+                  height="35px"
+                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
+                  changeFunc={onChangeTitle}
+                  value={title}
+                />
+              )}
             </Content>
             <Content>
               <SubTitle>캠퍼스</SubTitle>
-              <select
-                onChange={onChangeCampusId}
-                defaultValue={defaultCampusId}
-              >
-                {campus.map(
-                  (option, idx) =>
-                    idx >= 1 && (
-                      <option
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={idx}
-                        value={idx}
-                      >
-                        {option}
-                      </option>
-                    ),
-                )}
-              </select>
+              {isEdit ? (
+                <select onChange={onChangeCampusId} value={campusId}>
+                  {campus.map(
+                    (option, idx) =>
+                      idx == campusId && (
+                        <option
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={idx}
+                          value={idx}
+                        >
+                          {option}
+                        </option>
+                      ),
+                  )}
+                </select>
+              ) : (
+                <select onChange={onChangeCampusId} value={campusId}>
+                  {campus.map(
+                    (option, idx) =>
+                      idx >= 1 && (
+                        <option
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={idx}
+                          value={idx}
+                        >
+                          {option}
+                        </option>
+                      ),
+                  )}
+                </select>
+              )}
             </Content>
           </DivBox>
           <DivBox>
@@ -229,12 +308,23 @@ function CreateMapModal({ onClose }: ModalProps) {
             </Content>
             <Content>
               <SubTitle>아이콘(3개까지)</SubTitle>
-              <Input
-                width="100%"
-                height="41px"
-                placeholder="ex) 🎈🎆🎇"
-                changeFunc={onChangeEmoji}
-              />
+              {isEdit ? (
+                <Input
+                  width="100%"
+                  height="35px"
+                  placeholder="ex) 🎈🎆🎇"
+                  value={emoji}
+                  readonly
+                />
+              ) : (
+                <Input
+                  width="100%"
+                  height="35px"
+                  placeholder="ex) 🎈🎆🎇"
+                  changeFunc={onChangeEmoji}
+                  value={emoji}
+                />
+              )}
             </Content>
           </DivBox>
           <FilterBox>
@@ -245,7 +335,11 @@ function CreateMapModal({ onClose }: ModalProps) {
             />
           </FilterBox>
           <Flex>
-            <ConfirmButton type="submit" text="만들기" />
+            {isEdit ? (
+              <ConfirmButton type="submit" text="수정하기" />
+            ) : (
+              <ConfirmButton type="submit" text="만들기" />
+            )}
             <CancelButton type="button" text="취소" func={onClose} />
           </Flex>
         </Form>

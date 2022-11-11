@@ -7,28 +7,29 @@ const StyledCreate = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${pixelToRem(67)};
   padding: 15px;
   flex-grow: 0;
-  border-radius: ${pixelToRem(25)};
+  border-radius: 18px;
   background-color: ${(props) => props.theme.colors.lightBlue};
   color: ${(props) => props.theme.colors.gray0};
   text-align: center;
+  transition: all 0.2s ease-out;
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
     scale: 1.06;
   }
   .text {
-    bottom: 25%;
-    width: 120%;
-    font-size: ${(props) => props.theme.fontSizes.h3};
-    font-family: ${(props) => props.theme.fontFamily.h3};
+    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-family: ${(props) => props.theme.fontFamily.h4};
     line-height: 1.21;
     letter-spacing: ${pixelToRem(-1.2)};
   }
   .plus {
-    width: 5vh;
-    height: 5vh;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  ${(props) => props.theme.mq.tablet} {
+    display: none;
   }
 `;
 

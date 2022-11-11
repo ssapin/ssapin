@@ -6,6 +6,10 @@ type InputProps = {
   placeholder: string;
   // eslint-disable-next-line react/require-default-props
   changeFunc?: (e: any) => void;
+  // eslint-disable-next-line react/require-default-props
+  value?: string;
+  // eslint-disable-next-line react/require-default-props
+  readonly?: boolean;
 };
 
 const Container = styled.div<{ width?: string; height?: string }>`
@@ -19,22 +23,44 @@ const Container = styled.div<{ width?: string; height?: string }>`
     outline: none;
     color: ${(props) => props.theme.colors.gray700};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 
   input::placeholder {
     color: ${(props) => props.theme.colors.gray400};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 `;
 
-function Input({ width, height, placeholder, changeFunc }: InputProps) {
+function Input({
+  value,
+  width,
+  height,
+  placeholder,
+  readonly,
+  changeFunc,
+}: InputProps) {
   return (
     <Container width={width} height={height}>
-      <input type="text" onChange={changeFunc} placeholder={placeholder} />
+      {readonly ? (
+        <input
+          type="text"
+          value={value}
+          onChange={changeFunc}
+          placeholder={placeholder}
+          readOnly
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={changeFunc}
+          placeholder={placeholder}
+        />
+      )}
     </Container>
   );
 }

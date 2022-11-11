@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
@@ -18,8 +18,8 @@ import PlaceRanking from "./PlaceRanking";
 import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import TogetherMapList from "./TogetherMapList";
-import Navbar from "../Navbar/Navbar";
-import { campusState } from "../../store/atom";
+import Header from "../../components/etc/Header";
+import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
@@ -31,10 +31,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { IUserRanking } from "../../utils/types/user.interface";
 import { IPlaceRanking } from "../../utils/types/place.interface";
-import { PLACE_APIS } from "../../utils/apis/placeApi";
+import PLACE_APIS from "../../utils/apis/placeApi";
 import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
+import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -119,22 +120,16 @@ const FixContainer = styled.div`
 `;
 
 function MainPage() {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
   const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-    return () => window.removeEventListener("resize", resizeListener);
-  }, []);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
+  const auth = useRecoilValue(authState);
 
   const toggleActive = (key: number) => {
     setCampusId(key);
@@ -142,72 +137,43 @@ function MainPage() {
 
   const navigate = useNavigate();
   const moveToCreate = () => {
-    navigate("/mobilecreate");
+    if (auth.accessToken) navigate("/mobilecreate");
+    else setLoginModalOpen(true);
   };
 
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - togetherMapList`],
-    () => axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - togetherMapList`], () =>
+    axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
   );
 
   const { data: mapData, refetch: mapRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - mapList`],
-    () => axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - mapList`], () =>
+    axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
   );
 
   const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - mapRankingList`],
-    () => axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - mapRankingList`], () =>
+    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - userRankingList`],
-    () => axiosInstance.get(USER_APIS.getUserRanking(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - userRankingList`], () =>
+    axiosInstance.get(USER_APIS.getUserRanking(campusId)),
   );
 
   const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - placeRankingList`],
-    () => axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - placeRankingList`], () =>
+    axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
   );
 
   useEffect(() => {
@@ -243,9 +209,9 @@ function MainPage() {
     placeRankingData,
   ]);
 
-  const [modalOpen, setModalOpen] = useState(false);
   const handleModal = () => {
-    setModalOpen(true);
+    if (auth.accessToken) setModalOpen(true);
+    else setLoginModalOpen(true);
   };
 
   const [keyword, setKeyword] = useState("");
@@ -260,9 +226,9 @@ function MainPage() {
   };
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <HeadContainer>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <QuestionContainer>
           <Swiper
             slidesPerView={1}
@@ -307,19 +273,21 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 950 ? (
-          <CreateButton type="button" text="지도 만들기" func={handleModal} />
-        ) : (
-          <CreateButtonMobile type="button" func={moveToCreate} />
-        )}
+        <CreateButton type="button" text="지도 만들기" func={handleModal} />
+        <CreateButtonMobile type="button" func={moveToCreate} />
         {modalOpen && (
           <ModalPortal>
             <CreateMapModal onClose={() => setModalOpen(false)} />
           </ModalPortal>
         )}
       </FixContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
       <Footer />
-    </>
+    </div>
   );
 }
 

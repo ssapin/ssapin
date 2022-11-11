@@ -16,7 +16,8 @@ interface FilterModalProps {
 const Container = styled.div`
   max-width: 600px;
   max-height: 100vh;
-  height: 100%;
+  height: 100vh;
+  overflow-y: scroll;
   font-family: ${(props) => props.theme.fontFamily.h4};
   font-size: ${(props) => props.theme.fontSizes.h4};
   line-height: 29px;

@@ -10,7 +10,6 @@ type UserRankingProps = {
 const Container = styled.div<{ type: string; nickname: string }>`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem 0.5rem 1rem 0.5rem;
   width: ${(props) => (props.type === "full" ? `95%` : `100%`)};
   height: 9rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
@@ -73,7 +72,6 @@ const Container = styled.div<{ type: string; nickname: string }>`
 `;
 
 function RankingUserCard({ user, type }: UserRankingProps) {
-  console.log(user.nickname.length);
   return (
     <Container type={type} nickname={user.nickname}>
       <p className="emoji">{user.emoji}</p>

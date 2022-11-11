@@ -1,42 +1,64 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
+import { InfiniteData, QueryObserverResult } from "react-query";
+import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
+import PlaceInfoModal from "../../pages/Place/PlaceInfoModal";
+import { userInformationState } from "../../store/atom";
+import axiosInstance from "../../utils/apis/api";
+import PLACE_APIS from "../../utils/apis/placeApi";
 import { IPlace } from "../../utils/types/place.interface";
+import ModalPortal from "../containers/ModalPortalContainer";
 
 type PlaceCardProps = {
   prop: IPlace;
   isAdmin: boolean;
+  // eslint-disable-next-line react/require-default-props
+  mapId?: number;
+  // eslint-disable-next-line react/require-default-props
+  togethermapId?: number;
+  // eslint-disable-next-line react/require-default-props
+  refetch?: () => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        | {
+            result: any;
+            page: any;
+          }
+        | undefined
+      >,
+      unknown
+    >
+  >;
 };
 
-const Container = styled.div`
+const Container = styled.li`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   width: 100%;
-  height: 9rem;
+  height: 7rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 1rem;
+  transition: all 0.3s ease-in-out;
 
   ${(props) => props.theme.mq.mobile} {
-    height: 7.5rem;
+    height: 5rem;
     margin: 0;
   }
 
   .place {
-    font-size: ${(props) => props.theme.fontSizes.h4};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
 
     width: 100%;
-    text-align: center;
-    display: block;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
@@ -48,7 +70,7 @@ const Container = styled.div`
     font-family: ${(props) => props.theme.fontFamily.s2};
 
     width: 100%;
-    text-align: center;
+    text-align: left;
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
@@ -56,63 +78,111 @@ const Container = styled.div`
   }
 
   .review {
-    height: 30%;
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s2bold};
 
     width: 100%;
-    text-align: center;
+    text-align: left;
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
   }
 
-  .delete {
-    position: absolute;
-    margin-bottom: 5rem;
-    margin-left: 18rem;
-    font-size: ${(props) => props.theme.fontSizes.h4};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
   :hover {
-    scale: 1.06;
     cursor: pointer;
+    background-color: ${(props) => props.theme.colors.lightBlue};
+    > p {
+      color: ${(props) => props.theme.colors.gray0};
+    }
   }
 `;
 
-function PlaceCard({ prop, isAdmin }: PlaceCardProps) {
-  const onClickPlace = () => {
-    alert(`${prop.placeId}번 장소~`);
+function PlaceCard({
+  prop,
+  isAdmin,
+  refetch,
+  mapId,
+  togethermapId,
+}: PlaceCardProps) {
+  const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
+  const user = useRecoilValue(userInformationState);
+  const onDeletePlace = async (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    if (isAdmin && prop.userId !== user.userId) {
+      // eslint-disable-next-line no-alert
+      alert("본인이 등록한 장소가 아니예요~");
+      return;
+    }
+
+    // eslint-disable-next-line no-alert
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (mapId) {
+      const response = await axiosInstance.delete(PLACE_APIS.MAP, {
+        data: { mapId, placeId: prop.placeId },
+      });
+
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`장소가 삭제되었습니다.`);
+          window.location.reload();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (togethermapId) {
+      const response = await axiosInstance.delete(PLACE_APIS.TOGETHERMAP, {
+        data: { togethermapId, placeId: prop.placeId },
+      });
+
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`장소가 삭제되었습니다.`);
+          window.location.reload();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
-  const onDeletePlace = () => {
-    alert(`${prop.placeId}번 장소~ 지우고 싶대`);
+  const handlePlaceInfoModal = () => {
+    setPlaceInfoModalOpen(true);
   };
 
   return (
-    <Container onClick={onClickPlace}>
-      <p className="place">
-        {prop !== undefined ? prop.title : "장소가 없습니다"}
-      </p>
-      <p className="address">
-        {prop !== undefined ? prop.address : "장소가 없습니다"}
-      </p>
-      <p className="review">
-        {prop !== undefined ? prop.reviewContent : "장소가 없습니다"}
-      </p>
-      {isAdmin && (
-        <div className="delete">
-          <TrashIcon className="trashIcon" onClick={onDeletePlace} />
-        </div>
+    <>
+      <Container onClick={handlePlaceInfoModal}>
+        <p className="place">
+          {prop !== undefined ? prop.title : "장소가 없습니다"}
+          {isAdmin && prop.userId === user.userId && (
+            <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+          )}
+        </p>
+        <p className="address">
+          {prop !== undefined ? prop.address : "장소가 없습니다"}
+        </p>
+        <p className="review">
+          {prop !== undefined && !prop.reviewContent && !prop.content
+            ? "아직 등록된 리뷰가 없습니다."
+            : prop?.reviewContent || prop?.content}
+        </p>
+      </Container>
+      {placeInfomodalOpen && (
+        <ModalPortal>
+          <PlaceInfoModal
+            placeId={prop.placeId}
+            onClose={() => {
+              setPlaceInfoModalOpen(false);
+              if (refetch) refetch();
+            }}
+          />
+        </ModalPortal>
       )}
-    </Container>
+    </>
   );
 }
 

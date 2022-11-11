@@ -65,7 +65,7 @@ const Description = styled.div`
   padding-top: 1rem;
   padding-left: 2rem;
   padding-right: 0;
-  font-size: ${(props) => props.theme.fontSizes.h5};
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
   text-align: left;
@@ -77,7 +77,7 @@ const Description = styled.div`
     padding-top: 0.5rem;
     padding-right: 1rem;
     color: ${(props) => props.theme.colors.gray400};
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.s1};
     font-family: ${(props) => props.theme.fontFamily.paragraph};
 
     ${(props) => props.theme.mq.tablet} {
@@ -110,6 +110,8 @@ const NoContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  margin: auto;
   font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray500};
   font-family: ${(props) => props.theme.fontFamily.h5};
@@ -139,14 +141,18 @@ function UserRanking({ users }: UserProps) {
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       {innerWidth >= 950 ? (
-        <RankingContainer size={users.length}>
-          {users.length !== 0 &&
-            users.map((user, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <RankingUserCard key={i} user={user} />
-            ))}
-          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
-        </RankingContainer>
+        <>
+          <RankingContainer size={users.length}>
+            {users.length !== 0 &&
+              users.map((user, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <RankingUserCard key={i} user={user} />
+              ))}
+          </RankingContainer>
+          {users?.length === 0 && (
+            <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
+          )}
+        </>
       ) : (
         <>
           {users.length !== 0 && (
@@ -165,7 +171,9 @@ function UserRanking({ users }: UserProps) {
               )}
             </>
           )}
-          {users?.length === 0 && <NoContainer>없어요</NoContainer>}
+          {users?.length === 0 && (
+            <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
+          )}
         </>
       )}
     </Container>

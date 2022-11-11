@@ -32,10 +32,16 @@ const KaKakoLoginButton = styled.button`
   display: flex;
   justify-content: center;
   transition: all 0.2s ease-in;
+  color: black;
+  align-items: center;
   & > div {
     display: flex;
     align-items: center;
     height: ${(props) => props.theme.fontSizes.h2};
+  }
+  > p {
+    font-size: ${(props) => props.theme.fontSizes.h4};
+    height: ${(props) => props.theme.fontSizes.h4};
   }
   svg {
     align-items: center;
@@ -79,7 +85,7 @@ function LoginModal({ onClose }: LoginModalProps) {
             <div>
               <KakaoLogo />
             </div>
-            카카오톡 로그인
+            <p>카카오톡 로그인</p>
           </KaKakoLoginButton>
         </ButtonContainer>
       </Container>

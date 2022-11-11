@@ -1,21 +1,21 @@
 import styled from "@emotion/styled";
 import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
 import MapSearch from "../../components/etc/MapSearch";
-import { campusState } from "../../store/atom";
+import { authState, campusState } from "../../store/atom";
 import { pixelToRem } from "../../utils/functions/util";
-import Navbar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 import YellowButton from "../../components/Buttons/YellowButton";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
-import AddPlaceModal from "./AddPlaceModal";
 import SearchList from "./SearchList";
+import LoginModal from "../Login/LoginModal";
 
 const HeadContainer = styled.div`
   width: 100%;
@@ -119,7 +119,6 @@ const Page = styled.div`
 function SearchPage() {
   const [campusId, setCampusId] = useRecoilState(campusState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const [placemodalOpen, setPlaceModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
@@ -129,6 +128,8 @@ function SearchPage() {
     new URLSearchParams(window.location.search).get("keyword") || "",
   );
   const [sidebar, setSidebar] = useState(false);
+  const auth = useRecoilValue(authState);
+  const [LoginmodalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const resizeListener = () => {
@@ -156,10 +157,6 @@ function SearchPage() {
     setCampusId(key);
   };
 
-  const handleCreateModal = () => {
-    setCreateModalOpen(true);
-  };
-
   const onChangeKeyword = (e: {
     target: { value: SetStateAction<string> };
   }) => {
@@ -181,13 +178,18 @@ function SearchPage() {
 
   const navigate = useNavigate();
   const moveToCreate = () => {
-    navigate("/mobileCreate");
+    if (auth.accessToken) navigate("/mobilecreate");
+    else setLoginModalOpen(true);
+  };
+  const handleCreateModal = () => {
+    if (auth.accessToken) setCreateModalOpen(true);
+    else setLoginModalOpen(true);
   };
 
   return (
     <>
       <HeadContainer>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <Searchbar>
           <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
@@ -212,18 +214,13 @@ function SearchPage() {
           </Side>
           {sidebar && <Page onClick={showSidebar} />}
         </Searchbar>
-        {placemodalOpen && (
-          <ModalPortal>
-            <AddPlaceModal onClose={() => setPlaceModalOpen(false)} />
-          </ModalPortal>
-        )}
       </HeadContainer>
       <MainContainer>
         <SearchList hashtag={hashTag} keyword={keyword} />
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 650 ? (
+        {innerWidth > 950 ? (
           <CreateButton
             type="button"
             text="지도 만들기"
@@ -238,6 +235,11 @@ function SearchPage() {
           </ModalPortal>
         )}
       </FixContainer>
+      {LoginmodalOpen && (
+        <ModalPortal>
+          <LoginModal onClose={() => setLoginModalOpen(false)} />
+        </ModalPortal>
+      )}
       <Footer />
     </>
   );

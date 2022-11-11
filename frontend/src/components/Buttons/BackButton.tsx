@@ -6,16 +6,16 @@ import { ReactComponent as BackArrowIcon } from "../../assets/svgs/backarrow.svg
 const BackBtnBg = styled.button`
   display: flex;
   justify-content: center;
-  width: 61px;
-  height: 61px;
+  width: 50px;
+  height: 50px;
   border-radius: ${pixelToRem(10)};
   background-color: ${(props) => props.theme.colors.lightBlue};
   &:hover {
     background-color: ${(props) => props.theme.colors.mainBlue};
   }
   .arrow-size {
-    width: 61px;
-    height: 61px;
+    width: 50px;
+    height: 50px;
   }
 `;
 

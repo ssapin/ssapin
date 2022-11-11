@@ -1,0 +1,56 @@
+.marker_overlay {
+  text-align: center;
+  padding: 10px 20px;
+  min-width: 100px;
+  background-color: #fefefe;
+  border-radius: 18px;
+  position: relative;
+  white-space: normal;
+  word-break: keep-all;
+  width: max-content;
+  max-width: 80vw;
+}
+
+.marker_overlay:hover {
+  transition: all 0.2s;
+  -webkit-box-shadow: 3px 3px 8px rgb(0 0 0 / 80%);
+  box-shadow: 3px 3px 8px rgb(0 0 0 / 80%);
+}
+
+.marker_overlay:after {
+  border-bottom: 0px solid transparent;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #fefefe;
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: calc(50% - 10px);
+}
+
+.place_name {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.text_primary {
+  color: #0581bb;
+}
+
+.avatar {
+  display: inline-block;
+  position: absolute;
+  top: -18px;
+  right: 20px;
+
+  /* right: 5px; */
+  font-size: 25px;
+}
+
+.shadow {
+  transition: all 0.2s;
+  -webkit-box-shadow: 3px 3px 8px rgb(0 0 0 / 20%);
+  box-shadow: 3px 3px 8px rgb(0 0 0 / 20%);
+}
