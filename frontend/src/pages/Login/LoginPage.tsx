@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Loading from "../../components/etc/Loading";
 import useUserActions from "../../utils/hooks/useUserActions";
 
 function LoginPage() {
@@ -8,7 +9,7 @@ function LoginPage() {
     useUserAction.login();
   }, []);
 
-  return <div>Login</div>;
+  return <Loading />;
 }
 
 export default LoginPage;

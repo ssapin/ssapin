@@ -12,9 +12,8 @@ type HotPlaceProps = {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   width: 100%;
-  height: 9rem;
+  height: 8rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
@@ -23,20 +22,11 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
-  ${(props) => props.theme.mq.mobile} {
-    height: 7.5rem;
-    margin: 0;
-  }
-
   .place {
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
 
-    ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
     width: 100%;
     text-align: center;
     display: block;
@@ -65,15 +55,9 @@ const Container = styled.div`
 
   .message {
     margin-top: 1.5rem;
-    font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainBlue};
-    font-family: ${(props) => props.theme.fontFamily.s1bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      margin-top: 1rem;
-      font-family: ${(props) => props.theme.fontFamily.s2bold};
-      font-size: ${(props) => props.theme.fontSizes.s2};
-    }
+    font-family: ${(props) => props.theme.fontFamily.s2bold};
+    font-size: ${(props) => props.theme.fontSizes.s2};
   }
 
   :hover {
@@ -89,14 +73,16 @@ function HotPlaceCard({ place, message }: HotPlaceProps) {
   };
 
   return (
-    <Container onClick={handlePlaceInfoModal}>
-      <p className="place">
-        {place !== undefined ? place.title : "장소가 없습니다"}
-      </p>
-      <p className="address">
-        {place !== undefined ? place.address : "장소가 없습니다"}
-      </p>
-      <p className="message">{message}</p>
+    <>
+      <Container onClick={handlePlaceInfoModal}>
+        <p className="place">
+          {place !== undefined ? place.title : "장소가 없습니다"}
+        </p>
+        <p className="address">
+          {place !== undefined ? place.address : "장소가 없습니다"}
+        </p>
+        <p className="message">{message}</p>
+      </Container>
       {placeInfomodalOpen && (
         <ModalPortal>
           <PlaceInfoModal
@@ -107,7 +93,7 @@ function HotPlaceCard({ place, message }: HotPlaceProps) {
           />
         </ModalPortal>
       )}
-    </Container>
+    </>
   );
 }
 

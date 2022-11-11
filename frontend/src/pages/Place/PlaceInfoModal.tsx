@@ -85,8 +85,8 @@ const PlaceTitle = styled.h1`
   font-size: ${(props) => props.theme.fontSizes.h1};
 
   ${(props) => props.theme.mq.tablet} {
-    font-family: ${(props) => props.theme.fontFamily.h2bold};
-    font-size: ${(props) => props.theme.fontSizes.h2};
+    font-family: ${(props) => props.theme.fontFamily.h3bold};
+    font-size: ${(props) => props.theme.fontSizes.h3};
     display: block;
     white-space: nowrap;
     overflow-x: hidden;
@@ -147,8 +147,8 @@ const ImageContainer = styled.div`
 const ReviewWriteContainer = styled.div`
   width: 100%;
   height: 50%;
-  font-family: ${(props) => props.theme.fontFamily.h3};
-  font-size: ${(props) => props.theme.fontSizes.h3};
+  font-family: ${(props) => props.theme.fontFamily.h4};
+  font-size: ${(props) => props.theme.fontSizes.h4};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -156,6 +156,7 @@ const ReviewWriteContainer = styled.div`
   ${(props) => props.theme.mq.tablet} {
     height: fit-content;
     button {
+      margin-top: 1rem;
       margin-bottom: 1rem;
     }
   }
@@ -164,8 +165,8 @@ const ReviewWriteContainer = styled.div`
 const ReviewContainer = styled.div`
   width: 100%;
   height: 45%;
-  font-family: ${(props) => props.theme.fontFamily.h3};
-  font-size: ${(props) => props.theme.fontSizes.h3};
+  font-family: ${(props) => props.theme.fontFamily.h4};
+  font-size: ${(props) => props.theme.fontSizes.h4};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -229,21 +230,22 @@ const ButtonContainer = styled.div`
 `;
 
 const KakaoMapButton = styled.button`
-  width: 100%;
+  width: 95%;
   height: 18%;
   background-color: ${(props) => props.theme.colors.lightBlue};
   border-radius: 10px;
   color: white;
   font-family: ${(props) => props.theme.fontFamily.h3bold};
   font-size: ${(props) => props.theme.fontSizes.h3};
+  margin-left: 1rem;
 
   ${(props) => props.theme.mq.tablet} {
     width: 100%;
     height: 40px;
     margin: auto;
     margin-top: 0.3rem;
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
+    font-size: ${(props) => props.theme.fontSizes.h5};
   }
 `;
 
@@ -277,32 +279,50 @@ const Buttons = styled.div`
   button {
     margin-right: 1rem;
   }
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+
+  ${(props) => props.theme.mq.tablet} {
+    margin: 0;
+    button {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 const Subtitle = styled.h4`
-  font-family: ${(props) => props.theme.fontFamily.h4};
-  font-size: ${(props) => props.theme.fontSizes.h4};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+  font-size: ${(props) => props.theme.fontSizes.h5};
   color: ${(props) => props.theme.colors.gray600};
   width: 100%;
+  margin-left: 1rem;
 
   ${(props) => props.theme.mq.tablet} {
-    margin: 1rem;
     text-align: center;
+    margin-top: 1.5rem;
+    margin-left: 0;
   }
 `;
 
 const ReviewList = styled.div`
   overflow: scroll;
+
+  ${(props) => props.theme.mq.tablet} {
+    height: 105px;
+  }
 `;
 
 const MapContainer = styled.div`
   width: auto;
   height: 70%;
   border-radius: 15px;
+  margin-left: 1rem;
 
   ${(props) => props.theme.mq.tablet} {
     width: auto;
     height: 150px;
+    margin: 0;
   }
 `;
 
@@ -358,7 +378,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const toggleActive = (key: number) => {
     setRatePlace(key);
-    setIsOpen(!isOpen);
+    setIsOpen(true);
   };
 
   const onWriteReview = async () => {
@@ -426,9 +446,9 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const addBookmark = async () => {
     if (auth.accessToken) {
-      if (bookmark) {
+      if (!bookmark) {
         addBookmarkInPlace({ placeId });
-      } else if (!bookmark) {
+      } else if (bookmark) {
         removeBookmarkInPlace({ placeId });
       }
       setBookmark(!bookmark);
@@ -648,38 +668,44 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
             </ImageContainer>
             <Subtitle>어떤 곳인가요?</Subtitle>
             <PlaceContainer>
-              {mapList?.length !== 0 &&
-                mapList.map((map, id) => (
-                  <MapTitleCard
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={id}
-                    user={`${map.userEmoji} ${map.nickname}`}
-                    used="modal"
-                    title={map.title}
-                  />
-                ))}
+              <ReviewList>
+                {mapList?.length !== 0 &&
+                  mapList.map((map, id) => (
+                    <MapTitleCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={id}
+                      user={`${map.userEmoji} ${map.nickname}`}
+                      used="modal"
+                      title={map.title}
+                    />
+                  ))}
 
-              {!mapList ||
-                (mapList.length === 0 && (
-                  <MapTitleCard
-                    user=""
-                    used="modal"
-                    title="등록된 map이 없습니다."
-                  />
-                ))}
+                {!mapList ||
+                  (mapList.length === 0 && (
+                    <MapTitleCard
+                      user=""
+                      used="modal"
+                      title="등록된 map이 없습니다."
+                    />
+                  ))}
+              </ReviewList>
             </PlaceContainer>
             <Subtitle>싸핀러들의 생각</Subtitle>
             <ReviewContainer>
-              {reviewList.map((review, id) => (
-                <UserOpinionCard
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={id}
-                  review={review}
-                  func={onDeleteReview}
-                />
-              ))}
-              {!reviewList ||
-                (reviewList.length === 0 && <UserOpinionCard review={null} />)}
+              <ReviewList>
+                {reviewList.map((review, id) => (
+                  <UserOpinionCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={id}
+                    review={review}
+                    func={onDeleteReview}
+                  />
+                ))}
+                {!reviewList ||
+                  (reviewList.length === 0 && (
+                    <UserOpinionCard review={null} />
+                  ))}
+              </ReviewList>
             </ReviewContainer>
             <Subtitle>장소 공유하기</Subtitle>
             <ShareContainer>

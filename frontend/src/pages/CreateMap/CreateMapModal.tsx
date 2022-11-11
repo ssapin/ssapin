@@ -37,7 +37,8 @@ const Container = styled.div`
   max-width: 814px;
   width: 50vw;
   max-width: 925px;
-  height: 83vh;
+  height: 100%;
+  max-height: 83vh;
   overflow-y: scroll;
   background-color: transparent;
   font-size: ${(props) => props.theme.fontSizes.h5};
@@ -49,13 +50,13 @@ const Form = styled.form`
   flex-direction: column;
 
   .title {
-    font-size: ${(props) => props.theme.fontSizes.h1};
+    font-size: ${(props) => props.theme.fontSizes.h2};
     text-align: center;
-    font-family: ${(props) => props.theme.fontFamily.h1bold};
+    font-family: ${(props) => props.theme.fontFamily.h2bold};
     margin-bottom: 2rem;
   }
   .s1 {
-    font-size: ${(props) => props.theme.fontSizes.s1};
+    font-size: ${(props) => props.theme.fontSizes.s2};
     text-align: right;
   }
 `;
@@ -71,12 +72,12 @@ const FilterBox = styled.div`
 
 const Content = styled.div`
   width: 45%;
-  height: 80px;
+  height: 75px;
   margin: auto;
 
   select {
     width: 100%;
-    height: 41px;
+    height: 35px;
     background-color: ${(props) => props.theme.colors.lightLightBlue};
     border: 0;
     border-radius: 10px;
@@ -84,13 +85,13 @@ const Content = styled.div`
     outline: none;
     color: ${(props) => props.theme.colors.gray700};
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h5};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
   }
 `;
 
 const SubTitle = styled.h5`
-  font-size: ${(props) => props.theme.fontSizes.h5};
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray900};
   font-family: ${(props) => props.theme.fontFamily.h5};
   margin-left: 10px;
@@ -100,10 +101,9 @@ const Flex = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 2rem;
 
   button {
-    margin: 0.5rem;
+    margin: 0.2rem;
   }
 `;
 
@@ -246,7 +246,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               {isEdit ? (
                 <Input
                   width="100%"
-                  height="41px"
+                  height="35px"
                   placeholder="ex) 역삼 멀캠 근처 조용한 카페"
                   value={title}
                   readonly
@@ -254,7 +254,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               ) : (
                 <Input
                   width="100%"
-                  height="41px"
+                  height="35px"
                   placeholder="ex) 역삼 멀캠 근처 조용한 카페"
                   changeFunc={onChangeTitle}
                   value={title}
@@ -311,7 +311,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               {isEdit ? (
                 <Input
                   width="100%"
-                  height="41px"
+                  height="35px"
                   placeholder="ex) 🎈🎆🎇"
                   value={emoji}
                   readonly
@@ -319,7 +319,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               ) : (
                 <Input
                   width="100%"
-                  height="41px"
+                  height="35px"
                   placeholder="ex) 🎈🎆🎇"
                   changeFunc={onChangeEmoji}
                   value={emoji}

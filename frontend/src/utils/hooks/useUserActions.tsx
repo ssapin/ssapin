@@ -31,7 +31,7 @@ function useUserActions() {
         setAuth({ accessToken: data?.accessToken });
         await useGetUser.getUser();
         if (data?.firstLogin) {
-          navigate("/user");
+          navigate("/mypage");
         }
       }
     } catch (error) {

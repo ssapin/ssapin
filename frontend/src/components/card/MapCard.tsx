@@ -33,9 +33,8 @@ type MapCardProps = {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   width: 100%;
-  height: 9rem;
+  height: 8rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
@@ -44,35 +43,19 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
-  ${(props) => props.theme.mq.mobile} {
-    height: 7.5rem;
-    margin: 0;
-  }
-
   .icon {
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
   }
 
   .title {
     margin-top: 0.7rem;
     text-align: center;
-    font-size: ${(props) => props.theme.fontSizes.h4};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    ${(props) => props.theme.mq.mobile} {
-      margin-top: 0.3rem;
-      font-family: ${(props) => props.theme.fontFamily.h5bold};
-      font-size: ${(props) => props.theme.fontSizes.h5};
-    }
+    font-family: ${(props) => props.theme.fontFamily.h5bold};
 
     width: 100%;
     text-align: center;
