@@ -62,11 +62,9 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public Long addPlaceInMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
-
         Map map = mapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
         Place place = null;
-        long id =0;
+        long id = 0;
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
         long placeId;
         if (placeResponse.isEmpty()) {
@@ -88,24 +86,20 @@ public class PlaceServiceImpl implements PlaceService {
             mapPlaceRepository.save(mapPlace);
 
             return id;
-
         } else {
-
             place = placeResponse.get();
             id = place.getId();
-
-            MapPlace mapPlace = MapPlace.builder()
-                    .map(map)
-                    .user(user)
-                    .place(place)
-                    .build();
-
-            mapPlaceRepository.save(mapPlace);
-
+            boolean flag = mapPlaceRepository.existsByMapAndPlace(map, place);
+            if(!flag) {
+                MapPlace mapPlace = MapPlace.builder()
+                        .map(map)
+                        .user(user)
+                        .place(place)
+                        .build();
+                mapPlaceRepository.save(mapPlace);
+            }
             return id;
         }
-
-
     }
 
     /**
@@ -114,19 +108,12 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public Long addPlaceInTogetherMap(User user, PlaceMapRequest.RegisterPlaceToMapRequest placeRequest) {
-
-
         Togethermap map = togethermapRepository.findById(placeRequest.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
         Place place = null;
-
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
-
         long placeId = 0;
-
         long id;
         if (placeResponse.isEmpty()) {
-
             place = Place.builder()
                     .itemId(placeRequest.getPlace().getItemId())
                     .title(placeRequest.getPlace().getTitle())
@@ -140,26 +127,27 @@ public class PlaceServiceImpl implements PlaceService {
             placeId = place.getId();
         }
 
-
-        TogethermapPlace result = togethermapPlaceRepositorySupport.findByPlace(map, user, placeId);
+        TogethermapPlace result = togethermapPlaceRepositorySupport.findByPlace(map, user);
         if (result == null) {
             Place place1 = placeRepositorySupport.findPlace(place.getItemId());
-
-            TogethermapPlace mapPlace = TogethermapPlace.builder()
-                    .togethermap(map)
-                    .user(user)
-                    .place(place1)
-                    .build();
-            togethermapPlaceRepository.save(mapPlace);
+            boolean flag = togethermapPlaceRepository.existsByTogethermapAndPlace(map, place);
+            if(!flag) {
+                TogethermapPlace mapPlace = TogethermapPlace.builder()
+                        .togethermap(map)
+                        .user(user)
+                        .place(place1)
+                        .build();
+                togethermapPlaceRepository.save(mapPlace);
+            }
         } else {
-            result.update(place, map);
-            id = result.getId();
+            boolean flag = togethermapPlaceRepository.existsByTogethermapAndPlace(map, place);
+            if(!flag) {
+                result.update(place, map);
+                id = result.getId();
+            }
         }
-
-
         return placeId;
     }
-
 
     /**
      * (3) 장소랭킹 리스트
@@ -217,16 +205,11 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public Long removePlaceInTogetherMap(User user, PlaceMapRequest.RemovePlaceInTogethermapRequest removePlaceInTogethermapRequest) {
-
         Togethermap map = togethermapRepository.findById(removePlaceInTogethermapRequest.getTogethermapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Place place = placeRepository.findById(removePlaceInTogethermapRequest.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
-        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByPlace(map, user, place.getId());
-
-        TogethermapPlace result = togethermapPlaceRepository.findById(togethermapPlace.getId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
-        long id = result.getId();
-
+        TogethermapPlace togethermapPlace = togethermapPlaceRepositorySupport.findByMapPlace(map, user, place);
+        long id = togethermapPlace.getId();
+        togethermapPlaceRepository.delete(togethermapPlace);
         return id;
     }
 
@@ -349,7 +332,6 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public long countPlaceByUserId(long userId) {
-
         return 1;
     }
 }
