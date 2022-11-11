@@ -67,7 +67,7 @@ function MapPage() {
     getMap(Number(mapId)),
   );
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-  const [isBookmark, setIsBookmar] = useState(false);
+  const [isBookmark, setIsBookmark] = useState(false);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
@@ -100,6 +100,7 @@ function MapPage() {
     };
 
     registerMapBookmark(req);
+    setIsBookmark(true);
   };
 
   const removeBookmark = () => {
@@ -108,6 +109,7 @@ function MapPage() {
     };
 
     removeMapBookmark(req);
+    setIsBookmark(false);
   };
 
   return (
@@ -117,8 +119,12 @@ function MapPage() {
       <MapContainer ref={mapRef} />
       <BackContainer>
         <BackButton />
-        <MapCircleButton shape="2" func={registerBookmark} />
-        <MapCircleButton shape="3" func={removeBookmark} />
+        {mapData?.bookMark ? (
+          <MapCircleButton shape="3" func={removeBookmark} />
+        ) : (
+          <MapCircleButton shape="2" func={registerBookmark} />
+        )}
+
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
