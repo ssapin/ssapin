@@ -138,7 +138,7 @@ public class MapController {
             return new ResponseEntity<Map>(exceptionResponse, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("추천지도 랭킹 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -154,7 +154,7 @@ public class MapController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("추천지도 북마크 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -169,7 +169,7 @@ public class MapController {
             return new ResponseEntity<String>("추전지도 북마크 해제 성공", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("추천지도 메인 리스트 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("추천지도 북마크 해제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

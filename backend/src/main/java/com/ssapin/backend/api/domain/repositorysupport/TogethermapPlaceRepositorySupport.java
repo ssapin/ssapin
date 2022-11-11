@@ -23,7 +23,6 @@ public class TogethermapPlaceRepositorySupport extends QuerydslRepositorySupport
     }
 
     public long countTogethermapPlaceByUserId(long userId) {
-
         return queryFactory
                 .select(QTogethermapPlace.togethermapPlace.count())
                 .from(QTogethermapPlace.togethermapPlace)
@@ -32,7 +31,6 @@ public class TogethermapPlaceRepositorySupport extends QuerydslRepositorySupport
     }
 
     public long countParticipationByUserId(long userId) {
-
         return queryFactory
                 .select(QTogethermapPlace.togethermapPlace.togethermap.id.countDistinct())
                 .from(QTogethermapPlace.togethermapPlace)
@@ -40,13 +38,20 @@ public class TogethermapPlaceRepositorySupport extends QuerydslRepositorySupport
                 .fetchOne();
     }
 
-    public TogethermapPlace findByPlace(Togethermap togethermap, User user, long placeId)
+    public TogethermapPlace findByPlace(Togethermap togethermap, User user)
     {
-
         return queryFactory.selectFrom(QTogethermapPlace.togethermapPlace)
-                .where(QTogethermapPlace.togethermapPlace.togethermap.id.eq(togethermap.getId())
-                .and(QTogethermapPlace.togethermapPlace.place.id.eq(placeId))
-                .and(QTogethermapPlace.togethermapPlace.user.id.eq(user.getId())))
+                .where(QTogethermapPlace.togethermapPlace.togethermap.eq(togethermap)
+                .and(QTogethermapPlace.togethermapPlace.user.eq(user)))
+                .fetchOne();
+    }
+
+    public TogethermapPlace findByMapPlace(Togethermap togethermap, User user, Place place)
+    {
+        return queryFactory.selectFrom(QTogethermapPlace.togethermapPlace)
+                .where(QTogethermapPlace.togethermapPlace.togethermap.eq(togethermap)
+                        .and(QTogethermapPlace.togethermapPlace.user.eq(user))
+                        .and(QTogethermapPlace.togethermapPlace.place.eq(place)))
                 .fetchOne();
     }
 
