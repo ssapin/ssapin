@@ -454,7 +454,6 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
         placeDetailData.data.lat,
         placeDetailData.data.lng,
       );
-
       const marker = new kakao.maps.Marker({
         position: markerPosition,
       });

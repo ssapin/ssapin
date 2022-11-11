@@ -127,6 +127,8 @@ const BackContainer = styled.div`
   z-index: 2;
   top: 10px;
   left: 10px;
+  display: flex;
+  gap: 1rem;
 `;
 
 const FixContainer = styled.div`
@@ -233,7 +235,6 @@ function MapNewPlace() {
     setPaginationList(pageList);
   };
   const displayPlaces = (places: IKakaoPlace[]) => {
-    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
     // removeMarker();
@@ -244,7 +245,6 @@ function MapNewPlace() {
       const marker = addMarker(placePosition, i);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-      console.log(marker);
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -287,12 +287,12 @@ function MapNewPlace() {
   useEffect(() => {
     const [lat, lan]: Coordinate = mapData
       ? [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[Number(mapData.campusId)]].x,
         ]
       : [
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lat,
-          CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].lan,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].y,
+          +CAMPUS_COORDINATE_LIST[CAMPUS_LIST[userCampusId]].x,
         ];
     const container = mapRefs.current;
     const options = {
@@ -331,17 +331,11 @@ function MapNewPlace() {
   return (
     <Conatiner>
       <BackContainer>
-        {mapData?.bookMark ? (
-          <MapCircleButton shape="3" func={removeBookmark} />
-        ) : (
-          <MapCircleButton shape="2" func={registerBookmark} />
-        )}
+        <BackButton />
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
         />
-        <BackButton />
-        <MapCircleButton shape="2" />
       </BackContainer>
 
       <SearchContainer>
@@ -471,8 +465,6 @@ const PlaceCard = forwardRef(
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
-    console.log(mapId);
-
     const [modalOpen, setModalOpen] = useState(false);
     const [LoginmodalOpen, setLoginModalOpen] = useState(false);
     const [isRegister, setIsRegister] = useState(false);
