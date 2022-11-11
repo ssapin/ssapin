@@ -35,10 +35,6 @@ const Container = styled.div<{ used?: string }>`
       font-family: ${(props) => props.theme.fontFamily.h5};
     }
   }
-
-  ${(props) => props.theme.mq.mobile} {
-    max-width: 200px;
-  }
 `;
 
 function MapTitleCard({ user, title, used }: MapTitleProps) {

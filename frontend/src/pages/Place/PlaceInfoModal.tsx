@@ -447,7 +447,6 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   useEffect(() => {
     if (placeDetailData?.data) {
-      console.log(placeDetailData);
       setPlace(placeDetailData.data);
       setBookmark(placeDetailData.data.bookmark);
       const mapContainer = mapRef.current;

@@ -29,6 +29,7 @@ import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import { makePin } from "../../utils/functions/maps";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
 
 declare global {
   interface Window {
@@ -69,6 +70,10 @@ const SubjectContainer = styled(BackContainer)`
   left: 0;
   right: 0;
   width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const PlaceListContainer = styled.div`
@@ -85,12 +90,20 @@ const PlaceListContainer = styled.div`
     gap: 0.5rem;
     width: 90%;
     margin-left: auto;
+    ${(props) => props.theme.mq.mobile} {
+      height: fit-content;
+      max-height: 28vh;
+    }
   }
   ${(props) => props.theme.mq.tablet} {
-    top: 60vh;
+    top: auto;
+    bottom: 0;
     margin: 0 auto;
     left: 0;
     right: 0;
+    height: fit-content;
+    max-height: 40vh;
+
     > ul {
       width: 100%;
     }
@@ -279,6 +292,14 @@ function TogetherMap() {
         </title>
       </Helmet>
       <Container>
+        <PlaceListContainer>
+          <ul>
+            {togetherMapData?.placeList &&
+              togetherMapData.placeList.map((place) => (
+                <PlaceCard prop={place} key={place.placeId} isAdmin />
+              ))}
+          </ul>
+        </PlaceListContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
           <div>
@@ -291,14 +312,6 @@ function TogetherMap() {
             <KakaoShareButton />
           </div>
         </ButtonListContainer>
-        <PlaceListContainer>
-          <ul>
-            {togetherMapData?.placeList &&
-              togetherMapData.placeList.map((place) => (
-                <PlaceCard prop={place} key={place.placeId} isAdmin />
-              ))}
-          </ul>
-        </PlaceListContainer>
         <ButtonContainer>
           <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
           <CreateButtonMobile
@@ -313,6 +326,7 @@ function TogetherMap() {
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />
+          <TogetherMapNoticeCard />
         </SubjectContainer>
         <NavContainer>
           <NavToggleContainer />
