@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
@@ -90,10 +90,49 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const MapContainer = styled.div`
+  width: auto;
+  height: 70%;
+  border-radius: 15px;
+
+  ${(props) => props.theme.mq.tablet} {
+    width: auto;
+    height: 150px;
+  }
+`;
+
+const KakaoMapButton = styled.button`
+  width: 100%;
+  height: 18%;
+  background-color: ${(props) => props.theme.colors.lightBlue};
+  border-radius: 10px;
+  color: white;
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+
+  ${(props) => props.theme.mq.tablet} {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    margin-top: 0.3rem;
+    font-family: ${(props) => props.theme.fontFamily.h4bold};
+    font-size: ${(props) => props.theme.fontSizes.h4};
+  }
+`;
+
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
+const { kakao } = window;
+
 function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [ratePlace, setRatePlace] = useState(0);
   const [text, setText] = useState("");
+  const mapRef = useRef<HTMLDivElement>();
   const onChange = (e: any) => {
     setText(e.target.value);
   };
@@ -102,6 +141,24 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
     setIsOpen(!isOpen);
     setText("");
   };
+
+  useEffect(() => {
+    if (place) {
+      const mapContainer = mapRef.current;
+      const markerPosition = new kakao.maps.LatLng(place.x, place.y);
+
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+      const mapOption = {
+        center: new kakao.maps.LatLng(place.x, place.y),
+        level: 3,
+        marker,
+      };
+
+      const map = new kakao.maps.StaticMap(mapContainer, mapOption);
+    }
+  }, [innerWidth]);
 
   const addPlace = async () => {
     console.log(place);
@@ -186,7 +243,14 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
         </PlaceContainer>
         <PlaceContent>
           <ImageContainer>
-            <img alt="testmap.png" src={testMap} />
+            <MapContainer ref={mapRef} />
+            <KakaoMapButton
+              onClick={() => {
+                window.open(`https://place.map.kakao.com/${place.itemId}`);
+              }}
+            >
+              카카오맵리뷰보기
+            </KakaoMapButton>
           </ImageContainer>
 
           <ReviewContainer>
