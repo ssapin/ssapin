@@ -18,7 +18,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem 1rem 1rem 0;
+  padding: 1rem 1rem 0 1rem;
   transition: all 0.2s ease-out;
 
   .place {
