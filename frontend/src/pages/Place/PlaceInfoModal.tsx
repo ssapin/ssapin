@@ -766,7 +766,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
       {copied && (
         <ModalPortal>
           <CopyModalContainer onClose={() => setCopied(false)}>
-            URL을 복사했어요
+            <p>💻URL을 클립보드에 복사했어요.</p>
           </CopyModalContainer>
         </ModalPortal>
       )}

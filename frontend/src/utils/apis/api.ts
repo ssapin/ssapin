@@ -32,10 +32,8 @@ const axiosInstance: CustomInstance = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_SERVER_URL}/api`,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": import.meta.env.VITE_BASE_SERVER_URL,
-    "Access-Control-Allow-Credentials": true,
   },
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 export default axiosInstance;

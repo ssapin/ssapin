@@ -1,7 +1,7 @@
 export type Props = {};
 
 export interface Children {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 export interface ModalProps extends Children {

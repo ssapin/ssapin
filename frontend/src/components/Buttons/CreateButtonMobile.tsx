@@ -10,7 +10,7 @@ const StyledCreate = styled.button`
   width: 3.15rem;
   height: 3.15rem;
   background-color: ${(props) => props.theme.colors.lightBlue};
-  ${(props) => props.theme.mq.mobile} {
+  ${(props) => props.theme.mq.tablet} {
     display: flex;
   }
 `;

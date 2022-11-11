@@ -16,7 +16,6 @@ const Container = styled.div<{ used?: string }>`
   flex-direction: column;
   justify-content: center;
   gap: 0.25rem;
-  /* align-items: center; */
   padding: 0.5rem 1rem;
   .user {
     font-size: ${(props) => props.theme.fontSizes.s2};
@@ -35,6 +34,10 @@ const Container = styled.div<{ used?: string }>`
       font-size: ${(props) => props.theme.fontSizes.s1};
       font-family: ${(props) => props.theme.fontFamily.h5};
     }
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    max-width: 200px;
   }
 `;
 

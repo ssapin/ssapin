@@ -120,7 +120,6 @@ const FixContainer = styled.div`
 `;
 
 function MainPage() {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
@@ -131,13 +130,6 @@ function MainPage() {
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
   const auth = useRecoilValue(authState);
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-    return () => window.removeEventListener("resize", resizeListener);
-  }, []);
 
   const toggleActive = (key: number) => {
     setCampusId(key);
@@ -152,66 +144,36 @@ function MainPage() {
   const { data: togetherData, refetch: togetherRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - togetherMapList`],
-    () => axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - togetherMapList`], () =>
+    axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
   );
 
   const { data: mapData, refetch: mapRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - mapList`],
-    () => axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - mapList`], () =>
+    axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
   );
 
   const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - mapRankingList`],
-    () => axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - mapRankingList`], () =>
+    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - userRankingList`],
-    () => axiosInstance.get(USER_APIS.getUserRanking(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - userRankingList`], () =>
+    axiosInstance.get(USER_APIS.getUserRanking(campusId)),
   );
 
   const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${campusId} - placeRankingList`],
-    () => axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${campusId} - placeRankingList`], () =>
+    axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
   );
 
   useEffect(() => {
@@ -311,11 +273,8 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 950 ? (
-          <CreateButton type="button" text="지도 만들기" func={handleModal} />
-        ) : (
-          <CreateButtonMobile type="button" func={moveToCreate} />
-        )}
+        <CreateButton type="button" text="지도 만들기" func={handleModal} />
+        <CreateButtonMobile type="button" func={moveToCreate} />
         {modalOpen && (
           <ModalPortal>
             <CreateMapModal onClose={() => setModalOpen(false)} />

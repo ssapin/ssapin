@@ -59,6 +59,9 @@ const ButtonContainer = styled.div`
   z-index: 2;
   bottom: 10px;
   right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
 const BackContainer = styled.div`
@@ -73,9 +76,14 @@ const SubjectContainer = styled(BackContainer)`
   left: 0;
   right: 0;
   width: fit-content;
-  > button {
-    ${(props) => props.theme.mq.mobile} {
-      display: none;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  > div {
+    &:nth-child(2) {
+      ${(props) => props.theme.mq.mobile} {
+        display: none;
+      }
     }
   }
 `;
@@ -359,11 +367,13 @@ function Map() {
             user={`${mapData?.userEmoji} ${mapData?.nickname}`}
             title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
           />
-          {mapData?.bookMark ? (
-            <MapCircleButton shape="3" func={removeBookmark} />
-          ) : (
-            <MapCircleButton shape="2" func={registerBookmark} />
-          )}
+          <div>
+            {mapData?.bookMark ? (
+              <MapCircleButton shape="3" func={removeBookmark} />
+            ) : (
+              <MapCircleButton shape="2" func={registerBookmark} />
+            )}
+          </div>
         </SubjectContainer>
 
         <NavContainer>
