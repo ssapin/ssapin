@@ -295,7 +295,12 @@ function TogetherMap() {
           <ul>
             {togetherMapData?.placeList &&
               togetherMapData.placeList.map((place) => (
-                <PlaceCard prop={place} key={place.placeId} isAdmin />
+                <PlaceCard
+                  prop={place}
+                  key={place.placeId}
+                  isAdmin
+                  togethermapId={togetherMapData.togethermapId}
+                />
               ))}
           </ul>
         </PlaceListContainer>
