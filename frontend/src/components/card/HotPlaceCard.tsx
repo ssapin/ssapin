@@ -73,14 +73,16 @@ function HotPlaceCard({ place, message }: HotPlaceProps) {
   };
 
   return (
-    <Container onClick={handlePlaceInfoModal}>
-      <p className="place">
-        {place !== undefined ? place.title : "장소가 없습니다"}
-      </p>
-      <p className="address">
-        {place !== undefined ? place.address : "장소가 없습니다"}
-      </p>
-      <p className="message">{message}</p>
+    <>
+      <Container onClick={handlePlaceInfoModal}>
+        <p className="place">
+          {place !== undefined ? place.title : "장소가 없습니다"}
+        </p>
+        <p className="address">
+          {place !== undefined ? place.address : "장소가 없습니다"}
+        </p>
+        <p className="message">{message}</p>
+      </Container>
       {placeInfomodalOpen && (
         <ModalPortal>
           <PlaceInfoModal
@@ -91,7 +93,7 @@ function HotPlaceCard({ place, message }: HotPlaceProps) {
           />
         </ModalPortal>
       )}
-    </Container>
+    </>
   );
 }
 

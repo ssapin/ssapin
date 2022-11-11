@@ -116,7 +116,9 @@ function TogetherMapList({ maps }: TogetherMapProps) {
             />
           ))}
       </RankingContainer>
-      {maps?.length === 0 && <NoContainer>없어요</NoContainer>}
+      {maps?.length === 0 && (
+        <NoContainer>아직 장소가 있는 모여지도가 없어요 😥</NoContainer>
+      )}
     </Container>
   );
 }
