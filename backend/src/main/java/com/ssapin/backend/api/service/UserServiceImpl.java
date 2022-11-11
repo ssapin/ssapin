@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(long kakaoId, Campus campus) {
 
         User user = User.builder()
-                .nickname("undefined#"+kakaoId)
+                .nickname("싸핀러#"+kakaoId)
                 .kakaoId(kakaoId)
                 .campus(campus)
                 .emoji("\uD83D\uDCA9")
