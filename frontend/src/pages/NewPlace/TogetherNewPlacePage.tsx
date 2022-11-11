@@ -429,8 +429,6 @@ const PlaceCard = forwardRef(
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
-    console.log(mapId);
-
     const [modalOpen, setModalOpen] = useState(false);
     const [LoginmodalOpen, setLoginModalOpen] = useState(false);
     const auth = useRecoilValue(authState);
