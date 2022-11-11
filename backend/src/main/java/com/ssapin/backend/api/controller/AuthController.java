@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Api(value = "인증 API", tags={"Auth"})
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
