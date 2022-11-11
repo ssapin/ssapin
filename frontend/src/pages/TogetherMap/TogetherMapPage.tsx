@@ -40,8 +40,9 @@ declare global {
 const { kakao } = window;
 
 const Container = styled.section`
-  position: relative;
+  position: fixed;
   overflow: hidden;
+  height: 100%;
 `;
 
 const MapContainer = styled.div`
@@ -292,6 +293,8 @@ function TogetherMap() {
         </title>
       </Helmet>
       <Container>
+        <MapContainer ref={mapRef} />
+
         <PlaceListContainer>
           <ul>
             {togetherMapData?.placeList &&
@@ -326,7 +329,6 @@ function TogetherMap() {
             func={addNewPlace}
           />
         </ButtonContainer>
-        <MapContainer ref={mapRef} />
         <BackContainer>
           <BackButton />
         </BackContainer>
