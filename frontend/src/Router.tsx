@@ -36,7 +36,7 @@ function Router() {
         <Route path="mypage" element={<User />} />
         <Route path="search" element={<Search />} />
         <Route path="mobilecreate" element={<CreateMapMobilePage />} />
-        <Route path="place/:placeId" element={<SharedPlaceDetail />} />
+        <Route path="places/:placeId" element={<SharedPlaceDetail />} />
       </Routes>
     </BrowserRouter>
   );

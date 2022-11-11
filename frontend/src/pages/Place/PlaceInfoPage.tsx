@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 import { AxiosError, AxiosResponse } from "axios";
