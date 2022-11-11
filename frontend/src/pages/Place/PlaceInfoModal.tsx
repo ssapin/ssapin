@@ -187,7 +187,7 @@ const PlaceContainer = styled.div`
   }
 `;
 
-const Comment = styled.input`
+const Comment = styled.textarea`
   width: 100%;
   height: 50%;
   border-radius: 10px;
@@ -195,6 +195,7 @@ const Comment = styled.input`
   font-family: ${(props) => props.theme.fontFamily.h5};
   font-size: ${(props) => props.theme.fontSizes.h5};
   padding: 0.5rem;
+  resize: none;
 
   ${(props) => props.theme.mq.tablet} {
     padding: 1rem;
