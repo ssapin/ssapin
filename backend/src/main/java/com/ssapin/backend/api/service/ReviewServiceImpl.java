@@ -38,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
     public long addReview(ReviewRequest.ReviewAdd request, User user) {
         Place place = placeRepository.findById(request.getPlaceId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         Optional<Review> reviews = reviewRepository.findByUserAndPlace(user, place);
-        System.out.println(reviews.get().getId());
+        
         if(!reviews.isEmpty()) {
             Review review = reviews.get();
             reviewRepository.delete(review);
