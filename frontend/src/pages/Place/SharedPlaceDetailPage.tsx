@@ -1,19 +1,14 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "../../components/etc/Header";
 import { getPlaceInfo } from "../../utils/apis/placeApi";
 import { makePin } from "../../utils/functions/maps";
 import PlaceInfoModal from "./PlaceInfoModal";
-import "../../styles/style.css";
-import { Helmet } from "react-helmet-async";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+import "../../styles/style.css";
 
 const MapContainer = styled.div`
   width: 100vw;
