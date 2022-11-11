@@ -108,8 +108,6 @@ function PlaceCard({
 }: PlaceCardProps) {
   const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
   const user = useRecoilValue(userInformationState);
-  console.log(user.userId);
-  console.log(prop.userId);
   const onDeletePlace = async (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     if (isAdmin && prop.userId !== user.userId) {

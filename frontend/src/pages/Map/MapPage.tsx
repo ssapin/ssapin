@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { AxiosError } from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -80,12 +80,12 @@ const SubjectContainer = styled(BackContainer)`
   gap: 0.5rem;
   align-items: center;
   > div {
-    &:nth-child(1) {
+    &:nth-of-child(1) {
       ${(props) => props.theme.mq.mobile} {
         max-width: 200px;
       }
     }
-    &:nth-child(2) {
+    &:nth-of-child(2) {
       ${(props) => props.theme.mq.mobile} {
         display: none;
       }
@@ -246,10 +246,8 @@ function Map() {
           level: 3,
         };
 
-        // const campusName = CAMPUS_COORDINATE_LIST[campusLocation];
         const map = await new kakao.maps.Map(mapContainer, options);
         locateSSAFY(position, map);
-        // const img = "";
         const content = makePin(
           {
             title: CAMPUS_COORDINATE_LIST[campusLocation].place_name,

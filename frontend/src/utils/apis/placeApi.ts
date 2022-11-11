@@ -1,3 +1,7 @@
+import { AxiosResponse } from "axios";
+import { IPlaceDetail } from "../types/place.interface";
+import axiosInstance from "./api";
+
 const PLACE_APIS = {
   getPlaceRanking: (campusId: number) => `/place/ranking/${campusId}`,
   getDetailPlaceInfo: (placeId: number) => `/place/${placeId}/detail`,
@@ -8,3 +12,14 @@ const PLACE_APIS = {
 };
 
 export default PLACE_APIS;
+
+export const getPlaceInfo = async (placeId: number) => {
+  try {
+    const response: AxiosResponse<IPlaceDetail> = await axiosInstance.get(
+      PLACE_APIS.getDetailPlaceInfo(placeId),
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

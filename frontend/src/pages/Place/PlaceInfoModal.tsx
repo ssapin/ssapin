@@ -514,7 +514,6 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const copy = () => {
     const url = `${import.meta.env.VITE_BASE_URL}/places/${place.placeId}`;
-    console.log(url);
     setCopied(true);
     copyURL(url);
     setTimeout(() => {
