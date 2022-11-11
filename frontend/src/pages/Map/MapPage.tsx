@@ -158,7 +158,6 @@ function Map() {
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
-
   const userInformation = useRecoilValue(userInformationState);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
@@ -365,11 +364,12 @@ function Map() {
 
         <ButtonContainer>
           <Mobile>
-            {mapData?.bookMark ? (
-              <MapCircleButton shape="3" func={removeBookmark} />
-            ) : (
-              <MapCircleButton shape="2" func={registerBookmark} />
-            )}
+            {auth?.accessToken &&
+              (mapData?.bookMark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              ))}
           </Mobile>
           {(mapData?.access || isCreator) && (
             <>
@@ -395,11 +395,12 @@ function Map() {
             title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
           />
           <div>
-            {mapData?.bookMark ? (
-              <MapCircleButton shape="3" func={removeBookmark} />
-            ) : (
-              <MapCircleButton shape="2" func={registerBookmark} />
-            )}
+            {auth?.accessToken &&
+              (mapData?.bookMark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              ))}
           </div>
         </SubjectContainer>
 
