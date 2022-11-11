@@ -14,8 +14,7 @@ interface UserOpinionProps {
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
-  width: 90%;
+  width: 100%;
   height: 5rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;

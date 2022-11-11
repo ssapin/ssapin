@@ -11,3 +11,7 @@ export interface Children {
 export interface ModalProps extends Children {
   onClose: () => void;
 }
+
+export interface MessageResponse {
+  message: string;
+}

@@ -303,9 +303,14 @@ const Subtitle = styled.h4`
 
 const ReviewList = styled.div`
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1rem;
 
   ${(props) => props.theme.mq.tablet} {
-    height: 105px;
+    max-height: 300px;
   }
 `;
 

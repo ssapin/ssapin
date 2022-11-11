@@ -18,8 +18,7 @@ import {
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import LoginModal from "../Login/LoginModal";
 
-import "./style.css";
-import { IPlace } from "../../utils/types/place.interface";
+import "../../styles/style.css";
 import PlaceCard from "../../components/card/PlaceCard";
 import { getCurrentLocation } from "../../utils/functions/getCurrentLocation";
 import MenuButton from "../../components/Buttons/MenuButton";
@@ -29,6 +28,7 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
+import { makePin } from "../../utils/functions/maps";
 
 declare global {
   interface Window {
@@ -123,11 +123,6 @@ const ButtonListContainer = styled.div`
 
 type Coordinate = [number, number];
 
-interface ICenter {
-  title: string;
-  placeId: number;
-}
-
 function TogetherMap() {
   const mapRef = useRef<HTMLDivElement>();
   const [mapObj, setMapObj] = useState({ map: null });
@@ -174,25 +169,6 @@ function TogetherMap() {
   const openModal = (id: number) => {
     setModalOpen(true);
     setPlaceId(id);
-  };
-
-  const makePin = (place: IPlace | ICenter, avatar?: string) => {
-    const container = document.createElement("div");
-    container.setAttribute("class", "marker_overlay shadow");
-    const placeName = document.createElement("div");
-    placeName.setAttribute("class", "place_name text_primary");
-    placeName.append(place.title);
-    const emoji = document.createElement("div");
-    emoji.setAttribute("class", "avatar");
-    emoji.append(avatar);
-    container.append(placeName, emoji);
-    if (place.placeId) {
-      container.onclick = () => {
-        openModal(place.placeId);
-      };
-    }
-
-    return container;
   };
 
   const panTo = async () => {
@@ -268,7 +244,7 @@ function TogetherMap() {
         const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
         bounds.extend(placePosition);
         addMarker(placePosition);
-        const cont = makePin(place, place.userEmoji);
+        const cont = makePin(place, place.userEmoji, openModal);
         await new kakao.maps.CustomOverlay({
           map: mapObj.map,
           position: placePosition,

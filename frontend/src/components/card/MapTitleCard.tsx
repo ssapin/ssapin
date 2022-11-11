@@ -10,27 +10,34 @@ type MapTitleProps = {
 const Container = styled.div<{ used?: string }>`
   background-color: ${(props) => props.theme.colors.gray50};
   border-radius: 10px;
-  margin: 1rem;
-  width: 90%;
-  height: 4rem;
+  width: 100%;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-
+  gap: 0.25rem;
+  /* align-items: center; */
+  padding: 0.5rem 1rem;
   .user {
     font-size: ${(props) => props.theme.fontSizes.s2};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s1};
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.s3};
+    }
   }
 
   .title {
     font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.gray900};
-    font-family: ${(props) => props.theme.fontFamily.h5bold};
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    ${(props) => props.theme.mq.mobile} {
+      font-size: ${(props) => props.theme.fontSizes.s1};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+    }
+  }
+  ${(props) => props.theme.mq.mobile} {
+    max-width: 230px;
   }
 `;
 
