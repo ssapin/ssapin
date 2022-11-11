@@ -33,7 +33,7 @@ public class JwtTokenUtil {
                 .setSubject(user.getId() + "")
                 .setHeader(createHeader())
                 .setClaims(createClaims(user))
-                .setExpiration(createExpireDate(1000 * 60 * 60 * 24)) // 토큰 만료시간 24hour
+                .setExpiration(createExpireDate(1000 * 10)) // 토큰 만료시간 24hour
                 .signWith(createSigningKey(SECRET_KEY), SignatureAlgorithm.HS256) //HS256 , key로 sign
                 .compact(); // 토큰 생성
     }

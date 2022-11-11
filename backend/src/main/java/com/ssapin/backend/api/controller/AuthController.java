@@ -59,7 +59,6 @@ public class AuthController {
 
         if (firstLogin) authService.addAuth(user, refreshToken);
         else authService.updateAuth(user, refreshToken);
-
         response.setHeader(SET_COOKIE, cookieBuilder.createCookie(refreshToken).toString());
 
         return new ResponseEntity<>(AuthResponse.Login.builder()
