@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
+
 import { AxiosError } from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -8,16 +9,19 @@ import { Helmet } from "react-helmet-async";
 import BackButton from "../../components/Buttons/BackButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
-import { authState, campusState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
+import axiosInstance from "../../utils/apis/api";
+import { getMap, IBookMark, MAP_APIS } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
+import { isUserAccess } from "../../utils/functions/place";
+import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 import "../../styles/style.css";
 import PlaceCard from "../../components/card/PlaceCard";
 import { getCurrentLocation } from "../../utils/functions/getCurrentLocation";
-import MenuButton from "../../components/Buttons/MenuButton";
 import PlaceInfoModal from "../Place/PlaceInfoModal";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
@@ -25,11 +29,10 @@ import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import { makePin } from "../../utils/functions/maps";
-import { getMap } from "../../utils/apis/mapApi";
-import { IMap } from "../../utils/types/map.interface";
+
 import MapTitleCard from "../../components/card/MapTitleCard";
-import Navbar from "../../components/etc/Navbar";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import { Mobile } from "../../components/containers/MediaQueryContainer";
 
 declare global {
   interface Window {
@@ -70,6 +73,11 @@ const SubjectContainer = styled(BackContainer)`
   left: 0;
   right: 0;
   width: fit-content;
+  > button {
+    ${(props) => props.theme.mq.mobile} {
+      display: none;
+    }
+  }
 `;
 
 const PlaceListContainer = styled.div`
@@ -107,7 +115,7 @@ const NavContainer = styled.div`
 
 const ButtonListContainer = styled.div`
   position: fixed;
-  z-index: 3;
+  z-index: 2;
   bottom: 10px;
   left: 10px;
   display: flex;
@@ -122,15 +130,6 @@ const ButtonListContainer = styled.div`
   }
 `;
 
-const Page = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 130vh;
-  background-color: black;
-  opacity: 0.5;
-  z-index: 3;
-`;
-
 type Coordinate = [number, number];
 
 function Map() {
@@ -138,17 +137,17 @@ function Map() {
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
+
+  const userInformation = useRecoilValue(userInformationState);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
-  const [sidebar, setSidebar] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
-
-  const { data: mapData } = useQuery<IMap, AxiosError>(
+  const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
     ["map", mapId],
-    async () => getMap(Number(mapId)),
+    () => getMap(Number(mapId)),
   );
 
   const locateSSAFY = (position: any, map: any) => {
@@ -167,10 +166,6 @@ function Map() {
     });
     marker.setMap(map);
     return marker;
-  };
-
-  const showSidebar = () => {
-    setSidebar(!sidebar);
   };
 
   const addMarker = (position: any) => {
@@ -275,6 +270,36 @@ function Map() {
     else setLoginModalOpen(true);
   };
 
+  const registerBookmark = async () => {
+    const body: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    try {
+      await axiosInstance.post(MAP_APIS.BOOKMARK, body).then(() => {
+        mapRefetch();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeBookmark = async () => {
+    const body: IBookMark = {
+      mapId: Number(mapId),
+    };
+
+    try {
+      await axiosInstance.delete(MAP_APIS.BOOKMARK, { data: body }).then(() => {
+        mapRefetch();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  isUserAccess(userInformation.userId, mapData?.userId);
+
   const copy = () => {
     setCopied(true);
     copyURL();
@@ -291,18 +316,6 @@ function Map() {
         </title>
       </Helmet>
       <Container>
-        <BackContainer>
-          <BackButton />
-        </BackContainer>
-        <SubjectContainer>
-          <MapTitleCard
-            user={`${mapData?.userEmoji} ${mapData?.nickname}`}
-            title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
-          />
-        </SubjectContainer>
-        <NavContainer>
-          <NavToggleContainer />
-        </NavContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
           <div>
@@ -324,6 +337,13 @@ function Map() {
           </ul>
         </PlaceListContainer>
         <ButtonContainer>
+          <Mobile>
+            {mapData?.bookMark ? (
+              <MapCircleButton shape="3" func={removeBookmark} />
+            ) : (
+              <MapCircleButton shape="2" func={registerBookmark} />
+            )}
+          </Mobile>
           <CreateButton text="장소 추가하기" type="button" func={addNewPlace} />
           <CreateButtonMobile
             text="장소 추가하기"
@@ -331,6 +351,25 @@ function Map() {
             func={addNewPlace}
           />
         </ButtonContainer>
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <MapTitleCard
+            user={`${mapData?.userEmoji} ${mapData?.nickname}`}
+            title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
+          />
+          {mapData?.bookMark ? (
+            <MapCircleButton shape="3" func={removeBookmark} />
+          ) : (
+            <MapCircleButton shape="2" func={registerBookmark} />
+          )}
+        </SubjectContainer>
+
+        <NavContainer>
+          <NavToggleContainer />
+        </NavContainer>
+
         {LoginmodalOpen && (
           <ModalPortal>
             <LoginModal onClose={() => setLoginModalOpen(false)} />
@@ -347,7 +386,7 @@ function Map() {
         {copied && (
           <ModalPortal>
             <CopyModalContainer onClose={() => setCopied(false)}>
-              💻URL을 클립보드에 복사했어요.
+              <p>💻URL을 클립보드에 복사했어요.</p>
             </CopyModalContainer>
           </ModalPortal>
         )}

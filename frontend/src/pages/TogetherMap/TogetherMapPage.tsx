@@ -21,7 +21,6 @@ import LoginModal from "../Login/LoginModal";
 import "../../styles/style.css";
 import PlaceCard from "../../components/card/PlaceCard";
 import { getCurrentLocation } from "../../utils/functions/getCurrentLocation";
-import MenuButton from "../../components/Buttons/MenuButton";
 import PlaceInfoModal from "../Place/PlaceInfoModal";
 import MapCircleButton from "../../components/Buttons/MapCircleButton";
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
@@ -107,7 +106,7 @@ const NavContainer = styled.div`
 
 const ButtonListContainer = styled.div`
   position: fixed;
-  z-index: 3;
+  z-index: 2;
   bottom: 10px;
   left: 10px;
   display: flex;
@@ -280,16 +279,6 @@ function TogetherMap() {
         </title>
       </Helmet>
       <Container>
-        <MapContainer ref={mapRef} />
-        <BackContainer>
-          <BackButton />
-        </BackContainer>
-        <SubjectContainer>
-          <TogetherMapTitleCard title={togetherMapData?.title} />
-        </SubjectContainer>
-        <NavContainer>
-          <NavToggleContainer />
-        </NavContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
           <div>
@@ -318,6 +307,17 @@ function TogetherMap() {
             func={addNewPlace}
           />
         </ButtonContainer>
+        <MapContainer ref={mapRef} />
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <TogetherMapTitleCard title={togetherMapData?.title} />
+        </SubjectContainer>
+        <NavContainer>
+          <NavToggleContainer />
+        </NavContainer>
+
         {LoginmodalOpen && (
           <ModalPortal>
             <LoginModal onClose={() => setLoginModalOpen(false)} />
@@ -334,7 +334,7 @@ function TogetherMap() {
         {copied && (
           <ModalPortal>
             <CopyModalContainer onClose={() => setCopied(false)}>
-              💻URL을 클립보드에 복사했어요.
+              <p>💻URL을 클립보드에 복사했어요.</p>
             </CopyModalContainer>
           </ModalPortal>
         )}

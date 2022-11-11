@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import MenuButton from "../Buttons/MenuButton";
 import Logo from "../../assets/image/ssapin_logo.png";
 import CampusButton from "../Buttons/CampusButton";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { campusState } from "../../store/atom";
-import Navbar from "./Navbar";
 import NavToggleContainer from "./NavToggleContainer";
 
 const Container = styled.div`
@@ -29,11 +27,6 @@ const CampusContainer = styled.div`
   ${(props) => props.theme.mq.mobile} {
     width: 100%;
   }
-`;
-
-const EmptyContainer = styled.div`
-  width: 14.5%;
-  height: 100%;
 `;
 
 const LogoContainer = styled.h1`
@@ -89,23 +82,6 @@ const LogoContainer = styled.h1`
       scale: 1.05;
       cursor: pointer;
     }
-  }
-`;
-
-const Page = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 130vh;
-  background-color: black;
-  opacity: 0.5;
-  z-index: 3;
-`;
-
-const MenuContainer = styled.div`
-  height: 100%;
-
-  ${(props) => props.theme.mq.mobile} {
-    width: 14.5%;
   }
 `;
 

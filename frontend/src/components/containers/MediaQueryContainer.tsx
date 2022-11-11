@@ -5,6 +5,7 @@ export function Mobile({ children }: Children) {
   const isMobile = useMediaQuery({
     query: "(max-width: 500px)",
   });
+
   return isMobile && children;
 }
 
