@@ -117,6 +117,8 @@ const BackContainer = styled.div`
   z-index: 2;
   top: 10px;
   left: 10px;
+  display: flex;
+  gap: 1rem;
 `;
 
 const FixContainer = styled.div`
@@ -220,7 +222,6 @@ function MapNewPlace() {
     setPaginationList(pageList);
   };
   const displayPlaces = (places: IKakaoPlace[]) => {
-    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
     // removeMarker();
@@ -231,7 +232,6 @@ function MapNewPlace() {
       const marker = addMarker(placePosition, i);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-      console.log(marker);
       bounds.extend(placePosition);
       ((mark, title) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
@@ -318,17 +318,11 @@ function MapNewPlace() {
   return (
     <Conatiner>
       <BackContainer>
-        {mapData?.bookMark ? (
-          <MapCircleButton shape="3" func={removeBookmark} />
-        ) : (
-          <MapCircleButton shape="2" func={registerBookmark} />
-        )}
+        <BackButton />
         <MapTitleCard
           title={mapData?.title}
           user={`${mapData?.userEmoji} ${mapData?.nickname}`}
         />
-        <BackButton />
-        <MapCircleButton shape="2" />
       </BackContainer>
 
       <SearchContainer>

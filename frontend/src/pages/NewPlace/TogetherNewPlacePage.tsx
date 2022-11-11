@@ -111,6 +111,8 @@ const BackContainer = styled.div`
   z-index: 2;
   top: 10px;
   left: 10px;
+  display: flex;
+  gap: 1rem;
 `;
 const { kakao } = window;
 type Coordinate = [number, number];
