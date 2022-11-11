@@ -8,6 +8,7 @@ import CampusButton from "../Buttons/CampusButton";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { campusState } from "../../store/atom";
 import Navbar from "./Navbar";
+import NavToggleContainer from "./NavToggleContainer";
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -16,10 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 0.5rem 0.5rem 1.5rem;
-  ${(props) => props.theme.mq.mobile} {
-    padding: 0rem 1rem 0rem 1rem;
-  }
+  padding: 1rem;
 `;
 
 const CampusContainer = styled.div`
@@ -29,7 +27,7 @@ const CampusContainer = styled.div`
   justify-content: flex-start;
 
   ${(props) => props.theme.mq.mobile} {
-    width: 71%;
+    width: 100%;
   }
 `;
 
@@ -47,6 +45,7 @@ const LogoContainer = styled.h1`
 
   ${(props) => props.theme.mq.mobile} {
     height: 80%;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 0;
@@ -118,8 +117,6 @@ type HeaderProps = {
 function Header({ func }: HeaderProps) {
   const [campusId] = useRecoilState(campusState);
   const [isOpen, setIsOpen] = useState(false);
-  const [sidebar, setSidebar] = useState(false);
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   const toggleSide = () => {
     setIsOpen(!isOpen);
@@ -127,53 +124,35 @@ function Header({ func }: HeaderProps) {
 
   const campus = CAMPUS_LIST;
 
-  const showSidebar = () => {
-    setSidebar(!sidebar);
-  };
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
-
   const navigate = useNavigate();
   const moveToHome = () => {
     navigate("/");
   };
 
   return (
-    <>
-      <Container>
-        {innerWidth < 550 && <EmptyContainer />}
-        <CampusContainer>
-          <LogoContainer>
-            <button type="button" onClick={moveToHome} className="logo">
-              <img alt="ssapin_logo.png" src={Logo} />
+    <Container>
+      <CampusContainer>
+        <LogoContainer>
+          <button type="button" onClick={moveToHome} className="logo">
+            <img alt="ssapin_logo.png" src={Logo} />
+          </button>
+          {!isOpen && (
+            <button type="button" onClick={toggleSide}>
+              {campus[campusId]} ▼
             </button>
-            {!isOpen && (
-              <button type="button" onClick={toggleSide}>
-                {campus[campusId]} ▼
-              </button>
-            )}
-            {isOpen && (
-              <button type="button" onClick={toggleSide}>
-                {campus[campusId]} ▲
-              </button>
-            )}
-          </LogoContainer>
-          {isOpen && (
-            <CampusButton open={toggleSide} select={func} campusId={campusId} />
           )}
-        </CampusContainer>
-        <MenuContainer>
-          <MenuButton func={showSidebar} />
-        </MenuContainer>
-      </Container>
-      <Navbar sidebar={sidebar} func={showSidebar} />
-      {sidebar && <Page onClick={showSidebar} />}
-    </>
+          {isOpen && (
+            <button type="button" onClick={toggleSide}>
+              {campus[campusId]} ▲
+            </button>
+          )}
+        </LogoContainer>
+        {isOpen && (
+          <CampusButton open={toggleSide} select={func} campusId={campusId} />
+        )}
+      </CampusContainer>
+      <NavToggleContainer />
+    </Container>
   );
 }
 export default Header;

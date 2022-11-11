@@ -7,7 +7,6 @@ import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
 import BackButton from "../../components/Buttons/BackButton";
 import CreateButton from "../../components/Buttons/CreateButton";
-import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { authState, campusState } from "../../store/atom";
 import {
@@ -29,6 +28,8 @@ import { makePin } from "../../utils/functions/maps";
 import { getMap } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
 import MapTitleCard from "../../components/card/MapTitleCard";
+import Navbar from "../../components/etc/Navbar";
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
 
 declare global {
   interface Window {
@@ -121,6 +122,15 @@ const ButtonListContainer = styled.div`
   }
 `;
 
+const Page = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 130vh;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 3;
+`;
+
 type Coordinate = [number, number];
 
 function Map() {
@@ -132,6 +142,7 @@ function Map() {
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
+  const [sidebar, setSidebar] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
 
@@ -156,6 +167,10 @@ function Map() {
     });
     marker.setMap(map);
     return marker;
+  };
+
+  const showSidebar = () => {
+    setSidebar(!sidebar);
   };
 
   const addMarker = (position: any) => {
@@ -276,7 +291,6 @@ function Map() {
         </title>
       </Helmet>
       <Container>
-        <MapContainer ref={mapRef} />
         <BackContainer>
           <BackButton />
         </BackContainer>
@@ -287,7 +301,7 @@ function Map() {
           />
         </SubjectContainer>
         <NavContainer>
-          <MenuButton />
+          <NavToggleContainer />
         </NavContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
@@ -337,6 +351,7 @@ function Map() {
             </CopyModalContainer>
           </ModalPortal>
         )}
+        <MapContainer ref={mapRef} />
       </Container>
     </>
   );

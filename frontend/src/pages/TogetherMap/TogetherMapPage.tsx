@@ -29,6 +29,7 @@ import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import { makePin } from "../../utils/functions/maps";
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
 
 declare global {
   interface Window {
@@ -59,7 +60,7 @@ const ButtonContainer = styled.div`
 
 const BackContainer = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 1;
   top: 10px;
   left: 10px;
 `;
@@ -78,7 +79,7 @@ const PlaceListContainer = styled.div`
   width: 300px;
   height: 80vh;
   overflow-y: scroll;
-  z-index: 2;
+  z-index: 1;
   > ul {
     display: flex;
     flex-direction: column;
@@ -287,7 +288,7 @@ function TogetherMap() {
           <TogetherMapTitleCard title={togetherMapData?.title} />
         </SubjectContainer>
         <NavContainer>
-          <MenuButton />
+          <NavToggleContainer />
         </NavContainer>
         <ButtonListContainer>
           <MapCircleButton type="button" shape="4" height="50px" func={panTo} />
