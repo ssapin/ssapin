@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { pixelToRem } from "../../utils/functions/util";
-import Navbar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 import UserInfoCard from "../../components/card/UserInfoCard";
 import UserInfoDetailCard from "../../components/card/UserInfoDetailCard";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -94,7 +94,7 @@ function MyPage() {
   return (
     <>
       <PageTopBg>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <UserInfos>
           {innerWidth > 950 ? (
             <UserInfoCard

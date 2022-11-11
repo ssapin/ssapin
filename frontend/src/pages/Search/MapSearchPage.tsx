@@ -9,7 +9,7 @@ import Footer from "../../components/etc/Footer";
 import MapSearch from "../../components/etc/MapSearch";
 import { authState, campusState } from "../../store/atom";
 import { pixelToRem } from "../../utils/functions/util";
-import Navbar from "../Navbar/Navbar";
+import Header from "../../components/etc/Header";
 import YellowButton from "../../components/Buttons/YellowButton";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
@@ -189,7 +189,7 @@ function SearchPage() {
   return (
     <>
       <HeadContainer>
-        <Navbar func={toggleActive} />
+        <Header func={toggleActive} />
         <Searchbar>
           <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
