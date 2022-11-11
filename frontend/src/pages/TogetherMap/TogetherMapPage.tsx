@@ -78,7 +78,7 @@ const PlaceListContainer = styled.div`
   width: 300px;
   height: 80vh;
   overflow-y: scroll;
-  z-index: 1;
+  z-index: 2;
   > ul {
     display: flex;
     flex-direction: column;
