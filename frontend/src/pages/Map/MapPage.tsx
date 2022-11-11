@@ -80,6 +80,11 @@ const SubjectContainer = styled(BackContainer)`
   gap: 0.5rem;
   align-items: center;
   > div {
+    &:nth-child(1) {
+      ${(props) => props.theme.mq.mobile} {
+        max-width: 200px;
+      }
+    }
     &:nth-child(2) {
       ${(props) => props.theme.mq.mobile} {
         display: none;
@@ -102,12 +107,20 @@ const PlaceListContainer = styled.div`
     gap: 0.5rem;
     width: 90%;
     margin-left: auto;
+    ${(props) => props.theme.mq.mobile} {
+      height: fit-content;
+      max-height: 28vh;
+    }
   }
   ${(props) => props.theme.mq.tablet} {
-    top: 60vh;
+    top: auto;
+    bottom: 0;
     margin: 0 auto;
     left: 0;
     right: 0;
+    height: fit-content;
+    max-height: 40vh;
+
     > ul {
       width: 100%;
     }
