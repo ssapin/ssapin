@@ -68,8 +68,6 @@ dependencies {
 
 	//WebClient
 	implementation('org.springframework.boot:spring-boot-starter-webflux')
-
-
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
@@ -88,6 +86,7 @@ compileQuerydsl{
 }
 
 test {
+	exclude '**/*'
 	useJUnitPlatform()
 	systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
 }

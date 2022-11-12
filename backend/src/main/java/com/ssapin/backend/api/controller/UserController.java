@@ -5,6 +5,9 @@ import com.ssapin.backend.api.domain.dto.response.ReviewQueryResponse;
 import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.service.*;
+import com.ssapin.backend.exception.CustomException;
+import com.ssapin.backend.exception.ErrorCode;
+import com.ssapin.backend.util.EmojiChecker;
 import com.ssapin.backend.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +40,8 @@ public class UserController {
     private final UserRankingService userRankingService;
     private final ReviewService reviewService;
 
+    private final EmojiChecker emojiChecker;
+
     @GetMapping("/check/{nickname}")
     @ApiOperation(value = "닉네임 중복 검사", notes = "사용중일 경우 true 그렇지 않으면 false")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
@@ -66,10 +71,14 @@ public class UserController {
     @ApiOperation(value = "내 정보 수정", notes = "엑세스토큰의 userId에 해당하는 유저정보를 수정")
     public ResponseEntity<?> modifyUser(@RequestHeader("accessToken") String accessToken,
                                         @RequestBody UserRequest.Update request) {
+
+        if (!emojiChecker.isUserEmoji(request.getEmoji()))
+            throw new CustomException(ErrorCode.USER_NOT_EMOJI);
+
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);
         long campusId = request.getCampusId() != 0 ? request.getCampusId() : user.getCampus().getId();
-        Campus campus = campusService.getCampusById(request.getCampusId());
+        Campus campus = campusService.getCampusById(campusId);
 
         userService.updateUser(
                 userService.getUserById(userId),
