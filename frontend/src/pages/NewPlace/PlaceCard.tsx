@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { forwardRef, LegacyRef, useState } from "react";
+import { forwardRef, LegacyRef, memo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { authState } from "../../store/atom";
@@ -102,7 +102,7 @@ interface PlaceCardProps {
   mapId: number;
 }
 
-export const PlaceCard = forwardRef(
+const PlaceCard = forwardRef(
   (
     { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
@@ -161,3 +161,5 @@ export const PlaceCard = forwardRef(
     );
   },
 );
+
+export const MemoizedPlaceCard = memo(PlaceCard);

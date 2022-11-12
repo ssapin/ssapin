@@ -18,7 +18,7 @@ import {
 } from "../../utils/constants/contant";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import { PlaceCard } from "./PlaceCard";
+import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
   position: relative;
@@ -287,7 +287,7 @@ function TogetherNewPlace() {
         <SearchInformationContainer ref={menuWrapRef}>
           <ul>
             {placeList?.map((place, idx) => (
-              <PlaceCard
+              <MemoizedPlaceCard
                 {...place}
                 key={place.index}
                 ref={(el) => (itemRefs.current[idx] = el)}
