@@ -344,8 +344,6 @@ function TogetherNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  // mouseOver={() => mouseOver(idx, place.place.place_name)}
-                  // mouseLeave={mouseLeave}
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
                   mapId={togethermapId}
