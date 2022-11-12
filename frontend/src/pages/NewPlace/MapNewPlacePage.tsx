@@ -57,16 +57,16 @@ const SearchContainer = styled.div`
   right: 10px;
   z-index: 1;
   width: 378px;
-  max-height: 80vh;
+  max-height: 70vh;
 
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 0;
+    bottom: 100px;
     margin: 0 auto;
     left: 0;
     right: 0;
     height: fit-content;
-    max-height: 50vh;
+    max-height: 40vh;
   }
 `;
 
@@ -108,10 +108,21 @@ const SearchInformationContainer = styled.div`
   ${(props) => props.theme.mq.mobile} {
     height: calc(50vh - 83px);
   }
+  .pagination {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const PaginationButton = styled.button`
-  margin: 0 1rem;
+  margin: 0.5rem;
+  font-size: ${(props) => props.theme.fontSizes.s1};
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+
+  :hover {
+    scale: 1.1;
+  }
 `;
 
 const BackContainer = styled.div`
@@ -367,7 +378,7 @@ function MapNewPlace() {
               ))}
             </ul>
             {paginationList.length ? (
-              <div ref={pagenationRef}>
+              <div ref={pagenationRef} className="pagination">
                 {paginationList.map((page) => (
                   <PaginationButton
                     type="button"
@@ -406,6 +417,7 @@ const List = styled.li`
   cursor: pointer;
   min-height: 65px;
 `;
+
 const MarkerBg = styled.span<{ index: number }>`
   position: absolute;
   width: 36px;
@@ -428,6 +440,8 @@ const PlaceInfoContainer = styled.div`
     font-weight: bold;
     margin-block-start: 1.67px;
     margin-block-end: 1.67px;
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.s1bold};
   }
   span {
     display: block;
@@ -435,6 +449,8 @@ const PlaceInfoContainer = styled.div`
     &:last-of-type {
       color: #009900;
     }
+    font-size: ${(props) => props.theme.fontSizes.s2};
+    font-family: ${(props) => props.theme.fontFamily.s3};
   }
 `;
 
@@ -454,6 +470,7 @@ const CreateButton = styled.button`
   align-items: center;
   display: flex;
   justify-content: center;
+  font-family: ${(props) => props.theme.fontFamily.s1};
 
   &:hover {
     transform: scale(1.03);
