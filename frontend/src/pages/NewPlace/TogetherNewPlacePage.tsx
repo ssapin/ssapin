@@ -13,14 +13,16 @@ import {
   forwardRef,
   LegacyRef,
 } from "react";
+import { Helmet } from "react-helmet-async";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
 import BackButton from "../../components/Buttons/BackButton";
+import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
 import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
-
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
 import { authState, campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
@@ -40,26 +42,26 @@ const Conatiner = styled.section`
 const MapContainer = styled.div`
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   position: relative;
 `;
 
 const SearchContainer = styled.div`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 999;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 1;
   width: 378px;
   max-height: 80vh;
+
   ${(props) => props.theme.mq.tablet} {
-    max-height: 50vh;
-  }
-  ${(props) => props.theme.mq.mobile} {
-    right: 0;
-    left: 0;
-    top: 50vh;
-    width: 90%;
-    height: 50vh;
+    top: auto;
+    bottom: 0;
     margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: fit-content;
+    max-height: 50vh;
   }
 `;
 
@@ -106,14 +108,32 @@ const SearchInformationContainer = styled.div`
 const PaginationButton = styled.button`
   margin: 0 1rem;
 `;
+
 const BackContainer = styled.div`
   position: fixed;
   z-index: 2;
   top: 10px;
   left: 10px;
+`;
+
+const NavContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+`;
+
+const SubjectContainer = styled(BackContainer)`
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: fit-content;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
 `;
+
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -282,52 +302,67 @@ function TogetherNewPlace() {
   console.log(togethermapId);
 
   return (
-    <Conatiner>
-      <BackContainer>
-        <BackButton />
-        <TogetherMapTitleCard title={togetherMapData?.title} />
-      </BackContainer>
-      <SearchContainer>
-        <Form onSubmit={searchKeyword}>
-          <div>
-            <Input
-              placeholder="Search Place..."
-              onChange={onChange}
-              value={keyword}
-            />
-            <SearchButton type="submit">검색</SearchButton>
-          </div>
-        </Form>
-        <SearchInformationContainer ref={menuWrapRef}>
-          <ul>
-            {placeList?.map((place, idx) => (
-              <PlaceCard
-                {...place}
-                key={place.index}
-                ref={(el) => (itemRefs.current[idx] = el)}
-                mouseOver={() => mouseOver(idx, place.place.place_name)}
-                mouseLeave={mouseLeave}
-                mapId={togethermapId}
+    <>
+      <Helmet>
+        <title>
+          {togetherMapData?.title
+            ? `${togetherMapData?.title} - SSAPIN`
+            : "SSAPIN"}
+        </title>
+      </Helmet>
+      <Conatiner>
+        <MapContainer ref={mapRefs} />
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <TogetherMapTitleCard title={togetherMapData?.title} />
+          <TogetherMapNoticeCard />
+        </SubjectContainer>
+        <NavContainer>
+          <NavToggleContainer />
+        </NavContainer>
+        <SearchContainer>
+          <Form onSubmit={searchKeyword}>
+            <div>
+              <Input
+                placeholder="Search Place..."
+                onChange={onChange}
+                value={keyword}
               />
-            ))}
-          </ul>
-          {paginationList.length ? (
-            <div ref={pagenationRef}>
-              {paginationList.map((page) => (
-                <PaginationButton
-                  type="button"
-                  key={page.number}
-                  onClick={page.func}
-                >
-                  {page.number}
-                </PaginationButton>
-              ))}
+              <SearchButton type="submit">검색</SearchButton>
             </div>
-          ) : null}
-        </SearchInformationContainer>
-      </SearchContainer>
-      <MapContainer ref={mapRefs} />
-    </Conatiner>
+          </Form>
+          <SearchInformationContainer ref={menuWrapRef}>
+            <ul>
+              {placeList?.map((place, idx) => (
+                <PlaceCard
+                  {...place}
+                  key={place.index}
+                  ref={(el) => (itemRefs.current[idx] = el)}
+                  mouseOver={() => mouseOver(idx, place.place.place_name)}
+                  mouseLeave={mouseLeave}
+                  mapId={togethermapId}
+                />
+              ))}
+            </ul>
+            {paginationList.length ? (
+              <div ref={pagenationRef}>
+                {paginationList.map((page) => (
+                  <PaginationButton
+                    type="button"
+                    key={page.number}
+                    onClick={page.func}
+                  >
+                    {page.number}
+                  </PaginationButton>
+                ))}
+              </div>
+            ) : null}
+          </SearchInformationContainer>
+        </SearchContainer>
+      </Conatiner>
+    </>
   );
 }
 
@@ -344,7 +379,7 @@ const MarkerBg = styled.span<{ index: number }>`
   width: 36px;
   height: 37px;
   margin: 10px 0 0 10px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png")
     no-repeat;
   background-position: 0 ${(props) => -10 - props.index * 46}px;
 `;
@@ -379,18 +414,23 @@ const CreateButton = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 5px;
   border-radius: 10px;
   padding: 0.5rem;
   color: ${(props) => props.theme.colors.gray0};
   transition: all 0.2s ease-in;
   align-items: center;
   display: flex;
+  justify-content: center;
+
   &:hover {
     transform: scale(1.03);
+    background-color: ${(props) => props.theme.colors.mainBlue};
   }
+
   svg {
-    display: block;
+    width: 15px;
+    height: auto;
   }
 `;
 
@@ -413,7 +453,7 @@ const FixContainer = styled.div`
 
 const Jibun = styled.span`
   padding-left: 26px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png")
     no-repeat;
   color: ${(props) => props.theme.colors.gray400};
 `;
@@ -475,7 +515,7 @@ const PlaceCard = forwardRef(
               <span>{place.phone}</span>
 
               <CreateButton type="button" onClick={handleModal}>
-                장소
+                <p>장소 추가</p>
                 <PlusIcon className="plus" />
               </CreateButton>
             </InfoInnerContainer>

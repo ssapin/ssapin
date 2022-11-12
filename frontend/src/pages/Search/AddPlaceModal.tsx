@@ -26,11 +26,13 @@ interface PlaceModalProps {
 const Container = styled.div`
   width: 600px;
   /* max-width: 925px; */
+  height: 60vh;
   max-height: 70vh;
 
   ${(props) => props.theme.mq.tablet} {
     width: 70vw;
-    max-height: 70vh;
+    height: fit-content;
+    max-height: 85vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -92,6 +94,7 @@ const ImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
 
   ${(props) => props.theme.mq.tablet} {
     height: fit-content;
@@ -198,7 +201,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
 
   const toggleActive = (key: number) => {
     setRatePlace(key);
-    setIsOpen(true);
+    setIsOpen(!isOpen);
     setText("");
   };
 
@@ -235,7 +238,10 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
       try {
         if (response.status === 200) {
           id = response.data;
-
+          if (text.length === 0) {
+            alert("리뷰는 아예 작성하지 않거나, 1자 이상 적어주세요");
+            return;
+          }
           if (ratePlace !== 0) {
             const reviewData: IReviewPlace = {
               placeId: id,
@@ -255,6 +261,10 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
         if (response.status === 200) {
           id = response.data;
           if (ratePlace !== 0) {
+            if (text.length === 0) {
+              alert("리뷰는 아예 작성하지 않거나, 1자 이상 적어주세요");
+              return;
+            }
             const reviewData: IReviewPlace = {
               placeId: id,
               emojiType: ratePlace,
@@ -302,6 +312,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                   onChange={onChange}
                   placeholder="장소에 대한 솔직한 의견 적어주세요"
                   value={text}
+                  maxLength={20}
                 />
               ) : (
                 <EmptyContainer />
@@ -311,6 +322,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                 onChange={onChange}
                 placeholder="장소에 대한 솔직한 의견 적어주세요"
                 value={text}
+                maxLength={20}
               />
             )}
           </ReviewContainer>

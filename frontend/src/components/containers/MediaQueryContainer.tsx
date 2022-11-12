@@ -19,7 +19,7 @@ export function PC({ children }: Children): JSX.Element {
 
 export function Tablet({ children }: Children): JSX.Element {
   const isTablet = useMediaQuery({
-    query: "{min-width:501px) and (max-width:900px)",
+    query: "(min-width:501px) and (max-width:900px)",
   });
   return isTablet && <>{children}</>;
 }

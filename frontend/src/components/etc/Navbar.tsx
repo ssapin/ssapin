@@ -9,7 +9,6 @@ import ModalPortal from "../containers/ModalPortalContainer";
 import Footer from "./Footer";
 import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
-import Kakaotalk from "../../assets/image/ri_kakao-talk-fill.png";
 
 const Container = styled.div`
   hr {
@@ -35,6 +34,12 @@ const Container = styled.div`
     right: -100%;
     transition: 850ms;
     z-index: 4;
+
+    img {
+      width: 18px;
+      height: auto;
+      border-radius: 3px;
+    }
   }
 
   .nav-menu.active {
@@ -79,7 +84,7 @@ const NavContent = styled.button`
   align-items: center;
   padding: 8px 0 8px 16px;
   list-style: none;
-  height: 60px;
+  height: 70%;
   font-family: ${(props) => props.theme.fontFamily.h5};
   font-size: ${(props) => props.theme.fontSizes.h5};
 
@@ -98,23 +103,23 @@ const MyInfo = styled.div`
   }
 
   button {
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: ${(props) => props.theme.colors.mainNavy};
   }
 `;
 const NavContentFirst = styled.div`
   button {
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: black;
   }
 `;
 
 const NavContentSecond = styled.div`
   button {
-    font-family: ${(props) => props.theme.fontFamily.h3bold};
-    font-size: ${(props) => props.theme.fontSizes.h3};
+    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-size: ${(props) => props.theme.fontSizes.h5};
     color: black;
   }
 `;
@@ -216,7 +221,10 @@ function Navbar({ sidebar, func }: NavbarProps) {
                 window.open("http://pf.kakao.com/_mLgKxj");
               }}
             >
-              <img alt="ri_kakao-talk-fill.png" src={Kakaotalk} />
+              <img
+                alt="ri_kakao-talk-fill.png"
+                src="https://ifh.cc/g/qlBz3y.png"
+              />
               &nbsp;카카오톡 채널
             </NavContent>
             <NavContent
@@ -232,7 +240,7 @@ function Navbar({ sidebar, func }: NavbarProps) {
           </NavContentSecond>
         </div>
 
-        <Footer />
+        <Footer nav={true} />
       </div>
     </Container>
   );
