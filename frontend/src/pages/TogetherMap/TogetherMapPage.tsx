@@ -148,6 +148,8 @@ function TogetherMap() {
   const [copied, setCopied] = useState(false);
   const { togethermapId } = useParams();
   const navigate = useNavigate();
+  const cardContainerRef = useRef<HTMLDivElement>();
+  const cardRefs = useRef<HTMLLIElement[]>([]);
 
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
@@ -224,7 +226,6 @@ function TogetherMap() {
           level: 3,
         };
 
-        // const campusName = CAMPUS_COORDINATE_LIST[campusLocation];
         const map = await new kakao.maps.Map(mapContainer, options);
         locateSSAFY(position, map);
         // const img = "";
@@ -246,6 +247,21 @@ function TogetherMap() {
       }))();
   }, []);
 
+  const mouseOverHandler = (idx: number) => {
+    const current = cardRefs.current[idx];
+    current.style.backgroundColor = "#3396F4";
+    current.style.color = "#ffffff";
+    cardContainerRef.current.scrollTo({
+      top: current.offsetTop - cardContainerRef.current.offsetHeight / 2,
+      behavior: "smooth",
+    });
+  };
+
+  const mouseOutHandler = (idx: number) => {
+    const current = cardRefs.current[idx];
+    current.style.backgroundColor = "#ffffff";
+  };
+
   useEffect(() => {
     if (!togetherMapData) return;
     if (!mapObj.map) return;
@@ -253,18 +269,33 @@ function TogetherMap() {
       return;
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
-      togetherMapData.placeList.forEach(async (place) => {
-        const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
+      for (let i = 0; i < togetherMapData.placeList?.length; i++) {
+        const placePosition = new kakao.maps.LatLng(
+          togetherMapData.placeList[i].lat,
+          togetherMapData.placeList[i].lng,
+        );
         bounds.extend(placePosition);
-        addMarker(placePosition);
-        const cont = makePin(place, place.userEmoji, openModal);
-        await new kakao.maps.CustomOverlay({
+        const marker = addMarker(placePosition);
+        const cont = makePin(
+          togetherMapData.placeList[i],
+          togetherMapData.placeList[i].userEmoji,
+          openModal,
+        );
+        const overlay = new kakao.maps.CustomOverlay({
           map: mapObj.map,
           position: placePosition,
           content: cont,
           yAnchor: 2.3,
         });
-      });
+        ((mark) => {
+          kakao.maps.event.addListener(mark, "mouseover", () => {
+            mouseOverHandler(i);
+          });
+          kakao.maps.event.addListener(mark, "mouseout", () => {
+            mouseOutHandler(i);
+          });
+        })(marker);
+      }
       mapObj.map?.setBounds(bounds);
     })();
   }, [togetherMapData, mapObj]);
@@ -294,15 +325,18 @@ function TogetherMap() {
       <Container>
         <MapContainer ref={mapRef} />
 
-        <PlaceListContainer>
+        <PlaceListContainer ref={cardContainerRef}>
           <ul>
             {togetherMapData?.placeList &&
-              togetherMapData.placeList.map((place) => (
+              togetherMapData.placeList.map((place, idx) => (
                 <PlaceCard
                   prop={place}
                   key={place.placeId}
                   isAdmin
                   togethermapId={togetherMapData.togethermapId}
+                  ref={(el) => {
+                    cardRefs.current[idx] = el;
+                  }}
                 />
               ))}
           </ul>

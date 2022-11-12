@@ -162,7 +162,7 @@ const PlaceCard = forwardRef(
           </p>
           <p className="review">
             {prop !== undefined && !prop.reviewContent && !prop.content
-              ? "아직 등록된 리뷰가 없습니다."
+              ? "😉 아직 등록된 리뷰가 없습니다."
               : prop?.reviewContent || prop?.content}
           </p>
         </Container>

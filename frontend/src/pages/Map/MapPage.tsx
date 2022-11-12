@@ -288,7 +288,6 @@ function Map() {
     if (!mapData?.placeList || mapData.placeList.length < 1) return;
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
-      // mapData.placeList.forEach(async (place) =>
       for (let i = 0; i < mapData.placeList?.length; i++) {
         const placePosition = new kakao.maps.LatLng(
           mapData.placeList[i].lat,
