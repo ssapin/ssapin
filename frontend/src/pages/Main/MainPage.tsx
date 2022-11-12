@@ -38,7 +38,7 @@ import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
 
-const HeadContainer = styled.div`
+const HeadContainer = styled.header`
   width: 100%;
   height: 70vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -51,6 +51,8 @@ const QuestionContainer = styled.div`
   width: 100%;
   height: 55%;
   text-align: center;
+  max-width: 1024px;
+  margin: 0 auto;
 
   .swiper {
     width: 100%;
@@ -98,9 +100,11 @@ const Searchbar = styled.div`
   justify-content: center;
 `;
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   width: 100%;
   height: fit-content;
+  max-width: 1024px;
+  margin: 0 auto;
 `;
 
 const FixContainer = styled.div`

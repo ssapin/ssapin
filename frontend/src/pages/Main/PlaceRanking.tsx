@@ -2,20 +2,13 @@ import styled from "@emotion/styled";
 import HotPlaceCard from "../../components/card/HotPlaceCard";
 import { IPlaceRanking } from "../../utils/types/place.interface";
 
-const Container = styled.div`
+const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 17vw;
-  padding-right: 17vw;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.mobile} {
-    padding-left: 4vw;
-    padding-right: 4vw;
-  }
 `;
 
 const RankingContainer = styled.div`
