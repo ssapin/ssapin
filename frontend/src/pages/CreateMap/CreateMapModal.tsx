@@ -107,7 +107,7 @@ const Flex = styled.div`
   }
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   width: 100%;
   height: 35px;
   background-color: ${(props) => props.theme.colors.lightLightBlue};
@@ -132,13 +132,13 @@ const Input = styled.input`
   }
 `;
 
-const WarnDiv = styled.div`
+export const WarnDiv = styled.div`
   height: 1.5rem;
   padding: 0 1rem;
   display: flex;
 `;
 
-interface FormValues {
+export interface FormValues {
   title: string;
   emoji: string;
   campus: number;
@@ -244,7 +244,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                   required: true,
                   maxLength: 20,
                 })}
-                placeholder="지도의 제목을 입력해주세요."
+                placeholder="ex) 역삼 멀캠 근처 조용한 카페"
                 disabled={isEdit}
                 maxLength={20}
               />
