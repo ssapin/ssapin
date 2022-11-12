@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
@@ -105,10 +105,7 @@ const HeadContainer = styled.div`
 function CreateMapMobilePage() {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
-  const defaultCampusId = useRecoilValue(campusState);
-  const [campusId, setCampusId] = useState(defaultCampusId);
-  const [title, setTitle] = useState("");
-  const [emoji, setEmoji] = useState("");
+  const [defaultCampusId, setCampusdefaultId] = useRecoilState(campusState);
   const [access, setAccess] = useState(false);
   const [mapId] = useState(
     new URLSearchParams(window.location.search).get("mapId") || "",
@@ -168,19 +165,18 @@ function CreateMapMobilePage() {
     }
   };
   useEffect(() => {
-    if (mapId !== "") {
-      getMap(Number(mapId)).then((data) => {
-        setCampusId(data.campusId);
-        setEmoji(data.mapEmoji);
-        setAccess(data.access);
-        setTitle(data.title);
-        // eslint-disable-next-line array-callback-return
-        data.hashtagList.map((hashtag: any) => {
-          hashTag.push(hashtag.hashtagId);
-        });
-        setIsEdit(true);
+    if (!mapId) return;
+    getMap(Number(mapId)).then((data) => {
+      setValue("campus", data.campusId);
+      setValue("emoji", data.mapEmoji);
+      setValue("title", data.title);
+      setAccess(data.access);
+      // eslint-disable-next-line array-callback-return
+      data.hashtagList.map((hashtag: any) => {
+        hashTag.push(hashtag.hashtagId);
       });
-    }
+      setIsEdit(true);
+    });
   }, [mapId]);
 
   const toggleActive = (key: number) => {
@@ -193,18 +189,6 @@ function CreateMapMobilePage() {
     } else if (!checked) {
       setHashTag(hashTag.filter((el: any) => el !== item));
     }
-  };
-
-  const onChangeCampusId = (e: { target: { value: any } }) => {
-    setCampusId(e.target.value);
-  };
-
-  const onChangeTitle = (e: { target: { value: SetStateAction<string> } }) => {
-    setTitle(e.target.value);
-  };
-
-  const onChangeEmoji = (e: { target: { value: SetStateAction<string> } }) => {
-    setEmoji(e.target.value);
   };
 
   const onChangeAccess = (e: boolean) => {
