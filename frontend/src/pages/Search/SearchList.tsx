@@ -9,20 +9,13 @@ import { MAP_APIS } from "../../utils/apis/mapApi";
 import useFetchTripsInformation from "../../utils/hooks/useFecthTripsInformation";
 import useObserver from "../../utils/hooks/useObserver";
 
-const Container = styled.div`
+const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 17vw;
-  padding-right: 17vw;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.mobile} {
-    padding-left: 7vw;
-    padding-right: 7vw;
-  }
 `;
 
 const Title = styled.div`

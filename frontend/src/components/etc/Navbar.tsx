@@ -10,7 +10,7 @@ import Footer from "./Footer";
 import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
 
-const Container = styled.div`
+const Container = styled.nav`
   hr {
     width: 100%;
   }
@@ -240,7 +240,7 @@ function Navbar({ sidebar, func }: NavbarProps) {
           </NavContentSecond>
         </div>
 
-        <Footer nav={true} />
+        <Footer nav />
       </div>
     </Container>
   );

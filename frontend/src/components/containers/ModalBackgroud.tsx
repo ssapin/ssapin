@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Children, ModalProps } from "../../utils/types/common";
+import { ModalProps } from "../../utils/types/common";
 
 const ModalContainer = styled.div`
   width: 100%;
@@ -13,6 +13,7 @@ const ModalContainer = styled.div`
   justify-content: center;
   z-index: 999;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
 `;
 
 function ModalBackgroud({ onClose, children }: ModalProps) {
