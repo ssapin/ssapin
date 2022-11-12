@@ -1,0 +1,75 @@
+server:
+  servlet:
+    encoding:
+      force: 'true'
+      enabled: 'true'
+      charset: UTF-8
+    contextPath: /
+  port: '8080'
+logging:
+  level:
+    org:
+      springframework:
+        boot: INFO
+        security: DEBUG
+      apache:
+        tiles: INFO
+        web: DEBUG
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
+    com:
+      samsung:
+        security: DEBUG
+    root: INFO
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+spring:
+  jpa:
+    hibernate:
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      ddl-auto: update
+      use-new-id-generator-mappings: 'true'
+    properties:
+      hibernate:
+        format_sql: 'true'
+        show_sql: 'true'
+    database: mysql
+    show-sql: 'true'
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
+      username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
+    url: jdbc:mysql://k7a307.p.ssafy.io:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+  devtools:
+    livereload:
+      enabled: 'true'
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  jackson:
+    serialization:
+      fail-on-empty-beans: 'false'
+build:
+  date: '@build.date@'
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: 'false'
+external:
+  kakao:
+    client-id: ENC(y5SWfFXv9+D0YD+xY+9EJC2MirKHcBc66legGctm5HPgeEJ7cGtTV+5d5KalgasI)
+    redirect-uri: https://k7a307.p.ssafy.io/auth/kakao/login
+  jwt:
+    secret-key: ENC(to0RbuTctMFazVq5Y6WQ1EUTgQH9CY5VPEnLmRsZE8JnRjcJjM8WX8VFyUhbEPwDHt6nZpHL6wDaV6MPztuqs/BLQg1wqeOfzi3TYGleEDk=)
+    refresh-key: ENC(GwEhBnV+MkH0ERZZpzlW5EnoJhn/kGzhcaz85WnFH9vU7gbHVdXwkCPIrRUqSzU+g/xzS6u3ZUzsQ1fY4XR27ITc7I8rtLaw6BKCgDfbaZoRqCr99UdnHQ==)
+
+
+
+
