@@ -87,6 +87,8 @@ const Input = styled.input`
   border: none;
   margin-right: 10px;
   padding: 0 1rem;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   &:focus {
     outline: none;
   }
@@ -95,6 +97,7 @@ const Input = styled.input`
 const SearchButton = styled.button`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.mainYellow};
+  font-family: ${(props) => props.theme.fontFamily.paragraph};
   height: 43px;
   padding: 0 1rem;
 `;
@@ -165,6 +168,18 @@ const SubjectContainer = styled(BackContainer)`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+`;
+
+const SeachResultContainer = styled.div`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-radius: 17px;
+  background: ${(props) => props.theme.colors.lightLightBlue};
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+  box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray500};
+
+  text-align: center;
 `;
 
 const { kakao } = window;
@@ -271,6 +286,7 @@ function MapNewPlace() {
         });
       })(marker, places[i].place_name);
     }
+
     setMarkerList((prev) => {
       prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
@@ -288,7 +304,10 @@ function MapNewPlace() {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data);
       displayPagination(pagination);
-    }
+    } else setPlaceList([]);
+
+    if (data.length === 0) setFlag(false);
+    else setFlag(true);
   };
 
   const searchKeyword = (e: FormEvent) => {
@@ -298,6 +317,7 @@ function MapNewPlace() {
       `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
       placesSearchCB,
     );
+    setFirstserchFlag(false);
   };
 
   useEffect(() => {
@@ -320,6 +340,9 @@ function MapNewPlace() {
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     setMapObj({ map, ps, infowindow });
   }, []);
+
+  const [placeResultFlag, setFlag] = useState(true);
+  const [placeFirstSearch, setFirstserchFlag] = useState(true);
 
   const mouseOver = (idx: number, title: string) => {
     displayInfoWindow(markerList[idx], title);
@@ -353,6 +376,7 @@ function MapNewPlace() {
       </Helmet>
       <Conatiner>
         <MapContainer ref={mapRefs} />
+
         <SearchContainer>
           <Form onSubmit={searchKeyword}>
             <div>
@@ -391,6 +415,16 @@ function MapNewPlace() {
               </div>
             ) : null}
           </SearchInformationContainer>
+          {placeFirstSearch && placeResultFlag && (
+            <SeachResultContainer>
+              <h3>🤟 장소를 검색해주세요 🤟 </h3>
+            </SeachResultContainer>
+          )}
+          {!placeResultFlag && (
+            <SeachResultContainer>
+              <h3>😱😭 검색된 장소가 없어요😭😱 </h3>
+            </SeachResultContainer>
+          )}
         </SearchContainer>
         <BackContainer>
           <BackButton />
