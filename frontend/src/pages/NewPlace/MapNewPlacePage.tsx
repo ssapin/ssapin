@@ -342,13 +342,7 @@ function MapNewPlace() {
     setMapObj({ map, ps, infowindow });
   }, []);
 
-  const mouseOver = (idx: number, title: string) => {
-    displayInfoWindow(markerList[idx], title);
-  };
 
-  const mouseLeave = () => {
-    mapObj.infowindow.close();
-  };
   const registerBookmark = () => {
     const req: IBookMark = {
       mapId: Number(mapId),
