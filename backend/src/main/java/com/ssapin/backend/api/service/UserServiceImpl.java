@@ -26,13 +26,14 @@ public class UserServiceImpl implements UserService {
     public void addUser(long kakaoId, Campus campus) {
 
         User user = User.builder()
-                .nickname("싸핀러#"+kakaoId)
+                .nickname("undefiend")
                 .kakaoId(kakaoId)
                 .campus(campus)
                 .emoji("\uD83D\uDCA9")
                 .build();
 
-        userRepository.save(user);
+        user = userRepository.save(user);
+        user.update("싸핀러#" + user.getId(), user.getCampus(), user.getEmoji());
     }
 
     @Override
