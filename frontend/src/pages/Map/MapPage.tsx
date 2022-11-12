@@ -119,7 +119,7 @@ const PlaceListContainer = styled.div`
   }
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 0;
+    bottom: 10px;
     margin: 0 auto;
     left: 0;
     right: 0;
