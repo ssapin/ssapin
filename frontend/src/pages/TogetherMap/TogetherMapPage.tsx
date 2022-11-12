@@ -281,6 +281,7 @@ function TogetherMap() {
           togetherMapData.placeList[i].userEmoji,
           openModal,
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const overlay = new kakao.maps.CustomOverlay({
           map: mapObj.map,
           position: placePosition,

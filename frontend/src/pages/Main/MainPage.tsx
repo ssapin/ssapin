@@ -217,8 +217,10 @@ function MainPage() {
   ]);
 
   const handleModal = () => {
-    if (auth.accessToken) setModalOpen(true);
-    else setLoginModalOpen(true);
+    setModalOpen(true);
+
+    // if (auth.accessToken) setModalOpen(true);
+    // else setLoginModalOpen(true);
   };
 
   const [keyword, setKeyword] = useState("");
