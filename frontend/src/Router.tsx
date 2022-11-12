@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
 import SharedPlaceDetail from "./pages/Place/SharedPlaceDetailPage";
 import { authState } from "./store/atom";
+import ScrollToTop from "./styles/ScrollToTop";
 
 const Main = lazy(() => import("./pages/Main/MainPage"));
 const Login = lazy(() => import("./pages/Login/LoginPage"));
@@ -24,6 +25,7 @@ function Router() {
   const loggedIn = useRecoilValue(authState);
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="auth/kakao/login" element={<Login />} />

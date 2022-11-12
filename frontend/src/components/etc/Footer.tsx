@@ -23,14 +23,14 @@ const SNSContainer = styled.div`
   justify-content: space-between;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray400};
-    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
     letter-spacing: 0.5px;
 
     ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5};
-      font-size: ${(props) => props.theme.fontSizes.s1};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+      font-size: ${(props) => props.theme.fontSizes.s2};
     }
   }
 `;
@@ -49,15 +49,15 @@ const CopyRight = styled.div`
   padding: 10px;
 
   p {
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray400};
-    font-family: ${(props) => props.theme.fontFamily.h5};
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
     padding: 5px;
     letter-spacing: 0.7px;
 
     ${(props) => props.theme.mq.mobile} {
-      font-family: ${(props) => props.theme.fontFamily.h5};
-      font-size: ${(props) => props.theme.fontSizes.s1};
+      font-family: ${(props) => props.theme.fontFamily.paragraph};
+      font-size: ${(props) => props.theme.fontSizes.s2};
     }
   }
 `;
@@ -66,7 +66,11 @@ const Icon = styled.div`
   padding: 10px;
 `;
 
-function Footer() {
+type FooterProps = {
+  nav: boolean;
+};
+
+function Footer({ nav }: FooterProps) {
   return (
     <Container>
       <SNSContainer>
@@ -101,10 +105,12 @@ function Footer() {
         </IconContainer>
         <p>SNS를 통해 SSAPIN의 소식을 알려드립니다.</p>
       </SNSContainer>
-      <CopyRight>
-        <p>Copyrightⓒ2022 SSAPIN📍</p>
-        <p>유지연 | 남은열 | 박지원 | 허어설 | 이현규 | 임상빈</p>
-      </CopyRight>
+      {!nav && (
+        <CopyRight>
+          <p>Copyrightⓒ2022 SSAPIN📍</p>
+          <p>유지연 | 남은열 | 박지원 | 허어설 | 이현규 | 임상빈</p>
+        </CopyRight>
+      )}
     </Container>
   );
 }

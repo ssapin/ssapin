@@ -4,7 +4,7 @@ import { pixelToRem } from "../../utils/functions/util";
 const TiedBoxes = styled.div`
   display: block;
   height: fit-content;
-  padding-left: 10px;
+  padding-left: 5px;
   ${(props) => props.theme.mq.tablet} {
     padding-left: 0;
   }
@@ -14,6 +14,7 @@ const TagName = styled.span<{ type?: string }>`
   width: 62px;
   height: 29px;
   margin: 10px;
+  margin-left: 15px;
   flex-grow: 0;
   line-height: 1.21;
   letter-spacing: ${pixelToRem(-1.2)};
@@ -39,13 +40,13 @@ const OpenTag = styled.div<{ type?: string }>`
   .checkbox_text {
     display: flex;
     background-color: ${(props) => props.theme.colors.lightLightBlue};
-    margin-left: 5px;
+    margin-left: 2px;
     margin-top: 2px;
     font-family: ${(props) => props.theme.fontFamily.paragraph};
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray500};
     padding: ${(props) => (props.type !== "create" ? `3px 10px` : `5px 10px`)};
-    border-radius: 15px;
+    border-radius: 13px;
     cursor: pointer;
     &:hover {
       background-color: ${(props) => props.theme.colors.lightBlue};

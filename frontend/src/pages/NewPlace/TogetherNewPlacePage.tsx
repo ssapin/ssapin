@@ -5,12 +5,16 @@
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import BackButton from "../../components/Buttons/BackButton";
+import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
 import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
-import { campusState } from "../../store/atom";
+import ModalPortal from "../../components/containers/ModalPortalContainer";
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import { authState, campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
@@ -27,26 +31,26 @@ const Conatiner = styled.section`
 const MapContainer = styled.div`
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   position: relative;
 `;
 
 const SearchContainer = styled.div`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 999;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 1;
   width: 378px;
-  max-height: 80vh;
+  max-height: 70vh;
+
   ${(props) => props.theme.mq.tablet} {
-    max-height: 50vh;
-  }
-  ${(props) => props.theme.mq.mobile} {
-    right: 0;
-    left: 0;
-    top: 50vh;
-    width: 90%;
-    height: 50vh;
+    top: auto;
+    bottom: 100px;
     margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: fit-content;
+    max-height: 40vh;
   }
 `;
 
@@ -88,19 +92,49 @@ const SearchInformationContainer = styled.div`
   ${(props) => props.theme.mq.mobile} {
     height: calc(50vh - 83px);
   }
+
+  .pagination {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const PaginationButton = styled.button`
-  margin: 0 1rem;
+  margin: 0.5rem;
+  font-size: ${(props) => props.theme.fontSizes.s1};
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+
+  :hover {
+    scale: 1.1;
+  }
 `;
+
 const BackContainer = styled.div`
   position: fixed;
   z-index: 2;
   top: 10px;
   left: 10px;
+`;
+
+const NavContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+`;
+
+const SubjectContainer = styled(BackContainer)`
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: fit-content;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
 `;
+
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -268,52 +302,67 @@ function TogetherNewPlace() {
   };
 
   return (
-    <Conatiner>
-      <BackContainer>
-        <BackButton />
-        <TogetherMapTitleCard title={togetherMapData?.title} />
-      </BackContainer>
-      <SearchContainer>
-        <Form onSubmit={searchKeyword}>
-          <div>
-            <Input
-              placeholder="Search Place..."
-              onChange={onChange}
-              value={keyword}
-            />
-            <SearchButton type="submit">검색</SearchButton>
-          </div>
-        </Form>
-        <SearchInformationContainer ref={menuWrapRef}>
-          <ul>
-            {placeList?.map((place, idx) => (
-              <MemoizedPlaceCard
-                {...place}
-                key={place.index}
-                ref={(el) => (itemRefs.current[idx] = el)}
-                mouseOver={() => mouseOver(idx, place.place.place_name)}
-                mouseLeave={mouseLeave}
-                mapId={togethermapId}
+    <>
+      <Helmet>
+        <title>
+          {togetherMapData?.title
+            ? `${togetherMapData?.title} - SSAPIN`
+            : "SSAPIN"}
+        </title>
+      </Helmet>
+      <Conatiner>
+        <MapContainer ref={mapRefs} />
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <TogetherMapTitleCard title={togetherMapData?.title} />
+          <TogetherMapNoticeCard />
+        </SubjectContainer>
+        <NavContainer>
+          <NavToggleContainer />
+        </NavContainer>
+        <SearchContainer>
+          <Form onSubmit={searchKeyword}>
+            <div>
+              <Input
+                placeholder="Search Place..."
+                onChange={onChange}
+                value={keyword}
               />
-            ))}
-          </ul>
-          {paginationList.length ? (
-            <div ref={pagenationRef}>
-              {paginationList.map((page) => (
-                <PaginationButton
-                  type="button"
-                  key={page.number}
-                  onClick={page.func}
-                >
-                  {page.number}
-                </PaginationButton>
-              ))}
+              <SearchButton type="submit">검색</SearchButton>
             </div>
-          ) : null}
-        </SearchInformationContainer>
-      </SearchContainer>
-      <MapContainer ref={mapRefs} />
-    </Conatiner>
+          </Form>
+          <SearchInformationContainer ref={menuWrapRef}>
+            <ul>
+              {placeList?.map((place, idx) => (
+                <MemoizedPlaceCard
+                  {...place}
+                  key={place.index}
+                  ref={(el) => (itemRefs.current[idx] = el)}
+                  mouseOver={() => mouseOver(idx, place.place.place_name)}
+                  mouseLeave={mouseLeave}
+                  mapId={togethermapId}
+                />
+              ))}
+            </ul>
+            {paginationList.length ? (
+              <div ref={pagenationRef} className="pagination">
+                {paginationList.map((page) => (
+                  <PaginationButton
+                    type="button"
+                    key={page.number}
+                    onClick={page.func}
+                  >
+                    {page.number}
+                  </PaginationButton>
+                ))}
+              </div>
+            ) : null}
+          </SearchInformationContainer>
+        </SearchContainer>
+      </Conatiner>
+    </>
   );
 }
 

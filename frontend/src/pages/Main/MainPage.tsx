@@ -291,7 +291,7 @@ function MainPage() {
             <LoginModal onClose={() => setLoginModalOpen(false)} />
           </ModalPortal>
         )}
-        <Footer />
+        <Footer nav={false} />
       </div>
     </>
   );

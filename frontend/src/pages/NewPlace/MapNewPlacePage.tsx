@@ -36,6 +36,8 @@ import { pixelToRem } from "../../utils/functions/util";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import AddPlaceModal from "../Search/AddPlaceModal";
 import LoginModal from "../Login/LoginModal";
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import { Helmet } from "react-helmet-async";
 
 const Conatiner = styled.section`
   position: relative;
@@ -44,26 +46,26 @@ const Conatiner = styled.section`
 const MapContainer = styled.div`
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   position: relative;
 `;
 
 const SearchContainer = styled.div`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 999;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 1;
   width: 378px;
-  max-height: 80vh;
+  max-height: 70vh;
+
   ${(props) => props.theme.mq.tablet} {
-    max-height: 50vh;
-  }
-  ${(props) => props.theme.mq.mobile} {
-    right: 0;
-    left: 0;
-    top: 50vh;
-    width: 90%;
-    height: 50vh;
+    top: auto;
+    bottom: 100px;
     margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: fit-content;
+    max-height: 40vh;
   }
 `;
 
@@ -105,10 +107,21 @@ const SearchInformationContainer = styled.div`
   ${(props) => props.theme.mq.mobile} {
     height: calc(50vh - 83px);
   }
+  .pagination {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const PaginationButton = styled.button`
-  margin: 0 1rem;
+  margin: 0.5rem;
+  font-size: ${(props) => props.theme.fontSizes.s1};
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+
+  :hover {
+    scale: 1.1;
+  }
 `;
 
 const BackContainer = styled.div`
@@ -116,8 +129,6 @@ const BackContainer = styled.div`
   z-index: 2;
   top: 10px;
   left: 10px;
-  display: flex;
-  gap: 1rem;
 `;
 
 const FixContainer = styled.div`
@@ -135,6 +146,24 @@ const FixContainer = styled.div`
     right: 1rem;
     bottom: 1rem;
   }
+`;
+
+const NavContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+`;
+
+const SubjectContainer = styled(BackContainer)`
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const { kakao } = window;
@@ -315,56 +344,67 @@ function MapNewPlace() {
   };
 
   return (
-    <Conatiner>
-      <BackContainer>
-        <BackButton />
-        <MapTitleCard
-          title={mapData?.title}
-          user={`${mapData?.userEmoji} ${mapData?.nickname}`}
-        />
-      </BackContainer>
-
-      <SearchContainer>
-        <Form onSubmit={searchKeyword}>
-          <div>
-            <Input
-              placeholder="Search Place..."
-              onChange={onChange}
-              value={keyword}
-            />
-            <SearchButton type="submit">검색</SearchButton>
-          </div>
-        </Form>
-        <SearchInformationContainer ref={menuWrapRef}>
-          <ul>
-            {placeList?.map((place, idx) => (
-              <PlaceCard
-                {...place}
-                key={place.index}
-                ref={(el) => (itemRefs.current[idx] = el)}
-                mouseOver={() => mouseOver(idx, place.place.place_name)}
-                mouseLeave={mouseLeave}
-                mapId={mapId}
+    <>
+      <Helmet>
+        <title>
+          {mapData?.title ? `${mapData?.title} - SSAPIN` : "SSAPIN"}
+        </title>
+      </Helmet>
+      <Conatiner>
+        <MapContainer ref={mapRefs} />
+        <SearchContainer>
+          <Form onSubmit={searchKeyword}>
+            <div>
+              <Input
+                placeholder="Search Place..."
+                onChange={onChange}
+                value={keyword}
               />
-            ))}
-          </ul>
-          {paginationList.length ? (
-            <div ref={pagenationRef}>
-              {paginationList.map((page) => (
-                <PaginationButton
-                  type="button"
-                  key={page.number}
-                  onClick={page.func}
-                >
-                  {page.number}
-                </PaginationButton>
-              ))}
+              <SearchButton type="submit">검색</SearchButton>
             </div>
-          ) : null}
-        </SearchInformationContainer>
-      </SearchContainer>
-      <MapContainer ref={mapRefs} />
-    </Conatiner>
+          </Form>
+          <SearchInformationContainer ref={menuWrapRef}>
+            <ul>
+              {placeList?.map((place, idx) => (
+                <PlaceCard
+                  {...place}
+                  key={place.index}
+                  ref={(el) => (itemRefs.current[idx] = el)}
+                  mouseOver={() => mouseOver(idx, place.place.place_name)}
+                  mouseLeave={mouseLeave}
+                  mapId={mapId}
+                />
+              ))}
+            </ul>
+            {paginationList.length ? (
+              <div ref={pagenationRef} className="pagination">
+                {paginationList.map((page) => (
+                  <PaginationButton
+                    type="button"
+                    key={page.number}
+                    onClick={page.func}
+                  >
+                    {page.number}
+                  </PaginationButton>
+                ))}
+              </div>
+            ) : null}
+          </SearchInformationContainer>
+        </SearchContainer>
+        <BackContainer>
+          <BackButton />
+        </BackContainer>
+        <SubjectContainer>
+          <MapTitleCard
+            user={`${mapData?.userEmoji} ${mapData?.nickname}`}
+            title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
+          />
+        </SubjectContainer>
+        <NavContainer>
+          <NavToggleContainer />
+        </NavContainer>
+      </Conatiner>
+    </>
   );
 }
 
@@ -376,12 +416,13 @@ const List = styled.li`
   cursor: pointer;
   min-height: 65px;
 `;
+
 const MarkerBg = styled.span<{ index: number }>`
   position: absolute;
   width: 36px;
   height: 37px;
   margin: 10px 0 0 10px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png")
     no-repeat;
   background-position: 0 ${(props) => -10 - props.index * 46}px;
 `;
@@ -398,6 +439,8 @@ const PlaceInfoContainer = styled.div`
     font-weight: bold;
     margin-block-start: 1.67px;
     margin-block-end: 1.67px;
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.s1bold};
   }
   span {
     display: block;
@@ -405,6 +448,8 @@ const PlaceInfoContainer = styled.div`
     &:last-of-type {
       color: #009900;
     }
+    font-size: ${(props) => props.theme.fontSizes.s2};
+    font-family: ${(props) => props.theme.fontFamily.s3};
   }
 `;
 
@@ -416,24 +461,30 @@ const CreateButton = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 5px;
   border-radius: 10px;
   padding: 0.5rem;
   color: ${(props) => props.theme.colors.gray0};
   transition: all 0.2s ease-in;
   align-items: center;
   display: flex;
+  justify-content: center;
+  font-family: ${(props) => props.theme.fontFamily.s1};
+
   &:hover {
     transform: scale(1.03);
+    background-color: ${(props) => props.theme.colors.mainBlue};
   }
+
   svg {
-    display: block;
+    width: 15px;
+    height: auto;
   }
 `;
 
 const Jibun = styled.span`
   padding-left: 26px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png")
     no-repeat;
   color: ${(props) => props.theme.colors.gray400};
 `;
@@ -497,7 +548,7 @@ const PlaceCard = forwardRef(
               {isRegister && <span>이미 추가된 장소입니다.</span>}
               {!isRegister && (
                 <CreateButton type="button" onClick={handleModal}>
-                  장소
+                  <p>장소 추천</p>
                   <PlusIcon className="plus" />
                 </CreateButton>
               )}

@@ -381,19 +381,13 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
     if (reviewContent.length === 0) {
       // eslint-disable-next-line no-alert
-      alert("리뷰를 작성해주세요!");
+      alert("리뷰 내용을 작성해주세요!");
       return;
     }
 
     if (ratePlace === 0) {
       // eslint-disable-next-line no-alert
       alert("리뷰 이모지를 클릭해주세요!");
-      return;
-    }
-
-    if (reviewContent.length > 50) {
-      // eslint-disable-next-line no-alert
-      alert("리뷰는 20자 이내로 작성해주세요!");
       return;
     }
 
@@ -628,6 +622,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                         placeholder="장소에 대한 의견을 작성해주세요."
                         onChange={onChangeReview}
                         value={reviewContent}
+                        maxLength={20}
                       />
                       <ButtonContainer>
                         <ConfirmButton
@@ -743,6 +738,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                   placeholder="장소에 대한 의견을 작성해주세요."
                   onChange={onChangeReview}
                   value={reviewContent}
+                  maxLength={20}
                 />
                 <ButtonContainer>
                   <ConfirmButton

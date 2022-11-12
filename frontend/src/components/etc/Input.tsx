@@ -25,6 +25,10 @@ const Container = styled.div<{ width?: string; height?: string }>`
     text-align: center;
     font-size: ${(props) => props.theme.fontSizes.paragraph};
     font-family: ${(props) => props.theme.fontFamily.h5};
+
+    :read-only {
+      background-color: ${(props) => props.theme.colors.gray200};
+    }
   }
 
   input::placeholder {

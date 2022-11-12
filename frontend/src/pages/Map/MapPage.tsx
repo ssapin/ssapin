@@ -32,7 +32,11 @@ import { makePin } from "../../utils/functions/maps";
 
 import MapTitleCard from "../../components/card/MapTitleCard";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
-import { Mobile } from "../../components/containers/MediaQueryContainer";
+import {
+  Mobile,
+  PC,
+  Tablet,
+} from "../../components/containers/MediaQueryContainer";
 
 declare global {
   interface Window {
@@ -115,7 +119,7 @@ const PlaceListContainer = styled.div`
   }
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 0;
+    bottom: 10px;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -164,7 +168,6 @@ function Map() {
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
-  const [isCreator, setIsCreator] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
   const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
@@ -173,8 +176,7 @@ function Map() {
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc =
-      "https://trippiece607.s3.ap-northeast-2.amazonaws.com/building.png";
+    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
@@ -225,9 +227,6 @@ function Map() {
   };
 
   useEffect(() => {
-    if (isUserAccess(userInformation.userId, mapData?.userId)) {
-      setIsCreator(true);
-    }
     (async () =>
       kakao.maps.load(async () => {
         const campusLocation = mapData
@@ -372,7 +371,7 @@ function Map() {
                 <MapCircleButton shape="2" func={registerBookmark} />
               ))}
           </Mobile>
-          {(mapData?.access || isCreator) && (
+          {(mapData?.access || userInformation.userId === mapData?.userId) && (
             <>
               <CreateButton
                 text="장소 추가하기"
@@ -395,14 +394,26 @@ function Map() {
             user={`${mapData?.userEmoji} ${mapData?.nickname}`}
             title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
           />
-          <div>
-            {auth?.accessToken &&
-              (mapData?.bookMark ? (
-                <MapCircleButton shape="3" func={removeBookmark} />
-              ) : (
-                <MapCircleButton shape="2" func={registerBookmark} />
-              ))}
-          </div>
+          <PC>
+            <div>
+              {auth?.accessToken &&
+                (mapData?.bookMark ? (
+                  <MapCircleButton shape="3" func={removeBookmark} />
+                ) : (
+                  <MapCircleButton shape="2" func={registerBookmark} />
+                ))}
+            </div>
+          </PC>
+          <Tablet>
+            <div>
+              {auth?.accessToken &&
+                (mapData?.bookMark ? (
+                  <MapCircleButton shape="3" func={removeBookmark} />
+                ) : (
+                  <MapCircleButton shape="2" func={registerBookmark} />
+                ))}
+            </div>
+          </Tablet>
         </SubjectContainer>
 
         <NavContainer>

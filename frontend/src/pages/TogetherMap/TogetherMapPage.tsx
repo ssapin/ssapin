@@ -98,7 +98,7 @@ const PlaceListContainer = styled.div`
   }
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 0;
+    bottom: 10px;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -155,8 +155,7 @@ function TogetherMap() {
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc =
-      "https://trippiece607.s3.ap-northeast-2.amazonaws.com/building.png";
+    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
