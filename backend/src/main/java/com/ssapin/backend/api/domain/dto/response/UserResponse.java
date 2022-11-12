@@ -68,10 +68,11 @@ public class    UserResponse {
         private String nickname;
         private long placeCnt;
         private long userCnt;
+        private boolean access;
 
         @Builder
         Map(long mapId, long userId, String title, String mapEmoji
-            , String userEmoji, String nickname, long placeCnt, long userCnt){
+            , String userEmoji, String nickname, long placeCnt, long userCnt, boolean access){
             this.mapId = mapId;
             this.userId = userId;
             this.title = title;
@@ -80,6 +81,7 @@ public class    UserResponse {
             this.nickname = nickname;
             this.placeCnt = placeCnt;
             this.userCnt = userCnt;
+            this.access = access;
         }
     }
 
