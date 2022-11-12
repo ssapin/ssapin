@@ -340,34 +340,18 @@ function PlaceInfoPage({ placeId }: PlaceInfoProps) {
   const { data: reviewData, refetch: reviewRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
-  >(
-    [`${placeId} - reviewList`],
-    () => axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
+  >([`${placeId} - reviewList`], () =>
+    axiosInstance.get(REVIEW_APIS.getReviewList(placeId)),
   );
 
   const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - placeDetail`],
     () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
 
   const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - MapList`],
     () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: true,
-    },
   );
   const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {
     setReviewContent(e.target.value);

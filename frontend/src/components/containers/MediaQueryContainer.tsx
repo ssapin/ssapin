@@ -17,6 +17,13 @@ export function PC({ children }: Children): JSX.Element {
   return isPC && <>{children}</>;
 }
 
+export function LessPC({ children }: Children): JSX.Element {
+  const isPC = useMediaQuery({
+    query: "(max-width:900px)",
+  });
+  return isPC && <>{children}</>;
+}
+
 export function Tablet({ children }: Children): JSX.Element {
   const isTablet = useMediaQuery({
     query: "(min-width:501px) and (max-width:900px)",

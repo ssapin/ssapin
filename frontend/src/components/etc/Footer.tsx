@@ -3,7 +3,7 @@ import { ReactComponent as InstagramIcon } from "../../assets/svgs/instagram.svg
 import { ReactComponent as FacebookIcon } from "../../assets/svgs/facebook.svg";
 import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg";
 
-const Container = styled.div`
+const Container = styled.footer`
   width: inherit;
   height: 30vh;
   background-color: transparent;
