@@ -76,6 +76,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
                     .userCnt(userCnt)
+                    .access(map.isAccess())
                     .build();
 
             bookmarkedMapList.add(bookmarkedMap);
@@ -103,6 +104,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
                     .userCnt(userCnt)
+                    .access(map.isAccess())
                     .build();
 
             myMapList.add(myMap);
@@ -130,6 +132,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
                     .userCnt(userCnt)
+                    .access(map.isAccess())
                     .build();
 
             joinMapList.add(joinMap);
