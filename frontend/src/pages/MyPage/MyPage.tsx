@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { pixelToRem } from "../../utils/functions/util";
 import Header from "../../components/etc/Header";
 import UserInfoCard from "../../components/card/UserInfoCard";
@@ -17,8 +18,9 @@ import MyPageTab from "./MyPageTab";
 import Footer from "../../components/etc/Footer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
+import { LessPC, PC } from "../../components/containers/MediaQueryContainer";
 
-const PageTopBg = styled.div`
+const PageTopBg = styled.header`
   width: 100%;
   height: 50vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -55,10 +57,9 @@ const FixContainer = styled.div`
 `;
 
 function MyPage() {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const userInformation = useRecoilValue(userInformationState);
   const campus = CAMPUS_LIST;
-  const [campusId, setCampusId] = useRecoilState(campusState);
+  const setCampusId = useSetRecoilState(campusState);
   const auth = useRecoilValue(authState);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
@@ -72,15 +73,6 @@ function MyPage() {
     setCampusId(key);
   };
 
-  // 사이즈 조절
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-    return () => window.removeEventListener("resize", resizeListener);
-  }, []);
-
   const navigate = useNavigate();
   const moveToCreate = () => {
     if (auth.accessToken) navigate("/mobilecreate");
@@ -93,10 +85,13 @@ function MyPage() {
 
   return (
     <>
+      <Helmet>
+        <title>마이페이지 - SSAPIN</title>
+      </Helmet>
       <PageTopBg>
         <Header func={toggleActive} />
         <UserInfos>
-          {innerWidth > 950 ? (
+          <PC>
             <UserInfoCard
               type="pc"
               emoji={userInformation.emoji}
@@ -104,7 +99,8 @@ function MyPage() {
               campus={campus[userInformation.campusId]}
               func={handleModal}
             />
-          ) : (
+          </PC>
+          <LessPC>
             <UserInfoCard
               type="mobile"
               emoji={userInformation.emoji}
@@ -112,13 +108,13 @@ function MyPage() {
               campus={campus[userInformation.campusId]}
               func={handleModal}
             />
-          )}
+          </LessPC>
           {modalOpen && (
             <ModalPortal>
               <ChangeInfoModal onClose={() => setModalOpen(false)} />
             </ModalPortal>
           )}
-          {innerWidth > 950 ? (
+          <PC>
             <UserInfoDetailCard
               type="pc"
               nickname={userInformation.nickname}
@@ -126,7 +122,8 @@ function MyPage() {
               placecnt={userInformation.placeCnt}
               participatecnt={userInformation.participateCnt}
             />
-          ) : (
+          </PC>
+          <LessPC>
             <UserInfoDetailCard
               type="mobile"
               nickname={userInformation.nickname}
@@ -134,21 +131,18 @@ function MyPage() {
               placecnt={userInformation.placeCnt}
               participatecnt={userInformation.participateCnt}
             />
-          )}
+          </LessPC>
         </UserInfos>
       </PageTopBg>
       <MyPageTab />
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 950 ? (
-          <CreateButton
-            type="button"
-            text="지도 만들기"
-            func={handleCreateModal}
-          />
-        ) : (
-          <CreateButtonMobile type="button" func={moveToCreate} />
-        )}
+        <CreateButton
+          type="button"
+          text="지도 만들기"
+          func={handleCreateModal}
+        />
+        <CreateButtonMobile type="button" func={moveToCreate} />
         {createModalOpen && (
           <ModalPortal>
             <CreateMapModal onClose={() => setCreateModalOpen(false)} />

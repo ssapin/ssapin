@@ -1,13 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  FormEvent,
-  FormEventHandler,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
@@ -66,6 +58,9 @@ const Searchbar = styled.div`
 const MainContainer = styled.main`
   width: 100%;
   height: fit-content;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1rem;
 `;
 
 const FixContainer = styled.div`

@@ -53,6 +53,7 @@ const QuestionContainer = styled.div`
   text-align: center;
   max-width: 1024px;
   margin: 0 auto;
+  padding: 1rem;
 
   .swiper {
     width: 100%;
@@ -105,6 +106,7 @@ const MainContainer = styled.main`
   height: fit-content;
   max-width: 1024px;
   margin: 0 auto;
+  padding: 1rem;
 `;
 
 const FixContainer = styled.div`

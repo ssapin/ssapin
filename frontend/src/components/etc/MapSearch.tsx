@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
+import { ChangeEvent, FormEvent } from "react";
 import { ReactComponent as SearchIcon } from "../../assets/svgs/search.svg";
 
 type MapSearchProps = {
   width: string;
   height: string;
-  changeFunc?: (e: any) => void;
-  clickFunc?: () => void;
+  changeFunc?: (e: ChangeEvent<HTMLInputElement>) => void;
+  clickFunc?: (e: FormEvent<HTMLFormElement>) => void;
   value?: string;
 };
 

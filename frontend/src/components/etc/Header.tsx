@@ -110,11 +110,9 @@ function Header({ func }: HeaderProps) {
     <Container>
       <CampusContainer>
         <LogoContainer>
-          <h1>
-            <button type="button" onClick={moveToHome} className="logo">
-              <img alt="ssapin_logo.png" src={Logo} />
-            </button>
-          </h1>
+          <button type="button" onClick={moveToHome} className="logo">
+            <img alt="ssapin_logo.png" src={Logo} />
+          </button>
           {!isOpen && (
             <button type="button" onClick={toggleSide}>
               {campus[campusId]} ▼
