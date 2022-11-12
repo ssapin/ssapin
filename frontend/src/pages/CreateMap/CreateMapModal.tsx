@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import EmojiPicker from "emoji-picker-react";
 import { SetStateAction, useEffect, useState } from "react";
 import { InfiniteData, QueryObserverResult } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -121,7 +122,8 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
-    const promiseData = getMap(mapId).then((data) => {
+    if (!mapId) return;
+    getMap(mapId).then((data) => {
       setCampusId(data.campusId);
       setEmoji(data.mapEmoji);
       setAccess(data.access);
@@ -311,6 +313,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
             </Content>
             <Content edit={isEdit}>
               <SubTitle>아이콘(3개까지)</SubTitle>
+              {/* <EmojiPicker /> */}
               {isEdit ? (
                 <Input
                   width="100%"

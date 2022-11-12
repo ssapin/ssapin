@@ -8,7 +8,7 @@ import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { campusState } from "../../store/atom";
 import NavToggleContainer from "./NavToggleContainer";
 
-const Container = styled.div`
+const Container = styled.header`
   background-color: ${(props) => props.theme.colors.mainBlue};
   width: 100vw;
   height: 15vh;
@@ -110,9 +110,11 @@ function Header({ func }: HeaderProps) {
     <Container>
       <CampusContainer>
         <LogoContainer>
-          <button type="button" onClick={moveToHome} className="logo">
-            <img alt="ssapin_logo.png" src={Logo} />
-          </button>
+          <h1>
+            <button type="button" onClick={moveToHome} className="logo">
+              <img alt="ssapin_logo.png" src={Logo} />
+            </button>
+          </h1>
           {!isOpen && (
             <button type="button" onClick={toggleSide}>
               {campus[campusId]} ▼
