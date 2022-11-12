@@ -240,7 +240,7 @@ function SearchPage() {
           <LoginModal onClose={() => setLoginModalOpen(false)} />
         </ModalPortal>
       )}
-      <Footer />
+      <Footer nav={false} />
     </>
   );
 }

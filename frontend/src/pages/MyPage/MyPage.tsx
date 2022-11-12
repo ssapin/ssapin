@@ -160,7 +160,7 @@ function MyPage() {
           <LoginModal onClose={() => setLoginModalOpen(false)} />
         </ModalPortal>
       )}
-      <Footer />
+      <Footer nav={false} />
     </>
   );
 }

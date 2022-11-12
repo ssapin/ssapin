@@ -168,7 +168,6 @@ function Map() {
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
-  const [isCreator, setIsCreator] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
   const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
@@ -177,8 +176,7 @@ function Map() {
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc =
-      "https://trippiece607.s3.ap-northeast-2.amazonaws.com/building.png";
+    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
@@ -229,9 +227,6 @@ function Map() {
   };
 
   useEffect(() => {
-    if (isUserAccess(userInformation.userId, mapData?.userId)) {
-      setIsCreator(true);
-    }
     (async () =>
       kakao.maps.load(async () => {
         const campusLocation = mapData
@@ -376,7 +371,7 @@ function Map() {
                 <MapCircleButton shape="2" func={registerBookmark} />
               ))}
           </Mobile>
-          {(mapData?.access || isCreator) && (
+          {(mapData?.access || userInformation.userId === mapData?.userId) && (
             <>
               <CreateButton
                 text="장소 추가하기"
