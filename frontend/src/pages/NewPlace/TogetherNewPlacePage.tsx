@@ -12,9 +12,8 @@ import { useRecoilValue } from "recoil";
 import BackButton from "../../components/Buttons/BackButton";
 import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
 import TogetherMapTitleCard from "../../components/card/TogetherMapTitleCard";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
-import { authState, campusState } from "../../store/atom";
+import { campusState } from "../../store/atom";
 import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
@@ -163,6 +162,7 @@ function TogetherNewPlace() {
   const [markerList, setMarkerList] = useState([]);
   const [placeList, setPlaceList] = useState([]);
   const [paginationList, setPaginationList] = useState([]);
+  const [overlayList, setOverlayList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
   const menuWrapRef = useRef<HTMLDivElement>();
   const pagenationRef = useRef<HTMLDivElement>();
@@ -197,14 +197,16 @@ function TogetherNewPlace() {
       image: markerImage,
     });
     marker.setMap(mapObj.map);
+
     return marker;
   };
 
-  const displayInfoWindow = (marker: any, title: string) => {
-    mapObj.infowindow?.setContent(
-      `<div style="padding:10px;font-size:16px;width:150px;">${title}</div>`,
-    );
-    mapObj.infowindow?.open(mapObj.map, marker);
+  const mouseOverHandler = (overlay: any) => {
+    overlay.setMap(mapObj?.map);
+  };
+
+  const mouseOutHanvler = (overlay: any) => {
+    overlay.setMap(null);
   };
 
   const displayPagination = (pagination: Pagination) => {
@@ -219,30 +221,40 @@ function TogetherNewPlace() {
     setPaginationList(pageList);
   };
   const displayPlaces = (places: IKakaoPlace[]) => {
-    console.log(places);
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    // removeMarker();
     const newPlaceList = [];
     const newMarkerList: any[] = [];
+    const newOverlayList = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
+      const content = `
+      <div class="marker_overlay shadow" style="margin:0 auto;"><div class="place_name text_primary">${places[i].place_name}</div></div>`;
+
+      const overlay = new kakao.maps.CustomOverlay({
+        map: mapObj.map,
+        position: placePosition,
+        content,
+        yAnchor: 2.3,
+      });
+      overlay.setMap(null);
+      newOverlayList.push(overlay);
       newMarkerList.push(marker);
       newPlaceList.push({ index: i, place: places[i] });
-      console.log(marker);
       bounds.extend(placePosition);
-      ((mark, title) => {
+      ((mark) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
-          displayInfoWindow(mark, title);
+          mouseOverHandler(overlay);
         });
         kakao.maps.event.addListener(mark, "mouseout", () => {
-          mapObj.infowindow.close();
+          mouseOutHanvler(overlay);
         });
-      })(marker, places[i].place_name);
+      })(marker);
     }
-    setMarkerList((prev) => {
-      prev.forEach((marker) => marker.setMap(null));
+    setOverlayList(newOverlayList);
+    setMarkerList(() => {
+      markerList.forEach((marker) => marker.setMap(null));
       return newMarkerList;
     });
     setPlaceList(newPlaceList);
@@ -293,14 +305,6 @@ function TogetherNewPlace() {
     setMapObj({ map, ps, infowindow });
   }, []);
 
-  const mouseOver = (idx: number, title: string) => {
-    displayInfoWindow(markerList[idx], title);
-  };
-
-  const mouseLeave = () => {
-    mapObj.infowindow.close();
-  };
-
   return (
     <>
       <Helmet>
@@ -340,8 +344,10 @@ function TogetherNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  mouseOver={() => mouseOver(idx, place.place.place_name)}
-                  mouseLeave={mouseLeave}
+                  // mouseOver={() => mouseOver(idx, place.place.place_name)}
+                  // mouseLeave={mouseLeave}
+                  mouseOver={() => mouseOverHandler(overlayList[idx])}
+                  mouseLeave={() => mouseOutHanvler(overlayList[idx])}
                   mapId={togethermapId}
                 />
               ))}

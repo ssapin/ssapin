@@ -240,7 +240,7 @@ function TogetherMap() {
           map,
           position,
           content,
-          yAnchor: 2,
+          yAnchor: 2.3,
         });
         setMapObj({ map });
       }))();
@@ -262,7 +262,7 @@ function TogetherMap() {
           map: mapObj.map,
           position: placePosition,
           content: cont,
-          yAnchor: 2,
+          yAnchor: 2.3,
         });
       });
       mapObj.map?.setBounds(bounds);
