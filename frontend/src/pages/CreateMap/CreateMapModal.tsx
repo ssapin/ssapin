@@ -70,7 +70,7 @@ const FilterBox = styled.div`
   padding: 0.5rem;
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ edit: boolean }>`
   width: 45%;
   height: 75px;
   margin: auto;
@@ -78,7 +78,10 @@ const Content = styled.div`
   select {
     width: 100%;
     height: 35px;
-    background-color: ${(props) => props.theme.colors.lightLightBlue};
+    background-color: ${(props) =>
+      props.edit
+        ? props.theme.colors.gray200
+        : props.theme.colors.lightLightBlue};
     border: 0;
     border-radius: 10px;
     margin: 0.5rem;
@@ -241,7 +244,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
         <Form onSubmit={handleSubmit}>
           <p className="title">지도만들기</p>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>제목</SubTitle>
               {isEdit ? (
                 <Input
@@ -261,7 +264,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 />
               )}
             </Content>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>캠퍼스</SubTitle>
               {isEdit ? (
                 <select onChange={onChangeCampusId} value={campusId}>
@@ -297,7 +300,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>장소추가</SubTitle>
               <SwitchButton
                 textLeft="혼자 찍을래!"
@@ -306,7 +309,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 func={onChangeAccess}
               />
             </Content>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>아이콘(3개까지)</SubTitle>
               {isEdit ? (
                 <Input

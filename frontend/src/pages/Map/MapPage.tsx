@@ -32,7 +32,11 @@ import { makePin } from "../../utils/functions/maps";
 
 import MapTitleCard from "../../components/card/MapTitleCard";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
-import { Mobile } from "../../components/containers/MediaQueryContainer";
+import {
+  Mobile,
+  PC,
+  Tablet,
+} from "../../components/containers/MediaQueryContainer";
 
 declare global {
   interface Window {
@@ -395,14 +399,26 @@ function Map() {
             user={`${mapData?.userEmoji} ${mapData?.nickname}`}
             title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
           />
-          <div>
-            {auth?.accessToken &&
-              (mapData?.bookMark ? (
-                <MapCircleButton shape="3" func={removeBookmark} />
-              ) : (
-                <MapCircleButton shape="2" func={registerBookmark} />
-              ))}
-          </div>
+          <PC>
+            <div>
+              {auth?.accessToken &&
+                (mapData?.bookMark ? (
+                  <MapCircleButton shape="3" func={removeBookmark} />
+                ) : (
+                  <MapCircleButton shape="2" func={registerBookmark} />
+                ))}
+            </div>
+          </PC>
+          <Tablet>
+            <div>
+              {auth?.accessToken &&
+                (mapData?.bookMark ? (
+                  <MapCircleButton shape="3" func={removeBookmark} />
+                ) : (
+                  <MapCircleButton shape="2" func={registerBookmark} />
+                ))}
+            </div>
+          </Tablet>
         </SubjectContainer>
 
         <NavContainer>

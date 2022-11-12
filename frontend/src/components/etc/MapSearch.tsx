@@ -102,20 +102,15 @@ function MapSearch({
 }: MapSearchProps) {
   return (
     <SearchBar width={width} height={height}>
-      {value ? (
-        <input
-          type="text"
-          onChange={changeFunc}
-          placeholder="내가 원하는 지도 찾기"
-          value={value}
-        />
-      ) : (
-        <input
-          type="text"
-          onChange={changeFunc}
-          placeholder="내가 원하는 지도 찾기"
-        />
-      )}
+      <input
+        type="text"
+        onChange={changeFunc}
+        placeholder="내가 원하는 지도 찾기"
+        value={value}
+        onKeyUp={(e) => {
+          if (e.key == "Enter") clickFunc();
+        }}
+      />
       <SearchIcon className="searchButton" onClick={clickFunc} />
     </SearchBar>
   );
