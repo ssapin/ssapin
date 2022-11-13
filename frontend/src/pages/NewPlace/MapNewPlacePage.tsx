@@ -4,21 +4,12 @@
 /* eslint-disable react/destructuring-assignment */
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
-import {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  LegacyRef,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
-import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
-import { authState, campusState } from "../../store/atom";
+import { campusState } from "../../store/atom";
 import {
   getMap,
   IBookMark,
@@ -34,11 +25,8 @@ import { IMap } from "../../utils/types/map.interface";
 import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import { pixelToRem } from "../../utils/functions/util";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import AddPlaceModal from "../Search/AddPlaceModal";
-import LoginModal from "../Login/LoginModal";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
-import { MemoizedPlaceCard } from "./PlaceCard";
+import { MemoizedPlaceCard } from "./MapPlaceCard";
 
 const Conatiner = styled.section`
   position: relative;
