@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { FormEvent, SetStateAction, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -136,6 +136,7 @@ function MainPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
+  const [keyword, setKeyword] = useState("");
   const auth = useRecoilValue(authState);
 
   const toggleActive = (key: number) => {
@@ -218,19 +219,18 @@ function MainPage() {
 
   const handleModal = () => {
     setModalOpen(true);
-
-    // if (auth.accessToken) setModalOpen(true);
-    // else setLoginModalOpen(true);
+    if (auth.accessToken) setModalOpen(true);
+    else setLoginModalOpen(true);
   };
 
-  const [keyword, setKeyword] = useState("");
   const onChangeKeyword = (e: {
     target: { value: SetStateAction<string> };
   }) => {
     setKeyword(e.target.value);
   };
 
-  const moveToSearch = () => {
+  const moveToSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };
 
