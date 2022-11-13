@@ -3,18 +3,32 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Header from "../../components/etc/Header";
 import { getPlaceInfo } from "../../utils/apis/placeApi";
 import { makePin } from "../../utils/functions/maps";
 import PlaceInfoModal from "./PlaceInfoModal";
-
 import "../../styles/style.css";
+import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import BackButton from "../../components/Buttons/BackButton";
 
 const MapContainer = styled.div`
   width: 100vw;
   height: 100vh;
   z-index: 1;
   position: relative;
+`;
+
+const NavContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+`;
+
+const BackContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
 `;
 
 const { kakao } = window;
@@ -69,7 +83,12 @@ function SharedPlaceDetail() {
       <Helmet>
         <title>{placeData ? `${placeData.title} - SSAPIN` : "SSAPIN"}</title>
       </Helmet>
-      <Header />
+      <BackContainer>
+        <BackButton type="main" />
+      </BackContainer>
+      <NavContainer>
+        <NavToggleContainer />
+      </NavContainer>
       <MapContainer ref={mapRef} />
       {createModalOpen && (
         <PlaceInfoModal

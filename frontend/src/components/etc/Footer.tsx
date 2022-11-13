@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { ReactComponent as InstagramIcon } from "../../assets/svgs/instagram.svg";
-import { ReactComponent as FacebookIcon } from "../../assets/svgs/facebook.svg";
+import { ReactComponent as NotionIcon } from "../../assets/svgs/notion.svg";
 import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg";
 
-const Container = styled.div`
+const Container = styled.footer`
   width: inherit;
   height: 30vh;
   background-color: transparent;
@@ -86,11 +86,11 @@ function Footer({ nav }: FooterProps) {
           </Icon>
           <Icon>
             <a
-              href="https://ko-kr.facebook.com/"
+              href="https://positive-gambler-f01.notion.site/SSAPIN-9ab287af8b1b4226924574edef1017be"
               target="_blank"
               rel="noreferrer"
             >
-              <FacebookIcon />
+              <NotionIcon />
             </a>
           </Icon>
           <Icon>

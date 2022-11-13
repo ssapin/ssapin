@@ -8,7 +8,7 @@ import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { campusState } from "../../store/atom";
 import NavToggleContainer from "./NavToggleContainer";
 
-const Container = styled.div`
+const Container = styled.header`
   background-color: ${(props) => props.theme.colors.mainBlue};
   width: 100vw;
   height: 15vh;

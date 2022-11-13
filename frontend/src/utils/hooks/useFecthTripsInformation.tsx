@@ -24,9 +24,6 @@ const useFetchTripsInformation = ({
       }
       // return false;
     },
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: true,
   });
 
 export default useFetchTripsInformation;

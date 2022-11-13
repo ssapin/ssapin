@@ -4,7 +4,7 @@ import MyBookmark from "./MyPageBookmark";
 import MyMaps from "./MyPageMaps";
 import { pixelToRem } from "../../utils/functions/util";
 
-const TabBackground = styled.div`
+const TabBackground = styled.nav`
   background-color: ${(props) => props.theme.colors.mainBlue};
 `;
 
@@ -16,6 +16,8 @@ const TabMenu = styled.div`
   line-height: 1.22;
   letter-spacing: ${pixelToRem(-1.2)};
   position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
   .non-checked {
     width: 50%;
     border-radius: ${pixelToRem(20)} ${pixelToRem(20)} 0 0;
@@ -58,7 +60,7 @@ const TabMenu = styled.div`
   }
 `;
 
-const Container = styled.div`
+const Container = styled.main`
   width: 100%;
   height: 100%;
   position: relative;

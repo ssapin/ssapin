@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { FormEvent, SetStateAction, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -6,6 +6,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -37,7 +38,7 @@ import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
 
-const HeadContainer = styled.div`
+const HeadContainer = styled.header`
   width: 100%;
   height: 70vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -50,6 +51,9 @@ const QuestionContainer = styled.div`
   width: 100%;
   height: 55%;
   text-align: center;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1rem;
 
   .swiper {
     width: 100%;
@@ -97,9 +101,12 @@ const Searchbar = styled.div`
   justify-content: center;
 `;
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   width: 100%;
   height: fit-content;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1rem;
 `;
 
 const FixContainer = styled.div`
@@ -129,6 +136,7 @@ function MainPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
+  const [keyword, setKeyword] = useState("");
   const auth = useRecoilValue(authState);
 
   const toggleActive = (key: number) => {
@@ -210,23 +218,27 @@ function MainPage() {
   ]);
 
   const handleModal = () => {
+    setModalOpen(true);
     if (auth.accessToken) setModalOpen(true);
     else setLoginModalOpen(true);
   };
 
-  const [keyword, setKeyword] = useState("");
   const onChangeKeyword = (e: {
     target: { value: SetStateAction<string> };
   }) => {
     setKeyword(e.target.value);
   };
 
-  const moveToSearch = () => {
+  const moveToSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <>
+      <Helmet>
+        <title>SSAPIN</title>
+      </Helmet>
       <HeadContainer>
         <Header func={toggleActive} />
         <QuestionContainer>
@@ -287,7 +299,7 @@ function MainPage() {
         </ModalPortal>
       )}
       <Footer nav={false} />
-    </div>
+    </>
   );
 }
 

@@ -170,13 +170,15 @@ function Map() {
   const [copied, setCopied] = useState(false);
   const { mapId } = useParams();
   const navigate = useNavigate();
+  const cardContainerRef = useRef<HTMLDivElement>();
+  const cardRefs = useRef<HTMLLIElement[]>([]);
   const { data: mapData, refetch: mapRefetch } = useQuery<IMap, AxiosError>(
     ["map", mapId],
     () => getMap(Number(mapId)),
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
+    const imageSrc = "https://ifh.cc/g/nsa8rO.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
@@ -259,11 +261,26 @@ function Map() {
           map,
           position,
           content,
-          yAnchor: 2,
+          yAnchor: 2.3,
         });
         setMapObj({ map });
       }))();
   }, []);
+
+  const mouseOverHandler = (idx: number) => {
+    const current = cardRefs.current[idx];
+    current.style.backgroundColor = "#3396F4";
+    current.style.color = "#ffffff";
+    cardContainerRef.current.scrollTo({
+      top: current.offsetTop - cardContainerRef.current.offsetHeight / 2,
+      behavior: "smooth",
+    });
+  };
+
+  const mouseOutHandler = (idx: number) => {
+    const current = cardRefs.current[idx];
+    current.style.backgroundColor = "#ffffff";
+  };
 
   useEffect(() => {
     if (!mapData) return;
@@ -271,18 +288,34 @@ function Map() {
     if (!mapData?.placeList || mapData.placeList.length < 1) return;
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
-      mapData.placeList.forEach(async (place) => {
-        const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
+      for (let i = 0; i < mapData.placeList?.length; i++) {
+        const placePosition = new kakao.maps.LatLng(
+          mapData.placeList[i].lat,
+          mapData.placeList[i].lng,
+        );
         bounds.extend(placePosition);
-        addMarker(placePosition);
-        const cont = makePin(place, place.userEmoji, openModal);
-        await new kakao.maps.CustomOverlay({
+        const marker = addMarker(placePosition);
+        const cont = makePin(
+          mapData.placeList[i],
+          mapData.placeList[i].userEmoji,
+          openModal,
+        );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const overlay = new kakao.maps.CustomOverlay({
           map: mapObj.map,
           position: placePosition,
           content: cont,
-          yAnchor: 2,
+          yAnchor: 2.3,
         });
-      });
+        ((mark) => {
+          kakao.maps.event.addListener(mark, "mouseover", () => {
+            mouseOverHandler(i);
+          });
+          kakao.maps.event.addListener(mark, "mouseout", () => {
+            mouseOutHandler(i);
+          });
+        })(marker);
+      }
       mapObj.map?.setBounds(bounds);
     })();
   }, [mapData, mapObj]);
@@ -336,15 +369,18 @@ function Map() {
         </title>
       </Helmet>
       <Container>
-        <PlaceListContainer>
+        <PlaceListContainer ref={cardContainerRef}>
           <ul>
             {mapData?.placeList &&
-              mapData.placeList.map((place) => (
+              mapData.placeList.map((place, idx) => (
                 <PlaceCard
                   prop={place}
                   key={place.placeId}
                   isAdmin
                   mapId={mapData.mapId}
+                  ref={(el) => {
+                    cardRefs.current[idx] = el;
+                  }}
                 />
               ))}
           </ul>

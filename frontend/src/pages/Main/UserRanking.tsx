@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import RankingUserCard from "../../components/card/RankingUserCard";
 import { IUserRanking } from "../../utils/types/user.interface";
 
-const Container = styled.div`
+const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 17vw;
-  padding-right: 17vw;
   margin-top: 4rem;
 
   ${(props) => props.theme.mq.mobile} {
