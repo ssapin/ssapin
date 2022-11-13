@@ -43,7 +43,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequest.Login loginRequest, HttpServletResponse response,
                                    HttpServletRequest request) {
 
-        String redirectURL = kakaoOAuth2.getRedirectURL(request.getRemoteAddr());
+        String redirectURL = request.getHeader("Origin") + "/auth/kakao/login";
         boolean firstLogin = false;
         String kakaoToken = kakaoOAuth2.getKakaoToken(loginRequest.getAuthorizeCode(), redirectURL);
         long kakaoId = kakaoOAuth2.getKakaoId(kakaoToken);
