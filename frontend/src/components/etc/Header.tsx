@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/image/ssapin_logo.png";
 import CampusButton from "../Buttons/CampusButton";
@@ -87,12 +87,11 @@ const LogoContainer = styled.h1`
 `;
 
 type HeaderProps = {
-  // eslint-disable-next-line react/require-default-props
   func?: (key: number) => void;
 };
 
 function Header({ func }: HeaderProps) {
-  const [campusId] = useRecoilState(campusState);
+  const campusId = useRecoilValue(campusState);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSide = () => {
