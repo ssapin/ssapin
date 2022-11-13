@@ -9,6 +9,9 @@ import com.ssapin.backend.api.domain.entity.User;
 import com.ssapin.backend.api.service.MapServiceImpl;
 import com.ssapin.backend.api.service.TogethermapServiceImpl;
 import com.ssapin.backend.api.service.UserServiceImpl;
+import com.ssapin.backend.exception.CustomException;
+import com.ssapin.backend.exception.ErrorCode;
+import com.ssapin.backend.util.EmojiChecker;
 import com.ssapin.backend.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.Api;
@@ -35,10 +38,15 @@ public class MapController {
     private final MapServiceImpl mapService;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserServiceImpl userService;
+    private final EmojiChecker emojiChecker;
 
     @PostMapping("/login")
     @ApiOperation(value = "추천지도 생성 ", notes = "사용자가 추천지도를 생성한다.")
     public ResponseEntity<?> addMap(@RequestHeader("accessToken") final String accessToken, @RequestBody MapRequest.MapRegister mapRegister) {
+
+        if (!emojiChecker.isMapEmoji(mapRegister.getEmoji()))
+            throw new CustomException(ErrorCode.MAP_NOT_EMOJI);
+
         try {
             long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
             User user = userService.getUserById(userId);

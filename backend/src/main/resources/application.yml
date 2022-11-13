@@ -46,7 +46,7 @@ spring:
     hikari:
       password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
       username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
-    url: jdbc:mysql://k7a307.p.ssafy.io:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: ENC(+ngNBaZCaWIP7ug44Dmi0pyPmYZ4y016m8LCqkqbZa9Wltm4X6FUi02PG/v61otkOY2hjEWHffZ/IayyDEX1vXZxUPY15xjHU9pbL2hbmiIl8CHYvZGeIan+5fYi7NnVfE4xFIcDYxNVgz3mcZkxLM3S3AMEA0MCL5Q/jPteQ7xrHGQAWBPe2llJ//6cjlxCb1d2/HAw3YVPpR9W8olezxMpG0voLfJkRUWp9x0VrzM=)
   devtools:
     livereload:
       enabled: 'true'
@@ -65,7 +65,6 @@ springfox:
 external:
   kakao:
     client-id: ENC(y5SWfFXv9+D0YD+xY+9EJC2MirKHcBc66legGctm5HPgeEJ7cGtTV+5d5KalgasI)
-    redirect-uri: https://k7a307.p.ssafy.io/auth/kakao/login
   jwt:
     secret-key: ENC(to0RbuTctMFazVq5Y6WQ1EUTgQH9CY5VPEnLmRsZE8JnRjcJjM8WX8VFyUhbEPwDHt6nZpHL6wDaV6MPztuqs/BLQg1wqeOfzi3TYGleEDk=)
     refresh-key: ENC(GwEhBnV+MkH0ERZZpzlW5EnoJhn/kGzhcaz85WnFH9vU7gbHVdXwkCPIrRUqSzU+g/xzS6u3ZUzsQ1fY4XR27ITc7I8rtLaw6BKCgDfbaZoRqCr99UdnHQ==)
