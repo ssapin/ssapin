@@ -10,16 +10,7 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
 import { campusState } from "../../store/atom";
-<<<<<<< HEAD
 import { getMap } from "../../utils/apis/mapApi";
-=======
-import {
-  getMap,
-  IBookMark,
-  registerMapBookmark,
-  removeMapBookmark,
-} from "../../utils/apis/mapApi";
->>>>>>> upstream/FE-develop
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
