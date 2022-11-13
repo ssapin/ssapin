@@ -14,8 +14,6 @@ public class KakaoOAuth2 {
 
     @Value("${external.kakao.client-id}")
     private String CLIENT_ID;
-    @Value("${external.kakao.redirect-uri}")
-    private String REDIRECT_URI;
 
     @Value("${external.jwt.secret-key}")
     String SECRET_KEY;
@@ -23,7 +21,13 @@ public class KakaoOAuth2 {
     @Value("${external.jwt.refresh-key}")
     String REFRESH_KEY;
 
-    public String getKakaoToken(String authorizeCode) {
+    public String getRedirectURL(String requestURL) {
+
+        if (requestURL.contains("localhost")) return "http://localhost:3000/auth/kakao/login";
+        else return "https://k7a307.p.ssafy.io/auth/kakao/login";
+    }
+
+    public String getKakaoToken(String authorizeCode, String redirectURL) {
 
         WebClient webClient = WebClient.builder()
                 .baseUrl("https://kauth.kakao.com")
@@ -35,7 +39,7 @@ public class KakaoOAuth2 {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", CLIENT_ID)
-                        .queryParam("redirect_uri", REDIRECT_URI)
+                        .queryParam("redirect_uri", redirectURL)
                         .queryParam("code", authorizeCode)
                         .build())
                 .retrieve().bodyToMono(JSONObject.class).block();
