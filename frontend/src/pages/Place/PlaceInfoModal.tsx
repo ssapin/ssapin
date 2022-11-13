@@ -404,6 +404,8 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
     try {
       if (response.status === 200) {
         reviewRefetch();
+        setRatePlace(0);
+        setReviewContent("");
       }
     } catch (err) {
       console.log(err);

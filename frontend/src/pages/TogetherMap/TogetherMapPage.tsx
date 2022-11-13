@@ -151,9 +151,11 @@ function TogetherMap() {
   const cardContainerRef = useRef<HTMLDivElement>();
   const cardRefs = useRef<HTMLLIElement[]>([]);
 
-  const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
-    ["together-map", togethermapId],
-    async () => getTogetherMap(Number(togethermapId)),
+  const { data: togetherMapData, refetch: togethermapRefetch } = useQuery<
+    ITogetherMap,
+    AxiosError
+  >(["together-map", togethermapId], async () =>
+    getTogetherMap(Number(togethermapId)),
   );
 
   const locateSSAFY = (position: any, map: any) => {
@@ -314,6 +316,11 @@ function TogetherMap() {
     }, 2000);
   };
 
+  const onClose = () => {
+    setModalOpen(false);
+    togethermapRefetch();
+  };
+
   return (
     <>
       <Helmet>
@@ -338,6 +345,7 @@ function TogetherMap() {
                   ref={(el) => {
                     cardRefs.current[idx] = el;
                   }}
+                  refetch={togethermapRefetch}
                 />
               ))}
           </ul>
@@ -381,10 +389,7 @@ function TogetherMap() {
         )}
         {modalOpen && (
           <ModalPortal>
-            <PlaceInfoModal
-              placeId={placeId}
-              onClose={() => setModalOpen(false)}
-            />
+            <PlaceInfoModal placeId={placeId} onClose={onClose} />
           </ModalPortal>
         )}
         {copied && (

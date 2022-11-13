@@ -15,18 +15,7 @@ type PlaceCardProps = {
   isAdmin: boolean;
   mapId?: number;
   togethermapId?: number;
-  refetch?: () => Promise<
-    QueryObserverResult<
-      InfiniteData<
-        | {
-            result: any;
-            page: any;
-          }
-        | undefined
-      >,
-      unknown
-    >
-  >;
+  refetch?: () => any;
 };
 
 const Container = styled.li`
@@ -112,7 +101,7 @@ const PlaceCard = forwardRef(
       }
 
       // eslint-disable-next-line no-alert
-      if (!window.confirm("정말 삭제하시겠습니까?")) return;
+      if (!window.confirm("정말.. 삭제하시려구요..? (•́ ̯•̀)")) return;
       if (mapId) {
         const response = await axiosInstance.delete(PLACE_APIS.MAP, {
           data: { mapId, placeId: prop.placeId },
@@ -121,8 +110,7 @@ const PlaceCard = forwardRef(
         try {
           if (response.status === 200) {
             // eslint-disable-next-line no-alert
-            alert(`장소가 삭제되었습니다.`);
-            window.location.reload();
+            if (refetch) refetch();
           }
         } catch (err) {
           console.log(err);
@@ -134,9 +122,7 @@ const PlaceCard = forwardRef(
 
         try {
           if (response.status === 200) {
-            // eslint-disable-next-line no-alert
-            alert(`장소가 삭제되었습니다.`);
-            window.location.reload();
+            if (refetch) refetch();
           }
         } catch (err) {
           console.log(err);
