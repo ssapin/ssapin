@@ -26,6 +26,10 @@ const QuestionContainer = styled.div`
       font-size: ${(props) => props.theme.fontSizes.h4};
     }
   }
+
+  button {
+    margin-bottom: 30px;
+  }
 `;
 
 function Question({ item }: QuestionProps) {

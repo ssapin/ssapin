@@ -91,11 +91,6 @@ const QuestionContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
   }
-
-  .swiper-pagination {
-    position: fixed;
-    top: 50vh;
-  }
 `;
 
 const Searchbar = styled.div`
