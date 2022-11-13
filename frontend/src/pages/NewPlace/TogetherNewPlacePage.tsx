@@ -325,7 +325,7 @@ function TogetherNewPlace() {
       <Conatiner>
         <MapContainer ref={mapRefs} />
         <BackContainer>
-          <BackButton />
+          <BackButton type="togethermap" mapId={togethermapId} />
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />

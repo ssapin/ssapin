@@ -465,7 +465,7 @@ function MapNewPlace() {
           </SearchInformationContainer>
         </SearchContainer>
         <BackContainer>
-          <BackButton />
+          <BackButton type="map" mapId={mapId} />
         </BackContainer>
         <SubjectContainer>
           <MapTitleCard
