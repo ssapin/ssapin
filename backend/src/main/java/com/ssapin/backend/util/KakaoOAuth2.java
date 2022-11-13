@@ -15,16 +15,23 @@ public class KakaoOAuth2 {
     @Value("${external.kakao.client-id}")
     private String CLIENT_ID;
 
+    @Value("${external.kakao.test-server-ip}")
+    private String TEST_SERVER_IP;
+
+    @Value("${external.kakao.server-ip}")
+    private String SERVER_IP;
+
     @Value("${external.jwt.secret-key}")
     String SECRET_KEY;
 
     @Value("${external.jwt.refresh-key}")
     String REFRESH_KEY;
 
-    public String getRedirectURL(String requestURL) {
+    public String getRedirectURL(String remoteAddr) {
 
-        if (requestURL.contains("localhost")) return "http://localhost:3000/auth/kakao/login";
-        else return "https://k7a307.p.ssafy.io/auth/kakao/login";
+        if (remoteAddr.equals(TEST_SERVER_IP)) return "https://k7a307.p.ssafy.io/auth/kakao/login";
+        else if (remoteAddr.equals(SERVER_IP)) return "https://ssapin.com/auth/kakao/login";
+        else  return "http://localhost:3000/auth/kakao/login";
     }
 
     public String getKakaoToken(String authorizeCode, String redirectURL) {
