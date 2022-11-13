@@ -28,7 +28,7 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { getMap } from "../../utils/apis/mapApi";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -44,7 +44,7 @@ const Container = styled.div`
 
   ${(props) => props.theme.mq.tablet} {
     width: 80vw;
-    height: 80vh;
+    height: 70vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -200,7 +200,6 @@ const Comment = styled.textarea`
   resize: none;
 
   ${(props) => props.theme.mq.tablet} {
-    padding: 1rem;
     width: 85%;
     height: 60px;
     margin: auto;
@@ -345,6 +344,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const mapRef = useRef<HTMLDivElement>();
   const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
 
   const { data: reviewData, refetch: reviewRefetch } = useQuery<
     AxiosResponse<any>,
@@ -383,13 +383,13 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
     if (reviewContent.length === 0) {
       // eslint-disable-next-line no-alert
-      alert("리뷰 내용을 작성해주세요!");
+      alert("리뷰는 1자 이상 적어주세요!😉");
       return;
     }
 
     if (ratePlace === 0) {
       // eslint-disable-next-line no-alert
-      alert("리뷰 이모지를 클릭해주세요!");
+      alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
       return;
     }
 
@@ -517,6 +517,11 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
     }, 2000);
   };
 
+  const onTitleClick = (mapId: number) => {
+    onClose();
+    navigate(`/maps/${mapId}/detail`);
+  };
+
   return (
     <ModalContainer onClose={onClose}>
       {innerWidth > 950 ? (
@@ -549,6 +554,8 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                         user={`${map.userEmoji} ${map.nickname}`}
                         used="modal"
                         title={map.title}
+                        mapId={map.mapId}
+                        func={onTitleClick}
                       />
                     ))}
 
@@ -679,6 +686,8 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                       user={`${map.userEmoji} ${map.nickname}`}
                       used="modal"
                       title={map.title}
+                      mapId={map.mapId}
+                      func={onTitleClick}
                     />
                   ))}
 

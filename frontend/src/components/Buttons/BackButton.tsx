@@ -36,6 +36,7 @@ export default function BackButton({ type, mapId }: IBackButtonProps) {
   };
 
   const moveTogethermap = () => {
+    console.log("뒤로뒤로~");
     navigate(`/togethermaps/${mapId}/detail`);
   };
   const moveTomain = () => {

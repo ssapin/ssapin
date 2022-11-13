@@ -38,6 +38,10 @@ const WhiteCircle = styled.button<{ height?: string }>`
     height: 60%;
     fill: ${(props) => props.theme.colors.lightBlue};
   }
+
+  :hover {
+    scale: 1.07;
+  }
 `;
 
 export default function MapCircleButton({

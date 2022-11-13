@@ -15,12 +15,13 @@ const List = styled.li`
   cursor: pointer;
   min-height: 65px;
 `;
+
 const MarkerBg = styled.span<{ index: number }>`
   position: absolute;
   width: 36px;
   height: 37px;
   margin: 10px 0 0 10px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png")
     no-repeat;
   background-position: 0 ${(props) => -10 - props.index * 46}px;
 `;
@@ -37,6 +38,8 @@ const PlaceInfoContainer = styled.div`
     font-weight: bold;
     margin-block-start: 1.67px;
     margin-block-end: 1.67px;
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.s1bold};
   }
   span {
     display: block;
@@ -44,6 +47,8 @@ const PlaceInfoContainer = styled.div`
     &:last-of-type {
       color: #009900;
     }
+    font-size: ${(props) => props.theme.fontSizes.s2};
+    font-family: ${(props) => props.theme.fontFamily.s3};
   }
 `;
 
@@ -55,19 +60,32 @@ const CreateButton = styled.button`
   background-color: ${(props) => props.theme.colors.lightBlue};
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 5px;
   border-radius: 10px;
   padding: 0.5rem;
   color: ${(props) => props.theme.colors.gray0};
   transition: all 0.2s ease-in;
   align-items: center;
   display: flex;
+  justify-content: center;
+  font-family: ${(props) => props.theme.fontFamily.s1};
+
   &:hover {
     transform: scale(1.03);
+    background-color: ${(props) => props.theme.colors.mainBlue};
   }
+
   svg {
-    display: block;
+    width: 15px;
+    height: auto;
   }
+`;
+
+const Jibun = styled.span`
+  padding-left: 26px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png")
+    no-repeat;
+  color: ${(props) => props.theme.colors.gray400};
 `;
 
 const FixContainer = styled.div`
@@ -87,13 +105,6 @@ const FixContainer = styled.div`
   }
 `;
 
-const Jibun = styled.span`
-  padding-left: 26px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
-    no-repeat;
-  color: ${(props) => props.theme.colors.gray400};
-`;
-
 interface PlaceCardProps {
   index: number;
   mouseOver: () => void;
@@ -109,6 +120,7 @@ const PlaceCard = forwardRef(
   ) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
     const auth = useRecoilValue(authState);
 
     const handleModal = () => {
@@ -125,7 +137,7 @@ const PlaceCard = forwardRef(
                 onClose={() => setModalOpen(false)}
                 place={place}
                 mapId={mapId}
-                type={2}
+                type={1}
               />
             </ModalPortal>
           )}
@@ -149,11 +161,13 @@ const PlaceCard = forwardRef(
                 <span>{place.address_name}</span>
               )}
               <span>{place.phone}</span>
-
-              <CreateButton type="button" onClick={handleModal}>
-                장소
-                <PlusIcon className="plus" />
-              </CreateButton>
+              {isRegister && <span>이미 추가된 장소입니다.</span>}
+              {!isRegister && (
+                <CreateButton type="button" onClick={handleModal}>
+                  <p>장소 추천</p>
+                  <PlusIcon className="plus" />
+                </CreateButton>
+              )}
             </InfoInnerContainer>
           </PlaceInfoContainer>
         </List>
