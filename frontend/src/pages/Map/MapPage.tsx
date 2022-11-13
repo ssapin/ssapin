@@ -178,7 +178,7 @@ function Map() {
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
+    const imageSrc = "https://ifh.cc/g/nsa8rO.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
