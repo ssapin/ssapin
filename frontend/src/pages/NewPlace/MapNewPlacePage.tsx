@@ -73,10 +73,23 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
+  //background-color: ${(props) => props.theme.colors.lightBlue};
+  background-color: rgba(51, 150, 244, 0.9);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FormContainer = styled.div`
+  width: 100%;
+  height: 83px;
+  border-radius: 20px 20px 0px 0px;
   background-color: ${(props) => props.theme.colors.lightBlue};
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
 `;
 
 const Input = styled.input`
@@ -86,6 +99,8 @@ const Input = styled.input`
   border: none;
   margin-right: 10px;
   padding: 0 1rem;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   &:focus {
     outline: none;
   }
@@ -94,8 +109,10 @@ const Input = styled.input`
 const SearchButton = styled.button`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.mainYellow};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
   height: 43px;
   padding: 0 1rem;
+  box-shadow: 0 ${pixelToRem(2)} ${pixelToRem(2)} 0 rgba(0, 0, 0, 0.25);
 `;
 
 const SearchInformationContainer = styled.div`
@@ -164,6 +181,39 @@ const SubjectContainer = styled(BackContainer)`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+`;
+
+const SeachResultContainer = styled.div`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-radius: 17px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+
+  text-align: center;
+`;
+
+const NoResultContainer = styled.div`
+  margin-top: 3%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
+  text-align: center;
+`;
+
+const FontH3 = styled.div`
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+`;
+
+const FontS1 = styled.div`
+  margin-top: 3%;
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.s1};
+  font-size: ${(props) => props.theme.fontSizes.s1};
 `;
 
 const { kakao } = window;
@@ -309,7 +359,10 @@ function MapNewPlace() {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data);
       displayPagination(pagination);
-    }
+    } else setPlaceList([]);
+
+    if (data.length === 0) setFlag(false);
+    else setFlag(true);
   };
 
   const searchKeyword = (e: FormEvent) => {
@@ -319,6 +372,7 @@ function MapNewPlace() {
       `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
       placesSearchCB,
     );
+    setFirstserchFlag(false);
   };
 
   useEffect(() => {
@@ -342,6 +396,12 @@ function MapNewPlace() {
     setMapObj({ map, ps, infowindow });
   }, []);
 
+  const [placeResultFlag, setFlag] = useState(true);
+  const [placeFirstSearch, setFirstserchFlag] = useState(true);
+
+  const mouseOver = (idx: number, title: string) => {
+    displayInfoWindow(markerList[idx], title);
+  };
 
   const registerBookmark = () => {
     const req: IBookMark = {
@@ -368,6 +428,7 @@ function MapNewPlace() {
       </Helmet>
       <Conatiner>
         <MapContainer ref={mapRefs} />
+
         <SearchContainer>
           <Form onSubmit={searchKeyword}>
             <div>
@@ -392,7 +453,15 @@ function MapNewPlace() {
                 />
               ))}
             </ul>
-            {paginationList.length ? (
+            {!placeResultFlag && (
+              <NoResultContainer>
+                <FontH3>😱😭 검색된 장소가 없어요😭😱 </FontH3>
+                <FontS1>
+                  검색어의 철자가 정확한지 다시 한번 확인해 주세요
+                </FontS1>
+              </NoResultContainer>
+            )}
+            {placeResultFlag ? (
               <div ref={pagenationRef} className="pagination">
                 {paginationList.map((page) => (
                   <PaginationButton
@@ -405,10 +474,15 @@ function MapNewPlace() {
                 ))}
               </div>
             ) : null}
+            {placeFirstSearch && placeResultFlag && (
+              <SeachResultContainer>
+                <h3>🤟 장소를 검색해주세요 🤟 </h3>
+              </SeachResultContainer>
+            )}
           </SearchInformationContainer>
         </SearchContainer>
         <BackContainer>
-          <BackButton />
+          <BackButton type="map" mapId={mapId} />
         </BackContainer>
         <SubjectContainer>
           <MapTitleCard

@@ -27,6 +27,8 @@ import {
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
+import { getMap } from "../../utils/apis/mapApi";
+import { useParams } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -555,7 +557,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                       <MapTitleCard
                         user=""
                         used="modal"
-                        title="등록된 map이 없습니다."
+                        title="등록된 지도가 없습니다."
                       />
                     ))}
                 </ReviewList>
@@ -685,7 +687,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                     <MapTitleCard
                       user=""
                       used="modal"
-                      title="등록된 map이 없습니다."
+                      title="등록된 지도가 없습니다."
                     />
                   ))}
               </ReviewList>

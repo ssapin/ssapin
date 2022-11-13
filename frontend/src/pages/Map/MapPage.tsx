@@ -423,7 +423,7 @@ function Map() {
           )}
         </ButtonContainer>
         <BackContainer>
-          <BackButton />
+          <BackButton type="main" />
         </BackContainer>
         <SubjectContainer>
           <MapTitleCard
