@@ -202,7 +202,6 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
   const toggleActive = (key: number) => {
     setRatePlace(key);
     setIsOpen(!isOpen);
-    setText("");
   };
 
   useEffect(() => {
