@@ -22,6 +22,7 @@ import {
 import { pixelToRem } from "../../utils/functions/util";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import { IPlaceList } from "./MapNewPlacePage";
 import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
@@ -201,7 +202,7 @@ function TogetherNewPlace() {
     infowindow: null,
   });
   const [markerList, setMarkerList] = useState([]);
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
   const [paginationList, setPaginationList] = useState([]);
   const [overlayList, setOverlayList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
@@ -244,8 +245,15 @@ function TogetherNewPlace() {
     return marker;
   };
 
-  const mouseOverHandler = (overlay: any) => {
+  const mouseOverHandler = (
+    overlay: any,
+    lat: number | string,
+    lng: number | string,
+  ) => {
     overlay.setMap(mapObj?.map);
+    const moveLatLon = new kakao.maps.LatLng(lat, lng);
+
+    mapObj.map?.panTo(moveLatLon);
   };
 
   const mouseOutHanvler = (overlay: any) => {
@@ -288,7 +296,7 @@ function TogetherNewPlace() {
       bounds.extend(placePosition);
       ((mark) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
-          mouseOverHandler(overlay);
+          mouseOverHandler(overlay, places[i].y, places[i].x);
         });
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mouseOutHanvler(overlay);
@@ -391,9 +399,15 @@ function TogetherNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  mouseOver={() => mouseOverHandler(overlayList[idx])}
+                  mouseOver={() =>
+                    mouseOverHandler(
+                      overlayList[idx],
+                      place.place.y,
+                      place.place.x,
+                    )
+                  }
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
-                  mapId={togethermapId}
+                  mapId={Number(togethermapId)}
                   type={2}
                 />
               ))}
