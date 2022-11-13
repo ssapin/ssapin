@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/image/ssapin_logo.png";
 import CampusButton from "../Buttons/CampusButton";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { campusState } from "../../store/atom";
 import NavToggleContainer from "./NavToggleContainer";
+import { LessPC, PC } from "../containers/MediaQueryContainer";
 
 const Container = styled.header`
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -74,11 +75,6 @@ const LogoContainer = styled.h1`
     color: ${(props) => props.theme.colors.subYellow};
     transition: all 0.2s ease-out;
 
-    ${(props) => props.theme.mq.mobile} {
-      margin-top: 0;
-      margin-left: 0;
-    }
-
     &:hover {
       scale: 1.05;
       cursor: pointer;
@@ -86,13 +82,27 @@ const LogoContainer = styled.h1`
   }
 `;
 
+const CampusName = styled.div`
+  height: 35%;
+  margin-top: 1.8rem;
+  margin-left: 0.5rem;
+  background-color: transparent;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
+  color: ${(props) => props.theme.colors.subYellow};
+  transition: all 0.2s ease-out;
+  ${(props) => props.theme.mq.mobile} {
+    margin-top: 0.5rem;
+    margin-left: 0;
+  }
+`;
+
 type HeaderProps = {
-  // eslint-disable-next-line react/require-default-props
   func?: (key: number) => void;
 };
 
 function Header({ func }: HeaderProps) {
-  const [campusId] = useRecoilState(campusState);
+  const campusId = useRecoilValue(campusState);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSide = () => {
@@ -113,16 +123,21 @@ function Header({ func }: HeaderProps) {
           <button type="button" onClick={moveToHome} className="logo">
             <img alt="ssapin_logo.png" src={Logo} />
           </button>
-          {!isOpen && (
-            <button type="button" onClick={toggleSide}>
-              {campus[campusId]} ▼
-            </button>
-          )}
-          {isOpen && (
-            <button type="button" onClick={toggleSide}>
-              {campus[campusId]} ▲
-            </button>
-          )}
+          <LessPC>
+            <CampusName>{campus[campusId]}</CampusName>
+          </LessPC>
+          <PC>
+            {!isOpen && (
+              <button type="button" onClick={toggleSide}>
+                {campus[campusId]} ▼
+              </button>
+            )}
+            {isOpen && (
+              <button type="button" onClick={toggleSide}>
+                {campus[campusId]} ▲
+              </button>
+            )}
+          </PC>
         </LogoContainer>
         {isOpen && (
           <CampusButton open={toggleSide} select={func} campusId={campusId} />
