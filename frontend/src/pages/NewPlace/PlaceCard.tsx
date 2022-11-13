@@ -111,11 +111,12 @@ interface PlaceCardProps {
   mouseLeave: () => void;
   place: IKakaoPlace;
   mapId: number;
+  type: number;
 }
 
 const PlaceCard = forwardRef(
   (
-    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
+    { index, place, mouseOver, mouseLeave, mapId, type }: PlaceCardProps,
     ref: LegacyRef<HTMLLIElement>,
   ) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -137,7 +138,7 @@ const PlaceCard = forwardRef(
                 onClose={() => setModalOpen(false)}
                 place={place}
                 mapId={mapId}
-                type={1}
+                type={type}
               />
             </ModalPortal>
           )}

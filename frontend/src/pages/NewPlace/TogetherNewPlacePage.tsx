@@ -22,7 +22,7 @@ import {
 import { pixelToRem } from "../../utils/functions/util";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import { MemoizedPlaceCard } from "./TogetherMapPlaceCard";
+import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
   position: relative;
@@ -395,6 +395,7 @@ function TogetherNewPlace() {
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
                   mapId={togethermapId}
+                  type={2}
                 />
               ))}
             </ul>

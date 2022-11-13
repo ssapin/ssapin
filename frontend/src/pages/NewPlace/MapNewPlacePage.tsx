@@ -26,7 +26,7 @@ import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import { pixelToRem } from "../../utils/functions/util";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
-import { MemoizedPlaceCard } from "./MapPlaceCard";
+import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
   position: relative;
@@ -413,6 +413,7 @@ function MapNewPlace() {
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
                   mapId={mapId}
+                  type={1}
                 />
               ))}
             </ul>
