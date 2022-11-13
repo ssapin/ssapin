@@ -51,7 +51,7 @@ const SearchContainer = styled.div`
     left: 0;
     right: 0;
     height: fit-content;
-    max-height: 40vh;
+    max-height: 28vh;
   }
 `;
 
@@ -59,7 +59,6 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  //background-color: ${(props) => props.theme.colors.lightBlue};
   background-color: rgba(51, 150, 244, 0.9);
 
   display: flex;
@@ -297,8 +296,8 @@ function TogetherNewPlace() {
       })(marker);
     }
     setOverlayList(newOverlayList);
-    setMarkerList(() => {
-      markerList.forEach((marker) => marker.setMap(null));
+    setMarkerList((prev) => {
+      prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
     });
     setPlaceList(newPlaceList);
