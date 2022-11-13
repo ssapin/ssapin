@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,6 +69,17 @@ public class AuthController {
                 .accessToken(accessToken)
                 .firstLogin(firstLogin)
                 .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    @ApiOperation(value = "로그아웃", notes = "refreshToken cookie 제거")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
     @GetMapping("/reissue")
