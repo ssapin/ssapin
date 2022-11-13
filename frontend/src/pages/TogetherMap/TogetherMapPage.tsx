@@ -157,7 +157,7 @@ function TogetherMap() {
   );
 
   const locateSSAFY = (position: any, map: any) => {
-    const imageSrc = "https://ifh.cc/g/BSMNPC.png";
+    const imageSrc = "https://ifh.cc/g/nsa8rO.png";
     const imageSize = new kakao.maps.Size(30, 40);
     const imgOptions = {};
     const markerImage = new kakao.maps.MarkerImage(
@@ -364,7 +364,7 @@ function TogetherMap() {
           />
         </ButtonContainer>
         <BackContainer>
-          <BackButton />
+          <BackButton type="main" />
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />

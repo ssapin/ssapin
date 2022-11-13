@@ -131,7 +131,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
       </Title>
       {targetList?.length && targetList[0] === 0 && (
         <NoContainer>
-          아직 추천지도가 없어요 😥
+          휘이잉~... a(•́ ̯•̀)a 아직 추천지도가 없어요 😥
           <br />
           <br />
           지도를 만들어보시는건 어때요?

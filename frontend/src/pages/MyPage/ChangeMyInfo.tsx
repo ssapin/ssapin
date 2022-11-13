@@ -170,8 +170,6 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
 
     try {
       if (response.status === 200) {
-        // eslint-disable-next-line no-alert
-        alert(`정보가 변경되었습니다.`);
         try {
           const userResponse = await axiosInstance.get(
             USER_APIS.USER_INFORMATION,

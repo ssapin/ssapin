@@ -544,7 +544,7 @@ function PlaceInfoPage({ placeId }: PlaceInfoProps) {
                       <MapTitleCard
                         user=""
                         used="modal"
-                        title="등록된 map이 없습니다."
+                        title="등록된 지도가 없습니다."
                       />
                     ))}
                 </ReviewList>
@@ -660,7 +660,7 @@ function PlaceInfoPage({ placeId }: PlaceInfoProps) {
                     <MapTitleCard
                       user=""
                       used="modal"
-                      title="등록된 map이 없습니다."
+                      title="등록된 지도가 없습니다."
                     />
                   ))}
               </ReviewList>
