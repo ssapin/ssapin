@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Api(value = "인증 API", tags={"Auth"})
@@ -39,11 +40,14 @@ public class AuthController {
     private static final String SET_COOKIE = "Set-Cookie";
     @PostMapping("/login")
     @ApiOperation(value = "카카오 로그인/회원가입 ", notes = "JWT refresh token, access token 및 expiresIn을 반환")
-    public ResponseEntity<?> login(@RequestBody AuthRequest.Login loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest.Login loginRequest, HttpServletResponse response,
+                                   HttpServletRequest request) {
 
+        String redirectURL = kakaoOAuth2.getRedirectURL(request.getRequestURL().toString());
         boolean firstLogin = false;
-        String kakaoToken = kakaoOAuth2.getKakaoToken(loginRequest.getAuthorizeCode());
+        String kakaoToken = kakaoOAuth2.getKakaoToken(loginRequest.getAuthorizeCode(), redirectURL);
         long kakaoId = kakaoOAuth2.getKakaoId(kakaoToken);
+
 
         if (!userService.hasUserByKakaoId(kakaoId)) {
 

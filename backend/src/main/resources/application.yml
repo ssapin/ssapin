@@ -65,7 +65,6 @@ springfox:
 external:
   kakao:
     client-id: ENC(y5SWfFXv9+D0YD+xY+9EJC2MirKHcBc66legGctm5HPgeEJ7cGtTV+5d5KalgasI)
-    redirect-uri: http://localhost:3000/auth/kakao/login
   jwt:
     secret-key: ENC(to0RbuTctMFazVq5Y6WQ1EUTgQH9CY5VPEnLmRsZE8JnRjcJjM8WX8VFyUhbEPwDHt6nZpHL6wDaV6MPztuqs/BLQg1wqeOfzi3TYGleEDk=)
     refresh-key: ENC(GwEhBnV+MkH0ERZZpzlW5EnoJhn/kGzhcaz85WnFH9vU7gbHVdXwkCPIrRUqSzU+g/xzS6u3ZUzsQ1fY4XR27ITc7I8rtLaw6BKCgDfbaZoRqCr99UdnHQ==)
