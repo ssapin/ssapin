@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { FormEvent, SetStateAction, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -218,9 +218,8 @@ function MainPage() {
 
   const handleModal = () => {
     setModalOpen(true);
-
-    // if (auth.accessToken) setModalOpen(true);
-    // else setLoginModalOpen(true);
+    if (auth.accessToken) setModalOpen(true);
+    else setLoginModalOpen(true);
   };
 
   const [keyword, setKeyword] = useState("");
@@ -230,7 +229,8 @@ function MainPage() {
     setKeyword(e.target.value);
   };
 
-  const moveToSearch = () => {
+  const moveToSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };
 
