@@ -37,6 +37,8 @@ import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
+import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
+import { LessPC } from "../../components/containers/MediaQueryContainer";
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -111,12 +113,14 @@ const MainContainer = styled.main`
 
 const FixContainer = styled.div`
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1rem;
+  right: 1rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  button {
-    margin-bottom: 1rem;
+  > button {
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
 
@@ -284,6 +288,9 @@ function MainPage() {
         <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
+        <LessPC>
+          <MobileCampusButton />
+        </LessPC>
         <MoveToTopButton />
         <CreateButton type="button" text="지도 만들기" func={handleModal} />
         <CreateButtonMobile type="button" func={moveToCreate} />
