@@ -394,6 +394,7 @@ function TogetherNewPlace() {
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
                   mapId={togethermapId}
+                  type={2}
                 />
               ))}
             </ul>
