@@ -10,12 +10,16 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
 import { campusState } from "../../store/atom";
+<<<<<<< HEAD
+import { getMap } from "../../utils/apis/mapApi";
+=======
 import {
   getMap,
   IBookMark,
   registerMapBookmark,
   removeMapBookmark,
 } from "../../utils/apis/mapApi";
+>>>>>>> upstream/FE-develop
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
@@ -55,7 +59,7 @@ const SearchContainer = styled.div`
     left: 0;
     right: 0;
     height: fit-content;
-    max-height: 40vh;
+    max-height: 28vh;
   }
 `;
 
@@ -63,7 +67,6 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  //background-color: ${(props) => props.theme.colors.lightBlue};
   background-color: rgba(51, 150, 244, 0.9);
 
   display: flex;
@@ -198,6 +201,11 @@ export interface Pagination {
   prevPage: () => void;
 }
 
+export interface IPlaceList {
+  index: number;
+  place: IKakaoPlace;
+}
+
 function MapNewPlace() {
   const [keyword, setKeyword] = useState("");
   const [mapObj, setMapObj] = useState({
@@ -206,7 +214,7 @@ function MapNewPlace() {
     infowindow: null,
   });
   const [markerList, setMarkerList] = useState([]);
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
   const [paginationList, setPaginationList] = useState([]);
   const [overlayList, setOverlayList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
@@ -248,19 +256,19 @@ function MapNewPlace() {
     return marker;
   };
 
-  const mouseOverHandler = (overlay: any) => {
+  const mouseOverHandler = (
+    overlay: any,
+    lat: number | string,
+    lng: number | string,
+  ) => {
     overlay.setMap(mapObj?.map);
+    const moveLatLon = new kakao.maps.LatLng(lat, lng);
+
+    mapObj.map?.panTo(moveLatLon);
   };
 
   const mouseOutHanvler = (overlay: any) => {
     overlay.setMap(null);
-  };
-
-  const displayInfoWindow = (marker: any, title: string) => {
-    mapObj.infowindow?.setContent(
-      `<div style="padding:10px;font-size:16px;width:150px;">${title}</div>`,
-    );
-    mapObj.infowindow?.open(mapObj.map, marker);
   };
 
   const displayPagination = (pagination: Pagination) => {
@@ -277,8 +285,7 @@ function MapNewPlace() {
   const displayPlaces = (places: IKakaoPlace[]) => {
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    // removeMarker();
-    const newPlaceList = [];
+    const newPlaceList: IPlaceList[] = [];
     const newMarkerList: any[] = [];
     const newOverlayList = [];
     for (let i = 0; i < places.length; i++) {
@@ -300,18 +307,20 @@ function MapNewPlace() {
       bounds.extend(placePosition);
       ((mark) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
-          mouseOverHandler(overlay);
+          mouseOverHandler(overlay, places[i].y, places[i].x);
         });
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mouseOutHanvler(overlay);
         });
       })(marker);
     }
+
     setOverlayList(newOverlayList);
-    setMarkerList(() => {
-      markerList.forEach((marker) => marker.setMap(null));
+    setMarkerList((prev) => {
+      prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
     });
+
     setPlaceList(newPlaceList);
     menuWrap.scrollTop = 0;
     mapObj.map.setBounds(bounds);
@@ -362,26 +371,6 @@ function MapNewPlace() {
     setMapObj({ map, ps, infowindow });
   }, []);
 
-  const mouseOver = (idx: number, title: string) => {
-    displayInfoWindow(markerList[idx], title);
-  };
-
-  const registerBookmark = () => {
-    const req: IBookMark = {
-      mapId: Number(mapId),
-    };
-
-    registerMapBookmark(req);
-  };
-
-  const removeBookmark = () => {
-    const req: IBookMark = {
-      mapId: Number(mapId),
-    };
-
-    removeMapBookmark(req);
-  };
-
   return (
     <>
       <Helmet>
@@ -410,9 +399,15 @@ function MapNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  mouseOver={() => mouseOverHandler(overlayList[idx])}
+                  mouseOver={() =>
+                    mouseOverHandler(
+                      overlayList[idx],
+                      place.place.y,
+                      place.place.x,
+                    )
+                  }
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
-                  mapId={mapId}
+                  mapId={Number(mapId)}
                   type={1}
                 />
               ))}
