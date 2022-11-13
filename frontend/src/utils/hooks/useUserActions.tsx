@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { authState, userInformationState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
 import { getAccessToken, getUserInformation } from "../apis/userApis";
 import { cookie } from "../functions/cookie";
 
@@ -10,6 +10,7 @@ function useUserActions() {
   const [searchParams] = useSearchParams();
   const setAuth = useSetRecoilState(authState);
   const setUser = useSetRecoilState(userInformationState);
+  const setCampus = useSetRecoilState(campusState);
   const navigate = useNavigate();
   const useGetUser = useGetUserInformation();
 
@@ -52,6 +53,7 @@ function useUserActions() {
       placeCnt: 0,
       participateCnt: 0,
     });
+    setCampus(1);
     setAuth({ accessToken: "" });
     navigate("/");
   }
@@ -61,12 +63,14 @@ export default useUserActions;
 
 export function useGetUserInformation() {
   const setUser = useSetRecoilState(userInformationState);
+  const setCampus = useSetRecoilState(campusState);
   return { getUser };
 
   async function getUser() {
     try {
       const userResponse = await getUserInformation();
       setUser(userResponse.data);
+      setCampus(userResponse.data.campusId);
     } catch (error) {
       console.log(error);
     }

@@ -16,6 +16,8 @@ import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
 import SearchList from "./SearchList";
 import LoginModal from "../Login/LoginModal";
+import { LessPC } from "../../components/containers/MediaQueryContainer";
+import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -68,9 +70,11 @@ const FixContainer = styled.div`
   bottom: 2rem;
   right: 2rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  button {
-    margin-bottom: 1rem;
+  > button {
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
 `;
@@ -215,6 +219,9 @@ function SearchPage() {
         <SearchList hashtag={hashTag} keyword={keyword} />
       </MainContainer>
       <FixContainer>
+        <LessPC>
+          <MobileCampusButton />
+        </LessPC>
         <MoveToTopButton />
         <CreateButton
           type="button"
