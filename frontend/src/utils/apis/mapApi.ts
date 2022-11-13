@@ -1,5 +1,4 @@
 import { AxiosResponse } from "axios";
-import { r } from "msw/lib/glossary-dc3fd077";
 import { IMap } from "../types/map.interface";
 import axiosInstance from "./api";
 

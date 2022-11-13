@@ -19,6 +19,7 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
+import { pixelToRem } from "../../utils/functions/util";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { MemoizedPlaceCard } from "./PlaceCard";
@@ -41,10 +42,11 @@ const SearchContainer = styled.div`
   z-index: 1;
   width: 378px;
   max-height: 70vh;
+  max-width: 90vw;
 
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 100px;
+    bottom: 80px;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -57,7 +59,9 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  background-color: ${(props) => props.theme.colors.lightBlue};
+  //background-color: ${(props) => props.theme.colors.lightBlue};
+  background-color: rgba(51, 150, 244, 0.9);
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,11 +69,14 @@ const Form = styled.form`
 
 const Input = styled.input`
   width: 251px;
+  max-width: 60vw;
   height: 43px;
   border-radius: 10px;
   border: none;
   margin-right: 10px;
   padding: 0 1rem;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   &:focus {
     outline: none;
   }
@@ -78,8 +85,11 @@ const Input = styled.input`
 const SearchButton = styled.button`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.mainYellow};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   height: 43px;
   padding: 0 1rem;
+  box-shadow: 0 ${pixelToRem(2)} ${pixelToRem(2)} 0 rgba(0, 0, 0, 0.25);
 `;
 
 const SearchInformationContainer = styled.div`
@@ -91,7 +101,6 @@ const SearchInformationContainer = styled.div`
   ${(props) => props.theme.mq.mobile} {
     height: calc(50vh - 83px);
   }
-
   .pagination {
     width: 100%;
     text-align: center;
@@ -134,6 +143,39 @@ const SubjectContainer = styled(BackContainer)`
   gap: 1rem;
 `;
 
+const SeachResultContainer = styled.div`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-radius: 17px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+
+  text-align: center;
+`;
+
+const NoResultContainer = styled.div`
+  margin-top: 3%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
+  text-align: center;
+`;
+
+const FontH3 = styled.div`
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+`;
+
+const FontS1 = styled.div`
+  margin-top: 3%;
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.s1};
+  font-size: ${(props) => props.theme.fontSizes.s1};
+`;
+
 const { kakao } = window;
 type Coordinate = [number, number];
 
@@ -169,6 +211,8 @@ function TogetherNewPlace() {
   const itemRefs = useRef([]);
   const { togethermapId } = useParams();
   const userCampusId = useRecoilValue(campusState);
+  const [placeResultFlag, setFlag] = useState(true);
+  const [placeFirstSearch, setFirstserchFlag] = useState(true);
   const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
     ["together-map", togethermapId],
     () => getTogetherMap(Number(togethermapId)),
@@ -270,7 +314,10 @@ function TogetherNewPlace() {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data);
       displayPagination(pagination);
-    }
+    } else setPlaceList([]);
+
+    if (data.length === 0) setFlag(false);
+    else setFlag(true);
   };
 
   const searchKeyword = (e: FormEvent) => {
@@ -280,6 +327,7 @@ function TogetherNewPlace() {
       `${CAMPUS_LIST[togetherMapData.campusId]} ${keyword}`,
       placesSearchCB,
     );
+    setFirstserchFlag(false);
   };
 
   useEffect(() => {
@@ -317,7 +365,7 @@ function TogetherNewPlace() {
       <Conatiner>
         <MapContainer ref={mapRefs} />
         <BackContainer>
-          <BackButton />
+          <BackButton type="togethermap" mapId={togethermapId} />
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />
@@ -350,7 +398,15 @@ function TogetherNewPlace() {
                 />
               ))}
             </ul>
-            {paginationList.length ? (
+            {!placeResultFlag && (
+              <NoResultContainer>
+                <FontH3>😱😭 검색된 장소가 없어요😭😱 </FontH3>
+                <FontS1>
+                  검색어의 철자가 정확한지 다시 한번 확인해 주세요
+                </FontS1>
+              </NoResultContainer>
+            )}
+            {placeResultFlag ? (
               <div ref={pagenationRef} className="pagination">
                 {paginationList.map((page) => (
                   <PaginationButton
@@ -363,6 +419,11 @@ function TogetherNewPlace() {
                 ))}
               </div>
             ) : null}
+            {placeFirstSearch && placeResultFlag && (
+              <SeachResultContainer>
+                <h3>🤟 장소를 검색해주세요 🤟 </h3>
+              </SeachResultContainer>
+            )}
           </SearchInformationContainer>
         </SearchContainer>
       </Conatiner>

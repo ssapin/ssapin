@@ -32,7 +32,7 @@ const Container = styled.div`
   ${(props) => props.theme.mq.tablet} {
     width: 70vw;
     height: fit-content;
-    max-height: 85vh;
+    max-height: 70vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -238,17 +238,22 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
       try {
         if (response.status === 200) {
           id = response.data;
-          if (text.length === 0) {
-            alert("리뷰는 아예 작성하지 않거나, 1자 이상 적어주세요");
-            return;
-          }
           if (ratePlace !== 0) {
+            if (text.length === 0) {
+              alert("리뷰는 1자 이상 적어주세요!😉");
+              return;
+            }
             const reviewData: IReviewPlace = {
               placeId: id,
               emojiType: ratePlace,
               content: text,
             };
             registerReview(reviewData);
+          } else {
+            if (text.length !== 0) {
+              alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
+              return;
+            }
           }
           navigate(`/maps/${data.mapId}/detail`);
         }
@@ -262,7 +267,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
           id = response.data;
           if (ratePlace !== 0) {
             if (text.length === 0) {
-              alert("리뷰는 아예 작성하지 않거나, 1자 이상 적어주세요");
+              alert("리뷰는 1자 이상 적어주세요!😉");
               return;
             }
             const reviewData: IReviewPlace = {
@@ -271,6 +276,11 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
               content: text,
             };
             registerReview(reviewData);
+          } else {
+            if (text.length !== 0) {
+              alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
+              return;
+            }
           }
           navigate(`/togethermaps/${data.mapId}/detail`);
         }

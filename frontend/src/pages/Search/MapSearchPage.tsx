@@ -115,7 +115,7 @@ const Side = styled.div`
 const Page = styled.div`
   position: fixed;
   width: 100%;
-  height: 130vh;
+  height: 150vh;
   background-color: black;
   opacity: 0.5;
   z-index: 3;

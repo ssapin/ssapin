@@ -136,6 +136,7 @@ function MainPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
+  const [keyword, setKeyword] = useState("");
   const auth = useRecoilValue(authState);
 
   const toggleActive = (key: number) => {
@@ -222,7 +223,6 @@ function MainPage() {
     else setLoginModalOpen(true);
   };
 
-  const [keyword, setKeyword] = useState("");
   const onChangeKeyword = (e: {
     target: { value: SetStateAction<string> };
   }) => {

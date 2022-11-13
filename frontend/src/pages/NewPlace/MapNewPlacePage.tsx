@@ -38,6 +38,7 @@ import ModalPortal from "../../components/containers/ModalPortalContainer";
 import AddPlaceModal from "../Search/AddPlaceModal";
 import LoginModal from "../Login/LoginModal";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
+import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
   position: relative;
@@ -57,10 +58,11 @@ const SearchContainer = styled.div`
   z-index: 1;
   width: 378px;
   max-height: 70vh;
+  max-width: 90vw;
 
   ${(props) => props.theme.mq.tablet} {
     top: auto;
-    bottom: 100px;
+    bottom: 80px;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -73,7 +75,9 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  background-color: ${(props) => props.theme.colors.lightBlue};
+  //background-color: ${(props) => props.theme.colors.lightBlue};
+  background-color: rgba(51, 150, 244, 0.9);
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,11 +85,14 @@ const Form = styled.form`
 
 const Input = styled.input`
   width: 251px;
+  max-width: 60vw;
   height: 43px;
   border-radius: 10px;
   border: none;
   margin-right: 10px;
   padding: 0 1rem;
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   &:focus {
     outline: none;
   }
@@ -94,8 +101,11 @@ const Input = styled.input`
 const SearchButton = styled.button`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.mainYellow};
+  font-family: ${(props) => props.theme.fontFamily.paragraphbold};
+  color: ${(props) => props.theme.colors.gray900};
   height: 43px;
   padding: 0 1rem;
+  box-shadow: 0 ${pixelToRem(2)} ${pixelToRem(2)} 0 rgba(0, 0, 0, 0.25);
 `;
 
 const SearchInformationContainer = styled.div`
@@ -131,23 +141,6 @@ const BackContainer = styled.div`
   left: 10px;
 `;
 
-const FixContainer = styled.div`
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 2;
-
-  button {
-    margin-bottom: 1rem;
-    box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
-  }
-
-  ${(props) => props.theme.mq.mobile} {
-    right: 1rem;
-    bottom: 1rem;
-  }
-`;
-
 const NavContainer = styled.div`
   position: fixed;
   z-index: 2;
@@ -164,6 +157,39 @@ const SubjectContainer = styled(BackContainer)`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+`;
+
+const SeachResultContainer = styled.div`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-radius: 17px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+
+  text-align: center;
+`;
+
+const NoResultContainer = styled.div`
+  margin-top: 3%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
+  text-align: center;
+`;
+
+const FontH3 = styled.div`
+  font-family: ${(props) => props.theme.fontFamily.h3bold};
+  font-size: ${(props) => props.theme.fontSizes.h3};
+`;
+
+const FontS1 = styled.div`
+  margin-top: 3%;
+  color: ${(props) => props.theme.colors.gray900};
+  font-family: ${(props) => props.theme.fontFamily.s1};
+  font-size: ${(props) => props.theme.fontSizes.s1};
 `;
 
 const { kakao } = window;
@@ -201,6 +227,8 @@ function MapNewPlace() {
   const itemRefs = useRef([]);
   const { mapId } = useParams();
   const userCampusId = useRecoilValue(campusState);
+  const [placeResultFlag, setFlag] = useState(true);
+  const [placeFirstSearch, setFirstserchFlag] = useState(true);
 
   const { data: mapData } = useQuery<IMap, AxiosError>(["map", mapId], () =>
     getMap(Number(mapId)),
@@ -309,7 +337,10 @@ function MapNewPlace() {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data);
       displayPagination(pagination);
-    }
+    } else setPlaceList([]);
+
+    if (data.length === 0) setFlag(false);
+    else setFlag(true);
   };
 
   const searchKeyword = (e: FormEvent) => {
@@ -319,6 +350,7 @@ function MapNewPlace() {
       `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
       placesSearchCB,
     );
+    setFirstserchFlag(false);
   };
 
   useEffect(() => {
@@ -342,6 +374,9 @@ function MapNewPlace() {
     setMapObj({ map, ps, infowindow });
   }, []);
 
+  const mouseOver = (idx: number, title: string) => {
+    displayInfoWindow(markerList[idx], title);
+  };
 
   const registerBookmark = () => {
     const req: IBookMark = {
@@ -368,6 +403,7 @@ function MapNewPlace() {
       </Helmet>
       <Conatiner>
         <MapContainer ref={mapRefs} />
+
         <SearchContainer>
           <Form onSubmit={searchKeyword}>
             <div>
@@ -382,7 +418,7 @@ function MapNewPlace() {
           <SearchInformationContainer ref={menuWrapRef}>
             <ul>
               {placeList?.map((place, idx) => (
-                <PlaceCard
+                <MemoizedPlaceCard
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
@@ -392,7 +428,15 @@ function MapNewPlace() {
                 />
               ))}
             </ul>
-            {paginationList.length ? (
+            {!placeResultFlag && (
+              <NoResultContainer>
+                <FontH3>😱😭 검색된 장소가 없어요😭😱 </FontH3>
+                <FontS1>
+                  검색어의 철자가 정확한지 다시 한번 확인해 주세요
+                </FontS1>
+              </NoResultContainer>
+            )}
+            {placeResultFlag ? (
               <div ref={pagenationRef} className="pagination">
                 {paginationList.map((page) => (
                   <PaginationButton
@@ -405,10 +449,15 @@ function MapNewPlace() {
                 ))}
               </div>
             ) : null}
+            {placeFirstSearch && placeResultFlag && (
+              <SeachResultContainer>
+                <h3>🤟 장소를 검색해주세요 🤟 </h3>
+              </SeachResultContainer>
+            )}
           </SearchInformationContainer>
         </SearchContainer>
         <BackContainer>
-          <BackButton />
+          <BackButton type="map" mapId={mapId} />
         </BackContainer>
         <SubjectContainer>
           <MapTitleCard
@@ -425,153 +474,3 @@ function MapNewPlace() {
 }
 
 export default MapNewPlace;
-
-const List = styled.li`
-  position: relative;
-  border-bottom: 1px solid #888;
-  cursor: pointer;
-  min-height: 65px;
-`;
-
-const MarkerBg = styled.span<{ index: number }>`
-  position: absolute;
-  width: 36px;
-  height: 37px;
-  margin: 10px 0 0 10px;
-  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png")
-    no-repeat;
-  background-position: 0 ${(props) => -10 - props.index * 46}px;
-`;
-
-const PlaceInfoContainer = styled.div`
-  padding: 10px 0 10px 55px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  h4 {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    font-weight: bold;
-    margin-block-start: 1.67px;
-    margin-block-end: 1.67px;
-    font-size: ${(props) => props.theme.fontSizes.paragraph};
-    font-family: ${(props) => props.theme.fontFamily.s1bold};
-  }
-  span {
-    display: block;
-    margin-top: 4px;
-    &:last-of-type {
-      color: #009900;
-    }
-    font-size: ${(props) => props.theme.fontSizes.s2};
-    font-family: ${(props) => props.theme.fontFamily.s3};
-  }
-`;
-
-const InfoInnerContainer = styled.div`
-  position: relative;
-`;
-
-const CreateButton = styled.button`
-  background-color: ${(props) => props.theme.colors.lightBlue};
-  position: absolute;
-  bottom: 0;
-  right: 5px;
-  border-radius: 10px;
-  padding: 0.5rem;
-  color: ${(props) => props.theme.colors.gray0};
-  transition: all 0.2s ease-in;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  font-family: ${(props) => props.theme.fontFamily.s1};
-
-  &:hover {
-    transform: scale(1.03);
-    background-color: ${(props) => props.theme.colors.mainBlue};
-  }
-
-  svg {
-    width: 15px;
-    height: auto;
-  }
-`;
-
-const Jibun = styled.span`
-  padding-left: 26px;
-  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png")
-    no-repeat;
-  color: ${(props) => props.theme.colors.gray400};
-`;
-
-interface PlaceCardProps {
-  index: number;
-  mouseOver: () => void;
-  mouseLeave: () => void;
-  place: IKakaoPlace;
-  mapId: number;
-}
-
-const PlaceCard = forwardRef(
-  (
-    { index, place, mouseOver, mouseLeave, mapId }: PlaceCardProps,
-    ref: LegacyRef<HTMLLIElement>,
-  ) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-    const [isRegister, setIsRegister] = useState(false);
-    const auth = useRecoilValue(authState);
-
-    const handleModal = () => {
-      if (auth.accessToken) setModalOpen(true);
-      else setLoginModalOpen(true);
-    };
-
-    return (
-      <>
-        <FixContainer>
-          {modalOpen && (
-            <ModalPortal>
-              <AddPlaceModal
-                onClose={() => setModalOpen(false)}
-                place={place}
-                mapId={mapId}
-                type={1}
-              />
-            </ModalPortal>
-          )}
-          {LoginmodalOpen && (
-            <ModalPortal>
-              <LoginModal onClose={() => setLoginModalOpen(false)} />
-            </ModalPortal>
-          )}
-        </FixContainer>
-        <List ref={ref} onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
-          <MarkerBg index={index} />
-          <PlaceInfoContainer>
-            <InfoInnerContainer>
-              <h4>{place.place_name}</h4>
-              {place.road_address_name ? (
-                <>
-                  <span>{place.road_address_name}</span>
-                  <Jibun>{place.address_name}</Jibun>
-                </>
-              ) : (
-                <span>{place.address_name}</span>
-              )}
-              <span>{place.phone}</span>
-              {isRegister && <span>이미 추가된 장소입니다.</span>}
-              {!isRegister && (
-                <CreateButton type="button" onClick={handleModal}>
-                  <p>장소 추천</p>
-                  <PlusIcon className="plus" />
-                </CreateButton>
-              )}
-            </InfoInnerContainer>
-          </PlaceInfoContainer>
-        </List>
-      </>
-    );
-  },
-);

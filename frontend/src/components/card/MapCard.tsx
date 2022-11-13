@@ -41,6 +41,14 @@ const Container = styled.div`
   justify-content: center;
   padding: 1rem 1rem 0 1rem;
   transition: all 0.2s ease-out;
+  position: relative;
+
+  .access {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: ${(props) => props.theme.fontSizes.h5};
+  }
 
   .icon {
     text-align: center;
@@ -128,12 +136,12 @@ function MapCard({ prop, isAdmin, refetch }: MapCardProps) {
     e.stopPropagation();
     if (isAdmin && prop.userId !== user.userId) {
       // eslint-disable-next-line no-alert
-      alert("본인의 지도가 아니예요~");
+      alert("본인의 지도가 아니예요~😉");
       return;
     }
 
     // eslint-disable-next-line no-alert
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (!window.confirm("정말로... 삭제하실거예요..?(•́ ̯•̀)")) return;
 
     const response = await axiosInstance.delete(MAP_APIS.MAP, {
       data: { mapId: prop.mapId },
@@ -142,7 +150,7 @@ function MapCard({ prop, isAdmin, refetch }: MapCardProps) {
     try {
       if (response.status === 200) {
         // eslint-disable-next-line no-alert
-        alert(`지도가 삭제되었습니다.`);
+        alert(`지도가 삭제되었습니다.. 다시.. 만들어주실거죠..?`);
         window.location.reload();
       }
     } catch (err) {
@@ -159,6 +167,8 @@ function MapCard({ prop, isAdmin, refetch }: MapCardProps) {
   return (
     <>
       <Container onClick={onClickMap}>
+        {!prop.access && <p className="access">🔒</p>}
+        {/* {prop.access && <p className="access">👫</p>} */}
         <p className="icon">{prop.mapEmoji}</p>
         <p className="title">{prop.title}</p>
         <p className="user">{`${prop.userEmoji} ${prop.nickname}`}</p>
