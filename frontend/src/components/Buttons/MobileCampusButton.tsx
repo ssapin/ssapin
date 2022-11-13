@@ -1,23 +1,25 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import styled from "@emotion/styled";
-import { useRef } from "react";
-import { useRecoilValue } from "recoil";
+import { memo, useRef } from "react";
+import { useRecoilState } from "recoil";
 import { campusState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 
 const ButtonContainer = styled.button`
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 3.15rem;
+  height: 3.15rem;
   position: absolute;
   bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0 !important;
   background-color: ${(props) => props.theme.colors.lightLightBlue};
   box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} 0
     ${(props) => props.theme.colors.gray300};
+
   > span {
     width: 40px;
     height: 40px;
@@ -51,12 +53,12 @@ const CampusButtonListContainer = styled.div`
 `;
 
 const Container = styled.div`
-  position: absolute;
-  width: fit-content;
-  max-height: 50px;
+  position: relative;
+  width: 3.15rem;
+  max-height: 3.15rem;
   border-radius: 25px;
   background-color: ${(props) => props.theme.colors.lightLightBlue};
-  bottom: 10px;
+  top: 0;
   transition: all 0.5s ease-in-out;
   overflow: hidden;
   box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} 0
@@ -65,14 +67,19 @@ const Container = styled.div`
 
 function MobileCampusButton() {
   const buttonListRef = useRef<HTMLDivElement>();
-  const campusId = useRecoilValue(campusState);
+  const [campusId, setCampusId] = useRecoilState(campusState);
 
-  const onClick = () => {
+  const toggleCampusList = () => {
     if (buttonListRef.current.style.maxHeight !== "300px") {
       buttonListRef.current.style.maxHeight = "300px";
     } else {
-      buttonListRef.current.style.maxHeight = "50px";
+      buttonListRef.current.style.maxHeight = "3.15rem";
     }
+  };
+
+  const changeCampusId = (idx: number) => {
+    setCampusId(idx);
+    buttonListRef.current.style.maxHeight = "3.15rem";
   };
   return (
     <Container ref={buttonListRef}>
@@ -80,17 +87,18 @@ function MobileCampusButton() {
         {CAMPUS_LIST.map(
           (campus, idx) =>
             idx > 0 && (
-              <CampusButton
+              <MemoisedCampusButton
                 campus={campus}
                 isClicked={idx === campusId}
                 key={campus}
+                onClick={() => changeCampusId(idx)}
               />
             ),
         )}
 
         <div />
       </CampusButtonListContainer>
-      <ButtonContainer type="button" onClick={onClick}>
+      <ButtonContainer type="button" onClick={toggleCampusList}>
         <span>🏫</span>
       </ButtonContainer>
     </Container>
@@ -99,7 +107,7 @@ function MobileCampusButton() {
 
 export default MobileCampusButton;
 
-const ButtonC = styled.button<{ active: boolean }>`
+const Button = styled.button<{ active: boolean }>`
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -118,12 +126,15 @@ const ButtonC = styled.button<{ active: boolean }>`
 interface CampusProps {
   campus: string;
   isClicked: boolean;
+  onClick: () => void;
 }
 
-function CampusButton({ campus, isClicked }: CampusProps) {
+function CampusButton({ campus, isClicked, onClick }: CampusProps) {
   return (
-    <ButtonC type="button" active={isClicked}>
+    <Button type="button" active={isClicked} onClick={onClick}>
       {campus}
-    </ButtonC>
+    </Button>
   );
 }
+
+const MemoisedCampusButton = memo(CampusButton);
