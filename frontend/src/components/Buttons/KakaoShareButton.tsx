@@ -23,6 +23,9 @@ const WhiteButton = styled.button`
   > svg {
     fill: ${(props) => props.theme.colors.lightBlue};
   }
+  :hover {
+    scale: 1.07;
+  }
 `;
 
 interface IKakaoShareProps {
