@@ -361,6 +361,11 @@ function Map() {
     }, 2000);
   };
 
+  const onClose = () => {
+    setModalOpen(false);
+    mapRefetch();
+  };
+
   return (
     <>
       <Helmet>
@@ -381,6 +386,7 @@ function Map() {
                   ref={(el) => {
                     cardRefs.current[idx] = el;
                   }}
+                  refetch={mapRefetch}
                 />
               ))}
           </ul>
@@ -463,10 +469,7 @@ function Map() {
         )}
         {modalOpen && (
           <ModalPortal>
-            <PlaceInfoModal
-              placeId={placeId}
-              onClose={() => setModalOpen(false)}
-            />
+            <PlaceInfoModal placeId={placeId} onClose={onClose} />
           </ModalPortal>
         )}
         {copied && (
