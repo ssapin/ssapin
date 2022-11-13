@@ -68,7 +68,7 @@ const Container = styled.div`
 function HotPlaceCard({ place, message }: HotPlaceProps) {
   const [placeInfomodalOpen, setPlaceInfoModalOpen] = useState(false);
   const handlePlaceInfoModal = () => {
-    setPlaceInfoModalOpen(true);
+    if (place !== undefined) setPlaceInfoModalOpen(true);
   };
 
   return (

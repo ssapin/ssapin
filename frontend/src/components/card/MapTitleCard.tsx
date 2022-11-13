@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 type MapTitleProps = {
   user: string;
   title: string;
   // eslint-disable-next-line react/require-default-props
   used?: string;
+  func?: (e: any) => void;
+  mapId?: number;
 };
 
 const Container = styled.div<{ used?: string }>`
@@ -37,9 +40,14 @@ const Container = styled.div<{ used?: string }>`
   }
 `;
 
-function MapTitleCard({ user, title, used }: MapTitleProps) {
+function MapTitleCard({ user, title, used, mapId, func }: MapTitleProps) {
   return (
-    <Container used={used}>
+    <Container
+      used={used}
+      onClick={() => {
+        if (mapId) func(mapId);
+      }}
+    >
       <p className="user">{user}</p>
       <p className="title">{title}</p>
     </Container>

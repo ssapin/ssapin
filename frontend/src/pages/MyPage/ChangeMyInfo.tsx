@@ -1,14 +1,15 @@
 import styled from "@emotion/styled";
 import { SetStateAction, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import ModalContainer from "../../components/containers/ModalContainer";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
-import { userInformationState } from "../../store/atom";
+import { campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
 import USER_APIS from "../../utils/apis/userApis";
+import { REGEXES } from "../../utils/constants/regex";
 
 interface ChangeModalProps {
   // eslint-disable-next-line react/require-default-props
@@ -107,6 +108,7 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [nickname, setNickname] = useState(userInformation.nickname);
   const [emoji, setEmoji] = useState(userInformation.emoji);
   const [campus, setCampus] = useState(userInformation.campusId);
+  const setCampusId = useSetRecoilState(campusState);
 
   const onChangeNickname = (e: {
     target: { value: SetStateAction<string> };
@@ -137,23 +139,10 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
       return;
     }
 
-    if (!emoji) {
-      // eslint-disable-next-line no-alert
-      alert("아이콘을 하나라도 입력해주세요.");
-      return;
-    }
-
-    const regex =
-      /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+    const regex = REGEXES.USEREMOJI;
     if (!regex.test(emoji)) {
       // eslint-disable-next-line no-alert
-      alert("아이콘에는 이모지만 입력해주세요.");
-      return;
-    }
-
-    if (emoji.length > 2) {
-      // eslint-disable-next-line no-alert
-      alert("본인을 표현할 수 있는 이모지는 1개만 가능합니다.");
+      alert("본인을 표현할 수 있는 이모지를 1개만 꼭 입력해주세요💕");
       return;
     }
 
@@ -175,6 +164,7 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
             USER_APIS.USER_INFORMATION,
           );
           setUserInformation(userResponse.data);
+          setCampusId(campus);
         } catch (error) {
           console.log(error);
         }
