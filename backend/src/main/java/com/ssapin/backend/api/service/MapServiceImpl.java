@@ -139,7 +139,7 @@ public class MapServiceImpl implements MapService {
             for (MapPlace mapPlace : mapPlaceList) {
                 List<Review> review = reviewRepositorySupport.findAllByPlace(mapPlace.getPlace());
                 if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null, mapPlace.getUser()));
-                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(review.size()-1).getContent(), mapPlace.getUser()));
+                else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(0).getContent(), mapPlace.getUser()));
             }
             return new MapResponse(map, placeList, hashtagList, bookMark, isList);
         }
