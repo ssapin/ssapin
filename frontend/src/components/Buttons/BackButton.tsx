@@ -56,14 +56,14 @@ export default function BackButton({ type, mapId }: IBackButtonProps) {
     );
   if (type === "main") {
     return (
-      <BackBtnBg onClick={moveBack}>
+      <BackBtnBg onClick={moveTomain}>
         <BackArrowIcon className="arrow-size" />
       </BackBtnBg>
     );
   }
 
   return (
-    <BackBtnBg onClick={moveTomain}>
+    <BackBtnBg onClick={moveBack}>
       <BackArrowIcon className="arrow-size" />
     </BackBtnBg>
   );
