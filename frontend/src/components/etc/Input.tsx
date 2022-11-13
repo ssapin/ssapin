@@ -4,11 +4,8 @@ type InputProps = {
   width: string;
   height: string;
   placeholder: string;
-  // eslint-disable-next-line react/require-default-props
   changeFunc?: (e: any) => void;
-  // eslint-disable-next-line react/require-default-props
   value?: string;
-  // eslint-disable-next-line react/require-default-props
   readonly?: boolean;
 };
 

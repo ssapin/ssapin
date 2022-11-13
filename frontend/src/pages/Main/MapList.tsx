@@ -3,20 +3,13 @@ import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 import MapCard from "../../components/card/MapCard";
 import { IMap } from "../../utils/types/map.interface";
 
-const Container = styled.div`
+const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 17vw;
-  padding-right: 17vw;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.mobile} {
-    padding-left: 5vw;
-    padding-right: 5vw;
-  }
 `;
 
 const RankingContainer = styled.div`

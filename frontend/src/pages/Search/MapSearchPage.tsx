@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
@@ -17,7 +17,7 @@ import FilterModal from "./FilteringModal";
 import SearchList from "./SearchList";
 import LoginModal from "../Login/LoginModal";
 
-const HeadContainer = styled.div`
+const HeadContainer = styled.header`
   width: 100%;
   height: 50vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
@@ -34,7 +34,9 @@ const Searchbar = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  button {
+  max-width: 1400px;
+  margin: 0 auto;
+  > button {
     margin-top: 1.5rem;
     width: 8%;
     height: 50px;
@@ -53,9 +55,12 @@ const Searchbar = styled.div`
   }
 `;
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   width: 100%;
   height: fit-content;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1rem;
 `;
 
 const FixContainer = styled.div`
@@ -110,15 +115,14 @@ const Side = styled.div`
 const Page = styled.div`
   position: fixed;
   width: 100%;
-  height: 130vh;
+  height: 150vh;
   background-color: black;
   opacity: 0.5;
   z-index: 3;
 `;
 
 function SearchPage() {
-  const [campusId, setCampusId] = useRecoilState(campusState);
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const setCampusId = useSetRecoilState(campusState);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
@@ -130,13 +134,6 @@ function SearchPage() {
   const [sidebar, setSidebar] = useState(false);
   const auth = useRecoilValue(authState);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
 
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
@@ -157,13 +154,12 @@ function SearchPage() {
     setCampusId(key);
   };
 
-  const onChangeKeyword = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const onChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
     setFakeKeyword(e.target.value);
   };
 
-  const onClickKeyword = () => {
+  const onClickKeyword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setKeyword(fakeKeyword);
   };
 
@@ -220,15 +216,12 @@ function SearchPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
-        {innerWidth > 950 ? (
-          <CreateButton
-            type="button"
-            text="지도 만들기"
-            func={handleCreateModal}
-          />
-        ) : (
-          <CreateButtonMobile type="button" func={moveToCreate} />
-        )}
+        <CreateButton
+          type="button"
+          text="지도 만들기"
+          func={handleCreateModal}
+        />
+        <CreateButtonMobile type="button" func={moveToCreate} />
         {createModalOpen && (
           <ModalPortal>
             <CreateMapModal onClose={() => setCreateModalOpen(false)} />

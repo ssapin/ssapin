@@ -1,24 +1,25 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import styled from "@emotion/styled";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { InfiniteData, QueryObserverResult } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
 import SwitchButton from "../../components/Buttons/SwitchButton";
 import ModalContainer from "../../components/containers/ModalContainer";
-import Input from "../../components/etc/Input";
+import WarningContainer from "../../components/containers/WarningContainer";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
+import { REGEXES } from "../../utils/constants/regex";
 
 interface ModalProps {
-  // eslint-disable-next-line react/require-default-props
   mapId?: number;
   onClose: () => void;
-  // eslint-disable-next-line react/require-default-props
   refetch?: () => Promise<
     QueryObserverResult<
       InfiniteData<
@@ -34,9 +35,7 @@ interface ModalProps {
 }
 
 const Container = styled.div`
-  max-width: 814px;
-  width: 50vw;
-  max-width: 925px;
+  max-width: 800px;
   height: 100%;
   max-height: 83vh;
   overflow-y: scroll;
@@ -64,6 +63,7 @@ const DivBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  height: fit-content;
 `;
 
 const FilterBox = styled.div`
@@ -72,9 +72,6 @@ const FilterBox = styled.div`
 
 const Content = styled.div<{ edit: boolean }>`
   width: 45%;
-  height: 75px;
-  margin: auto;
-
   select {
     width: 100%;
     height: 35px;
@@ -110,22 +107,110 @@ const Flex = styled.div`
   }
 `;
 
+export const Input = styled.input`
+  width: 100%;
+  height: 35px;
+  background-color: ${(props) => props.theme.colors.lightLightBlue};
+  border: 0;
+  border-radius: 10px;
+  margin: 0.5rem;
+  outline: none;
+  color: ${(props) => props.theme.colors.gray700};
+  text-align: center;
+  font-size: ${(props) => props.theme.fontSizes.paragraph};
+  font-family: ${(props) => props.theme.fontFamily.h5};
+
+  :disabled {
+    background-color: ${(props) => props.theme.colors.gray200};
+  }
+
+  &::placeholder {
+    color: ${(props) => props.theme.colors.gray400};
+    text-align: center;
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+    font-family: ${(props) => props.theme.fontFamily.h5};
+  }
+`;
+
+export const WarnDiv = styled.div`
+  height: 1.5rem;
+  padding: 0 1rem;
+  display: flex;
+`;
+
+export interface FormValues {
+  title: string;
+  emoji: string;
+  campus: number;
+}
+
 function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
-  const [defaultCampusId] = useRecoilState(campusState);
-  const [campusId, setCampusId] = useState(defaultCampusId);
-  const [title, setTitle] = useState("");
-  const [emoji, setEmoji] = useState("");
+  const defaultCampusId = useRecoilValue(campusState);
   const [access, setAccess] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: "",
+      emoji: "",
+      campus: defaultCampusId,
+    },
+  });
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (isEdit) {
+      const body = {
+        campusId: data.campus,
+        title: data.title,
+        emoji: data.emoji,
+        access,
+        mapId,
+        hashtagList: hashTag,
+      };
+      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
+      try {
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert(`수정되었습니다.`);
+          refetch();
+          onClose();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      const body = JSON.stringify({
+        campusId: data.campus,
+        title: data.title,
+        emoji: data.emoji,
+        access,
+        hashtagList: hashTag,
+      });
+      const response = await axiosInstance.post(MAP_APIS.MAP, body);
+      try {
+        if (response.status === 200) {
+          navigate(`/maps/${response?.data}/detail`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   useEffect(() => {
-    const promiseData = getMap(mapId).then((data) => {
-      setCampusId(data.campusId);
-      setEmoji(data.mapEmoji);
+    if (!mapId) return;
+    getMap(mapId).then((data) => {
+      setValue("campus", data.campusId);
+      setValue("emoji", data.mapEmoji);
+      setValue("title", data.title);
       setAccess(data.access);
-      setTitle(data.title);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
         hashTag.push(hashtag.hashtagId);
@@ -142,161 +227,50 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
     }
   };
 
-  const onChangeCampusId = (e: { target: { value: any } }) => {
-    setCampusId(e.target.value);
-  };
-
-  const onChangeTitle = (e: { target: { value: SetStateAction<string> } }) => {
-    setTitle(e.target.value);
-  };
-
-  const onChangeEmoji = (e: { target: { value: SetStateAction<string> } }) => {
-    setEmoji(e.target.value);
-  };
-
   const onChangeAccess = (e: boolean) => {
     setAccess(e);
-  };
-
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    if (!title) {
-      // eslint-disable-next-line no-alert
-      alert("지도 제목을 입력해주세요.");
-      return;
-    }
-
-    if (title.length > 20) {
-      // eslint-disable-next-line no-alert
-      alert("지도 제목은 20자 이내로 입력해주세요.");
-      return;
-    }
-
-    if (!emoji) {
-      // eslint-disable-next-line no-alert
-      alert("아이콘을 하나라도 입력해주세요.");
-      return;
-    }
-
-    const regex =
-      /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
-    if (!regex.test(emoji)) {
-      // eslint-disable-next-line no-alert
-      alert("아이콘에는 이모지만 입력해주세요.");
-      return;
-    }
-
-    if (emoji.length > 6) {
-      // eslint-disable-next-line no-alert
-      alert("아이콘은 3개만 입력이 가능합니다.");
-      return;
-    }
-
-    if (isEdit) {
-      const body = JSON.stringify({
-        campusId,
-        title,
-        emoji,
-        access,
-        mapId,
-        hashtagList: hashTag,
-      });
-
-      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
-
-      try {
-        if (response.status === 200) {
-          // eslint-disable-next-line no-alert
-          alert(`수정되었습니다.`);
-          refetch();
-          onClose();
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      const body = JSON.stringify({
-        campusId,
-        title,
-        emoji,
-        access,
-        hashtagList: hashTag,
-      });
-
-      const response = await axiosInstance.post(MAP_APIS.MAP, body);
-
-      try {
-        if (response.status === 200) {
-          navigate(`/maps/${response?.data}/detail`);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
   };
 
   return (
     <ModalContainer onClose={onClose}>
       <Container>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <p className="title">지도만들기</p>
           <DivBox>
             <Content edit={isEdit}>
               <SubTitle>제목</SubTitle>
-              {isEdit ? (
-                <Input
-                  width="100%"
-                  height="35px"
-                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
-                  value={title}
-                  readonly
-                />
-              ) : (
-                <Input
-                  width="100%"
-                  height="35px"
-                  placeholder="ex) 역삼 멀캠 근처 조용한 카페"
-                  changeFunc={onChangeTitle}
-                  value={title}
-                />
-              )}
+              <Input
+                {...register("title", {
+                  required: true,
+                  maxLength: 20,
+                })}
+                placeholder="ex) 역삼 멀캠 근처 조용한 카페"
+                disabled={isEdit}
+                maxLength={20}
+              />
+              <WarnDiv>
+                {errors.title && (
+                  <WarningContainer text="20자 이하로 작성해주세요." />
+                )}
+              </WarnDiv>
             </Content>
             <Content edit={isEdit}>
               <SubTitle>캠퍼스</SubTitle>
-              {isEdit ? (
-                <select onChange={onChangeCampusId} value={campusId}>
-                  {campus.map(
-                    (option, idx) =>
-                      idx == campusId && (
-                        <option
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={idx}
-                          value={idx}
-                        >
-                          {option}
-                        </option>
-                      ),
-                  )}
-                </select>
-              ) : (
-                <select onChange={onChangeCampusId} value={campusId}>
-                  {campus.map(
-                    (option, idx) =>
-                      idx >= 1 && (
-                        <option
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={idx}
-                          value={idx}
-                        >
-                          {option}
-                        </option>
-                      ),
-                  )}
-                </select>
-              )}
+
+              <select
+                name="campus"
+                {...register("campus", { required: true })}
+                disabled={isEdit}
+              >
+                {campus.map(
+                  (option, idx) =>
+                    idx >= 1 && (
+                      <option key={option} value={idx}>
+                        {option}
+                      </option>
+                    ),
+                )}
+              </select>
             </Content>
           </DivBox>
           <DivBox>
@@ -307,27 +281,26 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 textRight="같이 찍을래!"
                 type={access}
                 func={onChangeAccess}
+                disabled={isEdit}
               />
             </Content>
             <Content edit={isEdit}>
               <SubTitle>아이콘(3개까지)</SubTitle>
-              {isEdit ? (
-                <Input
-                  width="100%"
-                  height="35px"
-                  placeholder="ex) 🎈🎆🎇"
-                  value={emoji}
-                  readonly
-                />
-              ) : (
-                <Input
-                  width="100%"
-                  height="35px"
-                  placeholder="ex) 🎈🎆🎇"
-                  changeFunc={onChangeEmoji}
-                  value={emoji}
-                />
-              )}
+              <Input
+                {...register("emoji", {
+                  required: true,
+                  pattern: REGEXES.EMOJI,
+                  maxLength: 6,
+                })}
+                maxLength={6}
+                disabled={isEdit}
+                placeholder="ex) 🎈🎆🎇"
+              />
+              <WarnDiv>
+                {errors.emoji && (
+                  <WarningContainer text="이모지만 입력해주세요.🙏 🙏" />
+                )}
+              </WarnDiv>
             </Content>
           </DivBox>
           <FilterBox>
@@ -338,11 +311,10 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
             />
           </FilterBox>
           <Flex>
-            {isEdit ? (
-              <ConfirmButton type="submit" text="수정하기" />
-            ) : (
-              <ConfirmButton type="submit" text="만들기" />
-            )}
+            <ConfirmButton
+              type="submit"
+              text={isEdit ? "수정하기" : "만들기"}
+            />
             <CancelButton type="button" text="취소" func={onClose} />
           </Flex>
         </Form>
