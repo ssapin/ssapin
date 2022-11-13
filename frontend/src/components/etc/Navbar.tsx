@@ -218,6 +218,16 @@ function Navbar({ sidebar, func }: NavbarProps) {
             <NavContent
               type="button"
               onClick={() => {
+                window.open(
+                  "https://positive-gambler-f01.notion.site/SSAPIN-9ab287af8b1b4226924574edef1017be",
+                );
+              }}
+            >
+              ⚙️ 이용가이드
+            </NavContent>
+            <NavContent
+              type="button"
+              onClick={() => {
                 window.open("http://pf.kakao.com/_mLgKxj");
               }}
             >
