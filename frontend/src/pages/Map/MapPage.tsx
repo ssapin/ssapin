@@ -176,6 +176,7 @@ function Map() {
     ["map", mapId],
     () => getMap(Number(mapId)),
   );
+  const [bookmark, setBookmark] = useState(false);
 
   const locateSSAFY = (position: any, map: any) => {
     const imageSrc = "https://ifh.cc/g/nsa8rO.png";
@@ -317,6 +318,7 @@ function Map() {
         })(marker);
       }
       mapObj.map?.setBounds(bounds);
+      setBookmark(mapData.bookMark);
     })();
   }, [mapData, mapObj]);
 
@@ -332,7 +334,7 @@ function Map() {
 
     try {
       await axiosInstance.post(MAP_APIS.BOOKMARK, body).then(() => {
-        mapRefetch();
+        setBookmark(true);
       });
     } catch (error) {
       console.log(error);
@@ -346,7 +348,7 @@ function Map() {
 
     try {
       await axiosInstance.delete(MAP_APIS.BOOKMARK, { data: body }).then(() => {
-        mapRefetch();
+        setBookmark(false);
       });
     } catch (error) {
       console.log(error);
@@ -407,7 +409,7 @@ function Map() {
         <ButtonContainer>
           <Mobile>
             {auth?.accessToken &&
-              (mapData?.bookMark ? (
+              (bookmark ? (
                 <MapCircleButton shape="3" func={removeBookmark} />
               ) : (
                 <MapCircleButton shape="2" func={registerBookmark} />
@@ -439,7 +441,7 @@ function Map() {
           <PC>
             <div>
               {auth?.accessToken &&
-                (mapData?.bookMark ? (
+                (bookmark ? (
                   <MapCircleButton shape="3" func={removeBookmark} />
                 ) : (
                   <MapCircleButton shape="2" func={registerBookmark} />
@@ -449,7 +451,7 @@ function Map() {
           <Tablet>
             <div>
               {auth?.accessToken &&
-                (mapData?.bookMark ? (
+                (bookmark ? (
                   <MapCircleButton shape="3" func={removeBookmark} />
                 ) : (
                   <MapCircleButton shape="2" func={registerBookmark} />
