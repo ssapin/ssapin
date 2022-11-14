@@ -1,0 +1,68 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #072333;
+  font-family: din-2014, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.slot {
+  display: flex;
+  flex-direction: row;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+}
+
+.row {
+  flex: 1 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: rgb(124, 159, 243);
+}
+
+.ringMoving {
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 2em;
+  animation: goaround 0.2s linear infinite;
+}
+
+.ringEnd {
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 2em;
+  animation: stop 0.5s ease-out forwards;
+}
+
+@keyframes goaround {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-1000px);
+  }
+}
+
+@keyframes stop {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-65px);
+  }
+  75% {
+    transform: translateY(-55px);
+  }
+  100% {
+    transform: translateY(-60px);
+  }
+}
