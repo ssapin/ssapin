@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +64,12 @@ function MyPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (auth.firstLogin) {
+      setModalOpen(true);
+    }
+  }, []);
 
   const handleModal = () => {
     setModalOpen(true);

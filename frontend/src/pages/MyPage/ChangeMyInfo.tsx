@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { SetStateAction, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import ModalContainer from "../../components/containers/ModalContainer";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
-import { campusState, userInformationState } from "../../store/atom";
+import { authState, campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
@@ -17,7 +17,7 @@ interface ChangeModalProps {
 }
 
 const Container = styled.div`
-  max-width: 600px;
+  position: relative;
   height: 100%;
   line-height: 29px;
 `;
@@ -34,7 +34,6 @@ const RelativeContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.paragraphbold};
   font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray600};
-
   span {
     color: ${(props) => props.theme.colors.mainRed};
     font-family: ${(props) => props.theme.fontFamily.s1};
@@ -107,6 +106,22 @@ const NicknameInput = styled.input`
   text-align: center;
 `;
 
+const TmpModal = styled.div`
+  position: absolute;
+  padding: 1rem;
+  width: 250px;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0%);
+  border-radius: 10px;
+  text-align: center;
+  word-break: keep-all;
+  background-color: rgba(255, 230, 81, 0.8);
+  font-family: ${(props) => props.theme.fontFamily.s1bold};
+  font-size: ${(props) => props.theme.fontSizes.s1};
+  cursor: pointer;
+`;
+
 export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const camlist = CAMPUS_LIST;
   const [userInformation, setUserInformation] =
@@ -119,6 +134,14 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [nicknameEmpty, setNicknameEmpty] = useState(false);
   const [nicknameVali, setNicknameVali] = useState(false);
   const [EmojiVali, setEmojiVali] = useState(false);
+  const [explainModal, setExplainModal] = useState(false);
+  const auth = useRecoilValue(authState);
+
+  useEffect(() => {
+    if (auth.firstLogin) {
+      setExplainModal(true);
+    }
+  }, []);
 
   const onChangeNickname = async (e: {
     target: { value: SetStateAction<string> };
@@ -200,6 +223,11 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   return (
     <ModalContainer onClose={onClose}>
       <Container>
+        {explainModal && (
+          <TmpModal onClick={() => setExplainModal(false)}>
+            이곳에서 이모지, 별명, 캠퍼스를 변경할 수 있어요.😉
+          </TmpModal>
+        )}
         <form onSubmit={handleSubmit}>
           <RelativeContainer>
             <EmojiInput onChange={onChangeEmoji} value={emoji} />
