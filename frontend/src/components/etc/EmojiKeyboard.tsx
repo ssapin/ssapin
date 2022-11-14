@@ -8,28 +8,19 @@ import EmojiPicker, {
   SuggestionMode,
 } from "emoji-picker-react";
 import { useState } from "react";
+interface IEmojiProps {
+  emoji: string;
+  setEmoji: (v: string) => void;
+}
 
-function EmojiKeyBoard() {
-  const [selectedEmoji, setSelectedEmoji] = useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function onClick(emojiData: EmojiClickData, event: MouseEvent) {
-    setSelectedEmoji(emojiData.unified);
+function EmojiKeyBoard({ emoji, setEmoji }: IEmojiProps) {
+  function onClick(emojiData: EmojiClickData) {
+    if (emoji.length <= 6) {
+      setEmoji(emoji + emojiData.emoji);
+    }
   }
 
   return (
-    // <div className="App">
-    //   <h2>Emoji Picker React 4 Demo</h2>
-    //   <div className="show-emoji">
-    //     Your selected Emoji is:
-    //     {selectedEmoji ? (
-    //       <Emoji
-    //         unified={selectedEmoji}
-    //         emojiStyle={EmojiStyle.NATIVE}
-    //         size={22}
-    //       />
-    //     ) : null}
-    //   </div>
-
     <EmojiPicker
       // eslint-disable-next-line react/jsx-no-bind
       onEmojiClick={onClick}
@@ -78,6 +69,7 @@ function EmojiKeyBoard() {
         },
       ]}
     />
+    //{" "}
     // </div>
   );
 }
