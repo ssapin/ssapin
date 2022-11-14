@@ -16,7 +16,6 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { isUserAccess } from "../../utils/functions/place";
 import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 import "../../styles/style.css";
@@ -328,6 +327,11 @@ function Map() {
   };
 
   const registerBookmark = async () => {
+    if (!auth.accessToken) {
+      setLoginModalOpen(true);
+      return;
+    }
+
     const body: IBookMark = {
       mapId: Number(mapId),
     };
@@ -408,12 +412,11 @@ function Map() {
 
         <ButtonContainer>
           <Mobile>
-            {auth?.accessToken &&
-              (bookmark ? (
-                <MapCircleButton shape="3" func={removeBookmark} />
-              ) : (
-                <MapCircleButton shape="2" func={registerBookmark} />
-              ))}
+            {bookmark ? (
+              <MapCircleButton shape="3" func={removeBookmark} />
+            ) : (
+              <MapCircleButton shape="2" func={registerBookmark} />
+            )}
           </Mobile>
           {(mapData?.access || userInformation.userId === mapData?.userId) && (
             <>
@@ -440,22 +443,20 @@ function Map() {
           />
           <PC>
             <div>
-              {auth?.accessToken &&
-                (bookmark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </PC>
           <Tablet>
             <div>
-              {auth?.accessToken &&
-                (bookmark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </Tablet>
         </SubjectContainer>
