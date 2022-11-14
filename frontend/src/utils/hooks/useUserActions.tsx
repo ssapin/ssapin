@@ -22,7 +22,6 @@ function useUserActions() {
     try {
       const response = await getAccessToken(kakaoCode);
       const { data } = response;
-      console.log(data?.firstLogin);
 
       if (data?.accessToken) {
         const option = {
@@ -37,7 +36,6 @@ function useUserActions() {
         });
         await useGetUser.getUser();
         if (data?.firstLogin) {
-          console.log(data?.firstLogin);
           navigate("/mypage");
         } else {
           navigate("/");
@@ -60,7 +58,7 @@ function useUserActions() {
       participateCnt: 0,
     });
     setCampus(1);
-    setAuth({ accessToken: "" });
+    setAuth({ accessToken: "", firstLogin: false });
     navigate("/");
   }
 }
