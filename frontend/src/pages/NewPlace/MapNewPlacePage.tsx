@@ -248,12 +248,11 @@ function MapNewPlace() {
     return marker;
   };
 
-  const mouseOverHandler = (
-    overlay: any,
-    lat: number | string,
-    lng: number | string,
-  ) => {
+  const mouseOverHandler = (overlay: any) => {
     overlay.setMap(mapObj?.map);
+  };
+
+  const clickHandler = (lat: number | string, lng: number | string) => {
     const moveLatLon = new kakao.maps.LatLng(lat, lng);
 
     mapObj.map?.panTo(moveLatLon);
@@ -279,7 +278,7 @@ function MapNewPlace() {
     const bounds = new kakao.maps.LatLngBounds();
     const newPlaceList: IPlaceList[] = [];
     const newMarkerList: any[] = [];
-    const newOverlayList = [];
+    const newOverlayList: any[] = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
@@ -307,7 +306,10 @@ function MapNewPlace() {
       })(marker);
     }
 
-    setOverlayList(newOverlayList);
+    setOverlayList((prev) => {
+      prev.forEach((overlay) => overlay.setMap(null));
+      return newOverlayList;
+    });
     setMarkerList((prev) => {
       prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
@@ -391,14 +393,9 @@ function MapNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  mouseOver={() =>
-                    mouseOverHandler(
-                      overlayList[idx],
-                      place.place.y,
-                      place.place.x,
-                    )
-                  }
+                  mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
+                  onClick={() => clickHandler(place.place.y, place.place.x)}
                   mapId={Number(mapId)}
                   type={1}
                 />

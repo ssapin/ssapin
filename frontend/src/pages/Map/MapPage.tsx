@@ -16,7 +16,6 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { isUserAccess } from "../../utils/functions/place";
 import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 import "../../styles/style.css";
@@ -28,7 +27,7 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import { makePin } from "../../utils/functions/maps";
+import { makeCampusPin, makePin } from "../../utils/functions/maps";
 
 import MapTitleCard from "../../components/card/MapTitleCard";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
@@ -37,6 +36,7 @@ import {
   PC,
   Tablet,
 } from "../../components/containers/MediaQueryContainer";
+import ssafylogo from "../../assets/svgs/ssafylogo.svg";
 
 declare global {
   interface Window {
@@ -249,12 +249,12 @@ function Map() {
 
         const map = await new kakao.maps.Map(mapContainer, options);
         locateSSAFY(position, map);
-        const content = makePin(
+        const content = makeCampusPin(
           {
             title: CAMPUS_COORDINATE_LIST[campusLocation].place_name,
             placeId: 0,
           },
-          "🗼",
+          ssafylogo,
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const customOverlay = new kakao.maps.CustomOverlay({
