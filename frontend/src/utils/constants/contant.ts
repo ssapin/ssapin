@@ -88,9 +88,9 @@ export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
     phone: "",
     place_name: "SSAFY 구미 캠퍼스",
     place_url: "http://place.map.kakao.com/26396878",
-    road_address_name: "경북 구미시 1공단로 244",
-    x: "128.390517754794",
-    y: "36.100457594073",
+    road_address_name: "경상북도 구미시 3공단3로 302",
+    x: "128.4163656538572",
+    y: "36.106703327770994",
   },
   대전: {
     address_name: "대전 유성구 덕명동 124",
