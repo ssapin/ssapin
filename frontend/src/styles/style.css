@@ -33,6 +33,7 @@
   font-size: 15px;
   line-height: 1.4;
   word-break: keep-all;
+  font-family: S-CoreDream-4Regular;
 }
 
 .text_primary {
@@ -49,8 +50,42 @@
   font-size: 25px;
 }
 
+.map_logo {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  position: absolute;
+  top: -18px;
+  right: 20px;
+}
+
 .shadow {
   transition: all 0.2s;
   -webkit-box-shadow: 3px 3px 8px rgb(0 0 0 / 20%);
   box-shadow: 3px 3px 8px rgb(0 0 0 / 20%);
+}
+
+.campus_pin_overlay {
+  background-color: #3396f4;
+  text-align: center;
+  padding: 10px 20px;
+  min-width: 100px;
+  border-radius: 18px;
+  position: relative;
+  white-space: normal;
+  word-break: keep-all;
+  width: max-content;
+  max-width: 80vw;
+  color: #fefefe;
+}
+
+.campus_pin_overlay:after {
+  border-bottom: 0px solid transparent;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #3396f4;
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: calc(50% - 10px);
 }

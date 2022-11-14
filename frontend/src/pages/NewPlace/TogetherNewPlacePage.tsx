@@ -18,6 +18,7 @@ import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
+  CAMPUS_REAL_PLACE_NAME_OBJ,
 } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import { IKakaoPlace } from "../../utils/types/place.interface";
@@ -245,12 +246,11 @@ function TogetherNewPlace() {
     return marker;
   };
 
-  const mouseOverHandler = (
-    overlay: any,
-    lat: number | string,
-    lng: number | string,
-  ) => {
+  const mouseOverHandler = (overlay: any) => {
     overlay.setMap(mapObj?.map);
+  };
+
+  const clickHandler = (lat: number | string, lng: number | string) => {
     const moveLatLon = new kakao.maps.LatLng(lat, lng);
 
     mapObj.map?.panTo(moveLatLon);
@@ -276,7 +276,7 @@ function TogetherNewPlace() {
     const bounds = new kakao.maps.LatLngBounds();
     const newPlaceList = [];
     const newMarkerList: any[] = [];
-    const newOverlayList = [];
+    const newOverlayList: any[] = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
@@ -296,14 +296,17 @@ function TogetherNewPlace() {
       bounds.extend(placePosition);
       ((mark) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
-          mouseOverHandler(overlay, places[i].y, places[i].x);
+          mouseOverHandler(overlay);
         });
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mouseOutHanvler(overlay);
         });
       })(marker);
     }
-    setOverlayList(newOverlayList);
+    setOverlayList((prev) => {
+      prev.forEach((overlay) => overlay.setMap(null));
+      return newOverlayList;
+    });
     setMarkerList((prev) => {
       prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
@@ -331,7 +334,9 @@ function TogetherNewPlace() {
     e.preventDefault();
     if (!keyword) return;
     mapObj.ps?.keywordSearch(
-      `${CAMPUS_LIST[togetherMapData.campusId]} ${keyword}`,
+      `${
+        CAMPUS_REAL_PLACE_NAME_OBJ[CAMPUS_LIST[togetherMapData.campusId]]
+      } ${keyword}`,
       placesSearchCB,
     );
     setFirstserchFlag(false);
@@ -399,14 +404,9 @@ function TogetherNewPlace() {
                   {...place}
                   key={place.index}
                   ref={(el) => (itemRefs.current[idx] = el)}
-                  mouseOver={() =>
-                    mouseOverHandler(
-                      overlayList[idx],
-                      place.place.y,
-                      place.place.x,
-                    )
-                  }
+                  mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
+                  onClick={() => clickHandler(place.place.y, place.place.x)}
                   mapId={Number(togethermapId)}
                   type={2}
                 />

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { AxiosError } from "axios";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
@@ -55,7 +56,7 @@ const FilterBox = styled.div`
   }
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ edit: boolean }>`
   width: 100%;
   height: 80px;
   margin: auto;
@@ -63,7 +64,10 @@ const Content = styled.div`
   select {
     width: 100%;
     height: 41px;
-    background-color: ${(props) => props.theme.colors.lightLightBlue};
+    background-color: ${(props) =>
+      props.edit
+        ? props.theme.colors.gray200
+        : props.theme.colors.lightLightBlue};
     border: 0;
     border-radius: 10px;
     margin: 0.5rem;
@@ -117,6 +121,7 @@ function CreateMapMobilePage() {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -136,15 +141,19 @@ function CreateMapMobilePage() {
         mapId,
         hashtagList: hashTag,
       };
-      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
       try {
+        const response = await axiosInstance.patch(MAP_APIS.MAP, body);
         if (response.status === 200) {
           // eslint-disable-next-line no-alert
           alert(`수정되었습니다.`);
           navigate(`/mypage`);
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          if (error.response.status === 400) {
+            setError("emoji", { message: "이모지만 입력해주세요.🙏 🙏" });
+          }
+        }
       }
     } else {
       const body = JSON.stringify({
@@ -154,13 +163,17 @@ function CreateMapMobilePage() {
         access,
         hashtagList: hashTag,
       });
-      const response = await axiosInstance.post(MAP_APIS.MAP, body);
       try {
+        const response = await axiosInstance.post(MAP_APIS.MAP, body);
         if (response.status === 200) {
           navigate(`/maps/${response?.data}/detail`);
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          if (error.response.status === 400) {
+            setError("emoji", { message: "이모지만 입력해주세요.🙏 🙏" });
+          }
+        }
       }
     }
   };
@@ -208,7 +221,7 @@ function CreateMapMobilePage() {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <p className="title">지도만들기</p>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <Input
                 {...register("title", {
                   required: true,
@@ -226,7 +239,7 @@ function CreateMapMobilePage() {
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>캠퍼스</SubTitle>
               <select
                 name="campus"
@@ -245,24 +258,25 @@ function CreateMapMobilePage() {
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>장소추가</SubTitle>
               <SwitchButton
                 textLeft="혼자 찍을래!"
                 textRight="같이 찍을래!"
                 type={access}
                 func={onChangeAccess}
-                disabled={isEdit}
               />
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
-              <SubTitle>아이콘(3개까지)</SubTitle>
+            <Content edit={isEdit}>
               <Input
                 {...register("emoji", {
-                  required: true,
-                  pattern: REGEXES.EMOJI,
+                  required: "이모지만 입력해주세요.🙏 🙏",
+                  pattern: {
+                    value: REGEXES.EMOJI,
+                    message: "이모지만 입력해주세요.🙏 🙏",
+                  },
                   maxLength: 6,
                 })}
                 maxLength={6}
@@ -271,7 +285,7 @@ function CreateMapMobilePage() {
               />
               <WarnDiv>
                 {errors.emoji && (
-                  <WarningContainer text="이모지만 입력해주세요.🙏 🙏" />
+                  <WarningContainer text={errors.emoji.message} />
                 )}
               </WarnDiv>
             </Content>
