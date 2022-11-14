@@ -137,17 +137,19 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    setNicknameEmpty(false);
+    setNicknameVali(false);
+    setNicknameChk(false);
+
     if (!nickname) {
       setNicknameEmpty(true);
       return;
     }
-    setNicknameEmpty(false);
 
     if (nickname.length > 10) {
       setNicknameVali(true);
       return;
     }
-    setNicknameVali(false);
 
     if (nickname !== userInformation.nickname) {
       const nicknameCheck = await axiosInstance.get(
