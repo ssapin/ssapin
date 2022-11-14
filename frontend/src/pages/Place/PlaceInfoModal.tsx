@@ -633,7 +633,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                         placeholder="장소에 대한 의견을 작성해주세요."
                         onChange={onChangeReview}
                         value={reviewContent}
-                        maxLength={20}
+                        maxLength={40}
                       />
                       <ButtonContainer>
                         <ConfirmButton
@@ -751,7 +751,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                   placeholder="장소에 대한 의견을 작성해주세요."
                   onChange={onChangeReview}
                   value={reviewContent}
-                  maxLength={20}
+                  maxLength={40}
                 />
                 <ButtonContainer>
                   <ConfirmButton
