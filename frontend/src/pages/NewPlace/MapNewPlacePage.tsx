@@ -298,7 +298,7 @@ function MapNewPlace() {
       bounds.extend(placePosition);
       ((mark) => {
         kakao.maps.event.addListener(mark, "mouseover", () => {
-          mouseOverHandler(overlay, places[i].y, places[i].x);
+          mouseOverHandler(overlay);
         });
         kakao.maps.event.addListener(mark, "mouseout", () => {
           mouseOutHanvler(overlay);
