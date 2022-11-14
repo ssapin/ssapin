@@ -34,6 +34,12 @@ const RelativeContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.paragraphbold};
   font-size: ${(props) => props.theme.fontSizes.paragraph};
   color: ${(props) => props.theme.colors.gray600};
+
+  span {
+    color: ${(props) => props.theme.colors.mainRed};
+    font-family: ${(props) => props.theme.fontFamily.s1};
+    font-size: ${(props) => props.theme.fontSizes.s1};
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -109,8 +115,12 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [emoji, setEmoji] = useState(userInformation.emoji);
   const [campus, setCampus] = useState(userInformation.campusId);
   const setCampusId = useSetRecoilState(campusState);
+  const [nicknameChk, setNicknameChk] = useState(false);
+  const [nicknameEmpty, setNicknameEmpty] = useState(false);
+  const [nicknameVali, setNicknameVali] = useState(false);
+  const [EmojiVali, setEmojiVali] = useState(false);
 
-  const onChangeNickname = (e: {
+  const onChangeNickname = async (e: {
     target: { value: SetStateAction<string> };
   }) => {
     setNickname(e.target.value);
@@ -128,23 +138,33 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     e.preventDefault();
 
     if (!nickname) {
-      // eslint-disable-next-line no-alert
-      alert("닉네임을 입력해주세요.");
+      setNicknameEmpty(true);
       return;
     }
+    setNicknameEmpty(false);
 
     if (nickname.length > 10) {
-      // eslint-disable-next-line no-alert
-      alert("닉네임은 10자 이내로 입력해주세요.");
+      setNicknameVali(true);
       return;
+    }
+    setNicknameVali(false);
+
+    if (nickname !== userInformation.nickname) {
+      const nicknameCheck = await axiosInstance.get(
+        USER_APIS.NICKNAME(nickname),
+      );
+      setNicknameChk(nicknameCheck.data.using);
+      if (nicknameCheck.data.using) {
+        return;
+      }
     }
 
     const regex = REGEXES.USEREMOJI;
-    if (!regex.test(emoji)) {
-      // eslint-disable-next-line no-alert
-      alert("본인을 표현할 수 있는 이모지를 1개만 꼭 입력해주세요💕");
+    if (emoji.length === 1 || !regex.test(emoji)) {
+      setEmojiVali(true);
       return;
     }
+    setEmojiVali(false);
 
     const body = JSON.stringify({
       campusId: campus,
@@ -181,10 +201,18 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
         <form onSubmit={handleSubmit}>
           <RelativeContainer>
             <EmojiInput onChange={onChangeEmoji} value={emoji} />
+            {EmojiVali && (
+              <span>자신을 표현할 수 있는 이모지를 1개만 꼭 넣어주세요!</span>
+            )}
           </RelativeContainer>
           <RelativeContainer>
             닉네임
             <NicknameInput onChange={onChangeNickname} value={nickname} />
+            {nicknameChk && <span>이미 존재하는 닉네임인데용.. 쩝...</span>}
+            {nicknameEmpty && <span>닉네임을.. 입력해주시궜어요..?</span>}
+            {nicknameVali && (
+              <span>흐어..~ 닉네임 다 못읽겠어.. 10자이하가 딱.. 좋은데..</span>
+            )}
           </RelativeContainer>
           <RelativeContainer>
             소속 캠퍼스
