@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { throttle } from "lodash";
 import { pixelToRem } from "../../utils/functions/util";
 import Header from "../../components/etc/Header";
 import UserInfoCard from "../../components/card/UserInfoCard";
@@ -65,9 +64,6 @@ function MyPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isTopBtn, setisTopBtn] = useState(true);
-
-  let beforeScrollY = 0;
 
   const handleModal = () => {
     setModalOpen(true);
@@ -86,24 +82,6 @@ function MyPage() {
     if (auth.accessToken) setCreateModalOpen(true);
     else setLoginModalOpen(true);
   };
-
-  const scrollEvent = useMemo(
-    () =>
-      throttle(() => {
-        if (window.pageYOffset > beforeScrollY) {
-          setisTopBtn(false);
-        } else {
-          setisTopBtn(true);
-        }
-        // 이전 스크롤값 저장
-        beforeScrollY = window.pageYOffset;
-      }, 500),
-    [isTopBtn],
-  );
-
-  useEffect(() => {
-    window.addEventListener("scroll", scrollEvent);
-  }, []);
 
   return (
     <>
@@ -158,7 +136,7 @@ function MyPage() {
       </PageTopBg>
       <MyPageTab />
       <FixContainer>
-        {isTopBtn ? <MoveToTopButton /> : null}
+        <MoveToTopButton />
         <CreateButton
           type="button"
           text="지도 만들기"

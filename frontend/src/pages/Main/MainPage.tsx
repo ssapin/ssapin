@@ -1,4 +1,4 @@
-import { FormEvent, SetStateAction, useEffect, useMemo, useState } from "react";
+import { FormEvent, SetStateAction, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,7 +7,6 @@ import { useQuery } from "react-query";
 import { Autoplay, EffectFade, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { throttle } from "lodash";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import Footer from "../../components/etc/Footer";
@@ -66,7 +65,6 @@ const QuestionContainer = styled.div`
   .swiper-slide {
     text-align: center;
     background-color: ${(props) => props.theme.colors.mainBlue};
-    /* Center slide text vertically */
     display: -webkit-box;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -221,27 +219,6 @@ function MainPage() {
     userRankingData,
     placeRankingData,
   ]);
-  const [isTopBtn, setisTopBtn] = useState(true);
-
-  let beforeScrollY = 0;
-
-  const scrollEvent = useMemo(
-    () =>
-      throttle(() => {
-        if (window.pageYOffset > beforeScrollY) {
-          setisTopBtn(false);
-        } else {
-          setisTopBtn(true);
-        }
-        // 이전 스크롤값 저장
-        beforeScrollY = window.pageYOffset;
-      }, 500),
-    [isTopBtn],
-  );
-
-  useEffect(() => {
-    window.addEventListener("scroll", scrollEvent);
-  }, []);
 
   const handleModal = () => {
     if (auth.accessToken) setModalOpen(true);
@@ -308,7 +285,7 @@ function MainPage() {
         <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
-        {isTopBtn ? <MoveToTopButton /> : null}
+        <MoveToTopButton />
         <LessPC>
           <MobileCampusButton />
         </LessPC>
