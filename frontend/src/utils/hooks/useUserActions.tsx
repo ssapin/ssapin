@@ -36,7 +36,6 @@ function useUserActions() {
         });
         await useGetUser.getUser();
         if (data?.firstLogin) {
-          console.log(data?.firstLogin);
           navigate("/mypage");
         } else {
           navigate("/");
