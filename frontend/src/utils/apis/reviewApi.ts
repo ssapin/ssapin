@@ -10,9 +10,14 @@ export interface IReviewPlace {
   content: string;
 }
 
-export function registerReview(data: IReviewPlace) {
-  axiosInstance.post(REVIEW_API.REVIEW, data);
-}
+export const registerReview = async (data: IReviewPlace) => {
+  try {
+    const response = await axiosInstance.post(REVIEW_API.REVIEW, data);
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 const REVIEW_APIS = {
   getReviewList: (placeId: number) => `/review/${placeId}`,
   REVIEW: `/review/login`,

@@ -16,7 +16,6 @@ import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
 } from "../../utils/constants/contant";
-import { isUserAccess } from "../../utils/functions/place";
 import { IMap } from "../../utils/types/map.interface";
 import LoginModal from "../Login/LoginModal";
 import "../../styles/style.css";
@@ -28,7 +27,7 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import { makePin } from "../../utils/functions/maps";
+import { makeCampusPin, makePin } from "../../utils/functions/maps";
 
 import MapTitleCard from "../../components/card/MapTitleCard";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
@@ -37,6 +36,7 @@ import {
   PC,
   Tablet,
 } from "../../components/containers/MediaQueryContainer";
+import ssafylogo from "../../assets/svgs/ssafylogo.svg";
 
 declare global {
   interface Window {
@@ -176,6 +176,7 @@ function Map() {
     ["map", mapId],
     () => getMap(Number(mapId)),
   );
+  const [bookmark, setBookmark] = useState(false);
 
   const locateSSAFY = (position: any, map: any) => {
     const imageSrc = "https://ifh.cc/g/nsa8rO.png";
@@ -249,12 +250,12 @@ function Map() {
 
         const map = await new kakao.maps.Map(mapContainer, options);
         locateSSAFY(position, map);
-        const content = makePin(
+        const content = makeCampusPin(
           {
             title: CAMPUS_COORDINATE_LIST[campusLocation].place_name,
             placeId: 0,
           },
-          "🗼",
+          ssafylogo,
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const customOverlay = new kakao.maps.CustomOverlay({
@@ -317,6 +318,7 @@ function Map() {
         })(marker);
       }
       mapObj.map?.setBounds(bounds);
+      setBookmark(mapData.bookMark);
     })();
   }, [mapData, mapObj]);
 
@@ -326,13 +328,18 @@ function Map() {
   };
 
   const registerBookmark = async () => {
+    if (!auth.accessToken) {
+      setLoginModalOpen(true);
+      return;
+    }
+
     const body: IBookMark = {
       mapId: Number(mapId),
     };
 
     try {
       await axiosInstance.post(MAP_APIS.BOOKMARK, body).then(() => {
-        mapRefetch();
+        setBookmark(true);
       });
     } catch (error) {
       console.log(error);
@@ -346,7 +353,7 @@ function Map() {
 
     try {
       await axiosInstance.delete(MAP_APIS.BOOKMARK, { data: body }).then(() => {
-        mapRefetch();
+        setBookmark(false);
       });
     } catch (error) {
       console.log(error);
@@ -359,6 +366,11 @@ function Map() {
     setTimeout(() => {
       setCopied(false);
     }, 2000);
+  };
+
+  const onClose = () => {
+    setModalOpen(false);
+    mapRefetch();
   };
 
   return (
@@ -381,6 +393,7 @@ function Map() {
                   ref={(el) => {
                     cardRefs.current[idx] = el;
                   }}
+                  refetch={mapRefetch}
                 />
               ))}
           </ul>
@@ -400,12 +413,11 @@ function Map() {
 
         <ButtonContainer>
           <Mobile>
-            {auth?.accessToken &&
-              (mapData?.bookMark ? (
-                <MapCircleButton shape="3" func={removeBookmark} />
-              ) : (
-                <MapCircleButton shape="2" func={registerBookmark} />
-              ))}
+            {bookmark ? (
+              <MapCircleButton shape="3" func={removeBookmark} />
+            ) : (
+              <MapCircleButton shape="2" func={registerBookmark} />
+            )}
           </Mobile>
           {(mapData?.access || userInformation.userId === mapData?.userId) && (
             <>
@@ -432,22 +444,20 @@ function Map() {
           />
           <PC>
             <div>
-              {auth?.accessToken &&
-                (mapData?.bookMark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </PC>
           <Tablet>
             <div>
-              {auth?.accessToken &&
-                (mapData?.bookMark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </Tablet>
         </SubjectContainer>
@@ -463,10 +473,7 @@ function Map() {
         )}
         {modalOpen && (
           <ModalPortal>
-            <PlaceInfoModal
-              placeId={placeId}
-              onClose={() => setModalOpen(false)}
-            />
+            <PlaceInfoModal placeId={placeId} onClose={onClose} />
           </ModalPortal>
         )}
         {copied && (

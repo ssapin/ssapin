@@ -16,14 +16,19 @@ const QuestionContainer = styled.div`
   align-items: center;
   padding: 0 1rem 0 1rem;
 
-  p {
+  > p {
     font-size: ${(props) => props.theme.fontSizes.h1};
     color: ${(props) => props.theme.colors.gray50};
     font-family: ${(props) => props.theme.fontFamily.h1bold};
+    word-break: keep-all;
 
     ${(props) => props.theme.mq.mobile} {
       font-size: ${(props) => props.theme.fontSizes.h4};
     }
+  }
+
+  button {
+    margin-bottom: 30px;
   }
 `;
 

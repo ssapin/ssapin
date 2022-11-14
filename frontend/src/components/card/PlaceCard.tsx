@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { forwardRef, LegacyRef, useState } from "react";
-import { InfiniteData, QueryObserverResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { ReactComponent as TrashIcon } from "../../assets/svgs/trashcan.svg";
 import PlaceInfoModal from "../../pages/Place/PlaceInfoModal";
@@ -15,18 +14,7 @@ type PlaceCardProps = {
   isAdmin: boolean;
   mapId?: number;
   togethermapId?: number;
-  refetch?: () => Promise<
-    QueryObserverResult<
-      InfiniteData<
-        | {
-            result: any;
-            page: any;
-          }
-        | undefined
-      >,
-      unknown
-    >
-  >;
+  refetch?: () => any;
 };
 
 const Container = styled.li`
@@ -40,10 +28,17 @@ const Container = styled.li`
   justify-content: space-around;
   padding: 1rem;
   transition: all 0.3s ease-in-out;
+  position: relative;
 
   ${(props) => props.theme.mq.mobile} {
     height: 5rem;
     margin: 0;
+  }
+
+  .trashIcon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
   }
 
   .place {
@@ -51,11 +46,9 @@ const Container = styled.li`
     font-family: ${(props) => props.theme.fontFamily.h5bold};
     font-size: ${(props) => props.theme.fontSizes.h5};
 
-    width: 100%;
+    width: 90%;
     text-align: left;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: block;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
@@ -112,7 +105,7 @@ const PlaceCard = forwardRef(
       }
 
       // eslint-disable-next-line no-alert
-      if (!window.confirm("정말 삭제하시겠습니까?")) return;
+      if (!window.confirm("정말.. 삭제하시려구요..? (•́ ̯•̀)")) return;
       if (mapId) {
         const response = await axiosInstance.delete(PLACE_APIS.MAP, {
           data: { mapId, placeId: prop.placeId },
@@ -121,8 +114,7 @@ const PlaceCard = forwardRef(
         try {
           if (response.status === 200) {
             // eslint-disable-next-line no-alert
-            alert(`장소가 삭제되었습니다.`);
-            window.location.reload();
+            if (refetch) refetch();
           }
         } catch (err) {
           console.log(err);
@@ -134,9 +126,7 @@ const PlaceCard = forwardRef(
 
         try {
           if (response.status === 200) {
-            // eslint-disable-next-line no-alert
-            alert(`장소가 삭제되었습니다.`);
-            window.location.reload();
+            if (refetch) refetch();
           }
         } catch (err) {
           console.log(err);
@@ -153,10 +143,10 @@ const PlaceCard = forwardRef(
         <Container onClick={handlePlaceInfoModal} ref={ref}>
           <p className="place">
             {prop !== undefined ? prop.title : "장소가 없습니다"}
-            {isAdmin && prop.userId === user.userId && (
-              <TrashIcon className="trashIcon" onClick={onDeletePlace} />
-            )}
           </p>
+          {isAdmin && prop.userId === user.userId && (
+            <TrashIcon className="trashIcon" onClick={onDeletePlace} />
+          )}
           <p className="address">
             {prop !== undefined ? prop.address : "장소가 없습니다"}
           </p>

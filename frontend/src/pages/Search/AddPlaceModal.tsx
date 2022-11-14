@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
@@ -14,7 +15,6 @@ import { getKakaoPlace, getRequestPlace } from "../../utils/functions/place";
 import axiosInstance from "../../utils/apis/api";
 import PLACE_APIS from "../../utils/apis/placeApi";
 import { IReviewPlace, registerReview } from "../../utils/apis/reviewApi";
-import { useNavigate } from "react-router-dom";
 
 interface PlaceModalProps {
   onClose: () => void;
@@ -202,7 +202,6 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
   const toggleActive = (key: number) => {
     setRatePlace(key);
     setIsOpen(!isOpen);
-    setText("");
   };
 
   useEffect(() => {
@@ -249,11 +248,9 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
               content: text,
             };
             registerReview(reviewData);
-          } else {
-            if (text.length !== 0) {
-              alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
-              return;
-            }
+          } else if (text.length !== 0) {
+            alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
+            return;
           }
           navigate(`/maps/${data.mapId}/detail`);
         }
@@ -276,11 +273,9 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
               content: text,
             };
             registerReview(reviewData);
-          } else {
-            if (text.length !== 0) {
-              alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
-              return;
-            }
+          } else if (text.length !== 0) {
+            alert("리뷰를 작성하실땐 이모지를 꼭 눌러주셔야해요!😋");
+            return;
           }
           navigate(`/togethermaps/${data.mapId}/detail`);
         }
@@ -322,7 +317,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                   onChange={onChange}
                   placeholder="장소에 대한 솔직한 의견 적어주세요"
                   value={text}
-                  maxLength={20}
+                  maxLength={40}
                 />
               ) : (
                 <EmptyContainer />
@@ -332,7 +327,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                 onChange={onChange}
                 placeholder="장소에 대한 솔직한 의견 적어주세요"
                 value={text}
-                maxLength={20}
+                maxLength={40}
               />
             )}
           </ReviewContainer>

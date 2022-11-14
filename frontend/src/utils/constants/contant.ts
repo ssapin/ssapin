@@ -1,8 +1,20 @@
 import { CampusCoordinate } from "../types/togethermap.interface";
 
+interface CampusRealPlaceNameObj {
+  [key: string]: string;
+}
+
 export const MESSAGE_LIST = {};
 
 export const CAMPUS_LIST = ["0", "서울", "대전", "광주", "구미", "부울경"];
+
+export const CAMPUS_REAL_PLACE_NAME_OBJ: CampusRealPlaceNameObj = {
+  서울: "서울시",
+  대전: "대전시",
+  광주: "광주시",
+  구미: "구미시",
+  부울경: "부산시",
+};
 
 export const HASHTAG_LIST = [
   "0",
@@ -76,9 +88,9 @@ export const CAMPUS_COORDINATE_LIST: CampusCoordinate = {
     phone: "",
     place_name: "SSAFY 구미 캠퍼스",
     place_url: "http://place.map.kakao.com/26396878",
-    road_address_name: "경북 구미시 1공단로 244",
-    x: "128.390517754794",
-    y: "36.100457594073",
+    road_address_name: "경상북도 구미시 3공단3로 302",
+    x: "128.4163656538572",
+    y: "36.106703327770994",
   },
   대전: {
     address_name: "대전 유성구 덕명동 124",

@@ -17,6 +17,9 @@ const Container = styled.div`
   ${(props) => props.theme.mq.mobile} {
     font-size: ${(props) => props.theme.fontSizes.s1};
   }
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 function TogetherMapNoticeCard() {

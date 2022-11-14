@@ -4,6 +4,7 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
@@ -27,8 +28,6 @@ import {
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
-import { getMap } from "../../utils/apis/mapApi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -404,6 +403,8 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
     try {
       if (response.status === 200) {
         reviewRefetch();
+        setRatePlace(0);
+        setReviewContent("");
       }
     } catch (err) {
       console.log(err);
@@ -631,7 +632,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                         placeholder="장소에 대한 의견을 작성해주세요."
                         onChange={onChangeReview}
                         value={reviewContent}
-                        maxLength={20}
+                        maxLength={40}
                       />
                       <ButtonContainer>
                         <ConfirmButton
@@ -749,7 +750,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                   placeholder="장소에 대한 의견을 작성해주세요."
                   onChange={onChangeReview}
                   value={reviewContent}
-                  maxLength={20}
+                  maxLength={40}
                 />
                 <ButtonContainer>
                   <ConfirmButton

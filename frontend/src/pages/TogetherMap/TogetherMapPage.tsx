@@ -27,9 +27,10 @@ import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
 import { copyURL } from "../../utils/functions/copyURL";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import { makePin } from "../../utils/functions/maps";
+import { makeCampusPin, makePin } from "../../utils/functions/maps";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
 import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
+import ssafylogo from "../../assets/svgs/ssafylogo.svg";
 
 declare global {
   interface Window {
@@ -151,20 +152,17 @@ function TogetherMap() {
   const cardContainerRef = useRef<HTMLDivElement>();
   const cardRefs = useRef<HTMLLIElement[]>([]);
 
-  const { data: togetherMapData } = useQuery<ITogetherMap, AxiosError>(
-    ["together-map", togethermapId],
-    async () => getTogetherMap(Number(togethermapId)),
+  const { data: togetherMapData, refetch: togethermapRefetch } = useQuery<
+    ITogetherMap,
+    AxiosError
+  >(["together-map", togethermapId], async () =>
+    getTogetherMap(Number(togethermapId)),
   );
 
   const locateSSAFY = (position: any, map: any) => {
     const imageSrc = "https://ifh.cc/g/nsa8rO.png";
     const imageSize = new kakao.maps.Size(30, 40);
-    const imgOptions = {};
-    const markerImage = new kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imgOptions,
-    );
+    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     const marker = new kakao.maps.Marker({
       position,
       image: markerImage,
@@ -229,12 +227,12 @@ function TogetherMap() {
         const map = await new kakao.maps.Map(mapContainer, options);
         locateSSAFY(position, map);
         // const img = "";
-        const content = makePin(
+        const content = makeCampusPin(
           {
             title: CAMPUS_COORDINATE_LIST[campusLocation].place_name,
             placeId: 0,
           },
-          "🗼",
+          ssafylogo,
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const customOverlay = new kakao.maps.CustomOverlay({
@@ -314,6 +312,11 @@ function TogetherMap() {
     }, 2000);
   };
 
+  const onClose = () => {
+    setModalOpen(false);
+    togethermapRefetch();
+  };
+
   return (
     <>
       <Helmet>
@@ -338,6 +341,7 @@ function TogetherMap() {
                   ref={(el) => {
                     cardRefs.current[idx] = el;
                   }}
+                  refetch={togethermapRefetch}
                 />
               ))}
           </ul>
@@ -381,10 +385,7 @@ function TogetherMap() {
         )}
         {modalOpen && (
           <ModalPortal>
-            <PlaceInfoModal
-              placeId={placeId}
-              onClose={() => setModalOpen(false)}
-            />
+            <PlaceInfoModal placeId={placeId} onClose={onClose} />
           </ModalPortal>
         )}
         {copied && (

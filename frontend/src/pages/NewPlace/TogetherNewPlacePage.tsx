@@ -18,10 +18,12 @@ import { getTogetherMap } from "../../utils/apis/togethermapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
+  CAMPUS_REAL_PLACE_NAME_OBJ,
 } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
+import { IPlaceList } from "./MapNewPlacePage";
 import { MemoizedPlaceCard } from "./PlaceCard";
 
 const Conatiner = styled.section`
@@ -51,7 +53,7 @@ const SearchContainer = styled.div`
     left: 0;
     right: 0;
     height: fit-content;
-    max-height: 40vh;
+    max-height: 28vh;
   }
 `;
 
@@ -59,7 +61,6 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  //background-color: ${(props) => props.theme.colors.lightBlue};
   background-color: rgba(51, 150, 244, 0.9);
 
   display: flex;
@@ -202,7 +203,7 @@ function TogetherNewPlace() {
     infowindow: null,
   });
   const [markerList, setMarkerList] = useState([]);
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
   const [paginationList, setPaginationList] = useState([]);
   const [overlayList, setOverlayList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
@@ -249,6 +250,12 @@ function TogetherNewPlace() {
     overlay.setMap(mapObj?.map);
   };
 
+  const clickHandler = (lat: number | string, lng: number | string) => {
+    const moveLatLon = new kakao.maps.LatLng(lat, lng);
+
+    mapObj.map?.panTo(moveLatLon);
+  };
+
   const mouseOutHanvler = (overlay: any) => {
     overlay.setMap(null);
   };
@@ -269,7 +276,7 @@ function TogetherNewPlace() {
     const bounds = new kakao.maps.LatLngBounds();
     const newPlaceList = [];
     const newMarkerList: any[] = [];
-    const newOverlayList = [];
+    const newOverlayList: any[] = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
@@ -296,9 +303,12 @@ function TogetherNewPlace() {
         });
       })(marker);
     }
-    setOverlayList(newOverlayList);
-    setMarkerList(() => {
-      markerList.forEach((marker) => marker.setMap(null));
+    setOverlayList((prev) => {
+      prev.forEach((overlay) => overlay.setMap(null));
+      return newOverlayList;
+    });
+    setMarkerList((prev) => {
+      prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
     });
     setPlaceList(newPlaceList);
@@ -324,7 +334,9 @@ function TogetherNewPlace() {
     e.preventDefault();
     if (!keyword) return;
     mapObj.ps?.keywordSearch(
-      `${CAMPUS_LIST[togetherMapData.campusId]} ${keyword}`,
+      `${
+        CAMPUS_REAL_PLACE_NAME_OBJ[CAMPUS_LIST[togetherMapData.campusId]]
+      } ${keyword}`,
       placesSearchCB,
     );
     setFirstserchFlag(false);
@@ -394,7 +406,9 @@ function TogetherNewPlace() {
                   ref={(el) => (itemRefs.current[idx] = el)}
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
-                  mapId={togethermapId}
+                  onClick={() => clickHandler(place.place.y, place.place.x)}
+                  mapId={Number(togethermapId)}
+                  type={2}
                 />
               ))}
             </ul>

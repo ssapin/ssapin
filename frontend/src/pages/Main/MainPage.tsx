@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
+import { Autoplay, EffectFade, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
@@ -37,6 +37,8 @@ import USER_APIS from "../../utils/apis/userApis";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
+import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
+import { LessPC } from "../../components/containers/MediaQueryContainer";
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -63,7 +65,6 @@ const QuestionContainer = styled.div`
   .swiper-slide {
     text-align: center;
     background-color: ${(props) => props.theme.colors.mainBlue};
-    /* Center slide text vertically */
     display: -webkit-box;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -111,12 +112,14 @@ const MainContainer = styled.main`
 
 const FixContainer = styled.div`
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1rem;
+  right: 1rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  button {
-    margin-bottom: 1rem;
+  > button {
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
   }
 
@@ -218,7 +221,6 @@ function MainPage() {
   ]);
 
   const handleModal = () => {
-    setModalOpen(true);
     if (auth.accessToken) setModalOpen(true);
     else setLoginModalOpen(true);
   };
@@ -249,13 +251,12 @@ function MainPage() {
               clickable: true,
             }}
             effect="fade"
-            navigation
             autoplay={{
               delay: 3500,
               disableOnInteraction: false,
             }}
             speed={800}
-            modules={[Pagination, Navigation, Autoplay, EffectFade]}
+            modules={[Pagination, Autoplay, EffectFade]}
             className="mySwiper"
           >
             {!loading &&
@@ -285,6 +286,9 @@ function MainPage() {
       </MainContainer>
       <FixContainer>
         <MoveToTopButton />
+        <LessPC>
+          <MobileCampusButton />
+        </LessPC>
         <CreateButton type="button" text="지도 만들기" func={handleModal} />
         <CreateButtonMobile type="button" func={moveToCreate} />
         {modalOpen && (

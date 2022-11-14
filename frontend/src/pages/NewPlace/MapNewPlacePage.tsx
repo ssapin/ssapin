@@ -4,39 +4,23 @@
 /* eslint-disable react/destructuring-assignment */
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
-import {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  LegacyRef,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Helmet } from "react-helmet-async";
-import { ReactComponent as PlusIcon } from "../../assets/svgs/plus.svg";
-import { authState, campusState } from "../../store/atom";
-import {
-  getMap,
-  IBookMark,
-  registerMapBookmark,
-  removeMapBookmark,
-} from "../../utils/apis/mapApi";
+import { campusState } from "../../store/atom";
+import { getMap } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
+  CAMPUS_REAL_PLACE_NAME_OBJ,
 } from "../../utils/constants/contant";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
 import BackButton from "../../components/Buttons/BackButton";
 import MapTitleCard from "../../components/card/MapTitleCard";
 import { pixelToRem } from "../../utils/functions/util";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import AddPlaceModal from "../Search/AddPlaceModal";
-import LoginModal from "../Login/LoginModal";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
 import { MemoizedPlaceCard } from "./PlaceCard";
 
@@ -67,7 +51,7 @@ const SearchContainer = styled.div`
     left: 0;
     right: 0;
     height: fit-content;
-    max-height: 40vh;
+    max-height: 28vh;
   }
 `;
 
@@ -75,7 +59,6 @@ const Form = styled.form`
   width: 100%;
   height: 83px;
   border-radius: 20px 20px 0px 0px;
-  //background-color: ${(props) => props.theme.colors.lightBlue};
   background-color: rgba(51, 150, 244, 0.9);
 
   display: flex;
@@ -210,6 +193,11 @@ export interface Pagination {
   prevPage: () => void;
 }
 
+export interface IPlaceList {
+  index: number;
+  place: IKakaoPlace;
+}
+
 function MapNewPlace() {
   const [keyword, setKeyword] = useState("");
   const [mapObj, setMapObj] = useState({
@@ -218,7 +206,7 @@ function MapNewPlace() {
     infowindow: null,
   });
   const [markerList, setMarkerList] = useState([]);
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
   const [paginationList, setPaginationList] = useState([]);
   const [overlayList, setOverlayList] = useState([]);
   const mapRefs = useRef<HTMLDivElement>();
@@ -264,15 +252,14 @@ function MapNewPlace() {
     overlay.setMap(mapObj?.map);
   };
 
-  const mouseOutHanvler = (overlay: any) => {
-    overlay.setMap(null);
+  const clickHandler = (lat: number | string, lng: number | string) => {
+    const moveLatLon = new kakao.maps.LatLng(lat, lng);
+
+    mapObj.map?.panTo(moveLatLon);
   };
 
-  const displayInfoWindow = (marker: any, title: string) => {
-    mapObj.infowindow?.setContent(
-      `<div style="padding:10px;font-size:16px;width:150px;">${title}</div>`,
-    );
-    mapObj.infowindow?.open(mapObj.map, marker);
+  const mouseOutHanvler = (overlay: any) => {
+    overlay.setMap(null);
   };
 
   const displayPagination = (pagination: Pagination) => {
@@ -289,10 +276,9 @@ function MapNewPlace() {
   const displayPlaces = (places: IKakaoPlace[]) => {
     const menuWrap = menuWrapRef.current;
     const bounds = new kakao.maps.LatLngBounds();
-    // removeMarker();
-    const newPlaceList = [];
+    const newPlaceList: IPlaceList[] = [];
     const newMarkerList: any[] = [];
-    const newOverlayList = [];
+    const newOverlayList: any[] = [];
     for (let i = 0; i < places.length; i++) {
       const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
       const marker = addMarker(placePosition, i);
@@ -319,11 +305,16 @@ function MapNewPlace() {
         });
       })(marker);
     }
-    setOverlayList(newOverlayList);
-    setMarkerList(() => {
-      markerList.forEach((marker) => marker.setMap(null));
+
+    setOverlayList((prev) => {
+      prev.forEach((overlay) => overlay.setMap(null));
+      return newOverlayList;
+    });
+    setMarkerList((prev) => {
+      prev.forEach((marker) => marker.setMap(null));
       return newMarkerList;
     });
+
     setPlaceList(newPlaceList);
     menuWrap.scrollTop = 0;
     mapObj.map.setBounds(bounds);
@@ -347,7 +338,7 @@ function MapNewPlace() {
     e.preventDefault();
     if (!keyword) return;
     mapObj.ps?.keywordSearch(
-      `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
+      `${CAMPUS_REAL_PLACE_NAME_OBJ[CAMPUS_LIST[mapData.campusId]]} ${keyword}`,
       placesSearchCB,
     );
     setFirstserchFlag(false);
@@ -373,26 +364,6 @@ function MapNewPlace() {
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     setMapObj({ map, ps, infowindow });
   }, []);
-
-  const mouseOver = (idx: number, title: string) => {
-    displayInfoWindow(markerList[idx], title);
-  };
-
-  const registerBookmark = () => {
-    const req: IBookMark = {
-      mapId: Number(mapId),
-    };
-
-    registerMapBookmark(req);
-  };
-
-  const removeBookmark = () => {
-    const req: IBookMark = {
-      mapId: Number(mapId),
-    };
-
-    removeMapBookmark(req);
-  };
 
   return (
     <>
@@ -424,7 +395,9 @@ function MapNewPlace() {
                   ref={(el) => (itemRefs.current[idx] = el)}
                   mouseOver={() => mouseOverHandler(overlayList[idx])}
                   mouseLeave={() => mouseOutHanvler(overlayList[idx])}
-                  mapId={mapId}
+                  onClick={() => clickHandler(place.place.y, place.place.x)}
+                  mapId={Number(mapId)}
+                  type={1}
                 />
               ))}
             </ul>
