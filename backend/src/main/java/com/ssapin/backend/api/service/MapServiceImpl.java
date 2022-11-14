@@ -69,10 +69,8 @@ public class MapServiceImpl implements MapService {
     @Transactional
     public Long updateMap(MapRequest.MapEdit mapEdit) {
         Map map = mapRepository.findById(mapEdit.getMapId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        Campus campus = campusRepository.findById(mapEdit.getCampusId()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        Map updatedMap = map.update(campus, mapEdit.getTitle(), mapEdit.getAccess(), mapEdit.getEmoji());
+         Map updatedMap = map.update( mapEdit.getAccess());
 
-        //원래 sticker
         List<MapHashtag> list = mapHashtagRepositorySupport.findAllByMap(map);
         List<Hashtag> originHashtagList = new ArrayList<>();
         List<Hashtag> deleteHashtagList = new ArrayList<>();
@@ -81,7 +79,6 @@ public class MapServiceImpl implements MapService {
             deleteHashtagList.add(maphashTag.getHashtag());
         }
 
-        //변경된 sticker
         List<HashtagRequest> newHashtagList = mapEdit.getHashtagList();
         Collections.sort(newHashtagList);
         List<Hashtag> updateHashTagList = new ArrayList<>();
