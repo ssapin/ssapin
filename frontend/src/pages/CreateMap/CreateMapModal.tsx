@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import styled from "@emotion/styled";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InfiniteData, QueryObserverResult } from "react-query";
@@ -119,7 +120,9 @@ export const Input = styled.input`
   text-align: center;
   font-size: ${(props) => props.theme.fontSizes.paragraph};
   font-family: ${(props) => props.theme.fontFamily.h5};
-
+  :focus {
+    outline: 2px solid ${(props) => props.theme.colors.lightBlue};
+  }
   :disabled {
     background-color: ${(props) => props.theme.colors.gray200};
   }
@@ -156,6 +159,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -167,39 +171,45 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (isEdit) {
       const body = {
-        campusId: data.campus,
-        title: data.title,
-        emoji: data.emoji,
         access,
         mapId,
         hashtagList: hashTag,
       };
-      const response = await axiosInstance.patch(MAP_APIS.MAP, body);
       try {
+        const response = await axiosInstance.patch(MAP_APIS.MAP, body);
         if (response.status === 200) {
           // eslint-disable-next-line no-alert
           alert(`수정되었습니다.`);
           refetch();
           onClose();
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          if (error.response.status === 400) {
+            setError("emoji", { message: "이모지만 입력해주세요.🙏 🙏" });
+          }
+        }
       }
     } else {
-      const body = JSON.stringify({
+      const body = {
         campusId: data.campus,
         title: data.title,
         emoji: data.emoji,
         access,
         hashtagList: hashTag,
-      });
-      const response = await axiosInstance.post(MAP_APIS.MAP, body);
+      };
       try {
+        const response = await axiosInstance.post(MAP_APIS.MAP, body);
+
         if (response.status === 200) {
           navigate(`/maps/${response?.data}/detail`);
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          if (error.response.status === 400) {
+            setError("emoji", { message: "이모지만 입력해주세요.🙏 🙏" });
+          }
+        }
       }
     }
   };
@@ -281,15 +291,17 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 textRight="같이 찍을래!"
                 type={access}
                 func={onChangeAccess}
-                disabled={isEdit}
               />
             </Content>
             <Content edit={isEdit}>
               <SubTitle>아이콘(3개까지)</SubTitle>
               <Input
                 {...register("emoji", {
-                  required: true,
-                  pattern: REGEXES.EMOJI,
+                  required: "이모지만 입력해주세요.🙏 🙏",
+                  pattern: {
+                    value: REGEXES.EMOJI,
+                    message: "이모지만 입력해주세요.🙏 🙏",
+                  },
                   maxLength: 6,
                 })}
                 maxLength={6}
@@ -298,7 +310,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               />
               <WarnDiv>
                 {errors.emoji && (
-                  <WarningContainer text="이모지만 입력해주세요.🙏 🙏" />
+                  <WarningContainer text={errors.emoji.message} />
                 )}
               </WarnDiv>
             </Content>

@@ -244,7 +244,6 @@ function MainPage() {
   }, []);
 
   const handleModal = () => {
-    setModalOpen(true);
     if (auth.accessToken) setModalOpen(true);
     else setLoginModalOpen(true);
   };

@@ -13,6 +13,7 @@ const USER_APIS = {
   JOIN_MAP: "/user/login/map/join",
   BOOKMARK_MAP: "/user/login/map/bookmark",
   BOOKMARK_PLACE: "/user/login/place/bookmark",
+  NICKNAME: (nickname: string) => `/user/check/${nickname}`,
 };
 
 export const getAccessToken = async (
