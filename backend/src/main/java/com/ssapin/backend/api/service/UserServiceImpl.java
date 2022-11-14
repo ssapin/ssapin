@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
                 .nickname("undefiend")
                 .kakaoId(kakaoId)
                 .campus(campus)
-                .emoji("🥸")
+                .emoji("\uD83D\uDE00")
                 .build();
 
         user = userRepository.save(user);

@@ -120,7 +120,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .lng(placeRequest.getPlace().getLng())
                     .address(placeRequest.getPlace().getAddress())
                     .build();
-            placeRepository.save(place);
+           placeId= placeRepository.saveAndFlush(place).getId();
         } else {
             place = placeResponse.get();
             placeId = place.getId();
