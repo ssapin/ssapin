@@ -22,6 +22,8 @@ function useUserActions() {
     try {
       const response = await getAccessToken(kakaoCode);
       const { data } = response;
+      console.log(data?.firstLogin);
+
       if (data?.accessToken) {
         const option = {
           path: "/",
@@ -29,17 +31,21 @@ function useUserActions() {
           sameSite: true,
         };
         cookie.set("accessToken", data?.accessToken, option);
-        setAuth({ accessToken: data?.accessToken });
+        setAuth({
+          accessToken: data?.accessToken,
+          firstLogin: data?.firstLogin,
+        });
         await useGetUser.getUser();
         if (data?.firstLogin) {
+          console.log(data?.firstLogin);
           navigate("/mypage");
+        } else {
+          navigate("/");
         }
       }
     } catch (error) {
       console.log(error);
     }
-
-    navigate("/");
   }
 
   function logout() {
