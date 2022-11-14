@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useEffect, useMemo, useState } from "react";
+import { throttle } from "lodash";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as UpArrowIcon } from "../../assets/svgs/upperarrow.svg";
 
@@ -26,15 +28,41 @@ const StyledUp = styled.button`
 `;
 
 export default function MoveToTopButton() {
+  const [isTopBtn, setisTopBtn] = useState(false);
+
+  let beforeScrollY = 0;
+
+  const scrollEvent = useMemo(
+    () =>
+      throttle(() => {
+        if (document.documentElement.scrollTop < 20) {
+          setisTopBtn(false);
+        } else if (window.pageYOffset < beforeScrollY) {
+          setisTopBtn(false);
+        } else {
+          setisTopBtn(true);
+        }
+        beforeScrollY = window.pageYOffset;
+      }, 300),
+    [isTopBtn],
+  );
+
+  useEffect(() => {
+    window.addEventListener("scroll", scrollEvent);
+    return () => window.removeEventListener("scroll", scrollEvent);
+  }, []);
+
   const goUp = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <RightFixed>
-      <StyledUp onClick={goUp}>
-        <UpArrowIcon />
-      </StyledUp>
-    </RightFixed>
+    isTopBtn && (
+      <RightFixed>
+        <StyledUp onClick={goUp}>
+          <UpArrowIcon />
+        </StyledUp>
+      </RightFixed>
+    )
   );
 }

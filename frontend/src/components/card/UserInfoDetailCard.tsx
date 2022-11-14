@@ -25,7 +25,7 @@ const Container = styled.div<{ type: string }>`
     font-size: ${(props) =>
       props.type === "pc"
         ? props.theme.fontSizes.h3
-        : props.theme.fontSizes.h5};
+        : props.theme.fontSizes.paragraph};
     color: ${(props) => props.theme.colors.lightBlue};
     font-family: ${(props) =>
       props.type === "pc"
@@ -37,67 +37,74 @@ const Container = styled.div<{ type: string }>`
       font-family: ${(props) =>
         props.type === "pc"
           ? props.theme.fontFamily.h3
-          : props.theme.fontFamily.h4};
+          : props.theme.fontFamily.paragraph};
     }
   }
 
   .map {
+    width: ${(props) => (props.type === "pc" ? `70%` : `90%`)};
+    color: ${(props) => props.theme.colors.lightBlue};
+    text-align: left;
     font-size: ${(props) =>
       props.type === "pc"
         ? props.theme.fontSizes.h5
-        : props.theme.fontSizes.paragraph};
+        : props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainNavy};
     font-family: ${(props) =>
       props.type === "pc"
         ? props.theme.fontFamily.h5
-        : props.theme.fontFamily.paragraph};
+        : props.theme.fontFamily.s1};
 
     span {
       color: ${(props) => props.theme.colors.mainBlue};
       font-family: ${(props) =>
         props.type === "pc"
           ? props.theme.fontFamily.h5bold
-          : props.theme.fontFamily.paragraphbold};
+          : props.theme.fontFamily.s1bold};
     }
   }
 
   .place {
+    width: ${(props) => (props.type === "pc" ? `70%` : `90%`)};
+    text-align: left;
     font-size: ${(props) =>
       props.type === "pc"
         ? props.theme.fontSizes.h5
-        : props.theme.fontSizes.paragraph};
+        : props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainNavy};
     font-family: ${(props) =>
       props.type === "pc"
         ? props.theme.fontFamily.h5
-        : props.theme.fontFamily.paragraph};
+        : props.theme.fontFamily.s1};
 
     span {
       color: ${(props) => props.theme.colors.mainBlue};
       font-family: ${(props) =>
         props.type === "pc"
           ? props.theme.fontFamily.h5bold
-          : props.theme.fontFamily.paragraphbold};
+          : props.theme.fontFamily.s1bold};
     }
   }
 
   .user {
+    width: ${(props) => (props.type === "pc" ? `70%` : `90%`)};
+    text-align: left;
     font-size: ${(props) =>
       props.type === "pc"
         ? props.theme.fontSizes.h5
-        : props.theme.fontSizes.paragraph};
+        : props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.mainNavy};
     font-family: ${(props) =>
       props.type === "pc"
         ? props.theme.fontFamily.h5
-        : props.theme.fontFamily.paragraph};
+        : props.theme.fontFamily.s1};
 
     span {
       color: ${(props) => props.theme.colors.mainBlue};
       font-family: ${(props) =>
         props.type === "pc"
           ? props.theme.fontFamily.h5bold
-          : props.theme.fontFamily.paragraphbold};
+          : props.theme.fontFamily.s1bold};
     }
   }
 `;

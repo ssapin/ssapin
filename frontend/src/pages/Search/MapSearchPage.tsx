@@ -219,10 +219,10 @@ function SearchPage() {
         <SearchList hashtag={hashTag} keyword={keyword} />
       </MainContainer>
       <FixContainer>
+        <MoveToTopButton />
         <LessPC>
           <MobileCampusButton />
         </LessPC>
-        <MoveToTopButton />
         <CreateButton
           type="button"
           text="지도 만들기"

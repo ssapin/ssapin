@@ -321,7 +321,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                   onChange={onChange}
                   placeholder="장소에 대한 솔직한 의견 적어주세요"
                   value={text}
-                  maxLength={20}
+                  maxLength={40}
                 />
               ) : (
                 <EmptyContainer />
@@ -331,7 +331,7 @@ function AddPlaceModal({ onClose, mapId, place, type }: PlaceModalProps) {
                 onChange={onChange}
                 placeholder="장소에 대한 솔직한 의견 적어주세요"
                 value={text}
-                maxLength={20}
+                maxLength={40}
               />
             )}
           </ReviewContainer>
