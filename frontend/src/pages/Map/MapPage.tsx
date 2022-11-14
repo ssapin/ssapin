@@ -176,6 +176,7 @@ function Map() {
     ["map", mapId],
     () => getMap(Number(mapId)),
   );
+  const [bookmark, setBookmark] = useState(false);
 
   const locateSSAFY = (position: any, map: any) => {
     const imageSrc = "https://ifh.cc/g/nsa8rO.png";
@@ -317,6 +318,7 @@ function Map() {
         })(marker);
       }
       mapObj.map?.setBounds(bounds);
+      setBookmark(mapData.bookMark);
     })();
   }, [mapData, mapObj]);
 
@@ -326,13 +328,18 @@ function Map() {
   };
 
   const registerBookmark = async () => {
+    if (!auth.accessToken) {
+      setLoginModalOpen(true);
+      return;
+    }
+
     const body: IBookMark = {
       mapId: Number(mapId),
     };
 
     try {
       await axiosInstance.post(MAP_APIS.BOOKMARK, body).then(() => {
-        mapRefetch();
+        setBookmark(true);
       });
     } catch (error) {
       console.log(error);
@@ -346,7 +353,7 @@ function Map() {
 
     try {
       await axiosInstance.delete(MAP_APIS.BOOKMARK, { data: body }).then(() => {
-        mapRefetch();
+        setBookmark(false);
       });
     } catch (error) {
       console.log(error);
@@ -406,12 +413,11 @@ function Map() {
 
         <ButtonContainer>
           <Mobile>
-            {auth?.accessToken &&
-              (mapData?.bookMark ? (
-                <MapCircleButton shape="3" func={removeBookmark} />
-              ) : (
-                <MapCircleButton shape="2" func={registerBookmark} />
-              ))}
+            {bookmark ? (
+              <MapCircleButton shape="3" func={removeBookmark} />
+            ) : (
+              <MapCircleButton shape="2" func={registerBookmark} />
+            )}
           </Mobile>
           {(mapData?.access || userInformation.userId === mapData?.userId) && (
             <>
@@ -438,22 +444,20 @@ function Map() {
           />
           <PC>
             <div>
-              {auth?.accessToken &&
-                (mapData?.bookMark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </PC>
           <Tablet>
             <div>
-              {auth?.accessToken &&
-                (mapData?.bookMark ? (
-                  <MapCircleButton shape="3" func={removeBookmark} />
-                ) : (
-                  <MapCircleButton shape="2" func={registerBookmark} />
-                ))}
+              {bookmark ? (
+                <MapCircleButton shape="3" func={removeBookmark} />
+              ) : (
+                <MapCircleButton shape="2" func={registerBookmark} />
+              )}
             </div>
           </Tablet>
         </SubjectContainer>
