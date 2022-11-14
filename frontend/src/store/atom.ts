@@ -5,11 +5,12 @@ import { IUser } from "../utils/types/user.interface";
 
 interface Auth {
   accessToken: string;
+  firstLogin: false;
 }
 
 export const authState = atom<Auth>({
   key: `auth/${v1()}`,
-  default: { accessToken: cookie.get("accessToken") },
+  default: { accessToken: cookie.get("accessToken"), firstLogin: false },
 });
 
 export const userInformationState = atom<IUser>({
