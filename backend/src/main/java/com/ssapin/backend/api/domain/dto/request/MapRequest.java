@@ -32,17 +32,11 @@ public class MapRequest {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MapEdit {
         private long mapId;
-        private long campusId;
-        private String title;
-        private String emoji;
         private Boolean access;
         private List<HashtagRequest> hashtagList;
 
-        public MapEdit(long mapId, long campusId, String title, String emoji, Boolean access, List<HashtagRequest> hashtagList) {
+        public MapEdit(long mapId, Boolean access, List<HashtagRequest> hashtagList) {
             this.mapId = mapId;
-            this.campusId = campusId;
-            this.title = title;
-            this.emoji = emoji;
             this.access = access;
             this.hashtagList = hashtagList;
         }
