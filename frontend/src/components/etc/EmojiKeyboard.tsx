@@ -6,7 +6,6 @@ import EmojiPicker, {
   EmojiClickData,
   Emoji,
   SuggestionMode,
-  SkinTonePickerLocation,
 } from "emoji-picker-react";
 import { useState } from "react";
 
@@ -25,7 +24,7 @@ function EmojiKeyBoard() {
         {selectedEmoji ? (
           <Emoji
             unified={selectedEmoji}
-            emojiStyle={EmojiStyle.APPLE}
+            emojiStyle={EmojiStyle.NATIVE}
             size={22}
           />
         ) : null}
@@ -34,41 +33,50 @@ function EmojiKeyBoard() {
       <EmojiPicker
         // eslint-disable-next-line react/jsx-no-bind
         onEmojiClick={onClick}
-        autoFocusSearch={false}
-        // theme={Theme.AUTO}
-        // searchDisabled
-        // skinTonePickerLocation={SkinTonePickerLocation.PREVIEW}
-        // height={350}
-        // width="50%"
-        // emojiVersion="0.6"
-        // lazyLoadEmojis={true}
-        // previewConfig={{
-        //   defaultCaption: "Pick one!",
-        //   defaultEmoji: "1f92a" // 🤪
-        // }}
-        // suggestedEmojisMode={SuggestionMode.RECENT}
-        // skinTonesDisabled
-        // searchPlaceHolder="Filter"
-        // defaultSkinTone={SkinTones.MEDIUM}
-        // emojiStyle={EmojiStyle.NATIVE}
-        // categories={[
-        //   {
-        //     name: "Fun and Games",
-        //     category: Categories.ACTIVITIES
-        //   },
-        //   {
-        //     name: "Smiles & Emotions",
-        //     category: Categories.SMILEYS_PEOPLE
-        //   },
-        //   {
-        //     name: "Flags",
-        //     category: Categories.FLAGS
-        //   },
-        //   {
-        //     name: "Yum Yum",
-        //     category: Categories.FOOD_DRINK
-        //   }
-        // ]}
+        autoFocusSearch
+        emojiStyle={EmojiStyle.NATIVE}
+        emojiVersion="5.0"
+        theme={Theme.DARK}
+        previewConfig={{
+          defaultCaption: "싸핀러의 이모지는 무엇!",
+          defaultEmoji: "1f92a", // 🤪
+        }}
+        suggestedEmojisMode={SuggestionMode.RECENT}
+        defaultSkinTone={SkinTones.NEUTRAL}
+        categories={[
+          {
+            name: "제안",
+            category: Categories.SUGGESTED,
+          },
+          {
+            name: "표정",
+            category: Categories.SMILEYS_PEOPLE,
+          },
+          {
+            name: "자연&동물",
+            category: Categories.ANIMALS_NATURE,
+          },
+          {
+            name: "음식",
+            category: Categories.FOOD_DRINK,
+          },
+          {
+            name: "여행",
+            category: Categories.TRAVEL_PLACES,
+          },
+          {
+            name: "활동",
+            category: Categories.ACTIVITIES,
+          },
+          {
+            name: "사물",
+            category: Categories.OBJECTS,
+          },
+          {
+            name: "깃발",
+            category: Categories.FLAGS,
+          },
+        ]}
       />
     </div>
   );
