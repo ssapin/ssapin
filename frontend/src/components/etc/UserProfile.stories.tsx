@@ -7,7 +7,7 @@ import UserProfile from "./UserProfile";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/etc/UserInfoDetailCard",
+  title: "Components/etc/UserProfile",
   component: UserProfile,
   decorators: [withRouter],
 } as ComponentMeta<typeof UserProfile>;
