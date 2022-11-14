@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
+import { Autoplay, EffectFade, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
@@ -253,13 +253,12 @@ function MainPage() {
               clickable: true,
             }}
             effect="fade"
-            navigation
             autoplay={{
               delay: 3500,
               disableOnInteraction: false,
             }}
             speed={800}
-            modules={[Pagination, Navigation, Autoplay, EffectFade]}
+            modules={[Pagination, Autoplay, EffectFade]}
             className="mySwiper"
           >
             {!loading &&

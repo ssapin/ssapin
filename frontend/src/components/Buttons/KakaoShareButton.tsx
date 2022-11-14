@@ -58,11 +58,6 @@ function KakaoShareButton({ title, url, description }: IKakaoShareProps) {
           webUrl: "https://www.ssapin.com",
         },
       },
-      social: {
-        likeCount: 69,
-        commentCount: 69,
-        sharedCount: 69,
-      },
       buttons: [
         {
           title: "웹으로 보기",
