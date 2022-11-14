@@ -14,6 +14,7 @@ import { getMap } from "../../utils/apis/mapApi";
 import {
   CAMPUS_COORDINATE_LIST,
   CAMPUS_LIST,
+  CAMPUS_REAL_PLACE_NAME_OBJ,
 } from "../../utils/constants/contant";
 import { IKakaoPlace } from "../../utils/types/place.interface";
 import { IMap } from "../../utils/types/map.interface";
@@ -335,7 +336,7 @@ function MapNewPlace() {
     e.preventDefault();
     if (!keyword) return;
     mapObj.ps?.keywordSearch(
-      `${CAMPUS_LIST[mapData.campusId]} ${keyword}`,
+      `${CAMPUS_REAL_PLACE_NAME_OBJ[CAMPUS_LIST[mapData.campusId]]} ${keyword}`,
       placesSearchCB,
     );
     setFirstserchFlag(false);

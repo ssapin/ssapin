@@ -1,8 +1,20 @@
 import { CampusCoordinate } from "../types/togethermap.interface";
 
+interface CampusRealPlaceNameObj {
+  [key: string]: string;
+}
+
 export const MESSAGE_LIST = {};
 
 export const CAMPUS_LIST = ["0", "서울", "대전", "광주", "구미", "부울경"];
+
+export const CAMPUS_REAL_PLACE_NAME_OBJ: CampusRealPlaceNameObj = {
+  서울: "서울시",
+  대전: "대전시",
+  광주: "광주시",
+  구미: "구미시",
+  부울경: "부산시",
+};
 
 export const HASHTAG_LIST = [
   "0",
