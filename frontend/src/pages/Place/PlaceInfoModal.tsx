@@ -4,6 +4,7 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
 import PlaceRatingButton from "../../components/Buttons/RatePlaceButton";
 import ModalContainer from "../../components/containers/ModalContainer";
@@ -27,8 +28,6 @@ import {
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
-import { getMap } from "../../utils/apis/mapApi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const { kakao } = window;
 
