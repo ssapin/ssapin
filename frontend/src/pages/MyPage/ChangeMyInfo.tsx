@@ -137,9 +137,16 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    setEmojiVali(false);
     setNicknameEmpty(false);
     setNicknameVali(false);
     setNicknameChk(false);
+
+    const regex = REGEXES.USEREMOJI;
+    if (emoji.length === 1 || !regex.test(emoji)) {
+      setEmojiVali(true);
+      return;
+    }
 
     if (!nickname) {
       setNicknameEmpty(true);
@@ -160,13 +167,6 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
         return;
       }
     }
-
-    const regex = REGEXES.USEREMOJI;
-    if (emoji.length === 1 || !regex.test(emoji)) {
-      setEmojiVali(true);
-      return;
-    }
-    setEmojiVali(false);
 
     const body = JSON.stringify({
       campusId: campus,
@@ -204,7 +204,7 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
           <RelativeContainer>
             <EmojiInput onChange={onChangeEmoji} value={emoji} />
             {EmojiVali && (
-              <span>자신을 표현할 수 있는 이모지를 1개만 꼭 넣어주세요!</span>
+              <span>이모지가 없거나, 사용할 수 없어요 ( •́ ̯•̀ )</span>
             )}
           </RelativeContainer>
           <RelativeContainer>
