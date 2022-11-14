@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,6 +16,7 @@ import Header from "../../components/etc/Header";
 import { FormValues, Input, WarnDiv } from "./CreateMapModal";
 import WarningContainer from "../../components/containers/WarningContainer";
 import { REGEXES } from "../../utils/constants/regex";
+import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
 
 const Container = styled.div`
   width: 90%;
@@ -106,6 +107,11 @@ const HeadContainer = styled.div`
   justify-content: center;
 `;
 
+const EmojikeyboardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 function CreateMapMobilePage() {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
@@ -115,6 +121,7 @@ function CreateMapMobilePage() {
     new URLSearchParams(window.location.search).get("mapId") || "",
   );
   const [isEdit, setIsEdit] = useState(false);
+  const [isKeyboard, setKeyboard] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -212,6 +219,23 @@ function CreateMapMobilePage() {
     navigate(-1);
   };
 
+  const isVisibleKeyboard = () => {
+    setKeyboard(!isKeyboard);
+  };
+
+  const [emoji, setEmoji] = useState<string>("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmoji(e.target.value);
+  };
+
+  const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const keycode = e.key;
+
+    if (keycode !== "Backspace") {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       <HeadContainer>
@@ -282,7 +306,17 @@ function CreateMapMobilePage() {
                 maxLength={6}
                 disabled={isEdit}
                 placeholder="ex) 🎈🎆🎇"
+                onClick={isVisibleKeyboard}
+                onChange={handleChange}
+                value={emoji}
+                onKeyDown={checkCharCode}
               />
+              {isKeyboard ? (
+                <EmojikeyboardContainer>
+                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
+                </EmojikeyboardContainer>
+              ) : null}
+
               <WarnDiv>
                 {errors.emoji && (
                   <WarningContainer text={errors.emoji.message} />
