@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { throttle } from "lodash";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
@@ -139,9 +138,6 @@ function SearchPage() {
   const [sidebar, setSidebar] = useState(false);
   const auth = useRecoilValue(authState);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-  const [isTopBtn, setisTopBtn] = useState(true);
-
-  let beforeScrollY = 0;
 
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
@@ -190,24 +186,6 @@ function SearchPage() {
     else setLoginModalOpen(true);
   };
 
-  const scrollEvent = useMemo(
-    () =>
-      throttle(() => {
-        if (window.pageYOffset > beforeScrollY) {
-          setisTopBtn(false);
-        } else {
-          setisTopBtn(true);
-        }
-        // 이전 스크롤값 저장
-        beforeScrollY = window.pageYOffset;
-      }, 500),
-    [isTopBtn],
-  );
-
-  useEffect(() => {
-    window.addEventListener("scroll", scrollEvent);
-  }, []);
-
   return (
     <>
       <HeadContainer>
@@ -241,7 +219,7 @@ function SearchPage() {
         <SearchList hashtag={hashTag} keyword={keyword} />
       </MainContainer>
       <FixContainer>
-        {isTopBtn ? <MoveToTopButton /> : null}
+        <MoveToTopButton />
         <LessPC>
           <MobileCampusButton />
         </LessPC>
