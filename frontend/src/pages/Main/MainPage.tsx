@@ -65,7 +65,6 @@ const QuestionContainer = styled.div`
   .swiper-slide {
     text-align: center;
     background-color: ${(props) => props.theme.colors.mainBlue};
-    /* Center slide text vertically */
     display: -webkit-box;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -286,10 +285,10 @@ function MainPage() {
         <TogetherMapList maps={togethermaps} />
       </MainContainer>
       <FixContainer>
+        <MoveToTopButton />
         <LessPC>
           <MobileCampusButton />
         </LessPC>
-        <MoveToTopButton />
         <CreateButton type="button" text="지도 만들기" func={handleModal} />
         <CreateButtonMobile type="button" func={moveToCreate} />
         {modalOpen && (
