@@ -55,7 +55,7 @@ const FilterBox = styled.div`
   }
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ edit: boolean }>`
   width: 100%;
   height: 80px;
   margin: auto;
@@ -63,7 +63,10 @@ const Content = styled.div`
   select {
     width: 100%;
     height: 41px;
-    background-color: ${(props) => props.theme.colors.lightLightBlue};
+    background-color: ${(props) =>
+      props.edit
+        ? props.theme.colors.gray200
+        : props.theme.colors.lightLightBlue};
     border: 0;
     border-radius: 10px;
     margin: 0.5rem;
@@ -208,7 +211,7 @@ function CreateMapMobilePage() {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <p className="title">지도만들기</p>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <Input
                 {...register("title", {
                   required: true,
@@ -226,7 +229,7 @@ function CreateMapMobilePage() {
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>캠퍼스</SubTitle>
               <select
                 name="campus"
@@ -245,19 +248,18 @@ function CreateMapMobilePage() {
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>장소추가</SubTitle>
               <SwitchButton
                 textLeft="혼자 찍을래!"
                 textRight="같이 찍을래!"
                 type={access}
                 func={onChangeAccess}
-                disabled={isEdit}
               />
             </Content>
           </DivBox>
           <DivBox>
-            <Content>
+            <Content edit={isEdit}>
               <SubTitle>아이콘(3개까지)</SubTitle>
               <Input
                 {...register("emoji", {

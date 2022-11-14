@@ -281,7 +281,6 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 textRight="같이 찍을래!"
                 type={access}
                 func={onChangeAccess}
-                disabled={isEdit}
               />
             </Content>
             <Content edit={isEdit}>
