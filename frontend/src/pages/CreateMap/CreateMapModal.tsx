@@ -12,6 +12,7 @@ import FilterChoiceButton from "../../components/Buttons/FilterChoiceButton";
 import SwitchButton from "../../components/Buttons/SwitchButton";
 import ModalContainer from "../../components/containers/ModalContainer";
 import WarningContainer from "../../components/containers/WarningContainer";
+import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
@@ -147,6 +148,10 @@ export interface FormValues {
   campus: number;
 }
 
+const EmojikeyboardContainer = styled.div`
+  position: absolute;
+`;
+
 function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
@@ -154,6 +159,8 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const [access, setAccess] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
+  const [isKeyboard, setKeyboard] = useState(false);
+  const [emoji, setEmoji] = useState<string>("");
 
   const {
     register,
@@ -241,6 +248,21 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
     setAccess(e);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmoji(e.target.value);
+  };
+  const isVisibleKeyboard = () => {
+    setKeyboard(!isKeyboard);
+  };
+
+  const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const keycode = e.key;
+
+    if (keycode !== "Backspace") {
+      e.preventDefault();
+    }
+  };
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
@@ -307,7 +329,17 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 maxLength={6}
                 disabled={isEdit}
                 placeholder="ex) 🎈🎆🎇"
+                onClick={isVisibleKeyboard}
+                onChange={handleChange}
+                value={emoji}
+                onKeyDown={checkCharCode}
+                autoComplete="off"
               />
+              {isKeyboard ? (
+                <EmojikeyboardContainer>
+                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
+                </EmojikeyboardContainer>
+              ) : null}
               <WarnDiv>
                 {errors.emoji && (
                   <WarningContainer text={errors.emoji.message} />

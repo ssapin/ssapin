@@ -123,6 +123,7 @@ function CreateMapMobilePage() {
   const [isEdit, setIsEdit] = useState(false);
   const [isKeyboard, setKeyboard] = useState(false);
   const navigate = useNavigate();
+  const [emoji, setEmoji] = useState<string>("");
 
   const {
     register,
@@ -223,7 +224,6 @@ function CreateMapMobilePage() {
     setKeyboard(!isKeyboard);
   };
 
-  const [emoji, setEmoji] = useState<string>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmoji(e.target.value);
   };
@@ -310,6 +310,7 @@ function CreateMapMobilePage() {
                 onChange={handleChange}
                 value={emoji}
                 onKeyDown={checkCharCode}
+                autoComplete="off"
               />
               {isKeyboard ? (
                 <EmojikeyboardContainer>
