@@ -4,20 +4,20 @@ import EmojiPicker, {
   Theme,
   Categories,
   EmojiClickData,
-  Emoji,
   SuggestionMode,
 } from "emoji-picker-react";
-import { useState } from "react";
+
 interface IEmojiProps {
   emoji: string;
+  length: number;
   setEmoji: (v: string) => void;
+  setLength: (v: number) => void;
 }
 
-function EmojiKeyBoard({ emoji, setEmoji }: IEmojiProps) {
+function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
   function onClick(emojiData: EmojiClickData) {
-    if (emoji.length <= 6) {
-      setEmoji(emoji + emojiData.emoji);
-    }
+    setEmoji(emoji + emojiData.emoji);
+    setLength(length + 1);
   }
 
   return (
@@ -69,8 +69,6 @@ function EmojiKeyBoard({ emoji, setEmoji }: IEmojiProps) {
         },
       ]}
     />
-    //{" "}
-    // </div>
   );
 }
 

@@ -161,6 +161,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const navigate = useNavigate();
   const [isKeyboard, setKeyboard] = useState(false);
   const [emoji, setEmoji] = useState<string>("");
+  const [length, setLength] = useState(0);
 
   const {
     register,
@@ -175,6 +176,12 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       campus: defaultCampusId,
     },
   });
+
+  const onFail = () => {
+    setError("emoji", {
+      message: "이모지는 1개 이상 3개이하로 입력 가능해요 ~",
+    });
+  };
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (isEdit) {
       const body = {
@@ -186,11 +193,11 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
         const response = await axiosInstance.patch(MAP_APIS.MAP, body);
         if (response.status === 200) {
           // eslint-disable-next-line no-alert
-          alert(`수정되었습니다.`);
-          refetch();
           onClose();
         }
       } catch (error: unknown) {
+        alert(`수정되었습니다.`);
+        refetch();
         if (error instanceof AxiosError) {
           if (error.response.status === 400) {
             setError("emoji", { message: "이모지만 입력해주세요.🙏 🙏" });
@@ -260,13 +267,13 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
 
     if (keycode !== "Backspace") {
       e.preventDefault();
-    }
+    } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
 
   return (
     <ModalContainer onClose={onClose}>
       <Container>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onFail)}>
           <p className="title">지도만들기</p>
           <DivBox>
             <Content edit={isEdit}>
@@ -319,14 +326,11 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               <SubTitle>아이콘(3개까지)</SubTitle>
               <Input
                 {...register("emoji", {
-                  required: "이모지만 입력해주세요.🙏 🙏",
-                  pattern: {
-                    value: REGEXES.EMOJI,
-                    message: "이모지만 입력해주세요.🙏 🙏",
+                  validate: {
+                    positive: () => length > 0,
+                    lessThenThree: () => length < 4,
                   },
-                  maxLength: 6,
                 })}
-                maxLength={6}
                 disabled={isEdit}
                 placeholder="ex) 🎈🎆🎇"
                 onClick={isVisibleKeyboard}
@@ -337,7 +341,12 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               />
               {isKeyboard ? (
                 <EmojikeyboardContainer>
-                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
+                  <EmojiKeyBoard
+                    emoji={emoji}
+                    setEmoji={setEmoji}
+                    length={length}
+                    setLength={setLength}
+                  />
                 </EmojikeyboardContainer>
               ) : null}
               <WarnDiv>
