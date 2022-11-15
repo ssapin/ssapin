@@ -438,10 +438,20 @@ function Map() {
           <BackButton type="main" />
         </BackContainer>
         <SubjectContainer>
-          <MapTitleCard
-            user={`${mapData?.userEmoji} ${mapData?.nickname}`}
-            title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
-          />
+          {mapData && (
+            <MapTitleCard
+              user={
+                mapData?.nickname
+                  ? `${mapData?.userEmoji} ${mapData?.nickname}`
+                  : null
+              }
+              title={
+                mapData?.title
+                  ? `${mapData?.mapEmoji?.substring(0, 2)} ${mapData?.title}`
+                  : null
+              }
+            />
+          )}
           <PC>
             <div>
               {bookmark ? (
