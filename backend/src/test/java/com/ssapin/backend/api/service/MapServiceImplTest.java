@@ -154,7 +154,7 @@ class MapServiceImplTest {
                 .build();
         edithashtagList.add(newhashtag);
         MapRequest.MapEdit editRequest = new MapRequest.MapEdit(
-                originMap.getId(), testmap.getCampus().getId(), testmap.getTitle(), testmap.getEmoji(), testmap.isAccess(), edithashtagList
+                originMap.getId(), testmap.isAccess(), edithashtagList
         );
         MapHashtag testmapHashtag = MapHashtag.builder()
                 .map(testmap)

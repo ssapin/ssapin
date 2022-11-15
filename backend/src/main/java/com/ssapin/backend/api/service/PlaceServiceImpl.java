@@ -66,7 +66,6 @@ public class PlaceServiceImpl implements PlaceService {
         Place place = null;
         long id = 0;
         Optional<Place> placeResponse = placeRepository.findByItemId(placeRequest.getPlace().getItemId());
-        long placeId;
         if (placeResponse.isEmpty()) {
             place = Place.builder()
                     .itemId(placeRequest.getPlace().getItemId())
@@ -84,7 +83,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .build();
 
             mapPlaceRepository.save(mapPlace);
-
+            System.out.println(id);
             return id;
         } else {
             place = placeResponse.get();
@@ -121,7 +120,7 @@ public class PlaceServiceImpl implements PlaceService {
                     .lng(placeRequest.getPlace().getLng())
                     .address(placeRequest.getPlace().getAddress())
                     .build();
-            placeRepository.save(place);
+           placeId= placeRepository.saveAndFlush(place).getId();
         } else {
             place = placeResponse.get();
             placeId = place.getId();
@@ -144,6 +143,7 @@ public class PlaceServiceImpl implements PlaceService {
             if(!flag) {
                 result.update(place, map);
                 id = result.getId();
+                placeId = result.getPlace().getId();
             }
         }
         return placeId;

@@ -23,7 +23,7 @@ public class UserRankingRepositorySupport extends QuerydslRepositorySupport {
                 select(Projections.bean(UserRankingResponse.class, QMap.map.user,QMap.map.id.count().as("mapCount")))
                 .from(QMap.map)
                 .join(QMap.map.user, QUser.user)
-                .where(QUser.user.campus.eq(campus))
+                .where(QUser.user.campus.eq(campus).and(QUser.user.id.goe(7)))
                 .groupBy(QUser.user.id)
                 .orderBy(QMap.map.id.count().desc())
                 .limit(5)
