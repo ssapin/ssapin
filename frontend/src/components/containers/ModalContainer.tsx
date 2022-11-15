@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 import { fadeIn } from "../../styles/animations";
 import { pixelToRem } from "../../utils/functions/util";
 import { ModalProps } from "../../utils/types/common";
@@ -16,6 +17,12 @@ const ModalWrapper = styled.div`
 `;
 
 function ModalContainer({ onClose, children }: ModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   return (
     <ModalBackground onClose={onClose}>
       <ModalWrapper onClick={(e) => e.stopPropagation()}>
