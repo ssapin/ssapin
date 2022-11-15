@@ -14,9 +14,9 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 
 // eslint-disable-next-line react/function-component-definition
-const Template: ComponentStory<typeof EmojiSlotMachine> = () => (
+const Template: ComponentStory<typeof EmojiSlotMachine> = (args) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <EmojiSlotMachine />
+  <EmojiSlotMachine {...args} />
 );
 
 export const RandomButton = Template.bind({});

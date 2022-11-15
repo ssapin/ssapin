@@ -9,13 +9,9 @@ import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
 import USER_APIS from "../../utils/apis/userApis";
-import { REGEXES } from "../../utils/constants/regex";
-import EmojiSlotMachine, {
-  MemoisedEmojiSlotMachine,
-} from "../../components/Buttons/EmojiSlotMachine";
+import { MemoisedEmojiSlotMachine } from "../../components/Buttons/EmojiSlotMachine";
 
 interface ChangeModalProps {
-  // eslint-disable-next-line react/require-default-props
   onClose: () => void;
 }
 
