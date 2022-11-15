@@ -243,8 +243,6 @@ function CreateMapMobilePage() {
     } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
 
-  console.log(length);
-
   return (
     <>
       <HeadContainer>
