@@ -25,7 +25,7 @@ public class UserRankingRepositorySupport extends QuerydslRepositorySupport {
                 .join(QMap.map.user, QUser.user)
                 .where(QUser.user.campus.eq(campus))
                 .groupBy(QUser.user.id)
-                .orderBy(QMap.map.id.count().desc())
+                .orderBy(QMap.map.id.count().desc() , QMap.map.user.id.desc())
                 .limit(5)
                 .fetch();
     }
