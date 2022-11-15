@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, {
+  FormEventHandler,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -121,7 +126,7 @@ function CreateMapMobilePage() {
     new URLSearchParams(window.location.search).get("mapId") || "",
   );
   const [isEdit, setIsEdit] = useState(false);
-  const [isKeyboard, setKeyboard] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const navigate = useNavigate();
   const [emoji, setEmoji] = useState<string>("");
 
@@ -227,8 +232,9 @@ function CreateMapMobilePage() {
     navigate(-1);
   };
 
-  const isVisibleKeyboard = () => {
-    setKeyboard(!isKeyboard);
+  const isVisibleKeyboard = (e: MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setIsKeyboard(!isKeyboard);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,7 +254,7 @@ function CreateMapMobilePage() {
       <HeadContainer>
         <Header func={toggleActive} />
       </HeadContainer>
-      <Container>
+      <Container onClick={() => setIsKeyboard(false)}>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
           <p className="title">지도만들기</p>
           <DivBox>
@@ -317,7 +323,7 @@ function CreateMapMobilePage() {
                 autoComplete="off"
               />
               {isKeyboard ? (
-                <EmojikeyboardContainer>
+                <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
                   <EmojiKeyBoard
                     emoji={emoji}
                     setEmoji={setEmoji}

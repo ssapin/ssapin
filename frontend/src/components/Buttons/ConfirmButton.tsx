@@ -14,6 +14,11 @@ const StyledConfirm = styled.button<{ used: string | undefined }>`
   letter-spacing: ${pixelToRem(-0.8)};
   text-align: center;
   color: ${(props) => props.theme.colors.gray50};
+  transition: all 0.2s ease-in;
+  :disabled {
+    background-color: ${(props) => props.theme.colors.gray300};
+    cursor: not-allowed;
+  }
 `;
 
 export default function ConfirmButton({
