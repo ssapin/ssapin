@@ -22,15 +22,15 @@ public class Place extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private float lat;
+    private double lat;
 
     @Column(nullable = false)
-    private float lng;
+    private double lng;
 
     @Column(nullable = false)
     private String address;
 
-    public Place update(long itemId, String title, float lat, float lng, String address){
+    public Place update(long itemId, String title, double lat, double lng, String address){
         this.itemId=itemId;
         this.title=title;
         this.lat=lat;
@@ -40,7 +40,7 @@ public class Place extends BaseEntity {
     }
 
     @Builder
-    public Place(long itemId, String title, float lat, float lng, String address){
+    public Place(long itemId, String title, double lat, double lng, String address){
         this.itemId=itemId;
         this.title=title;
         this.lat=lat;
