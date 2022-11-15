@@ -8,11 +8,11 @@ public class RankingResponse {
    private long placeId;
    private long itemId;
    private String title;
-   private long lat;
-   private long lng;
+   private double lat;
+   private double lng;
    private String address;
 
-   public RankingResponse(long placeId, long itemId, String title, long lat, long
+   public RankingResponse(long placeId, long itemId, String title, double lat, double
                           lng, String address)
    {
        this.placeId=placeId;

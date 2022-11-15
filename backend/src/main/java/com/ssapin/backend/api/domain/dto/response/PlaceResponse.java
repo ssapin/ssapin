@@ -10,8 +10,8 @@ public class PlaceResponse {
     private long placeId;
     private long itemId;
     private String title;
-    private float lat;
-    private float lng;
+    private double lat;
+    private double lng;
     private String address;
     private String reviewContent;
     private long userId;

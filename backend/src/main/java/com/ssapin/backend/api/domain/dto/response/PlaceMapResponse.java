@@ -64,8 +64,8 @@ public class PlaceMapResponse {
         private long placeId;
         private long itemId;
         private String title;
-        private float lat;
-        private float lng;
+        private double lat;
+        private double lng;
         private String address;
 
         public PlaceResponse(Place place) {
