@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InfiniteData, QueryObserverResult } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
-import { REGEXES } from "../../utils/constants/regex";
 
 interface ModalProps {
   mapId?: number;
@@ -158,10 +157,10 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const defaultCampusId = useRecoilValue(campusState);
   const [access, setAccess] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const navigate = useNavigate();
-  const [isKeyboard, setKeyboard] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const [emoji, setEmoji] = useState<string>("");
   const [length, setLength] = useState(0);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -234,6 +233,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
@@ -258,8 +258,9 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmoji(e.target.value);
   };
-  const isVisibleKeyboard = () => {
-    setKeyboard(!isKeyboard);
+  const isVisibleKeyboard = (e: MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setIsKeyboard(!isKeyboard);
   };
 
   const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -272,9 +273,13 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
 
   return (
     <ModalContainer onClose={onClose}>
-      <Container>
+      <Container onClick={() => setIsKeyboard(false)}>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
-          <p className="title">지도만들기</p>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <SubTitle>제목</SubTitle>
@@ -340,7 +345,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
                 autoComplete="off"
               />
               {isKeyboard ? (
-                <EmojikeyboardContainer>
+                <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
                   <EmojiKeyBoard
                     emoji={emoji}
                     setEmoji={setEmoji}

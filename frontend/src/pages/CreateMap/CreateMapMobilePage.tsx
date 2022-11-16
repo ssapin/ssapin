@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, {
+  FormEventHandler,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -121,7 +126,7 @@ function CreateMapMobilePage() {
     new URLSearchParams(window.location.search).get("mapId") || "",
   );
   const [isEdit, setIsEdit] = useState(false);
-  const [isKeyboard, setKeyboard] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const navigate = useNavigate();
   const [emoji, setEmoji] = useState<string>("");
 
@@ -198,6 +203,7 @@ function CreateMapMobilePage() {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
@@ -227,8 +233,9 @@ function CreateMapMobilePage() {
     navigate(-1);
   };
 
-  const isVisibleKeyboard = () => {
-    setKeyboard(!isKeyboard);
+  const isVisibleKeyboard = (e: MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setIsKeyboard(!isKeyboard);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,16 +250,18 @@ function CreateMapMobilePage() {
     } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
 
-  console.log(length);
-
   return (
     <>
       <HeadContainer>
         <Header func={toggleActive} />
       </HeadContainer>
-      <Container>
+      <Container onClick={() => setIsKeyboard(false)}>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
-          <p className="title">지도만들기</p>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <Input
@@ -319,7 +328,7 @@ function CreateMapMobilePage() {
                 autoComplete="off"
               />
               {isKeyboard ? (
-                <EmojikeyboardContainer>
+                <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
                   <EmojiKeyBoard
                     emoji={emoji}
                     setEmoji={setEmoji}
