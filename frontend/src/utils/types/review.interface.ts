@@ -3,4 +3,6 @@ export interface IReview {
   emojiType: number;
   content: string;
   userId: number;
+  nickname: string;
+  userEmoji: string;
 }

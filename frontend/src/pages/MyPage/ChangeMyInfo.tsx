@@ -8,8 +8,11 @@ import { authState, campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
-import USER_APIS from "../../utils/apis/userApis";
+import USER_APIS, {
+  checkDuplicateUserNickname,
+} from "../../utils/apis/userApis";
 import { MemoisedEmojiSlotMachine } from "../../components/Buttons/EmojiSlotMachine";
+import { IUserNicknameCheck } from "../../utils/types/user.interface";
 
 interface ChangeModalProps {
   onClose: () => void;
@@ -161,9 +164,14 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     }
 
     if (nickname !== userInformation.nickname) {
-      const nicknameCheck = await axiosInstance.get(
-        USER_APIS.NICKNAME(nickname),
-      );
+      const data: IUserNicknameCheck = {
+        nickname,
+      };
+
+      const nicknameCheck = await checkDuplicateUserNickname(data);
+      // const nicknameCheck = await axiosInstance.get(
+      //   USER_APIS.checkDuplicateUserNickname(nickname),
+      // );
       setNicknameChk(nicknameCheck.data.using);
       if (nicknameCheck.data.using) {
         return;
