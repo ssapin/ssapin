@@ -13,13 +13,14 @@ const Slot = styled.div`
   width: 150px;
   height: 150px;
   overflow: hidden;
-  background-color: ${(props) => props.theme.colors.lightLightBlue};
   border-radius: 50%;
+  background-color: ${(props) => props.theme.colors.lightLightBlue};
 `;
 
 const Row = styled.div`
   flex: 1 0 auto;
   overflow: hidden;
+  border-radius: 50%;
 `;
 
 const RingMoving = styled.div`
