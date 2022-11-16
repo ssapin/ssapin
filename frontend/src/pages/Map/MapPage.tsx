@@ -435,7 +435,7 @@ function Map() {
           )}
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
           {mapData && (

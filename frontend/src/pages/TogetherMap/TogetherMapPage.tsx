@@ -368,7 +368,7 @@ function TogetherMap() {
           />
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />
