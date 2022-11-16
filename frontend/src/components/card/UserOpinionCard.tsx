@@ -90,7 +90,7 @@ function UserOpinionCard({ review, func }: UserOpinionProps) {
       </Content>
       <UserNickName>
         {review === null ? "" : review.userEmoji}{" "}
-        {review === null ? "바보 싸핀러" : review.nickname}
+        {review === null ? "싸핀러" : review.nickname}
       </UserNickName>
     </Container>
   );
