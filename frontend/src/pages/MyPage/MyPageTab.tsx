@@ -18,6 +18,8 @@ const TabMenu = styled.div`
   position: relative;
   max-width: 1024px;
   margin: 0 auto;
+  padding: 0 1rem;
+
   .non-checked {
     width: 50%;
     border-radius: ${pixelToRem(20)} ${pixelToRem(20)} 0 0;
@@ -67,8 +69,10 @@ const Container = styled.main`
 `;
 
 const Contentdiv = styled.div`
-  width: 80%;
-  margin: 0 10%;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 1rem;
 `;
 
 const myPageTab = [

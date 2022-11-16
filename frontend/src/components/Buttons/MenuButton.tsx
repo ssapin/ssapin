@@ -15,7 +15,7 @@ type MenuProps = {
 };
 export default function MenuButton({ func }: MenuProps) {
   return (
-    <StyledMenu type="button" onClick={func}>
+    <StyledMenu type="button" onClick={func} aria-label="navigaition button">
       <MenuIcon />
     </StyledMenu>
   );

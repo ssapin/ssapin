@@ -203,6 +203,7 @@ function CreateMapMobilePage() {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
@@ -256,7 +257,11 @@ function CreateMapMobilePage() {
       </HeadContainer>
       <Container onClick={() => setIsKeyboard(false)}>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
-          <p className="title">지도만들기</p>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <Input
