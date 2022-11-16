@@ -2,6 +2,7 @@
 import { AxiosResponse } from "axios";
 // eslint-disable-next-line import/no-cycle
 import axiosInstance from "./api";
+import { IUserNicknameCheck } from "../types/user.interface";
 
 const USER_APIS = {
   REDIRECT_URI: `${import.meta.env.VITE_BASE_URL}/auth/kakao/login`,
@@ -13,7 +14,7 @@ const USER_APIS = {
   JOIN_MAP: "/user/login/map/join",
   BOOKMARK_MAP: "/user/login/map/bookmark",
   BOOKMARK_PLACE: "/user/login/place/bookmark",
-  NICKNAME: (nickname: string) => `/user/check/${nickname}`,
+  NICKNAME: `/user/check`,
 };
 
 export const getAccessToken = async (
@@ -28,4 +29,10 @@ export const getUserInformation = async (): Promise<AxiosResponse> =>
 
 export const getNewAccessToken = async (): Promise<AxiosResponse> =>
   axiosInstance.get(USER_APIS.REISSUE);
+
+export const checkDuplicateUserNickname = async (
+  data: IUserNicknameCheck,
+): Promise<AxiosResponse> => {
+  return axiosInstance.post(USER_APIS.NICKNAME, data);
+};
 export default USER_APIS;

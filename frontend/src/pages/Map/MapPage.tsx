@@ -104,6 +104,7 @@ const PlaceListContainer = styled.div`
   right: 10px;
   width: 300px;
   height: 80vh;
+  max-height: 80vh;
   overflow-y: scroll;
   z-index: 2;
   > ul {
@@ -435,13 +436,23 @@ function Map() {
           )}
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
-          <MapTitleCard
-            user={`${mapData?.userEmoji} ${mapData?.nickname}`}
-            title={`${mapData?.mapEmoji.substring(0, 2)}${mapData?.title}`}
-          />
+          {mapData && (
+            <MapTitleCard
+              user={
+                mapData?.nickname
+                  ? `${mapData?.userEmoji} ${mapData?.nickname}`
+                  : null
+              }
+              title={
+                mapData?.title
+                  ? `${mapData?.mapEmoji?.substring(0, 2)} ${mapData?.title}`
+                  : null
+              }
+            />
+          )}
           <PC>
             <div>
               {bookmark ? (

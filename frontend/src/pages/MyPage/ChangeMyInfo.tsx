@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import ModalContainer from "../../components/containers/ModalContainer";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
@@ -8,11 +8,13 @@ import { authState, campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
-import USER_APIS from "../../utils/apis/userApis";
-import { REGEXES } from "../../utils/constants/regex";
+import USER_APIS, {
+  checkDuplicateUserNickname,
+} from "../../utils/apis/userApis";
+import { MemoisedEmojiSlotMachine } from "../../components/Buttons/EmojiSlotMachine";
+import { IUserNicknameCheck } from "../../utils/types/user.interface";
 
 interface ChangeModalProps {
-  // eslint-disable-next-line react/require-default-props
   onClose: () => void;
 }
 
@@ -23,6 +25,7 @@ const Container = styled.div`
 `;
 
 const RelativeContainer = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -81,18 +84,6 @@ const StyledCampus = styled.div`
   }
 `;
 
-const EmojiInput = styled.input`
-  width: 150px;
-  height: 150px;
-  background-color: ${(props) => props.theme.colors.lightLightBlue};
-  border: 0;
-  border-radius: 50%;
-  outline: none;
-  font-size: 400%;
-  font-family: ${(props) => props.theme.fontFamily.h1};
-  text-align: center;
-`;
-
 const NicknameInput = styled.input`
   width: 276px;
   height: 43px;
@@ -111,7 +102,7 @@ const TmpModal = styled.div`
   padding: 1rem;
   width: 250px;
   left: 50%;
-  top: 0;
+  top: 30%;
   transform: translate(-50%, 0%);
   border-radius: 10px;
   text-align: center;
@@ -120,6 +111,7 @@ const TmpModal = styled.div`
   font-family: ${(props) => props.theme.fontFamily.s1bold};
   font-size: ${(props) => props.theme.fontSizes.s1};
   cursor: pointer;
+  z-index: 2;
 `;
 
 export function ChangeInfoModal({ onClose }: ChangeModalProps) {
@@ -133,13 +125,14 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [nicknameChk, setNicknameChk] = useState(false);
   const [nicknameEmpty, setNicknameEmpty] = useState(false);
   const [nicknameVali, setNicknameVali] = useState(false);
-  const [EmojiVali, setEmojiVali] = useState(false);
   const [explainModal, setExplainModal] = useState(false);
-  const auth = useRecoilValue(authState);
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [auth, setAuth] = useRecoilState(authState);
 
   useEffect(() => {
     if (auth.firstLogin) {
       setExplainModal(true);
+      setAuth((prev) => ({ ...prev, firstLogin: false }));
     }
   }, []);
 
@@ -149,53 +142,47 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     setNickname(e.target.value);
   };
 
-  const onChangeEmoji = (e: { target: { value: SetStateAction<string> } }) => {
-    setEmoji(e.target.value);
-  };
-
   const onChangeCampus = (e: number) => {
     setCampus(e);
+  };
+
+  const selectRandomEmoji = (selectedEmoji: string) => {
+    setEmoji(selectedEmoji);
+    setIsSelecting(false);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    setEmojiVali(false);
     setNicknameEmpty(false);
     setNicknameVali(false);
     setNicknameChk(false);
-
-    const regex = REGEXES.USEREMOJI;
-    if (emoji.length === 1 || !regex.test(emoji)) {
-      setEmojiVali(true);
-      return;
-    }
 
     if (!nickname) {
       setNicknameEmpty(true);
       return;
     }
 
-    if (nickname.length > 10) {
-      setNicknameVali(true);
-      return;
-    }
-
     if (nickname !== userInformation.nickname) {
-      const nicknameCheck = await axiosInstance.get(
-        USER_APIS.NICKNAME(nickname),
-      );
+      const data: IUserNicknameCheck = {
+        nickname,
+      };
+
+      const nicknameCheck = await checkDuplicateUserNickname(data);
+      // const nicknameCheck = await axiosInstance.get(
+      //   USER_APIS.checkDuplicateUserNickname(nickname),
+      // );
       setNicknameChk(nicknameCheck.data.using);
       if (nicknameCheck.data.using) {
         return;
       }
     }
 
-    const body = JSON.stringify({
+    const body = {
       campusId: campus,
       nickname,
       emoji,
-    });
+    };
 
     const response = await axiosInstance.patch(
       USER_APIS.USER_INFORMATION,
@@ -220,6 +207,10 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     }
   };
 
+  const onChange = () => {
+    setIsSelecting(true);
+  };
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
@@ -230,10 +221,11 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
         )}
         <form onSubmit={handleSubmit}>
           <RelativeContainer>
-            <EmojiInput onChange={onChangeEmoji} value={emoji} />
-            {EmojiVali && (
-              <span>이모지가 없거나, 사용할 수 없어요 ( •́ ̯•̀ )</span>
-            )}
+            <MemoisedEmojiSlotMachine
+              originalEmoji={userInformation.emoji}
+              onClick={selectRandomEmoji}
+              setState={onChange}
+            />
           </RelativeContainer>
           <RelativeContainer>
             닉네임
@@ -265,7 +257,12 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
             </TiedBoxes>
           </RelativeContainer>
           <ButtonContainer>
-            <ConfirmButton used="modal" type="submit" text="확인" />
+            <ConfirmButton
+              used="modal"
+              type="submit"
+              text="확인"
+              disabled={isSelecting}
+            />
             <CancelButton
               used="modal"
               type="button"

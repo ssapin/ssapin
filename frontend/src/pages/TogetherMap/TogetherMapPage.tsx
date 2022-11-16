@@ -83,6 +83,7 @@ const PlaceListContainer = styled.div`
   top: 80px;
   right: 10px;
   width: 300px;
+  max-height: 80vh;
   height: 80vh;
   overflow-y: scroll;
   z-index: 2;
@@ -368,7 +369,7 @@ function TogetherMap() {
           />
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
           <TogetherMapTitleCard title={togetherMapData?.title} />

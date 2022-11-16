@@ -12,12 +12,12 @@ const MyMapsContainer = styled.div`
 `;
 
 const WriteMapContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin: auto;
 `;
 
 const JoinedMapContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin: auto;
 `;
 

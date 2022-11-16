@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import React, {
+  FormEventHandler,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,6 +21,7 @@ import Header from "../../components/etc/Header";
 import { FormValues, Input, WarnDiv } from "./CreateMapModal";
 import WarningContainer from "../../components/containers/WarningContainer";
 import { REGEXES } from "../../utils/constants/regex";
+import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
 
 const Container = styled.div`
   width: 90%;
@@ -106,6 +112,11 @@ const HeadContainer = styled.div`
   justify-content: center;
 `;
 
+const EmojikeyboardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 function CreateMapMobilePage() {
   const [hashTag, setHashTag] = useState([]);
   const campus = CAMPUS_LIST;
@@ -115,8 +126,11 @@ function CreateMapMobilePage() {
     new URLSearchParams(window.location.search).get("mapId") || "",
   );
   const [isEdit, setIsEdit] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const navigate = useNavigate();
+  const [emoji, setEmoji] = useState<string>("");
 
+  const [length, setLength] = useState(0);
   const {
     register,
     handleSubmit,
@@ -130,6 +144,12 @@ function CreateMapMobilePage() {
       campus: defaultCampusId,
     },
   });
+
+  const onFail = () => {
+    setError("emoji", {
+      message: "이모지는 1개 이상 3개이하로 입력 가능해요 ~",
+    });
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (isEdit) {
@@ -183,6 +203,7 @@ function CreateMapMobilePage() {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
@@ -212,14 +233,35 @@ function CreateMapMobilePage() {
     navigate(-1);
   };
 
+  const isVisibleKeyboard = (e: MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setIsKeyboard(!isKeyboard);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmoji(e.target.value);
+  };
+
+  const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const keycode = e.key;
+
+    if (keycode !== "Backspace") {
+      e.preventDefault();
+    } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
+  };
+
   return (
     <>
       <HeadContainer>
         <Header func={toggleActive} />
       </HeadContainer>
-      <Container>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <p className="title">지도만들기</p>
+      <Container onClick={() => setIsKeyboard(false)}>
+        <Form onSubmit={handleSubmit(onSubmit, onFail)}>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <Input
@@ -272,17 +314,30 @@ function CreateMapMobilePage() {
             <Content edit={isEdit}>
               <Input
                 {...register("emoji", {
-                  required: "이모지만 입력해주세요.🙏 🙏",
-                  pattern: {
-                    value: REGEXES.EMOJI,
-                    message: "이모지만 입력해주세요.🙏 🙏",
+                  validate: {
+                    positive: () => length > 0,
+                    lessThenThree: () => length < 4,
                   },
-                  maxLength: 6,
                 })}
-                maxLength={6}
                 disabled={isEdit}
                 placeholder="ex) 🎈🎆🎇"
+                onClick={isVisibleKeyboard}
+                onChange={handleChange}
+                value={emoji}
+                onKeyDown={checkCharCode}
+                autoComplete="off"
               />
+              {isKeyboard ? (
+                <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
+                  <EmojiKeyBoard
+                    emoji={emoji}
+                    setEmoji={setEmoji}
+                    length={length}
+                    setLength={setLength}
+                  />
+                </EmojikeyboardContainer>
+              ) : null}
+
               <WarnDiv>
                 {errors.emoji && (
                   <WarningContainer text={errors.emoji.message} />
