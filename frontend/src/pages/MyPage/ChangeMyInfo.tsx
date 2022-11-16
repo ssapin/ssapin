@@ -9,10 +9,9 @@ import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
 import USER_APIS from "../../utils/apis/userApis";
-import { REGEXES } from "../../utils/constants/regex";
+import { MemoisedEmojiSlotMachine } from "../../components/Buttons/EmojiSlotMachine";
 
 interface ChangeModalProps {
-  // eslint-disable-next-line react/require-default-props
   onClose: () => void;
 }
 
@@ -23,6 +22,7 @@ const Container = styled.div`
 `;
 
 const RelativeContainer = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -133,8 +133,8 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [nicknameChk, setNicknameChk] = useState(false);
   const [nicknameEmpty, setNicknameEmpty] = useState(false);
   const [nicknameVali, setNicknameVali] = useState(false);
-  const [EmojiVali, setEmojiVali] = useState(false);
   const [explainModal, setExplainModal] = useState(false);
+  const [isSelecting, setIsSelecting] = useState(false);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
@@ -149,35 +149,24 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     setNickname(e.target.value);
   };
 
-  const onChangeEmoji = (e: { target: { value: SetStateAction<string> } }) => {
-    setEmoji(e.target.value);
-  };
-
   const onChangeCampus = (e: number) => {
     setCampus(e);
+  };
+
+  const selectRandomEmoji = (selectedEmoji: string) => {
+    setEmoji(selectedEmoji);
+    setIsSelecting(false);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    setEmojiVali(false);
     setNicknameEmpty(false);
     setNicknameVali(false);
     setNicknameChk(false);
 
-    const regex = REGEXES.USEREMOJI;
-    if (emoji.length === 1 || !regex.test(emoji)) {
-      setEmojiVali(true);
-      return;
-    }
-
     if (!nickname) {
       setNicknameEmpty(true);
-      return;
-    }
-
-    if (nickname.length > 10) {
-      setNicknameVali(true);
       return;
     }
 
@@ -191,11 +180,11 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
       }
     }
 
-    const body = JSON.stringify({
+    const body = {
       campusId: campus,
       nickname,
       emoji,
-    });
+    };
 
     const response = await axiosInstance.patch(
       USER_APIS.USER_INFORMATION,
@@ -220,6 +209,10 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     }
   };
 
+  const onChange = () => {
+    setIsSelecting(true);
+  };
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
@@ -230,10 +223,11 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
         )}
         <form onSubmit={handleSubmit}>
           <RelativeContainer>
-            <EmojiInput onChange={onChangeEmoji} value={emoji} />
-            {EmojiVali && (
-              <span>이모지가 없거나, 사용할 수 없어요 ( •́ ̯•̀ )</span>
-            )}
+            <MemoisedEmojiSlotMachine
+              originalEmoji={userInformation.emoji}
+              onClick={selectRandomEmoji}
+              setState={onChange}
+            />
           </RelativeContainer>
           <RelativeContainer>
             닉네임
@@ -265,7 +259,12 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
             </TiedBoxes>
           </RelativeContainer>
           <ButtonContainer>
-            <ConfirmButton used="modal" type="submit" text="확인" />
+            <ConfirmButton
+              used="modal"
+              type="submit"
+              text="확인"
+              disabled={isSelecting}
+            />
             <CancelButton
               used="modal"
               type="button"
