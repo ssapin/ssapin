@@ -234,6 +234,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
@@ -264,14 +265,11 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
 
   const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const keycode = e.key;
-    console.log(keycode);
 
     if (keycode !== "Backspace") {
       e.preventDefault();
     } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
-
-  console.log(isEdit);
 
   return (
     <ModalContainer onClose={onClose}>

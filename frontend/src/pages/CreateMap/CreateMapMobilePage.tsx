@@ -198,6 +198,7 @@ function CreateMapMobilePage() {
       setValue("campus", data.campusId);
       setValue("emoji", data.mapEmoji);
       setValue("title", data.title);
+      setEmoji(data.mapEmoji);
       setAccess(data.access);
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
