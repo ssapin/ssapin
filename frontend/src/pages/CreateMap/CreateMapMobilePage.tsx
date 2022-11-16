@@ -250,7 +250,11 @@ function CreateMapMobilePage() {
       </HeadContainer>
       <Container>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
-          <p className="title">지도만들기</p>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <Input

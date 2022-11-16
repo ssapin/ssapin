@@ -264,17 +264,24 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
 
   const checkCharCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const keycode = e.key;
+    console.log(keycode);
 
     if (keycode !== "Backspace") {
       e.preventDefault();
     } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
 
+  console.log(isEdit);
+
   return (
     <ModalContainer onClose={onClose}>
       <Container>
         <Form onSubmit={handleSubmit(onSubmit, onFail)}>
-          <p className="title">지도만들기</p>
+          {isEdit ? (
+            <p className="title">지도수정하기</p>
+          ) : (
+            <p className="title">지도만들기</p>
+          )}
           <DivBox>
             <Content edit={isEdit}>
               <SubTitle>제목</SubTitle>
