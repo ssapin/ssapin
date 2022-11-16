@@ -21,17 +21,28 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
+`;
 
-  .content {
-    margin-left: 1rem;
-    text-align: left;
-    font-size: ${(props) => props.theme.fontSizes.s1};
-    color: ${(props) => props.theme.colors.gray800};
-    font-family: ${(props) => props.theme.fontFamily.s1};
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+const Content = styled.div`
+  margin-left: 1rem;
+  text-align: left;
+  font-size: ${(props) => props.theme.fontSizes.s1};
+  color: ${(props) => props.theme.colors.gray800};
+  font-family: ${(props) => props.theme.fontFamily.s1};
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const DeleteButton = styled.button`
+  margin-top: 1.2rem;
+  font-size: ${(props) => props.theme.fontSizes.h4};
+  font-family: ${(props) => props.theme.fontFamily.h4bold};
+
+  :hover {
+    scale: 1.06;
+    cursor: pointer;
   }
 `;
 
@@ -44,21 +55,16 @@ const EmojiContainer = styled.div`
   margin-top: -1.7rem;
   transition: all 0.2s ease-out;
 
-  .icon {
-    font-size: ${(props) => props.theme.fontSizes.h2};
-    font-family: ${(props) => props.theme.fontFamily.h2bold};
   }
+`;
+const Icon = styled.div`
+  font-size: ${(props) => props.theme.fontSizes.h2};
+  font-family: ${(props) => props.theme.fontFamily.h2bold};
+`;
 
-  .delete {
-    margin-top: 1.2rem;
-    font-size: ${(props) => props.theme.fontSizes.h4};
-    font-family: ${(props) => props.theme.fontFamily.h4bold};
-
-    :hover {
-      scale: 1.06;
-      cursor: pointer;
-    }
-  }
+const UserNickName = styled.div`
+  margin: auto 0 0 auto;
+  background-color: ${(props) => props.theme.colors.gray100};
 `;
 
 function UserOpinionCard({ review, func }: UserOpinionProps) {
@@ -67,18 +73,17 @@ function UserOpinionCard({ review, func }: UserOpinionProps) {
   return (
     <Container>
       <EmojiContainer>
-        <p className="icon">
-          {review === null ? "" : emogiList[review.emojiType]}
-        </p>
+        <Icon> {review === null ? "" : emogiList[review.emojiType]}</Icon>
         {review !== null && user.userId === review.userId && (
-          <div className="delete">
-            <TrashIcon onClick={() => func(review.reviewId)} />
-          </div>
+          <DeleteButton onClick={() => func(review.reviewId)}>
+            <TrashIcon />
+          </DeleteButton>
         )}
       </EmojiContainer>
-      <p className="content">
+      <Content>
         {review === null ? "등록된 리뷰가 없습니다." : review.content}
-      </p>
+      </Content>
+      <UserNickName>뭘보노 </UserNickName>
     </Container>
   );
 }
