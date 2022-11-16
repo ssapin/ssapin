@@ -5,7 +5,6 @@ type UserInfoProps = {
   emoji: string;
   nickname: string;
   campus: string;
-  // eslint-disable-next-line react/require-default-props
   func?: () => void;
 };
 
