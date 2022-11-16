@@ -181,6 +181,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       message: "이모지는 1개 이상 3개이하로 입력 가능해요 ~",
     });
   };
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (isEdit) {
       const body = {
