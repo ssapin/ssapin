@@ -2,27 +2,35 @@ import styled from "@emotion/styled";
 import UserProfileImge from "../etc/UserProfileImage";
 
 type UserInfoProps = {
-  type: string;
   emoji: string;
   nickname: string;
   campus: string;
-  // eslint-disable-next-line react/require-default-props
   func?: () => void;
 };
 
-const Container = styled.div<{ type: string }>`
-  width: ${(props) => (props.type === "pc" ? `40vw` : `90vw`)};
-  height: ${(props) => (props.type === "pc" ? `27vh` : `17vh`)};
+const Container = styled.article`
+  width: 50%;
+  height: 200px;
   display: flex;
   flex-direction: row;
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
-  margin: 1rem;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
+  padding: 1rem 2rem;
+  gap: 1rem;
+  ${(props) => props.theme.mq.tablet} {
+    padding: 1rem;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    width: 100%;
+    height: 143px;
+    padding: 1rem;
+  }
 `;
 
 const EmojiContainer = styled.div`
-  width: 40%;
+  width: fit-content;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -30,67 +38,49 @@ const EmojiContainer = styled.div`
   align-items: center;
 `;
 
-const InfoContainer = styled.div<{ type: string }>`
-  width: 60%;
+const InfoContainer = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem;
+  position: relative;
 
-  .edit {
-    height: 20%;
+  > button {
     text-align: right;
-    padding-right: 1rem;
     font-size: ${(props) => props.theme.fontSizes.s1};
     color: ${(props) => props.theme.colors.gray500};
     font-family: ${(props) => props.theme.fontFamily.s1};
-    background-color: transparent;
+    top: 0;
+    right: 0;
+    position: absolute;
   }
-
-  .nickname {
-    height: 35%;
-    font-size: ${(props) =>
-      props.type === "pc"
-        ? props.theme.fontSizes.h3
-        : props.theme.fontSizes.h5};
-    color: ${(props) => props.theme.colors.mainNavy};
-    font-family: ${(props) =>
-      props.type === "pc"
-        ? props.theme.fontFamily.h3
-        : props.theme.fontFamily.h5};
-  }
-
-  .campus {
-    height: 35%;
-    font-size: ${(props) =>
-      props.type === "pc"
-        ? props.theme.fontSizes.h3
-        : props.theme.fontSizes.h5};
-    color: ${(props) => props.theme.colors.mainNavy};
-    font-family: ${(props) =>
-      props.type === "pc"
-        ? props.theme.fontFamily.h3
-        : props.theme.fontFamily.h5};
+  > div {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    p {
+      font-size: ${(props) => props.theme.fontSizes.h5};
+      color: ${(props) => props.theme.colors.mainNavy};
+      font-family: ${(props) => props.theme.fontFamily.h5};
+    }
   }
 `;
 
-function UserInfoCard({ type, emoji, nickname, campus, func }: UserInfoProps) {
+function UserInfoCard({ emoji, nickname, campus, func }: UserInfoProps) {
   return (
-    <Container type={type}>
+    <Container>
       <EmojiContainer>
-        {type === "pc" ? (
-          <UserProfileImge size={150} emoji={emoji} />
-        ) : (
-          <UserProfileImge size={95} emoji={emoji} />
-        )}
+        <UserProfileImge emoji={emoji} />
       </EmojiContainer>
-      <InfoContainer type={type}>
-        <button type="button" className="edit" onClick={func}>
+      <InfoContainer>
+        <button type="button" onClick={func}>
           수정
         </button>
-        <p className="nickname">닉네임 : {nickname}</p>
-        <p className="campus">캠퍼스 : {campus}</p>
+        <div>
+          <p>닉네임 : {nickname}</p>
+          <p>캠퍼스 : {campus}</p>
+        </div>
       </InfoContainer>
     </Container>
   );

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { SetStateAction, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import ModalContainer from "../../components/containers/ModalContainer";
 import CancelButton from "../../components/Buttons/CancelButton";
 import ConfirmButton from "../../components/Buttons/ConfirmButton";
@@ -8,8 +8,11 @@ import { authState, campusState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import { pixelToRem } from "../../utils/functions/util";
 import axiosInstance from "../../utils/apis/api";
-import USER_APIS from "../../utils/apis/userApis";
+import USER_APIS, {
+  checkDuplicateUserNickname,
+} from "../../utils/apis/userApis";
 import { MemoisedEmojiSlotMachine } from "../../components/Buttons/EmojiSlotMachine";
+import { IUserNicknameCheck } from "../../utils/types/user.interface";
 
 interface ChangeModalProps {
   onClose: () => void;
@@ -81,18 +84,6 @@ const StyledCampus = styled.div`
   }
 `;
 
-const EmojiInput = styled.input`
-  width: 150px;
-  height: 150px;
-  background-color: ${(props) => props.theme.colors.lightLightBlue};
-  border: 0;
-  border-radius: 50%;
-  outline: none;
-  font-size: 400%;
-  font-family: ${(props) => props.theme.fontFamily.h1};
-  text-align: center;
-`;
-
 const NicknameInput = styled.input`
   width: 276px;
   height: 43px;
@@ -111,7 +102,7 @@ const TmpModal = styled.div`
   padding: 1rem;
   width: 250px;
   left: 50%;
-  top: 0;
+  top: 30%;
   transform: translate(-50%, 0%);
   border-radius: 10px;
   text-align: center;
@@ -120,6 +111,7 @@ const TmpModal = styled.div`
   font-family: ${(props) => props.theme.fontFamily.s1bold};
   font-size: ${(props) => props.theme.fontSizes.s1};
   cursor: pointer;
+  z-index: 2;
 `;
 
 export function ChangeInfoModal({ onClose }: ChangeModalProps) {
@@ -135,11 +127,12 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
   const [nicknameVali, setNicknameVali] = useState(false);
   const [explainModal, setExplainModal] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
-  const auth = useRecoilValue(authState);
+  const [auth, setAuth] = useRecoilState(authState);
 
   useEffect(() => {
     if (auth.firstLogin) {
       setExplainModal(true);
+      setAuth((prev) => ({ ...prev, firstLogin: false }));
     }
   }, []);
 
@@ -171,9 +164,14 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
     }
 
     if (nickname !== userInformation.nickname) {
-      const nicknameCheck = await axiosInstance.get(
-        USER_APIS.NICKNAME(nickname),
-      );
+      const data: IUserNicknameCheck = {
+        nickname,
+      };
+
+      const nicknameCheck = await checkDuplicateUserNickname(data);
+      // const nicknameCheck = await axiosInstance.get(
+      //   USER_APIS.checkDuplicateUserNickname(nickname),
+      // );
       setNicknameChk(nicknameCheck.data.using);
       if (nicknameCheck.data.using) {
         return;

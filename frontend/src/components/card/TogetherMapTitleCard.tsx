@@ -19,26 +19,7 @@ const Container = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
 
-  .icon {
-    width: 100%;
-    height: 10%;
-    text-align: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    ${(props) => props.theme.mq.mobile} {
-      width: 100%;
-    }
-  }
-
-  .quotes {
-    fill: ${(props) => props.theme.colors.subYellow};
-    width: 20px;
-    height: 20px;
-  }
-
-  .title {
+  > p {
     width: 100%;
     margin-top: 1rem;
     text-align: center;
@@ -49,14 +30,32 @@ const Container = styled.div`
   }
 `;
 
+const IconAndTitleWrapper = styled.div`
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  > svg {
+    fill: ${(props) => props.theme.colors.subYellow};
+    width: 20px;
+    height: 20px;
+  }
+
+  ${(props) => props.theme.mq.mobile} {
+    width: 100%;
+  }
+`;
+
 function TogetherMapTitleCard({ title }: TogetherMapTitleProps) {
   return (
     <Container>
-      <div className="icon">
+      <IconAndTitleWrapper>
         <Quotesstart className="quotes" />
         <Quotesend className="quotes" />
-      </div>
-      <p className="title">{title}</p>
+      </IconAndTitleWrapper>
+      <p>{title}</p>
     </Container>
   );
 }
