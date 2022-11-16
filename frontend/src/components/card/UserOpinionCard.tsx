@@ -15,7 +15,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.gray0};
   border-radius: 10px;
   width: 100%;
-  height: 5rem;
+  height: 100%;
   box-shadow: 1px 3px 12px 0px ${(props) => props.theme.colors.gray300};
   display: flex;
   flex-direction: column;
@@ -36,7 +36,6 @@ const Content = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  margin-top: 1.2rem;
   font-size: ${(props) => props.theme.fontSizes.h4};
   font-family: ${(props) => props.theme.fontFamily.h4bold};
 
@@ -54,7 +53,7 @@ const EmojiContainer = styled.div`
   height: fit-content;
   margin-top: -1.7rem;
   transition: all 0.2s ease-out;
-
+  margin-bottom:0.3rem;
   }
 `;
 const Icon = styled.div`
@@ -63,27 +62,31 @@ const Icon = styled.div`
 `;
 
 const UserNickName = styled.div`
-  margin: auto 0 0 auto;
+  margin: 0.25rem 3% 0 auto;
   background-color: ${(props) => props.theme.colors.gray100};
+  font-size: ${(props) => props.theme.fontSizes.s3};
+  font-family: ${(props) => props.theme.fontFamily.s3};
 `;
 
 function UserOpinionCard({ review, func }: UserOpinionProps) {
   const user = useRecoilValue(userInformationState);
-  const emogiList = RATING_LIST;
+
   return (
     <Container>
       <EmojiContainer>
-        <Icon> {review === null ? "" : emogiList[review.emojiType]}</Icon>
-        {review !== null && user.userId === review.userId && (
-          <DeleteButton onClick={() => func(review.reviewId)}>
-            <TrashIcon />
-          </DeleteButton>
+        {review === null ? (
+          <Icon />
+        ) : (
+          <Icon> {RATING_LIST[review.emojiType]}</Icon>
         )}
+        <DeleteButton onClick={() => func(review.reviewId)}>
+          <TrashIcon />
+        </DeleteButton>
       </EmojiContainer>
       <Content>
         {review === null ? "등록된 리뷰가 없습니다." : review.content}
       </Content>
-      <UserNickName>뭘보노 </UserNickName>
+      <UserNickName>🪓 생산관리1팀생산관리1팀 </UserNickName>
     </Container>
   );
 }
