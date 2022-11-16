@@ -104,6 +104,7 @@ const PlaceListContainer = styled.div`
   right: 10px;
   width: 300px;
   height: 80vh;
+  max-height: 80vh;
   overflow-y: scroll;
   z-index: 2;
   > ul {
@@ -435,7 +436,7 @@ function Map() {
           )}
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
           {mapData && (
