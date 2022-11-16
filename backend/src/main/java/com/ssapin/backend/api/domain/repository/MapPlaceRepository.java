@@ -14,7 +14,7 @@ public interface MapPlaceRepository extends JpaRepository<MapPlace, Long> {
                     "from map_place " +
                     "right join map on map.id=map_place.map_id and map.campus_id=:campusId " +
                     "group by map_place.place_id " +
-                    "order by count(map_place.place_id) desc " +
+                    "order by count(map_place.place_id) desc, map_place.place_id desc  " +
                     "limit 1")
     long makeMapPlaceRanking(long campusId);
     boolean existsByMapAndPlace(Map map, Place place);

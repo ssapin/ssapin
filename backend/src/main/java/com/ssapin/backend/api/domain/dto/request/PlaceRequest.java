@@ -15,8 +15,8 @@ public class PlaceRequest {
 
     private long itemId;
     private String title;
-    private float lat;
-    private float lng;
+    private double lat;
+    private double lng;
     private String address;
 
     public PlaceRequest(Place place) {

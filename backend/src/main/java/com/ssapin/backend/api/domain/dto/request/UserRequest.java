@@ -10,4 +10,9 @@ public class UserRequest {
         private long campusId;
         private String emoji;
     }
+
+    @Getter
+    public static class Check {
+        private String nickname;
+    }
 }
