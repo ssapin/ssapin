@@ -79,14 +79,19 @@ function UserOpinionCard({ review, func }: UserOpinionProps) {
         ) : (
           <Icon> {RATING_LIST[review.emojiType]}</Icon>
         )}
-        <DeleteButton onClick={() => func(review.reviewId)}>
-          <TrashIcon />
-        </DeleteButton>
+        {review !== null && user.userId === review.userId && (
+          <DeleteButton onClick={() => func(review.reviewId)}>
+            <TrashIcon />
+          </DeleteButton>
+        )}
       </EmojiContainer>
       <Content>
         {review === null ? "등록된 리뷰가 없습니다." : review.content}
       </Content>
-      <UserNickName>🪓 생산관리1팀생산관리1팀 </UserNickName>
+      <UserNickName>
+        {review === null ? "" : review.userEmoji}{" "}
+        {review === null ? "바보 싸핀러" : review.nickname}
+      </UserNickName>
     </Container>
   );
 }
