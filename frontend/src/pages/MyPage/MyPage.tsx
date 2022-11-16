@@ -18,20 +18,17 @@ import MyPageTab from "./MyPageTab";
 import Footer from "../../components/etc/Footer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
-import { LessPC, PC } from "../../components/containers/MediaQueryContainer";
 
 const PageTopBg = styled.header`
   width: 100%;
-  height: 50vh;
+  height: fit-content;
+  padding-bottom: 2rem;
   background-color: ${(props) => props.theme.colors.mainBlue};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   color: ${(props) => props.theme.colors.gray0};
-
-  ${(props) => props.theme.mq.tablet} {
-    height: 60vh;
-  }
+  position: relative;
 `;
 
 const UserInfos = styled.div`
@@ -39,9 +36,15 @@ const UserInfos = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 1024px;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 200px;
 
-  ${(props) => props.theme.mq.tablet} {
+  ${(props) => props.theme.mq.mobile} {
     flex-direction: column;
+    height: fit-content;
   }
 `;
 
@@ -49,7 +52,9 @@ const FixContainer = styled.div`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 50;
+  z-index: 1;
+  max-width: 1024px;
+  margin: 0 auto;
   button {
     margin: 0.5rem;
     box-shadow: 0 ${pixelToRem(10)} ${pixelToRem(20)} 0 rgba(0, 0, 0, 0.25);
@@ -97,47 +102,23 @@ function MyPage() {
       <PageTopBg>
         <Header func={toggleActive} />
         <UserInfos>
-          <PC>
-            <UserInfoCard
-              type="pc"
-              emoji={userInformation.emoji}
-              nickname={userInformation.nickname}
-              campus={campus[userInformation.campusId]}
-              func={handleModal}
-            />
-          </PC>
-          <LessPC>
-            <UserInfoCard
-              type="mobile"
-              emoji={userInformation.emoji}
-              nickname={userInformation.nickname}
-              campus={campus[userInformation.campusId]}
-              func={handleModal}
-            />
-          </LessPC>
+          <UserInfoCard
+            emoji={userInformation.emoji}
+            nickname={userInformation.nickname}
+            campus={campus[userInformation.campusId]}
+            func={handleModal}
+          />
           {modalOpen && (
             <ModalPortal>
               <ChangeInfoModal onClose={() => setModalOpen(false)} />
             </ModalPortal>
           )}
-          <PC>
-            <UserInfoDetailCard
-              type="pc"
-              nickname={userInformation.nickname}
-              mapcnt={userInformation.mapCnt}
-              placecnt={userInformation.placeCnt}
-              participatecnt={userInformation.participateCnt}
-            />
-          </PC>
-          <LessPC>
-            <UserInfoDetailCard
-              type="mobile"
-              nickname={userInformation.nickname}
-              mapcnt={userInformation.mapCnt}
-              placecnt={userInformation.placeCnt}
-              participatecnt={userInformation.participateCnt}
-            />
-          </LessPC>
+          <UserInfoDetailCard
+            nickname={userInformation.nickname}
+            mapcnt={userInformation.mapCnt}
+            placecnt={userInformation.placeCnt}
+            participatecnt={userInformation.participateCnt}
+          />
         </UserInfos>
       </PageTopBg>
       <MyPageTab />
