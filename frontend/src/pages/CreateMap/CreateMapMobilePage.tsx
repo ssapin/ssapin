@@ -144,7 +144,9 @@ function CreateMapMobilePage() {
       campus: defaultCampusId,
     },
   });
-
+  const countEmojis = (emojiString: string) => {
+    return ((emojiString || "").match(REGEXES.EMOJI_PATTERN) || []).length;
+  };
   const onFail = () => {
     setError("emoji", {
       message: "이모지는 1개 이상 3개이하로 입력 가능해요 ~",
@@ -205,6 +207,7 @@ function CreateMapMobilePage() {
       setValue("title", data.title);
       setEmoji(data.mapEmoji);
       setAccess(data.access);
+      setLength(countEmojis(data.mapEmoji));
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
         hashTag.push(hashtag.hashtagId);
@@ -249,6 +252,10 @@ function CreateMapMobilePage() {
       e.preventDefault();
     } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
   };
+
+  console.log(emoji);
+
+  console.log(countEmojis(emoji));
 
   return (
     <>
