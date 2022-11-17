@@ -22,6 +22,7 @@ import { FormValues, Input, WarnDiv } from "./CreateMapModal";
 import WarningContainer from "../../components/containers/WarningContainer";
 import { REGEXES } from "../../utils/constants/regex";
 import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
+import { countEmojis } from "../../utils/functions/emoji";
 
 const Container = styled.div`
   width: 90%;
@@ -144,9 +145,7 @@ function CreateMapMobilePage() {
       campus: defaultCampusId,
     },
   });
-  const countEmojis = (emojiString: string) => {
-    return ((emojiString || "").match(REGEXES.EMOJI_PATTERN) || []).length;
-  };
+
   const onFail = () => {
     setError("emoji", {
       message: "이모지는 1개 이상 3개이하로 입력 가능해요 ~",

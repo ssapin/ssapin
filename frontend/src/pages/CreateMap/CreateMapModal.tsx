@@ -17,6 +17,7 @@ import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { getMap, MAP_APIS } from "../../utils/apis/mapApi";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
+import { countEmojis } from "../../utils/functions/emoji";
 
 interface ModalProps {
   mapId?: number;
@@ -236,6 +237,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       setValue("title", data.title);
       setEmoji(data.mapEmoji);
       setAccess(data.access);
+      setLength(countEmojis(data.mapEmoji));
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
         hashTag.push(hashtag.hashtagId);
