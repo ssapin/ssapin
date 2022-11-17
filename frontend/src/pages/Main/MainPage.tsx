@@ -163,14 +163,14 @@ function MainPage() {
     AxiosResponse<any>,
     AxiosError
   >([`${campusId} - mapList`], () =>
-    axiosInstance.get(MAP_APIS.getMapList(campusId, 0, [], "")),
+    axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
   );
 
   const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
   >([`${campusId} - mapRankingList`], () =>
-    axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
+    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
