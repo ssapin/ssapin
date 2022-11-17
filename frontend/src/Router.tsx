@@ -20,6 +20,7 @@ const TogetherNewPlace = lazy(
 );
 const MapNewPlace = lazy(() => import("./pages/NewPlace/MapNewPlacePage"));
 const Search = lazy(() => import("./pages/Search/MapSearchPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFound/NotFoundPage"));
 
 function Router() {
   const loggedIn = useRecoilValue(authState);
@@ -45,6 +46,7 @@ function Router() {
           />
           <Route path="maps/:mapId/new" element={<MapNewPlace />} />
           <Route path="mypage" element={<User />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

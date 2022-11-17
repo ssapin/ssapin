@@ -358,7 +358,7 @@ function TogetherMap() {
               func={copy}
             />
             <KakaoShareButton
-              title={togetherMapData.title}
+              title={togetherMapData?.title}
               imageUrl={SSAPIN_IMAGES.MAP}
             />
           </div>
