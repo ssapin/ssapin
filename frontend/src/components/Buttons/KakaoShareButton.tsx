@@ -51,7 +51,7 @@ function KakaoShareButton({
       }
     }
   };
-
+  console.log(description, title, imageUrl);
   const share = () => {
     Kakao.Share.sendDefault({
       objectType: "feed",

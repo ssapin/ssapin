@@ -296,8 +296,7 @@ function Map() {
     )
       return;
     if (mapData.hashtagList.length) {
-      // setHashs();
-      console.log(makeHashListToSting(mapData.hashtagList));
+      setHashs(makeHashListToSting(mapData.hashtagList));
     }
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
@@ -422,6 +421,7 @@ function Map() {
             <KakaoShareButton
               title={mapData?.title}
               imageUrl={SSAPIN_IMAGES.MAP}
+              description={hashs}
             />
           </div>
         </ButtonListContainer>

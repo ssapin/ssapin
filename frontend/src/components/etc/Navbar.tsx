@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 import LoginModal from "../../pages/Login/LoginModal";
 import { authState, userInformationState } from "../../store/atom";
 import useUserActions from "../../utils/hooks/useUserActions";
@@ -9,7 +9,6 @@ import ModalPortal from "../containers/ModalPortalContainer";
 import Footer from "./Footer";
 import { ReactComponent as Logout } from "../../assets/svgs/logoutbutton.svg";
 import { ReactComponent as Xbutton } from "../../assets/svgs/xbutton.svg";
-import history from "../../utils/common/history";
 
 const Container = styled.nav`
   hr {
