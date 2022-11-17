@@ -34,6 +34,8 @@ export const MAP_APIS = {
     return api;
   },
   GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
+  get_maplist_mainpage: (campusId: number) =>
+    `/map?page=0&size=6&campusId=${campusId}`,
 };
 
 export const getMap = async (mapId: number) => {
@@ -67,6 +69,17 @@ export const removeMapBookmark = async (rData: IBookMark) => {
     const response: AxiosResponse<IMap> = await axiosInstance.delete(
       MAP_APIS.BOOKMARK,
       { data: rData },
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const getMapListInMainpage = async (campusId: number) => {
+  try {
+    const response: AxiosResponse<IMap> = await axiosInstance.get(
+      MAP_APIS.GET_MAP_LIST_MAINPAGE(campusId),
     );
     return response.data;
   } catch (error) {

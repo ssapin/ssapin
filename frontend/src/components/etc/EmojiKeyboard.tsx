@@ -26,7 +26,7 @@ function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
       onEmojiClick={onClick}
       autoFocusSearch
       emojiStyle={EmojiStyle.NATIVE}
-      emojiVersion="5.0"
+      emojiVersion="4.0"
       theme={Theme.LIGHT}
       previewConfig={{
         defaultCaption: "싸핀러의 이모지는 무엇!",
