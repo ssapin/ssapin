@@ -75,14 +75,3 @@ export const removeMapBookmark = async (rData: IBookMark) => {
     return Promise.reject(error);
   }
 };
-
-export const getMapListInMainpage = async (campusId: number) => {
-  try {
-    const response: AxiosResponse<IMap> = await axiosInstance.get(
-      MAP_APIS.GET_MAP_LIST_MAINPAGE(campusId),
-    );
-    return response.data;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
