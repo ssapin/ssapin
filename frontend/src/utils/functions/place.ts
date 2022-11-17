@@ -70,7 +70,7 @@ export function getMapListInPlace(placeId: number) {
   axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId));
 }
 
-// 장소 북마크 등록
+// 장소 북마크등록
 export function addBookmarkInPlace(data: IPlaceBookmark) {
   axiosInstance.post(PLACE_APIS.BOOKMARK, data);
 }
