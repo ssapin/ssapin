@@ -40,6 +40,7 @@ function useUserActions() {
         } else {
           const lastLocation = localStorage.getItem("lastLocation");
           if (lastLocation) {
+            localStorage.removeItem("lastLocation");
             navigate(lastLocation);
           } else navigate("/");
         }
