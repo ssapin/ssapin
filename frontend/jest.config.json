@@ -1,11 +1,21 @@
 {
-  "roots": ["<rootDir>/src/test/"],
+  "roots": ["<rootDir>"],
+  "preset": "ts-jest",
   "testEnvironment": "jsdom",
+  "extensionsToTreatAsEsm": [".ts"],
+  "transformIgnorePatterns": ["/node_modules/", "\\.pnp\\.[^\\/]+$"],
   "moduleNameMapper": {
-    "\\.(css|less|svg)$": "identity-obj-proxy"
+    "^(\\.{1,2}/.*)\\.js$": "$1",
+    "^.+\\.svg$": "jest-svg-transformer"
   },
-  "setupFilesAfterEnv": ["<rootDir>/src/test/jest.setup.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/src/tests/jest.setup.ts"],
   "transform": {
-    "^.+\\.tsx?$": "ts-jest"
-  }
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        "useESM": true
+      }
+    ]
+  },
+  "moduleFileExtensions": ["ts", "tsx", "js", "json"]
 }

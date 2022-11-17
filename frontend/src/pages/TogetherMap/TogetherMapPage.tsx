@@ -83,7 +83,7 @@ const PlaceListContainer = styled.div`
   top: 80px;
   right: 10px;
   width: 300px;
-  height: 80vh;
+  max-height: 80vh;
   overflow-y: scroll;
   z-index: 2;
   > ul {
