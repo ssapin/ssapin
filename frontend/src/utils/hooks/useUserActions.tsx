@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authState, campusState, userInformationState } from "../../store/atom";
 import { getAccessToken, getUserInformation } from "../apis/userApis";
@@ -13,6 +13,7 @@ function useUserActions() {
   const setCampus = useSetRecoilState(campusState);
   const navigate = useNavigate();
   const useGetUser = useGetUserInformation();
+  const location = useLocation();
 
   return { login, logout };
 
@@ -34,15 +35,24 @@ function useUserActions() {
           accessToken: data?.accessToken,
           firstLogin: data?.firstLogin,
         });
-        await useGetUser.getUser();
-        if (data?.firstLogin) {
-          navigate("/mypage");
-        } else {
+        try {
+          console.log("fuck");
+          await useGetUser.getUser();
+          if (data?.firstLogin) {
+            navigate("/mypage");
+          } else {
+            const lastLocation = localStorage.getItem("lastLocation");
+            if (lastLocation) {
+              localStorage.removeItem("lastLocation");
+              navigate(lastLocation, { state: location.pathname });
+            } else navigate("/");
+          }
+        } catch {
           navigate("/");
         }
       }
     } catch (error) {
-      console.log(error);
+      navigate("/");
     }
   }
 
@@ -76,7 +86,7 @@ export function useGetUserInformation() {
       setUser(userResponse.data);
       setCampus(userResponse.data.campusId);
     } catch (error) {
-      console.log(error);
+      return Promise.reject(error);
     }
   }
 }

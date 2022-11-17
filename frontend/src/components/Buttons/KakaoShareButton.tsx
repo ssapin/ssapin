@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg";
+import { SSAPIN_IMAGES } from "../../utils/constants/imagePaths";
 
 declare global {
   interface Window {
@@ -32,11 +33,17 @@ interface IKakaoShareProps {
   title?: string;
   url?: string;
   description?: string;
+  imageUrl?: string;
 }
 
 const { Kakao } = window;
 
-function KakaoShareButton({ title, url, description }: IKakaoShareProps) {
+function KakaoShareButton({
+  title,
+  url,
+  description,
+  imageUrl,
+}: IKakaoShareProps) {
   const createKakaoButton = () => {
     if (Kakao) {
       if (!Kakao.isInitialized()) {
@@ -44,15 +51,13 @@ function KakaoShareButton({ title, url, description }: IKakaoShareProps) {
       }
     }
   };
-
   const share = () => {
     Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
         title: title || "SSAPIN",
         description: description || "#SSAPIN #SSAFY #장소 #큐레이팅",
-        imageUrl:
-          "https://trippiece607.s3.ap-northeast-2.amazonaws.com/SSAPIN_SHARE.png",
+        imageUrl: imageUrl || SSAPIN_IMAGES.DEFAULT,
         link: {
           mobileWebUrl: "https://www.ssapin.com",
           webUrl: "https://www.ssapin.com",
