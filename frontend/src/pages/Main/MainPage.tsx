@@ -170,7 +170,7 @@ function MainPage() {
     AxiosResponse<any>,
     AxiosError
   >([`${campusId} - mapRankingList`], () =>
-    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
+    axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
   );
 
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
