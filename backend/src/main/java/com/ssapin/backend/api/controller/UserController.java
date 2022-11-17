@@ -83,7 +83,7 @@ public class UserController {
     @GetMapping("/login/place/bookmark")
     @ApiOperation(value = "장소 북마크 리스트", notes = "사용자가 북마크한 장소 목록 조회")
     public ResponseEntity<?> getBookmarkedPlace(@RequestHeader("accessToken") final String accessToken,
-                                        @PageableDefault(size=15) Pageable pageable) {
+                                        @PageableDefault(size=6) Pageable pageable) {
 
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         List<PlaceBookmark> placeBookmarkList = placeBookmarkService.findPlaceBookmarkByUserId(userId);
@@ -103,7 +103,7 @@ public class UserController {
     @GetMapping("/login/map/bookmark")
     @ApiOperation(value = "추천지도 북마크 리스트", notes = "사용자가 북마크한 추천지도 목록 조회")
     public ResponseEntity<?> getBookmarkedMaps(@RequestHeader("accessToken") final String accessToken,
-                                                @PageableDefault(size=15) Pageable pageable) {
+                                                @PageableDefault(size=6) Pageable pageable) {
 
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         List<MapBookmark> mapBookmarkList = mapBookmarkService.getMapBookmarkListByUserId(userId);
@@ -120,7 +120,7 @@ public class UserController {
     @GetMapping("/login/map/mine")
     @ApiOperation(value = "작성한 추천지도 리스트", notes = "사용자가 생성한 추천지도 목록 조회")
     public ResponseEntity<?> getMyMaps(@RequestHeader("accessToken") final String accessToken,
-                                               @PageableDefault(size=15) Pageable pageable) {
+                                               @PageableDefault(size=6) Pageable pageable) {
 
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         List<com.ssapin.backend.api.domain.entity.Map> mapList = mapService.getMapListByUserId(userId);
@@ -137,7 +137,7 @@ public class UserController {
     @GetMapping("/login/map/join")
     @ApiOperation(value = "참가한 추천지도 리스트", notes = "사용자가 참가한 추천지도 목록 조회")
     public ResponseEntity<?> getJoinMaps(@RequestHeader("accessToken") final String accessToken,
-                                       @PageableDefault(size=15) Pageable pageable) {
+                                       @PageableDefault(size=6) Pageable pageable) {
 
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         List<Map> mapList = mapPlaceService.getJoinMapListByUserId(userId);
