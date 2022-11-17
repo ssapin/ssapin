@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ModalContainer from "../../components/containers/ModalContainer";
 import { ReactComponent as KakaoLogo } from "../../assets/svgs/kakao.svg";
 import USER_APIS from "../../utils/apis/userApis";
@@ -60,6 +62,8 @@ const ButtonContainer = styled.div`
 `;
 
 function LoginModal({ onClose }: LoginModalProps) {
+  const location = useLocation();
+
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_API_KEY
   }&redirect_uri=${USER_APIS.REDIRECT_URI}`;
@@ -67,6 +71,10 @@ function LoginModal({ onClose }: LoginModalProps) {
   const handleKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+
+  useEffect(() => {
+    localStorage.setItem("lastLocation", location.pathname);
+  }, []);
 
   return (
     <ModalContainer onClose={onClose}>

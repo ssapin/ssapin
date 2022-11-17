@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { KeyboardEvent, useEffect } from "react";
 import { ModalProps } from "../../utils/types/common";
 
 const ModalContainer = styled.div`
@@ -16,7 +17,34 @@ const ModalContainer = styled.div`
   overflow: hidden;
 `;
 
+interface Document {
+  removeEventListener(
+    type: "keyup" | "keydown",
+    listener: (event: KeyboardEvent) => any,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  addEventListener(
+    type: "keyup" | "keydown",
+    listener: (event: KeyboardEvent) => any,
+    options?: boolean | EventListenerOptions,
+  ): void;
+}
+
 function ModalBackgroud({ onClose, children }: ModalProps) {
+  const escClose = (event: KeyboardEvent): void => {
+    if (event.key === "Escape") {
+      onClose();
+    }
+  };
+  useEffect(() => {
+    ((document: Document) =>
+      document.addEventListener("keydown", escClose, true))(document);
+    return () => {
+      ((document: Document) =>
+        document.removeEventListener("keydown", escClose, true))(document);
+    };
+  }, []);
+
   return <ModalContainer onClick={onClose}>{children}</ModalContainer>;
 }
 
