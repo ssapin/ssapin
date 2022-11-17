@@ -35,4 +35,12 @@ public class MapBookmarkRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(QMapBookmark.mapBookmark.id.desc())
                 .fetch();
     }
+
+    public long countMapBookmarkByMapId(long mapId) {
+        return queryFactory
+                .select(QMapBookmark.mapBookmark.count())
+                .from(QMapBookmark.mapBookmark)
+                .where(QMapBookmark.mapBookmark.map.id.eq(mapId))
+                .fetchOne();
+    }
 }

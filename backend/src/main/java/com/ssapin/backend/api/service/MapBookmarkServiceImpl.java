@@ -19,4 +19,10 @@ public class MapBookmarkServiceImpl implements MapBookmarkService{
     public List<MapBookmark> getMapBookmarkListByUserId(long userId) {
         return mapBookmarkRepositorySupport.findByUserId(userId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByMapId(long mapId) {
+        return mapBookmarkRepositorySupport.countMapBookmarkByMapId(mapId);
+    }
 }
