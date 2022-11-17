@@ -127,10 +127,10 @@ public class MapServiceImpl implements MapService {
         for (MapHashtag mapHashtag : list) {
             hashtagList.add(new HashtagRequest(mapHashtag.getHashtag().getId()));
         }
+
         List<MapPlace> mapPlaceList = mapPlaceRepositorySupport.findByMap(map);
-        long bookmarkCnt = mapBookmarkRepositorySupport.countMapBookmarkByMapId(mapId);
         if (mapPlaceList.isEmpty()) {
-            return new MapResponse(map, null, bookmarkCnt, hashtagList, bookMark, isList);
+            return new MapResponse(map, null, hashtagList, bookMark, isList);
         } else {
             List<PlaceResponse> placeList = new ArrayList<>();
             for (MapPlace mapPlace : mapPlaceList) {
@@ -138,7 +138,7 @@ public class MapServiceImpl implements MapService {
                 if(review.isEmpty()) placeList.add(new PlaceResponse(mapPlace.getPlace(), null, mapPlace.getUser()));
                 else placeList.add(new PlaceResponse(mapPlace.getPlace(), review.get(0).getContent(), mapPlace.getUser()));
             }
-            return new MapResponse(map, placeList, bookmarkCnt, hashtagList, bookMark, isList);
+            return new MapResponse(map, placeList, hashtagList, bookMark, isList);
         }
     }
 

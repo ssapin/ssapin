@@ -22,11 +22,10 @@ public class MapResponse {
     private List<PlaceResponse> placeList;
     private List<HashtagRequest> hashtagList;
     private long placeCnt;
-    private long bookmarkCnt;
+    private long userCnt;
     private boolean bookMark;
 
-    public MapResponse(Map map, List<PlaceResponse> placeList, long bookmarkCnt,
-                       List<HashtagRequest> hashtagList, boolean bookMark, boolean isList) {
+    public MapResponse(Map map, List<PlaceResponse> placeList, List<HashtagRequest> hashtagList, boolean bookMark, boolean isList) {
         this.mapId = map.getId();
         this.title = map.getTitle();
         this.userId = map.getUser().getId();
@@ -37,7 +36,15 @@ public class MapResponse {
         this.mapEmoji = map.getEmoji();
         if(!isList) this.placeList = placeList;
         this.placeCnt = placeList==null? 0 : placeList.size();
-        this.bookmarkCnt = bookmarkCnt;
+        if(placeList==null || placeList.size()==0) {
+            this.userCnt=0;
+        } else {
+            Set<Long> userSet = new HashSet<>();
+            for(PlaceResponse placeResponse : placeList) {
+                userSet.add(placeResponse.getUserId());
+            }
+            this.userCnt = userSet.size();
+        }
         this.hashtagList = hashtagList;
         this.bookMark = bookMark;
     }
