@@ -38,7 +38,10 @@ function useUserActions() {
         if (data?.firstLogin) {
           navigate("/mypage");
         } else {
-          navigate("/");
+          const lastLocation = localStorage.getItem("lastLocation");
+          if (lastLocation) {
+            navigate(lastLocation);
+          } else navigate("/");
         }
       }
     } catch (error) {
