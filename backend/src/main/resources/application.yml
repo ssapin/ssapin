@@ -46,7 +46,7 @@ spring:
     hikari:
       password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
       username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
-    url: jdbc:mysql://ssapin.com:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: ENC(uu7/RxHGdpTwucXWCSlX8y9URp+OvEL0RVs7wTpfo/orFjTXAsENiFN8Aor+d87j+GuDAhBwEF7HwFcnBhNBCnuxfQExA3MFRBmJBsnwM5nGDnEfLV13Ea1VP2qKAt209dBtJ08fxJO/zDFw8k5EQzo9ih3KzF5WSnt9VKPuZsNA+0nOXuGcQPMhfKeRI5oLbzDSNKRKeDdJ+bY1Qd1slHQf17M96eWQbi+sRojiFgU6ycmXnzIzYQ==)
   devtools:
     livereload:
       enabled: 'true'
