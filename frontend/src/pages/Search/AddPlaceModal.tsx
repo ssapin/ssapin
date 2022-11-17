@@ -138,6 +138,11 @@ const Comment = styled.textarea`
     height: 100px;
     margin: auto;
   }
+
+  ::placeholder {
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+  }
 `;
 
 const EmptyContainer = styled.div`
