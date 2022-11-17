@@ -22,6 +22,7 @@ import { FormValues, Input, WarnDiv } from "./CreateMapModal";
 import WarningContainer from "../../components/containers/WarningContainer";
 import { REGEXES } from "../../utils/constants/regex";
 import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
+import { countEmojis } from "../../utils/functions/emoji";
 
 const Container = styled.div`
   width: 90%;
@@ -205,6 +206,7 @@ function CreateMapMobilePage() {
       setValue("title", data.title);
       setEmoji(data.mapEmoji);
       setAccess(data.access);
+      setLength(countEmojis(data.mapEmoji));
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
         hashTag.push(hashtag.hashtagId);

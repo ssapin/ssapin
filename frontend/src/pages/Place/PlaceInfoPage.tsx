@@ -203,6 +203,10 @@ const Comment = styled.input`
     height: 60px;
     margin: auto;
   }
+  ::placeholder {
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+  }
 `;
 
 const ButtonContainer = styled.div`

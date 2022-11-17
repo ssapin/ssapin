@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import RankingUserCard from "../../components/card/RankingUserCard";
+import { LessPC, PC } from "../../components/containers/MediaQueryContainer";
 import { IUserRanking } from "../../utils/types/user.interface";
 
 const Container = styled.section`
@@ -10,11 +10,6 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: center;
   margin-top: 4rem;
-
-  ${(props) => props.theme.mq.mobile} {
-    padding-left: 5vw;
-    padding-right: 5vw;
-  }
 `;
 
 const RankingContainer = styled.div<{ size?: number }>`
@@ -120,15 +115,6 @@ type UserProps = {
 };
 
 function UserRanking({ users }: UserProps) {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
-
   return (
     <Container>
       <Title>
@@ -138,42 +124,41 @@ function UserRanking({ users }: UserProps) {
         <p>싸핀을 열심히 이용하는 열.정.적.인 싸핀러들을 소개합니다 😎</p>
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
-      {innerWidth >= 950 ? (
-        <>
-          <RankingContainer size={users.length}>
-            {users.length !== 0 &&
-              users.map((user, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <RankingUserCard key={i} user={user} />
-              ))}
-          </RankingContainer>
-          {users?.length === 0 && (
-            <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
-          )}
-        </>
-      ) : (
-        <>
-          {users.length !== 0 && (
-            <>
-              <RankingUserCard user={users[0]} type="full" />
-              {users.length >= 2 && (
-                <RankingContainer>
-                  {users.map(
-                    (user, id) =>
-                      id >= 1 && (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <RankingUserCard key={id} user={user} />
-                      ),
-                  )}
-                </RankingContainer>
-              )}
-            </>
-          )}
-          {users?.length === 0 && (
-            <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
-          )}
-        </>
-      )}
+
+      <PC>
+        <RankingContainer size={users.length}>
+          {users.length !== 0 &&
+            users.map((user, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <RankingUserCard key={i} user={user} />
+            ))}
+        </RankingContainer>
+        {users?.length === 0 && (
+          <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
+        )}
+      </PC>
+
+      <LessPC>
+        {users.length !== 0 && (
+          <>
+            <RankingUserCard user={users[0]} type="full" />
+            {users.length >= 2 && (
+              <RankingContainer>
+                {users.map(
+                  (user, id) =>
+                    id >= 1 && (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <RankingUserCard key={id} user={user} />
+                    ),
+                )}
+              </RankingContainer>
+            )}
+          </>
+        )}
+        {users?.length === 0 && (
+          <NoContainer>아직 지도를 만든 유저가 없어요 😥</NoContainer>
+        )}
+      </LessPC>
     </Container>
   );
 }

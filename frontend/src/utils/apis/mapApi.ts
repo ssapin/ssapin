@@ -34,6 +34,8 @@ export const MAP_APIS = {
     return api;
   },
   GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
+  get_maplist_mainpage: (campusId: number) =>
+    `/map?page=0&size=6&campusId=${campusId}`,
 };
 
 export const getMap = async (mapId: number) => {

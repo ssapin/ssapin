@@ -57,6 +57,7 @@ const EmojiContainer = styled.div`
   }
 `;
 const Icon = styled.div`
+  min-height: 1.7rem;
   font-size: ${(props) => props.theme.fontSizes.h2};
   font-family: ${(props) => props.theme.fontFamily.h2bold};
 `;
@@ -75,7 +76,7 @@ function UserOpinionCard({ review, func }: UserOpinionProps) {
     <Container>
       <EmojiContainer>
         {review === null ? (
-          <Icon />
+          <Icon> </Icon>
         ) : (
           <Icon> {RATING_LIST[review.emojiType]}</Icon>
         )}
@@ -90,7 +91,7 @@ function UserOpinionCard({ review, func }: UserOpinionProps) {
       </Content>
       <UserNickName>
         {review === null ? "" : review.userEmoji}{" "}
-        {review === null ? "싸핀러" : review.nickname}
+        {review === null ? "" : review.nickname}
       </UserNickName>
     </Container>
   );

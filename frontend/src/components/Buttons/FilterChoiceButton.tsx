@@ -179,7 +179,7 @@ export default function FilterChoiceButton({
           </label>
         ))}
       </OpenTag>
-      <TagName type={type}># 시간</TagName>
+      <TagName type={type}># 기타</TagName>
       <OpenTag type={type}>
         {timeData.map((el) => (
           // eslint-disable-next-line jsx-a11y/label-has-associated-control

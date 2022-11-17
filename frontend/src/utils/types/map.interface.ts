@@ -11,7 +11,7 @@ export interface IMap {
   userEmoji: string;
   mapEmoji: string;
   placeCnt: number;
-  userCnt: number;
+  bookmarkCnt: number;
   bookMark: boolean;
   placeList: IPlace[];
   hashtagList: IHashtag[];

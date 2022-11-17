@@ -13,12 +13,12 @@ const MyBookmarkContainer = styled.div`
 `;
 
 const BookmarkMapContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin: auto;
 `;
 
 const BookmarkPlaceContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin: auto;
 `;
 

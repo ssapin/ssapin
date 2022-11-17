@@ -31,6 +31,7 @@ import { makeCampusPin, makePin } from "../../utils/functions/maps";
 import NavToggleContainer from "../../components/etc/NavToggleContainer";
 import TogetherMapNoticeCard from "../../components/card/TogetherMapNoticeCard";
 import ssafylogo from "../../assets/svgs/ssafylogo.svg";
+import { SSAPIN_IMAGES } from "../../utils/constants/imagePaths";
 
 declare global {
   interface Window {
@@ -356,7 +357,10 @@ function TogetherMap() {
               height="50px"
               func={copy}
             />
-            <KakaoShareButton />
+            <KakaoShareButton
+              title={togetherMapData?.title}
+              imageUrl={SSAPIN_IMAGES.MAP}
+            />
           </div>
         </ButtonListContainer>
 

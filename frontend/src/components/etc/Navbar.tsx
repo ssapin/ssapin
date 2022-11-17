@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 import LoginModal from "../../pages/Login/LoginModal";
 import { authState, userInformationState } from "../../store/atom";
 import useUserActions from "../../utils/hooks/useUserActions";

@@ -182,7 +182,7 @@ function MapCard({ prop, isAdmin, refetch }: MapCardProps) {
             )}
           </div>
           <p className="summary">
-            📌 {prop.placeCnt} &nbsp; 🙋‍♂️ {prop.userCnt}
+            📌 {prop.placeCnt} &nbsp; 💙 {prop.bookmarkCnt}
           </p>
         </Bottom>
       </Container>
