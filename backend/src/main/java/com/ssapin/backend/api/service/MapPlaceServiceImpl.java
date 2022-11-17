@@ -4,7 +4,6 @@ import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.domain.entity.Map;
 import com.ssapin.backend.api.domain.entity.MapBookmark;
 import com.ssapin.backend.api.domain.entity.MapPlace;
-import com.ssapin.backend.api.domain.repositorysupport.MapBookmarkRepositorySupport;
 import com.ssapin.backend.api.domain.repositorysupport.MapPlaceRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.Set;
 public class MapPlaceServiceImpl implements MapPlaceService{
 
     private final MapPlaceRepositorySupport mapPlaceRepositorySupport;
-    private final MapBookmarkRepositorySupport mapBookmarkRepositorySupport;
     @Override
     @Transactional(readOnly = true)
     public long getMapPlaceCntByUserId(long userId) {
@@ -68,7 +66,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
 
             Map map = mapBookmark.getMap();
             long placeCnt = getMapPlaceCntByMapId(map.getId());
-            long bookmarkCnt = mapBookmarkRepositorySupport.countMapBookmarkByMapId(map.getId());
+            long userCnt = getUserCntByMapId(map.getId());
             UserResponse.Map bookmarkedMap = UserResponse.Map.builder()
                     .mapId(map.getId())
                     .userId(map.getUser().getId())
@@ -77,7 +75,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .userEmoji(map.getUser().getEmoji())
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
-                    .bookmarkCnt(bookmarkCnt)
+                    .userCnt(userCnt)
                     .access(map.isAccess())
                     .build();
 
@@ -96,7 +94,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
         for (Map map : mapList) {
 
             long placeCnt = getMapPlaceCntByMapId(map.getId());
-            long bookmarkCnt = mapBookmarkRepositorySupport.countMapBookmarkByMapId(map.getId());
+            long userCnt = getUserCntByMapId(map.getId());
             UserResponse.Map myMap = UserResponse.Map.builder()
                     .mapId(map.getId())
                     .userId(map.getUser().getId())
@@ -105,7 +103,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .userEmoji(map.getUser().getEmoji())
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
-                    .bookmarkCnt(bookmarkCnt)
+                    .userCnt(userCnt)
                     .access(map.isAccess())
                     .build();
 
@@ -124,7 +122,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
         for (Map map : mapList) {
 
             long placeCnt = getMapPlaceCntByMapId(map.getId());
-            long bookmarkCnt = mapBookmarkRepositorySupport.countMapBookmarkByMapId(map.getId());
+            long userCnt = getUserCntByMapId(map.getId());
             UserResponse.Map joinMap = UserResponse.Map.builder()
                     .mapId(map.getId())
                     .userId(map.getUser().getId())
@@ -133,7 +131,7 @@ public class MapPlaceServiceImpl implements MapPlaceService{
                     .userEmoji(map.getUser().getEmoji())
                     .nickname(map.getUser().getNickname())
                     .placeCnt(placeCnt)
-                    .bookmarkCnt(bookmarkCnt)
+                    .userCnt(userCnt)
                     .access(map.isAccess())
                     .build();
 

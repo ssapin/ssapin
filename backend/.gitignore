@@ -38,6 +38,3 @@ out/
 
 #Docker
 Dockerfile
-
-#properties
-application.yml
