@@ -53,9 +53,9 @@ function NotFoundPage() {
   return (
     <Container>
       <picture>
-        <source srcSet="src/assets/image/solo_logo.webp" type="image/webp" />
+        <source srcSet="/src/assets/image/solo_logo.webp" type="image/webp" />
         <img
-          src="src/assets/image/solo_logo.png"
+          src="/src/assets/image/solo_logo.png"
           alt="ssapin logo"
           width="596"
           height="810"
