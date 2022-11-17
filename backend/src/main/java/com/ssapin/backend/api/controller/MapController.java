@@ -99,7 +99,7 @@ public class MapController {
     @GetMapping
     @ApiOperation(value = "추천지도 리스트", notes = "필터링을 포함한 추천지도 리스트를 조회한다.")
     public ResponseEntity<?> getMapList(@RequestHeader(value = "accessToken", required = false) final String accessToken,
-                                        @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=6) Pageable pageable) {
+                                        @RequestParam(required = false) List<Long> hashtagList, @RequestParam(required = false) String keyword, @RequestParam long campusId, @PageableDefault(size=15) Pageable pageable) {
         try {
             User user = null;
             if(accessToken!=null && accessToken!="") {
