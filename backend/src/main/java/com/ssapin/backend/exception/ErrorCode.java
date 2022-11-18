@@ -16,6 +16,7 @@ public enum ErrorCode {
     DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "요청된 값으로 데이터를 찾을 수 없습니다."),
     MAP_NOT_EMOJI(HttpStatus.BAD_REQUEST, "Bad Map Emoji"),
     USER_NOT_EMOJI(HttpStatus.BAD_REQUEST, "Bad User Emoji"),
+    BAD_NICKNAME(HttpStatus.BAD_REQUEST, "잘못된 길이의 닉네임 입니다."),
     AUTHENTICATION_FAILED(HttpStatus.FORBIDDEN, "Authentication Failed");
 
 
