@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFunctionContext } from "react-query";
 import { useRecoilState } from "recoil";
 import MapCard from "../../components/card/MapCard";
+import SkeletonListComponent from "../../components/etc/SkeletonListComponent";
 import { campusState } from "../../store/atom";
 import axiosInstance from "../../utils/apis/api";
 import { MAP_APIS } from "../../utils/apis/mapApi";
@@ -77,7 +78,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
   }: QueryFunctionContext) => {
     try {
       const res = await axiosInstance.get(
-        `${MAP_APIS.getMapList(campusId, pageParam, hashtag, keyword)}`,
+        `${MAP_APIS.SEARCH_MAP_LIST(campusId, pageParam, hashtag, keyword)}`,
       );
       return { result: res?.data, page: pageParam };
     } catch {
@@ -86,11 +87,18 @@ function SearchList({ keyword, hashtag }: SearchProps) {
     }
   };
 
-  const { data, error, fetchNextPage, hasNextPage, refetch } =
-    useFetchTripsInformation({
-      queryKey: ["mapList"],
-      getTargetComponentList,
-    });
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isFetching,
+    isLoading,
+  } = useFetchTripsInformation({
+    queryKey: ["mapList"],
+    getTargetComponentList,
+  });
 
   const onIntersect = ([entry]: any) => entry.isIntersecting && fetchNextPage();
   const bottom = useRef(null);
@@ -137,22 +145,28 @@ function SearchList({ keyword, hashtag }: SearchProps) {
           지도를 만들어보시는건 어때요?
         </NoContainer>
       )}
-      {targetList && targetList[0] !== 0 && (
-        <GridContainer>
-          {targetList?.length &&
-            targetList?.map((target, idx) => (
-              <MapCard
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...target}
-                index={idx}
-                // eslint-disable-next-line react/no-array-index-key
-                key={idx}
-                prop={target}
-                isAdmin={false}
-              />
-            ))}
-        </GridContainer>
-      )}
+      <GridContainer>
+        {isLoading && <SkeletonListComponent number={15} />}
+
+        {targetList && targetList[0] !== 0 && (
+          <>
+            {targetList?.length &&
+              targetList?.map((target, idx) => (
+                <MapCard
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...target}
+                  index={idx}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={idx}
+                  prop={target}
+                  isAdmin={false}
+                />
+              ))}
+            {isFetching && <SkeletonListComponent number={15} />}
+          </>
+        )}
+      </GridContainer>
+
       <div ref={bottom} />
     </Container>
   );

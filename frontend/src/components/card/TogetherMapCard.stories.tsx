@@ -6,7 +6,6 @@ import themes from "../../styles/theme";
 import TogetherMapCard from "./TogetherMapCard";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: "Components/Cards/TogetherMapCard",
   component: TogetherMapCard,
@@ -22,7 +21,6 @@ const Template: ComponentStory<typeof TogetherMapCard> = (args) => (
 );
 
 export const SwitchButton = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
 
 SwitchButton.decorators = [
   (Story) => (
