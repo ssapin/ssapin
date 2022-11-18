@@ -86,7 +86,7 @@ function LoginModal({ onClose }: LoginModalProps) {
         <Pin>📌</Pin>
         <p>
           싸핀과 함께 <br />
-          당신의 핀랜드를 <br /> 만들어 보세요!
+          당신만의 특별한 지도를 <br /> 만들어 보세요!
         </p>
         <ButtonContainer>
           <KaKakoLoginButton type="button" onClick={handleKakaoLogin}>
