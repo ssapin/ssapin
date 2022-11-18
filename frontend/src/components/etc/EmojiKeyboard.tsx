@@ -16,6 +16,8 @@ interface IEmojiProps {
 
 function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
   function onClick(emojiData: EmojiClickData) {
+    console.log(emojiData);
+
     setEmoji(emoji + emojiData.emoji);
     setLength(length + 1);
   }
@@ -26,7 +28,7 @@ function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
       onEmojiClick={onClick}
       autoFocusSearch
       emojiStyle={EmojiStyle.NATIVE}
-      emojiVersion="4.0"
+      emojiVersion="5.0"
       theme={Theme.LIGHT}
       previewConfig={{
         defaultCaption: "싸핀러의 이모지는 무엇!",
