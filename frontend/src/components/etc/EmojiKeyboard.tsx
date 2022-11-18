@@ -6,18 +6,16 @@ import EmojiPicker, {
   EmojiClickData,
   SuggestionMode,
 } from "emoji-picker-react";
+import { countEmojis } from "../../utils/functions/emoji";
 
 interface IEmojiProps {
   emoji: string;
-  length: number;
   setEmoji: (v: string) => void;
-  setLength: (v: number) => void;
 }
 
-function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
+function EmojiKeyBoard({ emoji, setEmoji }: IEmojiProps) {
   function onClick(emojiData: EmojiClickData) {
     setEmoji(emoji + emojiData.emoji);
-    setLength(length + 1);
   }
 
   return (
@@ -26,7 +24,7 @@ function EmojiKeyBoard({ emoji, length, setEmoji, setLength }: IEmojiProps) {
       onEmojiClick={onClick}
       autoFocusSearch
       emojiStyle={EmojiStyle.NATIVE}
-      emojiVersion="4.0"
+      emojiVersion="5.0"
       theme={Theme.LIGHT}
       previewConfig={{
         defaultCaption: "싸핀러의 이모지는 무엇!",
