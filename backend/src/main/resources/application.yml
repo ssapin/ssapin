@@ -44,8 +44,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      password: ssapin307
-      username: ssapin
+      password: ENC(Us7Ox9rNl3euu5spd0sWhJVF+AWNIG8A)
+      username: ENC(tS90BVRzDRvl4bYuu3fIRw==)
     url: jdbc:mysql://ssapin.com:3306/ssapin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
   devtools:
     livereload:
@@ -64,7 +64,11 @@ springfox:
       use-model-v3: 'false'
 external:
   kakao:
-    client-id: beeb2cfc722d8e4228c807e3416ee8f9
+    client-id: ENC(y5SWfFXv9+D0YD+xY+9EJC2MirKHcBc66legGctm5HPgeEJ7cGtTV+5d5KalgasI)
   jwt:
-    secret-key: BboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWapBboBbJJuWap
-    refresh-key: JJuWapslovePoopJJuWapslovePoopJJuWapslovePoopJJuWapslovePoopJJuWapslovePoop
+    secret-key: ENC(to0RbuTctMFazVq5Y6WQ1EUTgQH9CY5VPEnLmRsZE8JnRjcJjM8WX8VFyUhbEPwDHt6nZpHL6wDaV6MPztuqs/BLQg1wqeOfzi3TYGleEDk=)
+    refresh-key: ENC(GwEhBnV+MkH0ERZZpzlW5EnoJhn/kGzhcaz85WnFH9vU7gbHVdXwkCPIrRUqSzU+g/xzS6u3ZUzsQ1fY4XR27ITc7I8rtLaw6BKCgDfbaZoRqCr99UdnHQ==)
+
+
+
+
