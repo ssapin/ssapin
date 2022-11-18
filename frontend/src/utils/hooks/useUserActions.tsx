@@ -36,7 +36,6 @@ function useUserActions() {
           firstLogin: data?.firstLogin,
         });
         try {
-          console.log("fuck");
           await useGetUser.getUser();
           if (data?.firstLogin) {
             navigate("/mypage");

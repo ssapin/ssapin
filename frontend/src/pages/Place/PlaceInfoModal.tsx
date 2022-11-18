@@ -28,6 +28,7 @@ import {
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
+import { SSAPIN_IMAGES } from "../../utils/constants/imagePaths";
 
 const { kakao } = window;
 
@@ -588,6 +589,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                     url={`${import.meta.env.VITE_BASE_URL}/places/${
                       place?.placeId
                     }`}
+                    imageUrl={SSAPIN_IMAGES.MAP}
                   />
                 </Buttons>
               </ShareContainer>
@@ -737,6 +739,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                   url={`${import.meta.env.VITE_BASE_URL}/places/${
                     place?.placeId
                   }`}
+                  imageUrl={SSAPIN_IMAGES.MAP}
                 />
               </Buttons>
             </ShareContainer>

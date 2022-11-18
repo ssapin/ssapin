@@ -1,14 +1,22 @@
 import styled from "@emotion/styled";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
 import MapCard from "../../components/card/MapCard";
+import { campusState } from "../../store/atom";
+import { fadeIn } from "../../styles/animations";
+import axiosInstance from "../../utils/apis/api";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
 
-const Container = styled.section`
+const Container = styled.div`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-top: 4rem;
+  animation: ${fadeIn} 1s ease-in forwards;
 `;
 
 const RankingContainer = styled.div`
@@ -107,11 +115,12 @@ const NoContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.h5};
 `;
 
-type MapProps = {
-  maps: IMap[];
-};
-
-function MapRanking({ maps }: MapProps) {
+function MapRanking() {
+  const campusId = useRecoilValue(campusState);
+  const { data: mapRankingData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${campusId} - mapRankingList`],
+    () => axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
+  );
   return (
     <Container>
       <Title>
@@ -122,8 +131,8 @@ function MapRanking({ maps }: MapProps) {
         <p className="textRight">매일 오전 08:00 기준</p>
       </Description>
       <RankingContainer>
-        {maps.length !== 0 &&
-          maps.map((map, id) => (
+        {mapRankingData?.data?.length !== 0 &&
+          mapRankingData?.data?.map((map, id) => (
             <MapCard
               // eslint-disable-next-line react/no-array-index-key
               key={id}
@@ -132,7 +141,7 @@ function MapRanking({ maps }: MapProps) {
             />
           ))}
       </RankingContainer>
-      {maps?.length === 0 && (
+      {mapRankingData?.data?.length === 0 && (
         <NoContainer>아직 장소가 있는 추천지도가 없어요 😥</NoContainer>
       )}
     </Container>

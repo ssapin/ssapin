@@ -24,7 +24,6 @@ import { authState, campusState } from "../../store/atom";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
 import { IMap } from "../../utils/types/map.interface";
-import { MAP_APIS } from "../../utils/apis/mapApi";
 import axiosInstance from "../../utils/apis/api";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -39,6 +38,7 @@ import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
 import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
 import { LessPC } from "../../components/containers/MediaQueryContainer";
+import IntersectContainer from "../../components/containers/IntersectContainer";
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -133,7 +133,6 @@ function MainPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
   const [maps, setMaps] = useState<IMap[]>([]);
-  const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
   const [modalOpen, setModalOpen] = useState(false);
@@ -159,20 +158,6 @@ function MainPage() {
     axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
   );
 
-  const { data: mapData, refetch: mapRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - mapList`], () =>
-    axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
-  );
-
-  const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - mapRankingList`], () =>
-    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
-  );
-
   const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
     AxiosResponse<any>,
     AxiosError
@@ -189,8 +174,6 @@ function MainPage() {
 
   useEffect(() => {
     togetherRefetch();
-    mapRefetch();
-    mapRankingRefetch();
     userRankingRefetch();
     placeRankingRefetch();
   }, [campusId]);
@@ -199,12 +182,7 @@ function MainPage() {
     if (togetherData?.data) {
       setTogethermaps(togetherData.data);
     }
-    if (mapData?.data) {
-      setMaps(mapData.data.content);
-    }
-    if (mapRankingData?.data) {
-      setRankingmaps(mapRankingData.data);
-    }
+
     if (userRankingData?.data) {
       setRankingusers(userRankingData.data?.userRankingList);
     }
@@ -212,13 +190,7 @@ function MainPage() {
       setRankingplaces(placeRankingData.data);
     }
     setLoading(false);
-  }, [
-    togetherData,
-    mapData,
-    mapRankingData,
-    userRankingData,
-    placeRankingData,
-  ]);
+  }, [togetherData, userRankingData, placeRankingData]);
 
   const handleModal = () => {
     if (auth.accessToken) setModalOpen(true);
@@ -280,23 +252,30 @@ function MainPage() {
       <MainContainer>
         <UserRanking users={rankingusers} />
         <PlaceRanking places={rankingplaces} />
-        <MapRanking maps={rankingmaps} />
-        <MapList maps={maps} />
-        <TogetherMapList maps={togethermaps} />
+        <IntersectContainer>
+          <MapRanking />
+        </IntersectContainer>
+        <IntersectContainer>
+          <MapList />
+        </IntersectContainer>
+        <IntersectContainer>
+          <TogetherMapList maps={togethermaps} />
+        </IntersectContainer>
+        <FixContainer>
+          <MoveToTopButton />
+          <LessPC>
+            <MobileCampusButton />
+          </LessPC>
+          <CreateButton type="button" text="지도 만들기" func={handleModal} />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+          {modalOpen && (
+            <ModalPortal>
+              <CreateMapModal onClose={() => setModalOpen(false)} />
+            </ModalPortal>
+          )}
+        </FixContainer>
       </MainContainer>
-      <FixContainer>
-        <MoveToTopButton />
-        <LessPC>
-          <MobileCampusButton />
-        </LessPC>
-        <CreateButton type="button" text="지도 만들기" func={handleModal} />
-        <CreateButtonMobile type="button" func={moveToCreate} />
-        {modalOpen && (
-          <ModalPortal>
-            <CreateMapModal onClose={() => setModalOpen(false)} />
-          </ModalPortal>
-        )}
-      </FixContainer>
+
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />

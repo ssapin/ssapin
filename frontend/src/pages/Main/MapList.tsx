@@ -1,6 +1,13 @@
 import styled from "@emotion/styled";
+import { AxiosError, AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
 import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 import MapCard from "../../components/card/MapCard";
+import { campusState } from "../../store/atom";
+import { fadeIn } from "../../styles/animations";
+import axiosInstance from "../../utils/apis/api";
+import { MAP_APIS } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
 
 const Container = styled.section`
@@ -10,6 +17,7 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: center;
   margin-top: 4rem;
+  animation: ${fadeIn} 1s ease-in forwards;
 `;
 
 const RankingContainer = styled.div`
@@ -87,11 +95,12 @@ const NoContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.h5};
 `;
 
-type MapProps = {
-  maps: IMap[];
-};
-
-function MapList({ maps }: MapProps) {
+function MapList() {
+  const campusId = useRecoilValue(campusState);
+  const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${campusId} - mapList`],
+    () => axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
+  );
   return (
     <Container>
       <Title>
@@ -102,8 +111,8 @@ function MapList({ maps }: MapProps) {
         🤩
       </Description>
       <RankingContainer>
-        {maps.length !== 0 &&
-          maps.map((map, id) => (
+        {mapData?.data?.content.length !== 0 &&
+          mapData?.data?.content.map((map, id) => (
             <MapCard
               // eslint-disable-next-line react/no-array-index-key
               key={id}
@@ -112,7 +121,7 @@ function MapList({ maps }: MapProps) {
             />
           ))}
       </RankingContainer>
-      {maps?.length === 0 && (
+      {mapData?.data?.content.length === 0 && (
         <NoContainer>아직 추천지도가 없어요 😥</NoContainer>
       )}
       <ShowMoreButton />
