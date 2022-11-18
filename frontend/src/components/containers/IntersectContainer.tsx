@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { memo, useState } from "react";
 import useIntersect from "../../utils/hooks/useIntersect";
 import { Children } from "../../utils/types/common";
 
@@ -14,7 +14,9 @@ function IntersectContainer({ children }: Children) {
     setOpen(true);
   };
   const intersectionRef = useIntersect<HTMLDivElement>(onIntersect);
+  console.log(open);
   return <Section ref={intersectionRef}>{open && <>{children}</>}</Section>;
 }
 
 export default IntersectContainer;
+export const MemoisedIntersectionContainer = memo(IntersectContainer);

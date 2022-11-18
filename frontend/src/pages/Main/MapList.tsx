@@ -11,12 +11,13 @@ import MainCardListContainer from "../../components/containers/MainCardListConta
 import { campusState } from "../../store/atom";
 import { getMainMapList } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
+import SkeletonListComponent from "../../components/etc/SkeletonListComponent";
 
 function MapList() {
   const campusId = useRecoilValue(campusState);
-  const { data: mapData } = useQuery<IMap[], AxiosError>(
+  const { data: mapData, isFetching } = useQuery<IMap[], AxiosError>(
     [`${campusId} - mapList`],
-    async () => getMainMapList(Number(campusId)),
+    () => getMainMapList(Number(campusId)),
   );
   return (
     <MainSectionContainer>
@@ -32,10 +33,13 @@ function MapList() {
         </p>
       </MainDescriptionContainer>
       <MainCardListContainer>
-        {mapData?.length !== 0 &&
-          mapData?.map((map) => (
-            <MapCard key={map.mapId} prop={map} isAdmin={false} />
-          ))}
+        <>
+          {mapData?.length !== 0 &&
+            mapData?.map((map) => (
+              <MapCard key={map.mapId} prop={map} isAdmin={false} />
+            ))}
+          {isFetching && <SkeletonListComponent number={6} />}
+        </>
       </MainCardListContainer>
       {mapData?.length === 0 && (
         <MainNoDataContainer>

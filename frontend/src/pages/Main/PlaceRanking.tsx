@@ -11,7 +11,7 @@ type PlaceProps = {
 
 function PlaceRanking({ places }: PlaceProps) {
   return (
-    <MainSectionContainer>
+    <MainSectionContainer tag="section">
       <MainTitleContainer>
         <>
           📍 <span>캠퍼스 근처 핫플레이스</span>

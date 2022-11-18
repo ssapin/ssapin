@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, lazy, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, lazy, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -25,6 +25,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { MemoisedIntersectionContainer } from "../../components/containers/IntersectContainer";
 
 const UserRanking = lazy(() => import("./UserRanking"));
 const PlaceRanking = lazy(() => import("./PlaceRanking"));
@@ -131,7 +132,6 @@ const FixContainer = styled.div`
 `;
 
 function MainPage() {
-  const [loading, setLoading] = useState<boolean>(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
@@ -164,10 +164,6 @@ function MainPage() {
       },
     ]);
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
   const handleModal = () => {
     if (auth.accessToken) setModalOpen(true);
     else setLoginModalOpen(true);
@@ -181,6 +177,8 @@ function MainPage() {
     e.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };
+
+  console.log("fuck");
   return (
     <>
       <Helmet>
@@ -204,7 +202,7 @@ function MainPage() {
             modules={[Pagination, Autoplay, EffectFade]}
             className="mySwiper"
           >
-            {!loading &&
+            {togetherMapData.isSuccess &&
               togetherMapData.data?.map((item) => (
                 <SwiperSlide key={item.togethermapId}>
                   <Question item={item} />
@@ -230,12 +228,12 @@ function MainPage() {
         />
 
         <PlaceRanking places={placeRankingListData.data} />
-        <IntersectContainer>
+        <MemoisedIntersectionContainer>
           <MapRanking />
-        </IntersectContainer>
-        <IntersectContainer>
+        </MemoisedIntersectionContainer>
+        <MemoisedIntersectionContainer>
           <MapList />
-        </IntersectContainer>
+        </MemoisedIntersectionContainer>
         <TogetherMapList togetherData={togetherMapData.data} />
         <FixContainer>
           <MoveToTopButton />

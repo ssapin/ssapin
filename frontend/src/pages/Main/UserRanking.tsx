@@ -13,7 +13,7 @@ type UserProps = {
 
 function UserRanking({ users }: UserProps) {
   return (
-    <MainSectionContainer>
+    <MainSectionContainer tag="section">
       <MainTitleContainer>
         <>
           🔥 <span>열정적인 싸핀러 Top 5</span>

@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
+import { memo } from "react";
 import MapCard from "../../components/card/MapCard";
 import MainDescriptionContainer from "../../components/containers/MainDescriptionContainer";
 import MainSectionContainer from "../../components/containers/MainSectionContainer";
@@ -10,13 +11,19 @@ import MainCardListContainer from "../../components/containers/MainCardListConta
 import { campusState } from "../../store/atom";
 import { getMapRanking } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
+import SkeletonListComponent from "../../components/etc/SkeletonListComponent";
 
 function MapRanking() {
   const campusId = useRecoilValue(campusState);
-  const { data: mapRankingData } = useQuery<IMap[], AxiosError>(
-    [`${campusId} - mapRankingList`],
-    async () => getMapRanking(Number(campusId)),
+  const {
+    data: mapRankingData,
+    isFetching,
+    isSuccess,
+  } = useQuery<IMap[], AxiosError>([`${campusId} - mapRankingList`], async () =>
+    getMapRanking(Number(campusId)),
   );
+
+  console.log(isFetching, mapRankingData);
 
   return (
     <MainSectionContainer>
@@ -30,12 +37,16 @@ function MapRanking() {
         <p className="textRight">매일 오전 08:00 기준</p>
       </MainDescriptionContainer>
       <MainCardListContainer>
-        {mapRankingData?.length !== 0 &&
-          mapRankingData?.map((map) => (
-            <MapCard key={map.mapId} prop={map} isAdmin={false} />
-          ))}
+        <>
+          {isSuccess &&
+            mapRankingData?.length !== 0 &&
+            mapRankingData?.map((map) => (
+              <MapCard key={map.mapId} prop={map} isAdmin={false} />
+            ))}
+          {isFetching && <SkeletonListComponent number={6} />}
+        </>
       </MainCardListContainer>
-      {mapRankingData?.length === 0 && (
+      {isSuccess && mapRankingData?.length === 0 && (
         <MainNoDataContainer>
           <p>아직 장소가 있는 추천지도가 없어요 😥</p>
         </MainNoDataContainer>
@@ -44,4 +55,5 @@ function MapRanking() {
   );
 }
 
-export default MapRanking;
+const MemoizedMapRanking = memo(MapRanking);
+export default MemoizedMapRanking;
