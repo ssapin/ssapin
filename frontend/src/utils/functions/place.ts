@@ -61,13 +61,13 @@ export function removePlaceInTogethermap(d_data: IRemovePlaceTogethermap) {
 }
 
 // 장소 정보 조회
-export function getDetailPlaceInfo(placeId: number) {
-  axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId));
+export function DETAIL_PLACE_INFO(placeId: number) {
+  axiosInstance.get(PLACE_APIS.DETAIL_PLACE_INFO(placeId));
 }
 
 // 장소가 추가된 추천지도 리스트 조회
-export function getMapListInPlace(placeId: number) {
-  axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId));
+export function MAP_LIST_IN_PLACE(placeId: number) {
+  axiosInstance.get(PLACE_APIS.MAP_LIST_IN_PLACE(placeId));
 }
 
 // 장소 북마크등록

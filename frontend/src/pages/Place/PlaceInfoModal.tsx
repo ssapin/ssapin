@@ -359,12 +359,12 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - placeDetail`],
-    () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
+    () => axiosInstance.get(PLACE_APIS.DETAIL_PLACE_INFO(placeId)),
   );
 
   const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - MapList`],
-    () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
+    () => axiosInstance.get(PLACE_APIS.MAP_LIST_IN_PLACE(placeId)),
   );
 
   const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {

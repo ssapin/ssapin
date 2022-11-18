@@ -14,6 +14,10 @@ export interface IUserRanking {
   mapCount: number;
 }
 
+export interface IUserRankingList {
+  userRankingList: IUserRanking[];
+}
+
 export interface IUserNicknameCheck {
   nickname: string;
 }
