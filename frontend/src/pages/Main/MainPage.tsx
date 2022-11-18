@@ -1,44 +1,46 @@
-import { FormEvent, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, lazy, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { AxiosError, AxiosResponse } from "axios";
-import { useQuery } from "react-query";
+import { useQueries } from "react-query";
 import { Autoplay, EffectFade, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
-import Footer from "../../components/etc/Footer";
 import MapSearch from "../../components/etc/MapSearch";
 import Question from "./Question";
 import { pixelToRem } from "../../utils/functions/util";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import UserRanking from "./UserRanking";
-import PlaceRanking from "./PlaceRanking";
-import MapRanking from "./MapRanking";
-import MapList from "./MapList";
-import TogetherMapList from "./TogetherMapList";
 import Header from "../../components/etc/Header";
 import { authState, campusState } from "../../store/atom";
-import { ITogetherMap } from "../../utils/types/togethermap.interface";
-import { TOGETHERMAP_APIS } from "../../utils/apis/togethermapApi";
-import { IMap } from "../../utils/types/map.interface";
-import { MAP_APIS } from "../../utils/apis/mapApi";
-import axiosInstance from "../../utils/apis/api";
+import { getTogetherMapList } from "../../utils/apis/togethermapApi";
+import { getPlaceRanking } from "../../utils/apis/placeApi";
+import { getUserRanking } from "../../utils/apis/userApis";
+
+import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
+import { LessPC } from "../../components/containers/MediaQueryContainer";
+
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { IUserRanking } from "../../utils/types/user.interface";
-import { IPlaceRanking } from "../../utils/types/place.interface";
-import PLACE_APIS from "../../utils/apis/placeApi";
-import USER_APIS from "../../utils/apis/userApis";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import CreateMapModal from "../CreateMap/CreateMapModal";
-import LoginModal from "../Login/LoginModal";
-import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
-import { LessPC } from "../../components/containers/MediaQueryContainer";
+import { MemoisedIntersectionContainer } from "../../components/containers/IntersectContainer";
+
+const UserRanking = lazy(() => import("./UserRanking"));
+const PlaceRanking = lazy(() => import("./PlaceRanking"));
+const MapRanking = lazy(() => import("./MapRanking"));
+const MapList = lazy(() => import("./MapList"));
+const TogetherMapList = lazy(() => import("./TogetherMapList"));
+const Footer = lazy(() => import("../../components/etc/Footer"));
+const IntersectContainer = lazy(
+  () => import("../../components/containers/IntersectContainer"),
+);
+const ModalPortal = lazy(
+  () => import("../../components/containers/ModalPortalContainer"),
+);
+const LoginModal = lazy(() => import("../Login/LoginModal"));
+const CreateMapModal = lazy(() => import("../CreateMap/CreateMapModal"));
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -130,12 +132,6 @@ const FixContainer = styled.div`
 `;
 
 function MainPage() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
-  const [maps, setMaps] = useState<IMap[]>([]);
-  const [rankingmaps, setRankingmaps] = useState<IMap[]>([]);
-  const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
-  const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
   const [campusId, setCampusId] = useRecoilState(campusState);
@@ -152,82 +148,28 @@ function MainPage() {
     else setLoginModalOpen(true);
   };
 
-  const { data: togetherData, refetch: togetherRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - togetherMapList`], () =>
-    axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
-  );
-
-  const { data: mapData, refetch: mapRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - mapList`], () =>
-    axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
-  );
-
-  const { data: mapRankingData, refetch: mapRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - mapRankingList`], () =>
-    axiosInstance.get(MAP_APIS.GET_MAP_RANKING(campusId)),
-  );
-
-  const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - userRankingList`], () =>
-    axiosInstance.get(USER_APIS.getUserRanking(campusId)),
-  );
-
-  const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - placeRankingList`], () =>
-    axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
-  );
-
-  useEffect(() => {
-    togetherRefetch();
-    mapRefetch();
-    mapRankingRefetch();
-    userRankingRefetch();
-    placeRankingRefetch();
-  }, [campusId]);
-
-  useEffect(() => {
-    if (togetherData?.data) {
-      setTogethermaps(togetherData.data);
-    }
-    if (mapData?.data) {
-      setMaps(mapData.data.content);
-    }
-    if (mapRankingData?.data) {
-      setRankingmaps(mapRankingData.data);
-    }
-    if (userRankingData?.data) {
-      setRankingusers(userRankingData.data?.userRankingList);
-    }
-    if (placeRankingData?.data) {
-      setRankingplaces(placeRankingData.data);
-    }
-    setLoading(false);
-  }, [
-    togetherData,
-    mapData,
-    mapRankingData,
-    userRankingData,
-    placeRankingData,
-  ]);
+  const [togetherMapData, userRankingListData, placeRankingListData] =
+    useQueries([
+      {
+        queryKey: [`${campusId} - togetherMapList`, 1],
+        queryFn: () => getTogetherMapList(Number(campusId)),
+      },
+      {
+        queryKey: [`${campusId} - userRankingList`, 1],
+        queryFn: () => getUserRanking(Number(campusId)),
+      },
+      {
+        queryKey: [`${campusId} - placeRankingList`, 1],
+        queryFn: () => getPlaceRanking(Number(campusId)),
+      },
+    ]);
 
   const handleModal = () => {
     if (auth.accessToken) setModalOpen(true);
     else setLoginModalOpen(true);
   };
 
-  const onChangeKeyword = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const onChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   };
 
@@ -236,6 +178,7 @@ function MainPage() {
     navigate(`/search?keyword=${keyword}`);
   };
 
+  console.log("fuck");
   return (
     <>
       <Helmet>
@@ -259,10 +202,9 @@ function MainPage() {
             modules={[Pagination, Autoplay, EffectFade]}
             className="mySwiper"
           >
-            {!loading &&
-              togethermaps.map((item, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <SwiperSlide key={i}>
+            {togetherMapData.isSuccess &&
+              togetherMapData.data?.map((item) => (
+                <SwiperSlide key={item.togethermapId}>
                   <Question item={item} />
                 </SwiperSlide>
               ))}
@@ -278,25 +220,36 @@ function MainPage() {
         </Searchbar>
       </HeadContainer>
       <MainContainer>
-        <UserRanking users={rankingusers} />
-        <PlaceRanking places={rankingplaces} />
-        <MapRanking maps={rankingmaps} />
-        <MapList maps={maps} />
-        <TogetherMapList maps={togethermaps} />
+        <UserRanking
+          users={
+            userRankingListData.isSuccess &&
+            userRankingListData.data?.userRankingList
+          }
+        />
+
+        <PlaceRanking places={placeRankingListData.data} />
+        <MemoisedIntersectionContainer>
+          <MapRanking />
+        </MemoisedIntersectionContainer>
+        <MemoisedIntersectionContainer>
+          <MapList />
+        </MemoisedIntersectionContainer>
+        <TogetherMapList togetherData={togetherMapData.data} />
+        <FixContainer>
+          <MoveToTopButton />
+          <LessPC>
+            <MobileCampusButton />
+          </LessPC>
+          <CreateButton type="button" text="지도 만들기" func={handleModal} />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+          {modalOpen && (
+            <ModalPortal>
+              <CreateMapModal onClose={() => setModalOpen(false)} />
+            </ModalPortal>
+          )}
+        </FixContainer>
       </MainContainer>
-      <FixContainer>
-        <MoveToTopButton />
-        <LessPC>
-          <MobileCampusButton />
-        </LessPC>
-        <CreateButton type="button" text="지도 만들기" func={handleModal} />
-        <CreateButtonMobile type="button" func={moveToCreate} />
-        {modalOpen && (
-          <ModalPortal>
-            <CreateMapModal onClose={() => setModalOpen(false)} />
-          </ModalPortal>
-        )}
-      </FixContainer>
+
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
