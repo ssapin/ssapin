@@ -163,6 +163,11 @@ export function ChangeInfoModal({ onClose }: ChangeModalProps) {
       return;
     }
 
+    if (nickname.length > 10) {
+      setNicknameVali(true);
+      return;
+    }
+
     if (nickname !== userInformation.nickname) {
       const data: IUserNicknameCheck = {
         nickname,
