@@ -215,6 +215,11 @@ function CreateMapMobilePage() {
     });
   }, [mapId]);
 
+  useEffect(() => {
+    setLength(countEmojis(emoji));
+    setValue("emoji", emoji);
+  }, [length, emoji]);
+
   const toggleActive = (key: number) => {
     setCampusdefaultId(key);
   };
@@ -249,7 +254,7 @@ function CreateMapMobilePage() {
 
     if (keycode !== "Backspace") {
       e.preventDefault();
-    } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
+    }
   };
 
   return (
@@ -331,12 +336,7 @@ function CreateMapMobilePage() {
               />
               {isKeyboard ? (
                 <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
-                  <EmojiKeyBoard
-                    emoji={emoji}
-                    setEmoji={setEmoji}
-                    length={length}
-                    setLength={setLength}
-                  />
+                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
                 </EmojikeyboardContainer>
               ) : null}
 
