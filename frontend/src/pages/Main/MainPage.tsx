@@ -132,7 +132,6 @@ const FixContainer = styled.div`
 function MainPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [togethermaps, setTogethermaps] = useState<ITogetherMap[]>([]);
-  const [maps, setMaps] = useState<IMap[]>([]);
   const [rankingusers, setRankingusers] = useState<IUserRanking[]>([]);
   const [rankingplaces, setRankingplaces] = useState<IPlaceRanking>();
   const [modalOpen, setModalOpen] = useState(false);
@@ -151,32 +150,20 @@ function MainPage() {
     else setLoginModalOpen(true);
   };
 
-  const { data: togetherData, refetch: togetherRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - togetherMapList`], () =>
-    axiosInstance.get(TOGETHERMAP_APIS.GET_TOGETHERMAP_LIST(campusId)),
+  const { data: togetherData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${campusId} - togetherMapList`],
+    () => axiosInstance.get(TOGETHERMAP_APIS.TOGETHERMAP_LIST(campusId)),
   );
 
-  const { data: userRankingData, refetch: userRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - userRankingList`], () =>
-    axiosInstance.get(USER_APIS.getUserRanking(campusId)),
+  const { data: userRankingData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${campusId} - userRankingList`],
+    () => axiosInstance.get(USER_APIS.getUserRanking(campusId)),
   );
 
-  const { data: placeRankingData, refetch: placeRankingRefetch } = useQuery<
-    AxiosResponse<any>,
-    AxiosError
-  >([`${campusId} - placeRankingList`], () =>
-    axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
+  const { data: placeRankingData } = useQuery<AxiosResponse<any>, AxiosError>(
+    [`${campusId} - placeRankingList`],
+    () => axiosInstance.get(PLACE_APIS.getPlaceRanking(campusId)),
   );
-
-  useEffect(() => {
-    togetherRefetch();
-    userRankingRefetch();
-    placeRankingRefetch();
-  }, [campusId]);
 
   useEffect(() => {
     if (togetherData?.data) {
@@ -207,7 +194,6 @@ function MainPage() {
     e.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };
-
   return (
     <>
       <Helmet>
@@ -259,7 +245,7 @@ function MainPage() {
           <MapList />
         </IntersectContainer>
         <IntersectContainer>
-          <TogetherMapList maps={togethermaps} />
+          <TogetherMapList />
         </IntersectContainer>
         <FixContainer>
           <MoveToTopButton />

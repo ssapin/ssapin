@@ -7,7 +7,7 @@ import MapCard from "../../components/card/MapCard";
 import { campusState } from "../../store/atom";
 import { fadeIn } from "../../styles/animations";
 import axiosInstance from "../../utils/apis/api";
-import { MAP_APIS } from "../../utils/apis/mapApi";
+import { getMainMapList, MAP_APIS } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
 
 const Container = styled.section`
@@ -97,9 +97,9 @@ const NoContainer = styled.div`
 
 function MapList() {
   const campusId = useRecoilValue(campusState);
-  const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
+  const { data: mapData } = useQuery<IMap[], AxiosError>(
     [`${campusId} - mapList`],
-    () => axiosInstance.get(MAP_APIS.get_maplist_mainpage(campusId)),
+    async () => getMainMapList(Number(campusId)),
   );
   return (
     <Container>
@@ -111,8 +111,8 @@ function MapList() {
         🤩
       </Description>
       <RankingContainer>
-        {mapData?.data?.content.length !== 0 &&
-          mapData?.data?.content.map((map, id) => (
+        {mapData?.length !== 0 &&
+          mapData?.map((map, id) => (
             <MapCard
               // eslint-disable-next-line react/no-array-index-key
               key={id}
@@ -121,7 +121,7 @@ function MapList() {
             />
           ))}
       </RankingContainer>
-      {mapData?.data?.content.length === 0 && (
+      {mapData?.length === 0 && (
         <NoContainer>아직 추천지도가 없어요 😥</NoContainer>
       )}
       <ShowMoreButton />

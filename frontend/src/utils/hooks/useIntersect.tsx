@@ -11,7 +11,6 @@ const useIntersect = <T extends Element = Element>(
   const checkIntersect: IntersectionObserverCallback = useCallback(
     ([entry], observer) => {
       if (entry.isIntersecting) {
-        console.log(entry.isIntersecting);
         onIntersect(entry, observer);
       }
     },

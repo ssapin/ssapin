@@ -5,7 +5,7 @@ import useIntersect from "../../utils/hooks/useIntersect";
 import { Children } from "../../utils/types/common";
 
 const Section = styled.section`
-  min-height: 500px;
+  min-height: 226px;
 `;
 
 function IntersectContainer({ children }: Children) {

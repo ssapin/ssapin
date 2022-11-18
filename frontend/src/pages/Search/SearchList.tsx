@@ -77,7 +77,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
   }: QueryFunctionContext) => {
     try {
       const res = await axiosInstance.get(
-        `${MAP_APIS.getMapList(campusId, pageParam, hashtag, keyword)}`,
+        `${MAP_APIS.SEARCH_MAP_LIST(campusId, pageParam, hashtag, keyword)}`,
       );
       return { result: res?.data, page: pageParam };
     } catch {

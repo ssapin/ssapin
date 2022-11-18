@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
+import { AxiosError } from "axios";
+import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
 import TogetherMapCard from "../../components/card/TogetherMapCard";
+import { campusState } from "../../store/atom";
+import { fadeIn } from "../../styles/animations";
+import { getTogetherMapList } from "../../utils/apis/togethermapApi";
 import { ITogetherMap } from "../../utils/types/togethermap.interface";
 
 const Container = styled.section`
@@ -9,6 +15,7 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: center;
   margin-top: 4rem;
+  animation: ${fadeIn} 1s ease-in forwards;
 `;
 
 const RankingContainer = styled.div`
@@ -86,11 +93,12 @@ const NoContainer = styled.div`
   font-family: ${(props) => props.theme.fontFamily.h5};
 `;
 
-type TogetherMapProps = {
-  maps: ITogetherMap[];
-};
-
-function TogetherMapList({ maps }: TogetherMapProps) {
+function TogetherMapList() {
+  const campusId = useRecoilValue(campusState);
+  const { data: togetherData } = useQuery<ITogetherMap[], AxiosError>(
+    [`${campusId} - togetherMapList`, `togetherMapList`],
+    async () => getTogetherMapList(Number(campusId)),
+  );
   return (
     <Container>
       <Title>
@@ -100,16 +108,12 @@ function TogetherMapList({ maps }: TogetherMapProps) {
         테마별 자신의 베스트 1위! 장소를 등록해보세요 🥳
       </Description>
       <RankingContainer>
-        {maps.length !== 0 &&
-          maps.map((map, id) => (
-            <TogetherMapCard
-              // eslint-disable-next-line react/no-array-index-key
-              key={id}
-              prop={map}
-            />
+        {togetherData?.length !== 0 &&
+          togetherData?.map((map) => (
+            <TogetherMapCard key={map.togethermapId} prop={map} />
           ))}
       </RankingContainer>
-      {maps?.length === 0 && (
+      {togetherData?.length === 0 && (
         <NoContainer>아직 장소가 있는 모여지도가 없어요 😥</NoContainer>
       )}
     </Container>
