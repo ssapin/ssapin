@@ -245,7 +245,10 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
       setIsEdit(true);
     });
   }, [mapId]);
-
+  useEffect(() => {
+    setLength(countEmojis(emoji));
+    setValue("emoji", emoji);
+  }, [length, emoji]);
   const onChangeTag = (checked: any, item: any) => {
     if (checked) {
       setHashTag([...hashTag, item]);
@@ -349,12 +352,7 @@ function CreateMapModal({ onClose, mapId, refetch }: ModalProps) {
               />
               {isKeyboard ? (
                 <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
-                  <EmojiKeyBoard
-                    emoji={emoji}
-                    setEmoji={setEmoji}
-                    length={length}
-                    setLength={setLength}
-                  />
+                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
                 </EmojikeyboardContainer>
               ) : null}
               <WarnDiv>
