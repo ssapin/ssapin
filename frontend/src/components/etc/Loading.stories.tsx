@@ -3,23 +3,20 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { withRouter } from "storybook-addon-react-router-v6";
 import GlobalStyle from "../../styles/GlobalStyle";
 import themes from "../../styles/theme";
-import Input from "./Input";
+import Loading from "./Loading";
 
 export default {
-  title: "Components/etc/Input",
-  component: Input,
+  title: "Components/etc/Loading",
+  component: Loading,
   decorators: [withRouter],
-} as ComponentMeta<typeof Input>;
+} as ComponentMeta<typeof Loading>;
 
 // eslint-disable-next-line react/function-component-definition
-const Template: ComponentStory<typeof Input> = (args) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <Input {...args} />
-);
+const Template: ComponentStory<typeof Loading> = () => <Loading />;
 
-export const SwitchButton = Template.bind({});
+export const LoadingComponent = Template.bind({});
 
-SwitchButton.decorators = [
+LoadingComponent.decorators = [
   (Story) => (
     <ThemeProvider theme={themes}>
       <GlobalStyle />
@@ -27,9 +24,3 @@ SwitchButton.decorators = [
     </ThemeProvider>
   ),
 ];
-
-SwitchButton.args = {
-  width: "100",
-  height: "100",
-  placeholder: "멀바이자식아",
-};

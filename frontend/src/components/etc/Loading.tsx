@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import loading from "../../assets/image/loading.gif";
+import loadingWebm from "../../assets/image/video.webm";
+import loadingMp4 from "../../assets/image/video.mp4";
 
 const Container = styled.div`
   width: 100vw;
@@ -11,7 +13,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  img {
+  video {
     width: 50%;
     height: auto;
 
@@ -25,7 +27,11 @@ const Container = styled.div`
 function Loading() {
   return (
     <Container>
-      <img alt="loading" src={loading} />
+      <video autoPlay loop muted playsInline>
+        <source src={loadingWebm} type="video/webm" />
+        <source src={loadingMp4} type="video/mp4" />
+        <img alt="loading" src={loading} />
+      </video>
     </Container>
   );
 }
