@@ -4,18 +4,15 @@ import styled from "@emotion/styled";
 import { useQueries } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import CreateButton from "../../components/Buttons/CreateButton";
-import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
+
 import MapSearch from "../../components/etc/MapSearch";
 import { pixelToRem } from "../../utils/functions/util";
-import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import Header from "../../components/etc/Header";
 import { authState, campusState } from "../../store/atom";
 import { getTogetherMapList } from "../../utils/apis/togethermapApi";
 import { getPlaceRanking } from "../../utils/apis/placeApi";
 import { getUserRanking } from "../../utils/apis/userApis";
 
-import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
 import { LessPC } from "../../components/containers/MediaQueryContainer";
 
 import MapRanking from "./MapRanking";
@@ -34,6 +31,18 @@ const ModalPortal = lazy(
 );
 const LoginModal = lazy(() => import("../Login/LoginModal"));
 const CreateMapModal = lazy(() => import("../CreateMap/CreateMapModal"));
+const CreateButtonMobile = lazy(
+  () => import("../../components/Buttons/CreateButtonMobile"),
+);
+const MobileCampusButton = lazy(
+  () => import("../../components/Buttons/MobileCampusButton"),
+);
+const CreateButton = lazy(
+  () => import("../../components/Buttons/CreateButton"),
+);
+const MoveToTopButton = lazy(
+  () => import("../../components/Buttons/MoveToTopButton"),
+);
 
 const HeadContainer = styled.header`
   width: 100%;
