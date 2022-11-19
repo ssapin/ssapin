@@ -18,7 +18,11 @@ const SkeletonListComponent = lazy(
 function PlaceRanking() {
   const campusId = useRecoilValue(campusState);
 
-  const { data: places, isLoading } = useQuery<IPlaceRanking, AxiosError>(
+  const {
+    data: places,
+    isLoading,
+    isSuccess,
+  } = useQuery<IPlaceRanking, AxiosError>(
     [`${campusId} - placeRankingList`],
     () => getPlaceRanking(Number(campusId)),
   );
@@ -35,28 +39,34 @@ function PlaceRanking() {
       </MainDescriptionContainer>
       <MainCardListContainer column={30} mobileColumn={80}>
         {isLoading && <SkeletonListComponent number={3} />}
-        <HotPlaceCard
-          place={
-            places !== undefined && places.review !== null
-              ? places.review
-              : undefined
-          }
-          message="🔥 리뷰가 불타고 있어요"
-        />
-        <HotPlaceCard
-          place={
-            places !== undefined && places.pin !== null ? places.pin : undefined
-          }
-          message="📌 가장 많은 지도에 찍힌 장소"
-        />
-        <HotPlaceCard
-          place={
-            places !== undefined && places.bookmark !== null
-              ? places.bookmark
-              : undefined
-          }
-          message="💘 싸핀러들이 킹왕짱 찜한 장소"
-        />
+        {isSuccess && (
+          <>
+            <HotPlaceCard
+              place={
+                places !== undefined && places.review !== null
+                  ? places.review
+                  : undefined
+              }
+              message="🔥 리뷰가 불타고 있어요"
+            />
+            <HotPlaceCard
+              place={
+                places !== undefined && places.pin !== null
+                  ? places.pin
+                  : undefined
+              }
+              message="📌 가장 많은 지도에 찍힌 장소"
+            />
+            <HotPlaceCard
+              place={
+                places !== undefined && places.bookmark !== null
+                  ? places.bookmark
+                  : undefined
+              }
+              message="💘 싸핀러들이 킹왕짱 찜한 장소"
+            />
+          </>
+        )}
       </MainCardListContainer>
     </MainSectionContainer>
   );
