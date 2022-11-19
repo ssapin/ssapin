@@ -119,18 +119,9 @@ function SearchList({ keyword, hashtag }: SearchProps) {
     error,
     onIntersect,
   });
-
   useEffect(() => {
     refetch();
-  }, [campusId]);
-
-  useEffect(() => {
-    refetch();
-  }, [hashtag]);
-
-  useEffect(() => {
-    refetch();
-  }, [keyword]);
+  }, [hashtag, keyword]);
 
   return (
     <Container>
@@ -162,7 +153,7 @@ function SearchList({ keyword, hashtag }: SearchProps) {
                   isAdmin={false}
                 />
               ))}
-            {isFetching && <SkeletonListComponent number={15} />}
+            {isFetching && <SkeletonListComponent number={6} />}
           </>
         )}
       </GridContainer>

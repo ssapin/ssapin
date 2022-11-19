@@ -121,7 +121,7 @@ function Header({ func }: HeaderProps) {
       <CampusContainer>
         <LogoContainer>
           <button type="button" onClick={moveToHome} className="logo">
-            <img alt="ssapin_logo.png" src={Logo} />
+            <img alt="ssapin_logo.png" src={Logo} width="240" height="82" />
           </button>
           <LessPC>
             <CampusName>{campus[campusId]}</CampusName>

@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
-import { memo } from "react";
 import MapCard from "../../components/card/MapCard";
 import MainDescriptionContainer from "../../components/containers/MainDescriptionContainer";
 import MainSectionContainer from "../../components/containers/MainSectionContainer";
@@ -22,8 +21,6 @@ function MapRanking() {
   } = useQuery<IMap[], AxiosError>([`${campusId} - mapRankingList`], async () =>
     getMapRanking(Number(campusId)),
   );
-
-  console.log(isFetching, mapRankingData);
 
   return (
     <MainSectionContainer>
@@ -55,5 +52,4 @@ function MapRanking() {
   );
 }
 
-const MemoizedMapRanking = memo(MapRanking);
-export default MemoizedMapRanking;
+export default MapRanking;
