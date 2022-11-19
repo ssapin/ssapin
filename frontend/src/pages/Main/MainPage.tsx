@@ -1,15 +1,12 @@
 import { ChangeEvent, FormEvent, lazy, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { useQueries } from "react-query";
-import { Autoplay, EffectFade, Pagination } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import CreateButton from "../../components/Buttons/CreateButton";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import MapSearch from "../../components/etc/MapSearch";
-import Question from "./Question";
 import { pixelToRem } from "../../utils/functions/util";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
 import Header from "../../components/etc/Header";
@@ -21,16 +18,12 @@ import { getUserRanking } from "../../utils/apis/userApis";
 import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
 import { LessPC } from "../../components/containers/MediaQueryContainer";
 
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { MemoisedIntersectionContainer } from "../../components/containers/IntersectContainer";
+import MapRanking from "./MapRanking";
+import MapList from "./MapList";
+import HeaderSwiper from "./HeaderSwiper";
 
 const UserRanking = lazy(() => import("./UserRanking"));
 const PlaceRanking = lazy(() => import("./PlaceRanking"));
-const MapRanking = lazy(() => import("./MapRanking"));
-const MapList = lazy(() => import("./MapList"));
 const TogetherMapList = lazy(() => import("./TogetherMapList"));
 const Footer = lazy(() => import("../../components/etc/Footer"));
 const IntersectContainer = lazy(
@@ -151,15 +144,15 @@ function MainPage() {
   const [togetherMapData, userRankingListData, placeRankingListData] =
     useQueries([
       {
-        queryKey: [`${campusId} - togetherMapList`, 1],
+        queryKey: [`${campusId} - togetherMapList`],
         queryFn: () => getTogetherMapList(Number(campusId)),
       },
       {
-        queryKey: [`${campusId} - userRankingList`, 1],
+        queryKey: [`${campusId} - userRankingList`],
         queryFn: () => getUserRanking(Number(campusId)),
       },
       {
-        queryKey: [`${campusId} - placeRankingList`, 1],
+        queryKey: [`${campusId} - placeRankingList`],
         queryFn: () => getPlaceRanking(Number(campusId)),
       },
     ]);
@@ -178,7 +171,6 @@ function MainPage() {
     navigate(`/search?keyword=${keyword}`);
   };
 
-  console.log("fuck");
   return (
     <>
       <Helmet>
@@ -187,28 +179,7 @@ function MainPage() {
       <HeadContainer>
         <Header func={toggleActive} />
         <QuestionContainer>
-          <Swiper
-            slidesPerView={1}
-            loop
-            pagination={{
-              clickable: true,
-            }}
-            effect="fade"
-            autoplay={{
-              delay: 3500,
-              disableOnInteraction: false,
-            }}
-            speed={800}
-            modules={[Pagination, Autoplay, EffectFade]}
-            className="mySwiper"
-          >
-            {togetherMapData.isSuccess &&
-              togetherMapData.data?.map((item) => (
-                <SwiperSlide key={item.togethermapId}>
-                  <Question item={item} />
-                </SwiperSlide>
-              ))}
-          </Swiper>
+          <HeaderSwiper data={togetherMapData} />
         </QuestionContainer>
         <Searchbar>
           <MapSearch
@@ -228,12 +199,12 @@ function MainPage() {
         />
 
         <PlaceRanking places={placeRankingListData.data} />
-        <MemoisedIntersectionContainer>
+        <IntersectContainer>
           <MapRanking />
-        </MemoisedIntersectionContainer>
-        <MemoisedIntersectionContainer>
+        </IntersectContainer>
+        <IntersectContainer>
           <MapList />
-        </MemoisedIntersectionContainer>
+        </IntersectContainer>
         <TogetherMapList togetherData={togetherMapData.data} />
         <FixContainer>
           <MoveToTopButton />

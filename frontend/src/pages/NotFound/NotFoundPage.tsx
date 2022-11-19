@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import ssapinLogoWebp from "../../assets/image/solo_logo.webp";
+import ssapinLogoPng from "../../assets/image/solo_logo.png";
 
 const Container = styled.main`
   width: 100vw;
@@ -53,13 +55,8 @@ function NotFoundPage() {
   return (
     <Container>
       <picture>
-        <source srcSet="/src/assets/image/solo_logo.webp" type="image/webp" />
-        <img
-          src="/src/assets/image/solo_logo.png"
-          alt="ssapin logo"
-          width="596"
-          height="810"
-        />
+        <source srcSet={ssapinLogoWebp} type="image/webp" />
+        <img src={ssapinLogoPng} alt="ssapin logo" width="596" height="810" />
       </picture>
       <div>
         <p>잘못들어오신거 가툰뎅</p>
