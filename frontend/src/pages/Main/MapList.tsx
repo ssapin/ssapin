@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
+import { lazy } from "react";
 import ShowMoreButton from "../../components/Buttons/ShowMoreButton";
 import MapCard from "../../components/card/MapCard";
 import MainDescriptionContainer from "../../components/containers/MainDescriptionContainer";
@@ -11,7 +12,10 @@ import MainCardListContainer from "../../components/containers/MainCardListConta
 import { campusState } from "../../store/atom";
 import { getMainMapList } from "../../utils/apis/mapApi";
 import { IMap } from "../../utils/types/map.interface";
-import SkeletonListComponent from "../../components/etc/SkeletonListComponent";
+
+const SkeletonListComponent = lazy(
+  () => import("../../components/etc/SkeletonListComponent"),
+);
 
 function MapList() {
   const campusId = useRecoilValue(campusState);

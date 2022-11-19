@@ -1,5 +1,6 @@
-import React from "react";
-import SkeletonCard from "../card/SkeletonCard";
+import { lazy } from "react";
+
+const SkeletonCard = lazy(() => import("../card/SkeletonCard"));
 
 interface SkeletonListComponentProps {
   number: number;

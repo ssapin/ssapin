@@ -234,6 +234,8 @@ function Navbar({ sidebar, func }: NavbarProps) {
               <img
                 alt="ri_kakao-talk-fill.png"
                 src="https://ifh.cc/g/qlBz3y.png"
+                width="18px"
+                height="18px"
               />
               &nbsp;카카오톡 채널
             </NavContent>
