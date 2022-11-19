@@ -14,7 +14,6 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  padding: 0 1rem 0 1rem;
 
   > p {
     font-size: ${(props) => props.theme.fontSizes.h1};

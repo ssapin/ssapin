@@ -191,6 +191,7 @@ export default function GlobalStyle() {
               format("woff");
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
           }
           @font-face {
             font-family: "S-CoreDream-5Medium";
@@ -198,6 +199,7 @@ export default function GlobalStyle() {
               format("woff");
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
           }
           @font-face {
             font-family: "S-CoreDream-6Bold";
@@ -205,6 +207,7 @@ export default function GlobalStyle() {
               format("woff");
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
           }
           @font-face {
             font-family: "S-CoreDream-7ExtraBold";
@@ -212,6 +215,7 @@ export default function GlobalStyle() {
               format("woff");
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
           }
         }
       `}
