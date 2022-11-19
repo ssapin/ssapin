@@ -10,7 +10,6 @@ import { pixelToRem } from "../../utils/functions/util";
 import Header from "../../components/etc/Header";
 import { authState, campusState } from "../../store/atom";
 import { getTogetherMapList } from "../../utils/apis/togethermapApi";
-import { getPlaceRanking } from "../../utils/apis/placeApi";
 import { getUserRanking } from "../../utils/apis/userApis";
 
 import { LessPC } from "../../components/containers/MediaQueryContainer";
@@ -149,21 +148,16 @@ function MainPage() {
     else setLoginModalOpen(true);
   };
 
-  const [togetherMapData, userRankingListData, placeRankingListData] =
-    useQueries([
-      {
-        queryKey: [`${campusId} - togetherMapList`],
-        queryFn: () => getTogetherMapList(Number(campusId)),
-      },
-      {
-        queryKey: [`${campusId} - userRankingList`],
-        queryFn: () => getUserRanking(Number(campusId)),
-      },
-      {
-        queryKey: [`${campusId} - placeRankingList`],
-        queryFn: () => getPlaceRanking(Number(campusId)),
-      },
-    ]);
+  const [togetherMapData, userRankingListData] = useQueries([
+    {
+      queryKey: [`${campusId} - togetherMapList`],
+      queryFn: () => getTogetherMapList(Number(campusId)),
+    },
+    {
+      queryKey: [`${campusId} - userRankingList`],
+      queryFn: () => getUserRanking(Number(campusId)),
+    },
+  ]);
 
   const handleModal = () => {
     if (auth.accessToken) setModalOpen(true);
@@ -205,8 +199,9 @@ function MainPage() {
             userRankingListData.data?.userRankingList
           }
         />
-
-        <PlaceRanking places={placeRankingListData.data} />
+        <IntersectContainer>
+          <PlaceRanking />
+        </IntersectContainer>
         <IntersectContainer>
           <MapRanking />
         </IntersectContainer>
