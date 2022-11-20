@@ -80,6 +80,7 @@ function Footer({ nav }: FooterProps) {
               href="https://www.instagram.com/ssapin_official/"
               target="_blank"
               rel="noreferrer"
+              aria-label="instagram"
             >
               <InstagramIcon />
             </a>
@@ -89,6 +90,7 @@ function Footer({ nav }: FooterProps) {
               href="https://positive-gambler-f01.notion.site/SSAPIN-9ab287af8b1b4226924574edef1017be"
               target="_blank"
               rel="noreferrer"
+              aria-label="notion"
             >
               <NotionIcon />
             </a>
@@ -98,6 +100,7 @@ function Footer({ nav }: FooterProps) {
               href="http://pf.kakao.com/_mLgKxj"
               target="_blank"
               rel="noreferrer"
+              aria-label="kakao channel"
             >
               <KakaotalkIcon fill="#999999" />
             </a>

@@ -3,23 +3,25 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { withRouter } from "storybook-addon-react-router-v6";
 import GlobalStyle from "../../styles/GlobalStyle";
 import themes from "../../styles/theme";
-import Input from "./Input";
+import SkeletonCard from "./SkeletonCard";
 
 export default {
-  title: "Components/etc/Input",
-  component: Input,
+  title: "Components/Cards/SkeletonCard",
+  component: SkeletonCard,
   decorators: [withRouter],
-} as ComponentMeta<typeof Input>;
+} as ComponentMeta<typeof SkeletonCard>;
+
+// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 
 // eslint-disable-next-line react/function-component-definition
-const Template: ComponentStory<typeof Input> = (args) => (
+const Template: ComponentStory<typeof SkeletonCard> = () => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <Input {...args} />
+  <SkeletonCard />
 );
 
-export const SwitchButton = Template.bind({});
+export const SkeletonUICard = Template.bind({});
 
-SwitchButton.decorators = [
+SkeletonUICard.decorators = [
   (Story) => (
     <ThemeProvider theme={themes}>
       <GlobalStyle />
@@ -27,9 +29,3 @@ SwitchButton.decorators = [
     </ThemeProvider>
   ),
 ];
-
-SwitchButton.args = {
-  width: "100",
-  height: "100",
-  placeholder: "멀바이자식아",
-};
