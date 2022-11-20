@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios";
-import { IMap } from "../types/map.interface";
+import { IMap, IMapObject } from "../types/map.interface";
 import axiosInstance from "./api";
 
 export const MAP_APIS = {
   MAP: "/map/login",
   BOOKMARK: "/map/login/bookmark",
-  getMap: (mapId: number) => `/map/${mapId}/detail`,
-  getMapList: (
+  MAP_DETAIL: (mapId: number) => `/map/${mapId}/detail`,
+  SEARCH_MAP_LIST: (
     campusId: number,
     page?: number,
     hashtagList?: number[],
@@ -33,15 +33,15 @@ export const MAP_APIS = {
     api += str;
     return api;
   },
-  GET_MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
-  get_maplist_mainpage: (campusId: number) =>
+  MAP_RANKING: (campusId: number) => `/map/${campusId}/ranking`,
+  MAIN_MAP_LIST: (campusId: number) =>
     `/map?page=0&size=6&campusId=${campusId}`,
 };
 
 export const getMap = async (mapId: number) => {
   try {
     const response: AxiosResponse<IMap> = await axiosInstance.get(
-      MAP_APIS.getMap(mapId),
+      MAP_APIS.MAP_DETAIL(mapId),
     );
     return response.data;
   } catch (error) {
@@ -51,6 +51,28 @@ export const getMap = async (mapId: number) => {
 export interface IBookMark {
   mapId: number;
 }
+
+export const getMapRanking = async (campusId: number) => {
+  try {
+    const response: AxiosResponse<IMap[]> = await axiosInstance.get(
+      MAP_APIS.MAP_RANKING(campusId),
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const getMainMapList = async (campusId: number) => {
+  try {
+    const response: AxiosResponse<IMapObject> = await axiosInstance.get(
+      MAP_APIS.MAIN_MAP_LIST(campusId),
+    );
+    return response.data.content;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
 export const registerMapBookmark = async (data: IBookMark) => {
   try {

@@ -59,8 +59,8 @@ function KakaoShareButton({
         description: description || "#SSAPIN #SSAFY #장소 #큐레이팅",
         imageUrl: imageUrl || SSAPIN_IMAGES.DEFAULT,
         link: {
-          mobileWebUrl: "https://www.ssapin.com",
-          webUrl: "https://www.ssapin.com",
+          mobileWebUrl: "https://ssapin.com",
+          webUrl: "https://ssapin.com",
         },
       },
       buttons: [

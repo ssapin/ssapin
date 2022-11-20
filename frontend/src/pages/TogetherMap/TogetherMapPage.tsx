@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import styled from "@emotion/styled";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -85,7 +86,7 @@ const PlaceListContainer = styled.div`
   right: 10px;
   width: 300px;
   max-height: 80vh;
-  height: 80vh;
+  height: fit-content;
   overflow-y: scroll;
   z-index: 2;
   > ul {
@@ -146,9 +147,12 @@ function TogetherMap() {
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+  const [markerList, setMarkerList] = useState([]);
+  const [overlayList, setOverlayList] = useState([]);
+
+  const [copied, setCopied] = useState(false);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
-  const [copied, setCopied] = useState(false);
   const { togethermapId } = useParams();
   const navigate = useNavigate();
   const cardContainerRef = useRef<HTMLDivElement>();
@@ -261,7 +265,6 @@ function TogetherMap() {
     const current = cardRefs.current[idx];
     current.style.backgroundColor = "#ffffff";
   };
-
   useEffect(() => {
     if (!togetherMapData) return;
     if (!mapObj.map) return;
@@ -269,6 +272,8 @@ function TogetherMap() {
       return;
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
+      const newMarkerList: any[] = [];
+      const newOverlayList: any[] = [];
       for (let i = 0; i < togetherMapData.placeList?.length; i++) {
         const placePosition = new kakao.maps.LatLng(
           togetherMapData.placeList[i].lat,
@@ -288,6 +293,9 @@ function TogetherMap() {
           content: cont,
           yAnchor: 2.3,
         });
+        newMarkerList.push(marker);
+        newOverlayList.push(overlay);
+
         ((mark) => {
           kakao.maps.event.addListener(mark, "mouseover", () => {
             mouseOverHandler(i);
@@ -298,7 +306,19 @@ function TogetherMap() {
         })(marker);
       }
       mapObj.map?.setBounds(bounds);
+      setMarkerList(newMarkerList);
+      setOverlayList(newOverlayList);
     })();
+    return () => {
+      setMarkerList((prev) => {
+        prev.forEach((marker) => marker.setMap(null));
+        return [];
+      });
+      setOverlayList((prev) => {
+        prev.forEach((overlay) => overlay.setMap(null));
+        return [];
+      });
+    };
   }, [togetherMapData, mapObj]);
 
   const addNewPlace = () => {

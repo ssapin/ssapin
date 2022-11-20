@@ -20,9 +20,7 @@ const useFetchTripsInformation = ({
     getNextPageParam: (lastPage: any) => {
       if (!lastPage?.result?.last) {
         if (!lastPage?.result?.last) return lastPage.page + 1;
-        // return false;
       }
-      // return false;
     },
   });
 
