@@ -5,6 +5,8 @@ import com.ssapin.backend.api.domain.dto.response.ReviewQueryResponse;
 import com.ssapin.backend.api.domain.dto.response.UserResponse;
 import com.ssapin.backend.api.domain.entity.*;
 import com.ssapin.backend.api.service.*;
+import com.ssapin.backend.exception.CustomException;
+import com.ssapin.backend.exception.ErrorCode;
 import com.ssapin.backend.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -66,6 +68,11 @@ public class UserController {
     @ApiOperation(value = "내 정보 수정", notes = "엑세스토큰의 userId에 해당하는 유저정보를 수정")
     public ResponseEntity<?> modifyUser(@RequestHeader("accessToken") String accessToken,
                                         @RequestBody UserRequest.Update request) {
+
+        if (request.getNickname() != null && (request.getNickname().length() > 10 ||
+                request.getNickname().length() < 1)) {
+            throw new CustomException(ErrorCode.BAD_NICKNAME);
+        }
 
         long userId = jwtTokenUtil.getUserIdFromToken(accessToken);
         User user = userService.getUserById(userId);

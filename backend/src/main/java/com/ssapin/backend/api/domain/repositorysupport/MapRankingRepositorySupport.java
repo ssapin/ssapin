@@ -23,13 +23,13 @@ public class MapRankingRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public List<Map> findMapsByCampus(Campus campus) {
-        return queryFactory.select(QMap.map)
-                .from(QMapPlace.mapPlace)
-                .rightJoin(QMapPlace.mapPlace.map,QMap.map)
-                .where(QMap.map.campus.eq(campus))
-                .groupBy(QMap.map)
-                .orderBy(QMapPlace.mapPlace.place.count().desc())
+        return queryFactory.select(QMapBookmark.mapBookmark.map)
+                .from(QMapBookmark.mapBookmark)
+                .where(QMapBookmark.mapBookmark.map.campus.eq(campus))
+                .groupBy(QMapBookmark.mapBookmark.map)
+                .orderBy(QMapBookmark.mapBookmark.count().desc())
                 .limit(6)
                 .fetch();
+
     }
 }
