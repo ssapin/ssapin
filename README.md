@@ -294,7 +294,7 @@
 | 남은열 |       Front-end        |  |
 | 임상빈 |       Front-end        | **Front-end**<br /> - 버튼 컴포넌트 작성 <br /> - 마이페이지 레이아웃 및 기능 연결 <br /> - 로고 및 로딩 디자인 |
 | 박지원 | Back-end | **Back-end**<br />- DB 설계<br /> - Map, TogetherMap API 작성<br /> **Front-end**<br /> - 카드/기타 컴포넌트 작성 <br /> - 메인페이지/지도검색페이지 레이아웃 및 기능 연결 <br /> - 장소 상세 모달 기능 연결              |
-| 이현규 | Back-end |  |
+| 이현규 | Back-end | **Back-end**<br />- DB 설계<br />- User, Auth API 작성<br />- Server to Server 카카오 로그인<br />- JWT 인증 방식 구현  |
 |  허설  | Back-end | |
 
 <br />
