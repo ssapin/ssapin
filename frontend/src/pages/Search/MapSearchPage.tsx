@@ -1,23 +1,31 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { ChangeEvent, FormEvent, lazy, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
-import CreateButton from "../../components/Buttons/CreateButton";
-import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
-import Footer from "../../components/etc/Footer";
 import MapSearch from "../../components/etc/MapSearch";
-import { authState, campusState } from "../../store/atom";
+import { authState } from "../../store/atom";
 import { pixelToRem } from "../../utils/functions/util";
-import Header from "../../components/etc/Header";
 import YellowButton from "../../components/Buttons/YellowButton";
-import ModalPortal from "../../components/containers/ModalPortalContainer";
-import CreateMapModal from "../CreateMap/CreateMapModal";
 import FilterModal from "./FilteringModal";
 import SearchList from "./SearchList";
 import LoginModal from "../Login/LoginModal";
 import { LessPC } from "../../components/containers/MediaQueryContainer";
 import MobileCampusButton from "../../components/Buttons/MobileCampusButton";
+
+const CreateMapModal = lazy(() => import("../CreateMap/CreateMapModal"));
+const ModalPortal = lazy(
+  () => import("../../components/containers/ModalPortalContainer"),
+);
+const MoveToTopButton = lazy(
+  () => import("../../components/Buttons/MoveToTopButton"),
+);
+const CreateButton = lazy(
+  () => import("../../components/Buttons/CreateButton"),
+);
+
+const CreateButtonMobile = lazy(
+  () => import("../../components/Buttons/CreateButtonMobile"),
+);
 
 const HeadContainer = styled.header`
   width: 100%;
@@ -126,7 +134,6 @@ const Page = styled.div`
 `;
 
 function SearchPage() {
-  const setCampusId = useSetRecoilState(campusState);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [hashTag, setHashTag] = useState([]);
   const [keyword, setKeyword] = useState(
@@ -152,10 +159,6 @@ function SearchPage() {
     setFakeKeyword("");
     setKeyword("");
     setSidebar(!sidebar);
-  };
-
-  const toggleActive = (key: number) => {
-    setCampusId(key);
   };
 
   const onChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +192,6 @@ function SearchPage() {
   return (
     <>
       <HeadContainer>
-        <Header func={toggleActive} />
         <Searchbar>
           <p>🔍 추천 지도 검색 🔍</p>
           <MapSearch
@@ -217,30 +219,30 @@ function SearchPage() {
       </HeadContainer>
       <MainContainer>
         <SearchList hashtag={hashTag} keyword={keyword} />
+        <FixContainer>
+          <MoveToTopButton />
+          <LessPC>
+            <MobileCampusButton />
+          </LessPC>
+          <CreateButton
+            type="button"
+            text="지도 만들기"
+            func={handleCreateModal}
+          />
+          <CreateButtonMobile type="button" func={moveToCreate} />
+        </FixContainer>
       </MainContainer>
-      <FixContainer>
-        <MoveToTopButton />
-        <LessPC>
-          <MobileCampusButton />
-        </LessPC>
-        <CreateButton
-          type="button"
-          text="지도 만들기"
-          func={handleCreateModal}
-        />
-        <CreateButtonMobile type="button" func={moveToCreate} />
-        {createModalOpen && (
-          <ModalPortal>
-            <CreateMapModal onClose={() => setCreateModalOpen(false)} />
-          </ModalPortal>
-        )}
-      </FixContainer>
+
+      {createModalOpen && (
+        <ModalPortal>
+          <CreateMapModal onClose={() => setCreateModalOpen(false)} />
+        </ModalPortal>
+      )}
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
         </ModalPortal>
       )}
-      <Footer nav={false} />
     </>
   );
 }

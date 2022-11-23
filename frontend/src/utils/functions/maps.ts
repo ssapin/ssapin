@@ -36,6 +36,9 @@ export const makeCampusPin = (place: IPlace | ICenter, img: string) => {
   placeName.append(place.title);
   const emoji = document.createElement("img");
   emoji.src = img;
+  emoji.width = 30;
+  emoji.height = 30;
+  emoji.alt = "ssafy logo";
   emoji.setAttribute("class", "map_logo");
   container.append(placeName, emoji);
 

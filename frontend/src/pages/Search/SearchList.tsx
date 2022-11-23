@@ -19,7 +19,7 @@ const Container = styled.section`
   margin-top: 4rem;
 `;
 
-const Title = styled.div`
+const Title = styled.h2`
   padding-left: 1rem;
   font-size: ${(props) => props.theme.fontSizes.h2};
   color: ${(props) => props.theme.colors.gray900};

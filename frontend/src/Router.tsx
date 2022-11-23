@@ -1,6 +1,8 @@
 import { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import Footer from "./components/etc/Footer";
+import Header from "./components/etc/Header";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { authState } from "./store/atom";
 import ScrollToTop from "./styles/ScrollToTop";
@@ -30,6 +32,7 @@ function Router() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Header />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="auth/kakao/login" element={<Login />} />
@@ -52,6 +55,7 @@ function Router() {
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Footer nav={false} />
     </BrowserRouter>
   );
 }
