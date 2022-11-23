@@ -1,27 +1,24 @@
 import { ChangeEvent, FormEvent, lazy, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "@emotion/styled";
 import { useQueries } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-
-import MapSearch from "../../components/etc/MapSearch";
 import { pixelToRem } from "../../utils/functions/util";
-import Header from "../../components/etc/Header";
 import { authState, campusState } from "../../store/atom";
 import { getTogetherMapList } from "../../utils/apis/togethermapApi";
 import { getUserRanking } from "../../utils/apis/userApis";
 
 import { LessPC } from "../../components/containers/MediaQueryContainer";
 
+import MapSearch from "../../components/etc/MapSearch";
 import MapRanking from "./MapRanking";
 import MapList from "./MapList";
 import HeaderSwiper from "./HeaderSwiper";
+import PlaceRanking from "./PlaceRanking";
 
 const UserRanking = lazy(() => import("./UserRanking"));
-const PlaceRanking = lazy(() => import("./PlaceRanking"));
 const TogetherMapList = lazy(() => import("./TogetherMapList"));
-const Footer = lazy(() => import("../../components/etc/Footer"));
 const IntersectContainer = lazy(
   () => import("../../components/containers/IntersectContainer"),
 );
@@ -134,13 +131,9 @@ const FixContainer = styled.div`
 function MainPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
-  const [campusId, setCampusId] = useRecoilState(campusState);
+  const campusId = useRecoilValue(campusState);
   const [keyword, setKeyword] = useState("");
   const auth = useRecoilValue(authState);
-
-  const toggleActive = (key: number) => {
-    setCampusId(key);
-  };
 
   const navigate = useNavigate();
   const moveToCreate = () => {
@@ -179,7 +172,6 @@ function MainPage() {
         <title>SSAPIN</title>
       </Helmet>
       <HeadContainer>
-        <Header func={toggleActive} />
         <QuestionContainer>
           <HeaderSwiper data={togetherMapData} />
         </QuestionContainer>
@@ -216,20 +208,18 @@ function MainPage() {
           </LessPC>
           <CreateButton type="button" text="지도 만들기" func={handleModal} />
           <CreateButtonMobile type="button" func={moveToCreate} />
-          {modalOpen && (
-            <ModalPortal>
-              <CreateMapModal onClose={() => setModalOpen(false)} />
-            </ModalPortal>
-          )}
         </FixContainer>
       </MainContainer>
-
+      {modalOpen && (
+        <ModalPortal>
+          <CreateMapModal onClose={() => setModalOpen(false)} />
+        </ModalPortal>
+      )}
       {LoginmodalOpen && (
         <ModalPortal>
           <LoginModal onClose={() => setLoginModalOpen(false)} />
         </ModalPortal>
       )}
-      <Footer nav={false} />
     </>
   );
 }

@@ -139,7 +139,6 @@ const ButtonContainer = styled.div`
 
 type NavbarProps = {
   sidebar: boolean;
-  // eslint-disable-next-line react/require-default-props
   func?: () => void;
 };
 
@@ -154,14 +153,10 @@ function Navbar({ sidebar, func }: NavbarProps) {
   const handleModal = () => {
     setModalOpen(true);
   };
-  const moveToSearch = () => {
-    navigate("/search");
-  };
-  const moveToMyPage = () => {
-    navigate("/mypage");
-  };
-  const moveToHome = () => {
-    navigate("/");
+
+  const movePage = (url: string) => {
+    func();
+    navigate(url);
   };
 
   return (
@@ -201,14 +196,14 @@ function Navbar({ sidebar, func }: NavbarProps) {
           )}
           <hr />
           <NavContentFirst>
-            <NavContent type="button" onClick={moveToHome}>
+            <NavContent type="button" onClick={() => movePage("/")}>
               🏠 홈
             </NavContent>
-            <NavContent type="button" onClick={moveToSearch}>
+            <NavContent type="button" onClick={() => movePage("/search")}>
               🗺 지도 찾기
             </NavContent>
             {auth.accessToken && (
-              <NavContent type="button" onClick={moveToMyPage}>
+              <NavContent type="button" onClick={() => movePage("/mypage")}>
                 💡 마이페이지
               </NavContent>
             )}
