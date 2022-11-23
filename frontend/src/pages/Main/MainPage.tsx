@@ -169,7 +169,7 @@ function MainPage() {
   return (
     <>
       <Helmet>
-        <title>SSAPIN</title>
+        <title>SSAPIN | 싸핀</title>
       </Helmet>
       <HeadContainer>
         <QuestionContainer>
