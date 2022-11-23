@@ -5,7 +5,7 @@ import ssapinLogoPng from "../../assets/image/solo_logo.png";
 
 const Container = styled.main`
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
   background-color: ${(props) => props.theme.colors.mainBlue};
   display: flex;
   align-items: center;

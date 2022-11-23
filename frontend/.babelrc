@@ -1,8 +1,13 @@
 {
+  "presets": [
+    ["@babel/preset-env", { "targets": { "node": "current" } }],
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
   "env": {
     "production": {
       "plugins": ["@emotion"]
     }
   },
-  "plugins": ["@emotion"]
+  "plugins": ["@emotion", "babel-plugin-transform-import-meta"]
 }

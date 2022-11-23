@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { pixelToRem } from "../../utils/functions/util";
-import Header from "../../components/etc/Header";
 import UserInfoCard from "../../components/card/UserInfoCard";
 import UserInfoDetailCard from "../../components/card/UserInfoDetailCard";
 import MoveToTopButton from "../../components/Buttons/MoveToTopButton";
 import CreateButton from "../../components/Buttons/CreateButton";
 import CreateButtonMobile from "../../components/Buttons/CreateButtonMobile";
-import { authState, campusState, userInformationState } from "../../store/atom";
+import { authState, userInformationState } from "../../store/atom";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
 import ModalPortal from "../../components/containers/ModalPortalContainer";
 import { ChangeInfoModal } from "./ChangeMyInfo";
 import MyPageTab from "./MyPageTab";
-import Footer from "../../components/etc/Footer";
 import CreateMapModal from "../CreateMap/CreateMapModal";
 import LoginModal from "../Login/LoginModal";
 
@@ -64,7 +62,6 @@ const FixContainer = styled.div`
 function MyPage() {
   const userInformation = useRecoilValue(userInformationState);
   const campus = CAMPUS_LIST;
-  const setCampusId = useSetRecoilState(campusState);
   const auth = useRecoilValue(authState);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
@@ -78,10 +75,6 @@ function MyPage() {
 
   const handleModal = () => {
     setModalOpen(true);
-  };
-
-  const toggleActive = (key: number) => {
-    setCampusId(key);
   };
 
   const navigate = useNavigate();
@@ -100,7 +93,6 @@ function MyPage() {
         <title>마이페이지 - SSAPIN</title>
       </Helmet>
       <PageTopBg>
-        <Header func={toggleActive} />
         <UserInfos>
           <UserInfoCard
             emoji={userInformation.emoji}
@@ -141,7 +133,6 @@ function MyPage() {
           <LoginModal onClose={() => setLoginModalOpen(false)} />
         </ModalPortal>
       )}
-      <Footer nav={false} />
     </>
   );
 }

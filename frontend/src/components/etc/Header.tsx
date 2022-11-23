@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/image/ssapin_logo.png";
 import CampusButton from "../Buttons/CampusButton";
 import { CAMPUS_LIST } from "../../utils/constants/contant";
@@ -97,13 +97,15 @@ const CampusName = styled.div`
   }
 `;
 
-type HeaderProps = {
-  func?: (key: number) => void;
-};
-
-function Header({ func }: HeaderProps) {
-  const campusId = useRecoilValue(campusState);
+function Header() {
+  const [campusId, setCampusId] = useRecoilState(campusState);
   const [isOpen, setIsOpen] = useState(false);
+
+  const location = useLocation();
+
+  const changeCampus = (key: number) => {
+    setCampusId(key);
+  };
 
   const toggleSide = () => {
     setIsOpen(!isOpen);
@@ -115,6 +117,13 @@ function Header({ func }: HeaderProps) {
   const moveToHome = () => {
     navigate("/");
   };
+
+  if (
+    location.pathname.startsWith("/togethermaps") ||
+    location.pathname.startsWith("/maps") ||
+    location.pathname.startsWith("/places")
+  )
+    return null;
 
   return (
     <Container>
@@ -140,7 +149,11 @@ function Header({ func }: HeaderProps) {
           </PC>
         </LogoContainer>
         {isOpen && (
-          <CampusButton open={toggleSide} select={func} campusId={campusId} />
+          <CampusButton
+            open={toggleSide}
+            select={changeCampus}
+            campusId={campusId}
+          />
         )}
       </CampusContainer>
       <NavToggleContainer />

@@ -59,7 +59,7 @@ export default function MoveToTopButton() {
   return (
     isTopBtn && (
       <RightFixed>
-        <StyledUp onClick={goUp}>
+        <StyledUp type="button" onClick={goUp} aria-label="top button">
           <UpArrowIcon />
         </StyledUp>
       </RightFixed>
