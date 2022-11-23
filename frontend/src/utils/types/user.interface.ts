@@ -7,10 +7,17 @@ export interface IUser {
   placeCnt: number;
   participateCnt: number;
 }
-
 export interface IUserRanking {
   userId: number;
   nickname: string;
   emoji: string;
   mapCount: number;
+}
+
+export interface IUserRankingList {
+  userRankingList: IUserRanking[];
+}
+
+export interface IUserNicknameCheck {
+  nickname: string;
 }

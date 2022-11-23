@@ -6,6 +6,7 @@ import axiosInstance from "../../utils/apis/api";
 import { isQueryError } from "../../utils/functions/util";
 import useFetchTripsInformation from "../../utils/hooks/useFecthTripsInformation";
 import useObserver from "../../utils/hooks/useObserver";
+import SkeletonListComponent from "../etc/SkeletonListComponent";
 
 interface InifinteListProps {
   url: string;
@@ -77,6 +78,7 @@ function InfiniteList({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
     refetch,
   } = useFetchTripsInformation({ queryKey, getTargetComponentList });
 
@@ -139,6 +141,11 @@ function InfiniteList({
 
   return (
     <div>
+      {isLoading && (
+        <GridContainer>
+          <SkeletonListComponent number={6} />
+        </GridContainer>
+      )}
       {isSuccess && targetList?.length < 1 && (
         <NoContainer>{zeroDataText}</NoContainer>
       )}

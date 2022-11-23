@@ -21,7 +21,12 @@ export default function CreateButtonMobile({
   disabled,
 }: IButtonProps) {
   return (
-    <StyledCreate type={type} onClick={func} disabled={disabled}>
+    <StyledCreate
+      type={type}
+      onClick={func}
+      disabled={disabled}
+      aria-label="지도만들기"
+    >
       <PlusIcon />
     </StyledCreate>
   );

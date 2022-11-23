@@ -22,6 +22,7 @@ import { FormValues, Input, WarnDiv } from "./CreateMapModal";
 import WarningContainer from "../../components/containers/WarningContainer";
 import { REGEXES } from "../../utils/constants/regex";
 import EmojiKeyBoard from "../../components/etc/EmojiKeyboard";
+import { countEmojis } from "../../utils/functions/emoji";
 
 const Container = styled.div`
   width: 90%;
@@ -205,6 +206,7 @@ function CreateMapMobilePage() {
       setValue("title", data.title);
       setEmoji(data.mapEmoji);
       setAccess(data.access);
+      setLength(countEmojis(data.mapEmoji));
       // eslint-disable-next-line array-callback-return
       data.hashtagList.map((hashtag: any) => {
         hashTag.push(hashtag.hashtagId);
@@ -212,6 +214,11 @@ function CreateMapMobilePage() {
       setIsEdit(true);
     });
   }, [mapId]);
+
+  useEffect(() => {
+    setLength(countEmojis(emoji));
+    setValue("emoji", emoji);
+  }, [length, emoji]);
 
   const toggleActive = (key: number) => {
     setCampusdefaultId(key);
@@ -247,7 +254,7 @@ function CreateMapMobilePage() {
 
     if (keycode !== "Backspace") {
       e.preventDefault();
-    } else if (keycode === "Backspace" && length !== 0) setLength(length - 1);
+    }
   };
 
   return (
@@ -329,12 +336,7 @@ function CreateMapMobilePage() {
               />
               {isKeyboard ? (
                 <EmojikeyboardContainer onClick={(e) => e.stopPropagation()}>
-                  <EmojiKeyBoard
-                    emoji={emoji}
-                    setEmoji={setEmoji}
-                    length={length}
-                    setLength={setLength}
-                  />
+                  <EmojiKeyBoard emoji={emoji} setEmoji={setEmoji} />
                 </EmojikeyboardContainer>
               ) : null}
 

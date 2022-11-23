@@ -1,10 +1,7 @@
-/* eslint-disable import/extensions */
 import { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
-import CreateMapMobilePage from "./pages/CreateMap/CreateMapMobilePage";
-import SharedPlaceDetail from "./pages/Place/SharedPlaceDetailPage";
 import { authState } from "./store/atom";
 import ScrollToTop from "./styles/ScrollToTop";
 
@@ -20,6 +17,13 @@ const TogetherNewPlace = lazy(
 );
 const MapNewPlace = lazy(() => import("./pages/NewPlace/MapNewPlacePage"));
 const Search = lazy(() => import("./pages/Search/MapSearchPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFound/NotFoundPage"));
+const SharedPlaceDetail = lazy(
+  () => import("./pages/Place/SharedPlaceDetailPage"),
+);
+const CreateMapMobilePage = lazy(
+  () => import("./pages/CreateMap/CreateMapMobilePage"),
+);
 
 function Router() {
   const loggedIn = useRecoilValue(authState);
@@ -46,6 +50,7 @@ function Router() {
           <Route path="maps/:mapId/new" element={<MapNewPlace />} />
           <Route path="mypage" element={<User />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

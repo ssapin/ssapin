@@ -37,6 +37,8 @@ import {
   Tablet,
 } from "../../components/containers/MediaQueryContainer";
 import ssafylogo from "../../assets/svgs/ssafylogo.svg";
+import { SSAPIN_IMAGES } from "../../utils/constants/imagePaths";
+import { makeHashListToSting } from "../../utils/functions/util";
 
 declare global {
   interface Window {
@@ -163,8 +165,9 @@ function Map() {
   const [mapObj, setMapObj] = useState({ map: null });
   const [modalOpen, setModalOpen] = useState(false);
   const [placeId, setPlaceId] = useState<number>();
-  const userInformation = useRecoilValue(userInformationState);
+  const [hashs, setHashs] = useState("");
   const [LoginmodalOpen, setLoginModalOpen] = useState(false);
+  const userInformation = useRecoilValue(userInformationState);
   const auth = useRecoilValue(authState);
   const userCampusId = useRecoilValue(campusState);
   const [copied, setCopied] = useState(false);
@@ -284,9 +287,16 @@ function Map() {
   };
 
   useEffect(() => {
-    if (!mapData) return;
-    if (!mapObj.map) return;
-    if (!mapData?.placeList || mapData.placeList.length < 1) return;
+    if (
+      !mapData ||
+      !mapObj.map ||
+      !mapData?.placeList ||
+      mapData.placeList.length < 1
+    )
+      return;
+    if (mapData.hashtagList.length) {
+      setHashs(makeHashListToSting(mapData.hashtagList));
+    }
     (async () => {
       const bounds = await new kakao.maps.LatLngBounds();
       for (let i = 0; i < mapData.placeList?.length; i++) {
@@ -407,7 +417,11 @@ function Map() {
               height="50px"
               func={copy}
             />
-            <KakaoShareButton />
+            <KakaoShareButton
+              title={mapData?.title}
+              imageUrl={SSAPIN_IMAGES.MAP}
+              description={hashs}
+            />
           </div>
         </ButtonListContainer>
 
@@ -435,7 +449,7 @@ function Map() {
           )}
         </ButtonContainer>
         <BackContainer>
-          <BackButton type="main" />
+          <BackButton />
         </BackContainer>
         <SubjectContainer>
           {mapData && (

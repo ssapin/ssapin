@@ -7,7 +7,7 @@ export interface ITogetherMap {
   question: string;
   campusId: number;
   userCnt: number;
-  placeList: IPlace[];
+  placeList?: IPlace[];
 }
 
 export interface CampusCoordinate {

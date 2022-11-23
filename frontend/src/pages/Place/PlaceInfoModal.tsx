@@ -28,6 +28,7 @@ import {
 import KakaoShareButton from "../../components/Buttons/KakaoShareButton";
 import { copyURL } from "../../utils/functions/copyURL";
 import CopyModalContainer from "../../components/containers/CopyModalContainer";
+import { SSAPIN_IMAGES } from "../../utils/constants/imagePaths";
 
 const { kakao } = window;
 
@@ -203,6 +204,10 @@ const Comment = styled.textarea`
     height: 60px;
     margin: auto;
   }
+  ::placeholder {
+    font-family: ${(props) => props.theme.fontFamily.paragraph};
+    font-size: ${(props) => props.theme.fontSizes.paragraph};
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -354,12 +359,12 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
 
   const { data: placeDetailData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - placeDetail`],
-    () => axiosInstance.get(PLACE_APIS.getDetailPlaceInfo(placeId)),
+    () => axiosInstance.get(PLACE_APIS.DETAIL_PLACE_INFO(placeId)),
   );
 
   const { data: mapData } = useQuery<AxiosResponse<any>, AxiosError>(
     [`${placeId} - MapList`],
-    () => axiosInstance.get(PLACE_APIS.getMapListInPlace(placeId)),
+    () => axiosInstance.get(PLACE_APIS.MAP_LIST_IN_PLACE(placeId)),
   );
 
   const onChangeReview = (e: { target: { value: SetStateAction<string> } }) => {
@@ -584,6 +589,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                     url={`${import.meta.env.VITE_BASE_URL}/places/${
                       place?.placeId
                     }`}
+                    imageUrl={SSAPIN_IMAGES.MAP}
                   />
                 </Buttons>
               </ShareContainer>
@@ -733,6 +739,7 @@ function PlaceInfoModal({ placeId, onClose }: PlaceInfoModalProps) {
                   url={`${import.meta.env.VITE_BASE_URL}/places/${
                     place?.placeId
                   }`}
+                  imageUrl={SSAPIN_IMAGES.MAP}
                 />
               </Buttons>
             </ShareContainer>

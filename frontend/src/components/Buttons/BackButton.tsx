@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { pixelToRem } from "../../utils/functions/util";
 import { ReactComponent as BackArrowIcon } from "../../assets/svgs/backarrow.svg";
 
@@ -26,9 +26,11 @@ interface IBackButtonProps {
 
 export default function BackButton({ type, mapId }: IBackButtonProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const moveBack = () => {
-    navigate(-1);
+    if (location.state === "/auth/kakao/login") navigate("/");
+    else navigate(-1);
   };
 
   const moveMap = () => {
