@@ -79,7 +79,12 @@ function KakaoShareButton({
   }, []);
 
   return (
-    <WhiteButton id="kakao-link-btn" type="button" onClick={share}>
+    <WhiteButton
+      id="kakao-link-btn"
+      type="button"
+      onClick={share}
+      aria-label="kakao share"
+    >
       <KakaotalkIcon width="40px" height="40px" />
     </WhiteButton>
   );

@@ -65,7 +65,7 @@ export default function BackButton({ type, mapId }: IBackButtonProps) {
   }
 
   return (
-    <BackBtnBg onClick={moveBack}>
+    <BackBtnBg onClick={moveBack} type="button" aria-label="back button">
       <BackArrowIcon className="arrow-size" />
     </BackBtnBg>
   );
