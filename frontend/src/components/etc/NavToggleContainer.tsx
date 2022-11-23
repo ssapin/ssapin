@@ -1,17 +1,14 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import { lazy, useState } from "react";
 import MenuButton from "../Buttons/MenuButton";
-import Navbar from "./Navbar";
+
+const Navbar = lazy(() => import("./Navbar"));
 
 const MenuContainer = styled.div`
   height: fit-content;
   position: absolute;
   right: 0;
   padding-right: inherit;
-
-  ${(props) => props.theme.mq.mobile} {
-    /* width: 14.5%; */
-  }
 `;
 
 const Page = styled.div`

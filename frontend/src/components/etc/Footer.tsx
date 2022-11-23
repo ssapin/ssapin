@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as InstagramIcon } from "../../assets/svgs/instagram.svg";
 import { ReactComponent as NotionIcon } from "../../assets/svgs/notion.svg";
 import { ReactComponent as KakaotalkIcon } from "../../assets/svgs/kakaotalk.svg";
@@ -71,6 +72,16 @@ type FooterProps = {
 };
 
 function Footer({ nav }: FooterProps) {
+  const location = useLocation();
+
+  if (
+    location.pathname.startsWith("/togethermaps") ||
+    location.pathname.startsWith("/maps") ||
+    location.pathname.startsWith("/mobilecreate") ||
+    location.pathname.startsWith("/places")
+  )
+    return null;
+
   return (
     <Container>
       <SNSContainer>
